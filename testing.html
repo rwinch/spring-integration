@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Testing support :: Spring Integration</title>
+    <link rel="prev" href="configuration/message-mapping-rules.html">
+    <link rel="next" href="samples.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1086,7 +1087,7 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="testing.html">Testing support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Testing support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/testing.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,465 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="testing.html">Testing support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Testing support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>Spring Integration provides a number of utilities and annotations to help you test your application.
+Testing support is presented by two modules:</p>
 </div>
-<div class="hdlist">
+<div class="ulist">
+<ul>
+<li>
+<p><code>spring-integration-test-support</code> contains core items and shared utilities</p>
+</li>
+<li>
+<p><code>spring-integration-test</code> provides mocking and application context configuration components for integration tests</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><code>spring-integration-test-support</code> (<code>spring-integration-test</code> in versions before 5.0) provides basic, standalone utilities, rules, and matchers for unit testing.
+(it also has no dependencies on Spring Integration itself and is used internally in Framework tests).
+<code>spring-integration-test</code> aims to help with integration testing and provides a comprehensive high-level API to mock integration components and verify the behavior of individual components, including whole integration flows or only parts of them.</p>
+</div>
+<div class="paragraph">
+<p>A thorough treatment of testing in the enterprise is beyond the scope of this reference manual.
+See the <a href="https://www.enterpriseintegrationpatterns.com/docs/TestDrivenEAI.pdf">&#8220;Test-Driven Development in Enterprise Integration Projects&#8221;</a> paper, by Gregor Hohpe and Wendy Istvanick, for a source of ideas and principles for testing your target integration solution.</p>
+</div>
+<div class="paragraph">
+<p>The Spring Integration Test Framework and test utilities are fully based on existing JUnit, Hamcrest, and Mockito libraries.
+The application context interaction is based on the <a href="https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/testing.html#testing">Spring test framework</a>.
+See the documentation for those projects for further information.</p>
+</div>
+<div class="paragraph">
+<p>Thanks to the canonical implementation of the EIP in Spring Integration Framework and its first-class citizens (such as <code>MessageChannel</code>, <code>Endpoint</code> and <code>MessageHandler</code>), abstractions, and loose coupling principles, you can implement integration solutions of any complexity.
+With the Spring Integration API for the flow definitions, you can improve, modify or even replace some part of the flow without impacting (mostly) other components in the integration solution.
+Testing such an integration solution is still a challenge, both from an end-to-end approach and from an in-isolation approach.
+Several existing tools can help to test or mock some integration protocols, and they work well with Spring Integration channel adapters.
+Examples of such tools include the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Spring <code>MockMVC</code> and its <code>MockRestServiceServer</code> can be used for testing HTTP.</p>
+</li>
+<li>
+<p>Some RDBMS vendors provide embedded data bases for JDBC or JPA support.</p>
+</li>
+<li>
+<p>ActiveMQ can be embedded for testing JMS or STOMP protocols.</p>
+</li>
+<li>
+<p>There are tools for embedded MongoDB and Redis.</p>
+</li>
+<li>
+<p>Tomcat and Jetty have embedded libraries to test real HTTP, Web Services, or WebSockets.</p>
+</li>
+<li>
+<p>The <code>FtpServer</code> and <code>SshServer</code> from the Apache Mina project can be used for testing the FTP and SFTP protocols.</p>
+</li>
+<li>
+<p>Hazelcast can be run as real-data grid nodes in the tests.</p>
+</li>
+<li>
+<p>The Curator Framework provides a <code>TestingServer</code> for Zookeeper interaction.</p>
+</li>
+<li>
+<p>Apache Kafka provides admin tools to embed a Kafka Broker in the tests.</p>
+</li>
+<li>
+<p>The GreenMail is an open source, intuitive and easy-to-use test suite of email servers for testing purposes.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Most of these tools and libraries are used in Spring Integration tests.
+Also, from the GitHub <a href="https://github.com/spring-projects/spring-integration">repository</a> (in the <code>test</code> directory of each module), you can discover ideas for how to build your own tests for integration solutions.</p>
+</div>
+<div class="paragraph">
+<p>The rest of this chapter describes the testing tools and utilities provided by Spring Integration.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="testing-utilities"><a class="anchor" href="#testing-utilities"></a>Testing Utilities</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>spring-integration-test-support</code> module provides utilities and helpers for unit testing.</p>
+</div>
+<div class="sect2">
+<h3 id="testutils"><a class="anchor" href="#testutils"></a>TestUtils</h3>
+<div class="paragraph">
+<p>The <code>TestUtils</code> class is mostly used for properties assertions in JUnit tests, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+public void loadBalancerRef() {
+    MessageChannel channel = channels.get("lbRefChannel");
+    LoadBalancingStrategy lbStrategy = TestUtils.getPropertyValue(channel,
+                 "dispatcher.loadBalancingStrategy", LoadBalancingStrategy.class);
+    assertTrue(lbStrategy instanceof SampleLoadBalancingStrategy);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>TestUtils.getPropertyValue()</code> is based on Spring&#8217;s <code>DirectFieldAccessor</code> and provides the ability to get a value from the target private property.
+As shown in the preceding example, it also supports nested properties access by using dotted notation.</p>
+</div>
+<div class="paragraph">
+<p>The <code>createTestApplicationContext()</code> factory method produces a <code>TestApplicationContext</code> instance with the supplied Spring Integration environment.</p>
+</div>
+<div class="paragraph">
+<p>See the <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/util/TestUtils.html">Javadoc</a> of other <code>TestUtils</code> methods for more information about this class.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-onlyoncetrigger"><a class="anchor" href="#using-onlyoncetrigger"></a>Using <code>OnlyOnceTrigger</code></h3>
+<div class="paragraph">
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/util/OnlyOnceTrigger.html"><code>OnlyOnceTrigger</code></a> is useful for polling endpoints when you need to produce only one test message and verify the behavior without impacting other period messages.
+The following example shows how to configure <code>OnlyOnceTrigger</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="testTrigger" class="org.springframework.integration.test.util.OnlyOnceTrigger" /&gt;
+
+&lt;int:poller id="jpaPoller" trigger="testTrigger"&gt;
+    &lt;int:transactional transaction-manager="transactionManager" /&gt;
+&lt;/int:poller&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows how to use the preceding configuration of <code>OnlyOnceTrigger</code> for testing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Autowired
+@Qualifier("jpaPoller")
+PollerMetadata poller;
+
+@Autowired
+OnlyOnceTrigger testTrigger;
+
+@Test
+@DirtiesContext
+public void testWithEntityClass() throws Exception {
+    this.testTrigger.reset();
+    ...
+    JpaPollingChannelAdapter jpaPollingChannelAdapter = new JpaPollingChannelAdapter(jpaExecutor);
+
+    SourcePollingChannelAdapter adapter = JpaTestUtils.getSourcePollingChannelAdapter(
+    		jpaPollingChannelAdapter, this.outputChannel, this.poller, this.context,
+    		this.getClass().getClassLoader());
+    adapter.start();
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="support-components"><a class="anchor" href="#support-components"></a>Support Components</h3>
+<div class="paragraph">
+<p>The <code>org.springframework.integration.test.support</code> package contains various abstract classes that you should implement in target tests</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/support/AbstractRequestResponseScenarioTests.html"><code>AbstractRequestResponseScenarioTests</code></a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/support/AbstractResponseValidator.html"><code>AbstractResponseValidator</code></a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/support/LogAdjustingTestSupport.html"><code>LogAdjustingTestSupport</code></a> (Deprecated)</p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/support/MessageValidator.html"><code>MessageValidator</code></a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/support/PayloadValidator.html"><code>PayloadValidator</code></a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/support/RequestResponseScenario.html"><code>RequestResponseScenario</code></a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/support/SingleRequestResponseScenarioTests.html"><code>SingleRequestResponseScenarioTests</code></a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="test-junit-rules"><a class="anchor" href="#test-junit-rules"></a>JUnit Rules and Conditions</h3>
+<div class="paragraph">
+<p>The <code>LongRunningIntegrationTest</code> JUnit 4 test rule is present to indicate if test should be run if <code>RUN_LONG_INTEGRATION_TESTS</code> environment or system property is set to <code>true</code>.
+Otherwise, it is skipped.
+For the same reason since version 5.1, a <code>@LongRunningTest</code> conditional annotation is provided for JUnit 5 tests.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hamcrest-and-mockito-matchers"><a class="anchor" href="#hamcrest-and-mockito-matchers"></a>Hamcrest and Mockito Matchers</h3>
+<div class="paragraph">
+<p>The <code>org.springframework.integration.test.matcher</code> package contains several <code>Matcher</code> implementations to assert <code>Message</code> and its properties in unit tests.
+The following example shows how to use one such matcher (<code>PayloadMatcher</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"><span class="fold-block is-hidden-folded">import static org.springframework.integration.test.matcher.PayloadMatcher.hasPayload;
+</span><span class="fold-block">...
+@Test
+public void transform_withFilePayload_convertedToByteArray() throws Exception {
+    Message&lt;?&gt; result = this.transformer.transform(message);
+    assertThat(result, is(notNullValue()));
+    assertThat(result, hasPayload(is(instanceOf(byte[].class))));
+    assertThat(result, hasPayload(SAMPLE_CONTENT.getBytes(DEFAULT_ENCODING)));
+}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>MockitoMessageMatchers</code> factory can be used for mocks for stubbing and verifications, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">static final Date SOME_PAYLOAD = new Date();
+
+static final String SOME_HEADER_VALUE = "bar";
+
+static final String SOME_HEADER_KEY = "test.foo";
+...
+Message&lt;?&gt; message = MessageBuilder.withPayload(SOME_PAYLOAD)
+                .setHeader(SOME_HEADER_KEY, SOME_HEADER_VALUE)
+                .build();
+MessageHandler handler = mock(MessageHandler.class);
+handler.handleMessage(message);
+verify(handler).handleMessage(messageWithPayload(SOME_PAYLOAD));
+verify(handler).handleMessage(messageWithPayload(is(instanceOf(Date.class))));
+...
+MessageChannel channel = mock(MessageChannel.class);
+when(channel.send(messageWithHeaderEntry(SOME_HEADER_KEY, is(instanceOf(Short.class)))))
+        .thenReturn(true);
+assertThat(channel.send(message), is(false));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="assertj-conditions-and-predicates"><a class="anchor" href="#assertj-conditions-and-predicates"></a>AssertJ conditions and predicates</h3>
+<div class="paragraph">
+<p>Starting with version 5.2, the <code>MessagePredicate</code> is introduced to be used in the AssertJ <code>matches()</code> assertion.
+It requires a <code>Message</code> object as an expectation.
+And also ot can be configured with headers to exclude from expectation as well as from actual message to assert.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="test-context"><a class="anchor" href="#test-context"></a>Spring Integration and the Test Context</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Typically, tests for Spring applications use the Spring Test Framework.
+Since Spring Integration is based on the Spring Framework foundation, everything we can do with the Spring Test Framework also applies when testing integration flows.
+The <code>org.springframework.integration.test.context</code> package provides some components for enhancing the test context for integration needs.
+First we configure our test class with a <code>@SpringIntegrationTest</code> annotation to enable the Spring Integration Test Framework, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SpringJUnitConfig
+@SpringIntegrationTest(noAutoStartup = {"inboundChannelAdapter", "*Source*"})
+public class MyIntegrationTests {
+
+    @Autowired
+    private MockIntegrationContext mockIntegrationContext;
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>@SpringIntegrationTest</code> annotation populates a <code>MockIntegrationContext</code> bean, which you can autowire to the test class to access its methods.
+With the <code>noAutoStartup</code> option, the Spring Integration Test Framework prevents endpoints that are normally <code>autoStartup=true</code> from starting.
+The endpoints are matched to the provided patterns, which support the following simple pattern styles: <code>xxx*</code>, <code><strong>xxx</code>, <code>*xxx</strong></code>, and <code>xxx*yyy</code>.</p>
+</div>
+<div class="paragraph">
+<p>This is useful when we would like to not have real connections to the target systems from inbound channel adapters (for example an AMQP Inbound Gateway, JDBC Polling Channel Adapter, WebSocket Message Producer in client mode, and so on).</p>
+</div>
+<div class="paragraph">
+<p>The <code>MockIntegrationContext</code> is meant to be used in the target test cases for modifications to beans in the real application context.
+For example, endpoints that have <code>autoStartup</code> overridden to <code>false</code> can be replaced with mocks, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Test
+public void testMockMessageSource() {
+    MessageSource&lt;String&gt; messageSource = () -&gt; new GenericMessage&lt;&gt;("foo");
+
+    this.mockIntegrationContext.substituteMessageSourceFor("mySourceEndpoint", messageSource);
+
+    Message&lt;?&gt; receive = this.results.receive(10_000);
+    assertNotNull(receive);
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+The <code>mySourceEndpoint</code> refers here to the bean name of the <code>SourcePollingChannelAdapter</code> for which we replace the real <code>MessageSource</code> with our mock.
+Similarly, the <code>MockIntegrationContext.substituteMessageHandlerFor()</code> expects a bean name for the <code>IntegrationConsumer</code>, which wraps a <code>MessageHandler</code> as an endpoint.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>After test is performed you can restore the state of endpoint beans to the real configuration using <code>MockIntegrationContext.resetBeans()</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@After
+public void tearDown() {
+    this.mockIntegrationContext.resetBeans();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/context/MockIntegrationContext.html">Javadoc</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="testing-mocks"><a class="anchor" href="#testing-mocks"></a>Integration Mocks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>org.springframework.integration.test.mock</code> package offers tools and utilities for mocking, stubbing, and verification of activity on Spring Integration components.
+The mocking functionality is fully based on and compatible with the well known Mockito Framework.
+(The current Mockito transitive dependency is on version 2.5.x or higher.)</p>
+</div>
+<div class="sect2">
+<h3 id="mockintegration"><a class="anchor" href="#mockintegration"></a>MockIntegration</h3>
+<div class="paragraph">
+<p>The <code>MockIntegration</code> factory provides an API to build mocks for Spring Integration beans that are parts of the integration flow (<code>MessageSource</code>, <code>MessageProducer</code>, <code>MessageHandler</code>, and <code>MessageChannel</code>).
+You can use the target mocks during the configuration phase as well as in the target test method to replace the real endpoints before performing verifications and assertions, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:inbound-channel-adapter id="inboundChannelAdapter" channel="results"&gt;
+    &lt;bean class="org.springframework.integration.test.mock.MockIntegration" factory-method="mockMessageSource"&gt;
+        &lt;constructor-arg value="a"/&gt;
+        &lt;constructor-arg&gt;
+            &lt;array&gt;
+                &lt;value&gt;b&lt;/value&gt;
+                &lt;value&gt;c&lt;/value&gt;
+            &lt;/array&gt;
+        &lt;/constructor-arg&gt;
+    &lt;/bean&gt;
+&lt;/int:inbound-channel-adapter&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows how to use Java Configuration to achieve the same configuration as the preceding example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@InboundChannelAdapter(channel = "results")
+@Bean
+public MessageSource&lt;Integer&gt; testingMessageSource() {
+    return MockIntegration.mockMessageSource(1, 2, 3);
+}
+...
+StandardIntegrationFlow flow = IntegrationFlow
+        .from(MockIntegration.mockMessageSource("foo", "bar", "baz"))
+        .&lt;String, String&gt;transform(String::toUpperCase)
+        .channel(out)
+        .get();
+IntegrationFlowRegistration registration = this.integrationFlowContext.registration(flow)
+        .register();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For this purpose, the aforementioned <code>MockIntegrationContext</code> should be used from the test, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">this.mockIntegrationContext.substituteMessageSourceFor("mySourceEndpoint",
+        MockIntegration.mockMessageSource("foo", "bar", "baz"));
+Message&lt;?&gt; receive = this.results.receive(10_000);
+assertNotNull(receive);
+assertEquals("FOO", receive.getPayload());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unlike the Mockito <code>MessageSource</code> mock object, the <code>MockMessageHandler</code> is a regular <code>AbstractMessageProducingHandler</code> extension with a chain API to stub handling for incoming messages.
+The <code>MockMessageHandler</code> provides <code>handleNext(Consumer&lt;Message&lt;?&gt;&gt;)</code> to specify a one-way stub for the next request message.
+It is used to mock message handlers that do not produce replies.
+The <code>handleNextAndReply(Function&lt;Message&lt;?&gt;, ?&gt;)</code> is provided for performing the same stub logic for the next request message and producing a reply for it.
+They can be chained to simulate any arbitrary request-reply scenarios for all expected request messages variants.
+These consumers and functions are applied to the incoming messages, one at a time from the stack, until the last, which is then used for all remaining messages.
+The behavior is similar to the Mockito <code>Answer</code> or <code>doReturn()</code> API.</p>
+</div>
+<div class="paragraph">
+<p>In addition, you can supply a Mockito <code>ArgumentCaptor&lt;Message&lt;?&gt;&gt;</code> to the <code>MockMessageHandler</code> in a constructor argument.
+Each request message for the <code>MockMessageHandler</code> is captured by that <code>ArgumentCaptor</code>.
+During the test, you can use its <code>getValue()</code> and <code>getAllValues()</code> methods to verify and assert those request messages.</p>
+</div>
+<div class="paragraph">
+<p>The <code>MockIntegrationContext</code> provides a <code>substituteMessageHandlerFor()</code> API that lets you replace the actual configured <code>MessageHandler</code> with a <code>MockMessageHandler</code> in the endpoint under test.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows a typical usage scenario:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ArgumentCaptor&lt;Message&lt;?&gt;&gt; messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
+
+MessageHandler mockMessageHandler =
+        mockMessageHandler(messageArgumentCaptor)
+                .handleNextAndReply(m -&gt; m.getPayload().toString().toUpperCase());
+
+this.mockIntegrationContext.substituteMessageHandlerFor("myService.serviceActivator",
+                               mockMessageHandler);
+GenericMessage&lt;String&gt; message = new GenericMessage&lt;&gt;("foo");
+this.myChannel.send(message);
+Message&lt;?&gt; received = this.results.receive(10000);
+assertNotNull(received);
+assertEquals("FOO", received.getPayload());
+assertSame(message, messageArgumentCaptor.getValue());</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+The regular <code>MessageHandler</code> mocking (or <code>MockMessageHandler</code>) has to be used even for a <code>ReactiveStreamsConsumer</code> with a <code>ReactiveMessageHandler</code> configuration.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>See the <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/mock/MockIntegration.html"><code>MockIntegration</code></a> and <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/test/mock/MockMessageHandler.html"><code>MockMessageHandler</code></a> Javadoc for more information.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="testing-other-resources"><a class="anchor" href="#testing-other-resources"></a>Other Resources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As well as exploring the test cases in the framework itself, the <a href="https://github.com/spring-projects/spring-integration-samples">Spring Integration Samples repository</a> has some sample applications specifically made to show testing, such as <code>testing-examples</code> and <code>advanced-testing-examples</code>.
+In some cases, the samples themselves have comprehensive end-to-end tests, such as the <code>file-split-ftp</code> sample.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="configuration/message-mapping-rules.html">Message Mapping Rules and Conventions</a></span>
+  <span class="next"><a href="samples.html">Spring Integration Samples</a></span>
 </nav>
 </article>
 </div>  </div>

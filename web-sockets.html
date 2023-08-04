@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>WebSockets Support :: Spring Integration</title>
+    <link rel="prev" href="webflux.html">
+    <link rel="next" href="ws.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -999,7 +1000,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="webflux.html">WebFlux Support</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="web-sockets.html">WebSockets Support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="WebSockets Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/web-sockets.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,741 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="web-sockets.html">WebSockets Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">WebSockets Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>Starting with version 4.1, Spring Integration has WebSocket support.
+It is based on the architecture, infrastructure, and API from the Spring Framework&#8217;s <code>web-socket</code> module.
+Therefore, many of Spring WebSocket&#8217;s components (such as <code>SubProtocolHandler</code> or <code>WebSocketClient</code>) and configuration options (such as <code>@EnableWebSocketMessageBroker</code>) can be reused within Spring Integration.
+For more information, see the <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#websocket">Spring Framework WebSocket Support</a> chapter in the Spring Framework reference manual.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-websocket&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-websocket:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>For server side, the <code>org.springframework:spring-webmvc</code> dependency must be included explicitly.</p>
+</div>
+<div class="paragraph">
+<p>The Spring Framework WebSocket infrastructure is based on the Spring messaging foundation and provides a basic messaging framework based on the same <code>MessageChannel</code> implementations and <code>MessageHandler</code> implementations that Spring Integration uses (and some POJO-method annotation mappings).
+Consequently, Spring Integration can be directly involved in a WebSocket flow, even without WebSocket adapters.
+For this purpose, you can configure a Spring Integration <code>@MessagingGateway</code> with appropriate annotations, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MessagingGateway
+@Controller
+public interface WebSocketGateway {
+
+    @MessageMapping("/greeting")
+    @SendToUser("/queue/answer")
+    @Gateway(requestChannel = "greetingChannel")
+    String greeting(String payload);
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="web-socket-overview"><a class="anchor" href="#web-socket-overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Since the WebSocket protocol is streaming by definition, and we can send and receive messages to and from a WebSocket at the same time, we can deal with an appropriate <code>WebSocketSession</code>, regardless of being on the client or server side.
+To encapsulate the connection management and <code>WebSocketSession</code> registry, the <code>IntegrationWebSocketContainer</code> is provided with <code>ClientWebSocketContainer</code> and <code>ServerWebSocketContainer</code> implementations.
+Thanks to the <a href="https://www.jcp.org/en/jsr/detail?id=356">WebSocket API</a> and its implementation in the Spring Framework (with many extensions), the same classes are used on the server side as well as the client side (from a Java perspective, of course).
+Consequently, most connection and <code>WebSocketSession</code> registry options are the same on both sides.
+That lets us reuse many configuration items and infrastructure hooks to build WebSocket applications on the server side as well as on the client side.
+The following example shows how components can serve both purposes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">//Client side
+@Bean
+public WebSocketClient webSocketClient() {
+    return new SockJsClient(Collections.singletonList(new WebSocketTransport(new JettyWebSocketClient())));
+}
+
+@Bean
+public IntegrationWebSocketContainer clientWebSocketContainer() {
+    return new ClientWebSocketContainer(webSocketClient(), "ws://my.server.com/endpoint");
+}
+
+//Server side
+@Bean
+public IntegrationWebSocketContainer serverWebSocketContainer() {
+    return new ServerWebSocketContainer("/endpoint").withSockJs();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>IntegrationWebSocketContainer</code> is designed to achieve bidirectional messaging and can be shared between inbound and outbound channel adapters (see below), can be referenced from only one of them when using one-way (sending or receiving) WebSocket messaging.
+It can be used without any channel adapter, but, in this case, <code>IntegrationWebSocketContainer</code> only plays a role as the <code>WebSocketSession</code> registry.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+The <code>ServerWebSocketContainer</code> implements <code>WebSocketConfigurer</code> to register an internal <code>IntegrationWebSocketContainer.IntegrationWebSocketHandler</code> as an <code>Endpoint</code>.
+It does so under the provided <code>paths</code> and other server WebSocket options (such as <code>HandshakeHandler</code> or <code>SockJS fallback</code>) within the <code>ServletWebSocketHandlerRegistry</code> for the target vendor WebSocket Container.
+This registration is achieved with an infrastructural <code>WebSocketIntegrationConfigurationInitializer</code> component, which does the same as the <code>@EnableWebSocket</code> annotation.
+This means that, by using <code>@EnableIntegration</code> (or any Spring Integration namespace in the application context), you can omit the <code>@EnableWebSocket</code> declaration, because the Spring Integration infrastructure detects all WebSocket endpoints.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>Starting with version 6.1, the <code>ClientWebSocketContainer</code> can be configured with a provided <code>URI</code> instead of <code>uriTemplate</code> and <code>uriVariables</code> combination.
+This is useful in cases when custom encoding is required for some parts of the uri.
+See an <code>UriComponentsBuilder</code> API for convenience.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="web-socket-inbound-adapter"><a class="anchor" href="#web-socket-inbound-adapter"></a>WebSocket Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>WebSocketInboundChannelAdapter</code> implements the receiving part of <code>WebSocketSession</code> interaction.
+You must supply it with a <code>IntegrationWebSocketContainer</code>, and the adapter registers itself as a <code>WebSocketListener</code> to handle incoming messages and <code>WebSocketSession</code> events.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Only one <code>WebSocketListener</code> can be registered in the <code>IntegrationWebSocketContainer</code>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>For WebSocket sub-protocols, the <code>WebSocketInboundChannelAdapter</code> can be configured with <code>SubProtocolHandlerRegistry</code> as the second constructor argument.
+The adapter delegates to the <code>SubProtocolHandlerRegistry</code> to determine the appropriate <code>SubProtocolHandler</code> for the accepted <code>WebSocketSession</code> and to convert a <code>WebSocketMessage</code> to a <code>Message</code> according to the sub-protocol implementation.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+By default, the <code>WebSocketInboundChannelAdapter</code> relies only on the raw <code>PassThruSubProtocolHandler</code> implementation, which converts the <code>WebSocketMessage</code> to a <code>Message</code>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>The <code>WebSocketInboundChannelAdapter</code> accepts and sends to the underlying integration flow only <code>Message</code> instances that have <code>SimpMessageType.MESSAGE</code> or an empty <code>simpMessageType</code> header.
+All other <code>Message</code> types are handled through the <code>ApplicationEvent</code> instances emitted from a <code>SubProtocolHandler</code> implementation (such as <code>StompSubProtocolHandler</code>).</p>
+</div>
+<div class="paragraph">
+<p>On the server side, if the <code>@EnableWebSocketMessageBroker</code> configuration is present, you can configure <code>WebSocketInboundChannelAdapter</code> with the <code>useBroker = true</code> option.
+In this case, all <code>non-MESSAGE</code> <code>Message</code> types are delegated to the provided <code>AbstractBrokerMessageHandler</code>.
+In addition, if the broker relay is configured with destination prefixes, those messages that match the Broker destinations are routed to the <code>AbstractBrokerMessageHandler</code> instead of to the <code>outputChannel</code> of the <code>WebSocketInboundChannelAdapter</code>.</p>
+</div>
+<div class="paragraph">
+<p>If <code>useBroker = false</code> and the received message is of the <code>SimpMessageType.CONNECT</code> type, the <code>WebSocketInboundChannelAdapter</code> immediately sends a <code>SimpMessageType.CONNECT_ACK</code> message to the <code>WebSocketSession</code> without sending it to the channel.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Spring&#8217;s WebSocket Support allows the configuration of only one broker relay.
+Consequently, we do not require an <code>AbstractBrokerMessageHandler</code> reference.
+It is detected in the Application Context.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>For more configuration options, see <a href="#web-sockets-namespace">WebSockets Namespace Support</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="web-socket-outbound-adapter"><a class="anchor" href="#web-socket-outbound-adapter"></a>WebSocket Outbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>WebSocketOutboundChannelAdapter</code>:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Accepts Spring Integration messages from its <code>MessageChannel</code></p>
+</li>
+<li>
+<p>Determines the <code>WebSocketSession</code> <code>id</code> from the <code>MessageHeaders</code></p>
+</li>
+<li>
+<p>Retrieves the <code>WebSocketSession</code> from the provided <code>IntegrationWebSocketContainer</code></p>
+</li>
+<li>
+<p>Delegates the conversion and sending of <code>WebSocketMessage</code> work to the appropriate <code>SubProtocolHandler</code> from the provided <code>SubProtocolHandlerRegistry</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>On the client side, the <code>WebSocketSession</code> <code>id</code> message header is not required, because <code>ClientWebSocketContainer</code> deals only with a single connection and its <code>WebSocketSession</code> respectively.</p>
+</div>
+<div class="paragraph">
+<p>To use the STOMP sub-protocol, you should configure this adapter with a <code>StompSubProtocolHandler</code>.
+Then you can send any STOMP message type to this adapter, using <code>StompHeaderAccessor.create(StompCommand&#8230;&#8203;)</code> and a <code>MessageBuilder</code>, or just using a <code>HeaderEnricher</code> (see <a href="content-enrichment.html#header-enricher" class="xref page">Header Enricher</a>).</p>
+</div>
+<div class="paragraph">
+<p>The rest of this chapter covers largely additional configuration options.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="web-sockets-namespace"><a class="anchor" href="#web-sockets-namespace"></a>WebSockets Namespace Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Spring Integration WebSocket namespace includes several components described in the remainder of this chapter.
+To include it in your configuration, use the following namespace declaration in your application context configuration file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:int="http://www.springframework.org/schema/integration"
+  xmlns:int-websocket="http://www.springframework.org/schema/integration/websocket"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    https://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    https://www.springframework.org/schema/integration/spring-integration.xsd
+    http://www.springframework.org/schema/integration/websocket
+    https://www.springframework.org/schema/integration/websocket/spring-integration-websocket.xsd"&gt;
+    ...
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="websocket-client-container-attributes"><a class="anchor" href="#websocket-client-container-attributes"></a><code>&lt;int-websocket:client-container&gt;</code> Attributes</h3>
+<div class="paragraph">
+<p>The following listing shows the attributes available for the <code>&lt;int-websocket:client-container&gt;</code> element:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-websocket:client-container
+                  id=""                             <i class="conum" data-value="1"></i><b>(1)</b>
+                  client=""                         <i class="conum" data-value="2"></i><b>(2)</b>
+                  uri=""                            <i class="conum" data-value="3"></i><b>(3)</b>
+                  uri-variables=""                  <i class="conum" data-value="4"></i><b>(4)</b>
+                  origin=""                         <i class="conum" data-value="5"></i><b>(5)</b>
+                  send-time-limit=""                <i class="conum" data-value="6"></i><b>(6)</b>
+                  send-buffer-size-limit=""         <i class="conum" data-value="7"></i><b>(7)</b>
+                  send-buffer-overflow-strategy=""  <i class="conum" data-value="8"></i><b>(8)</b>
+                  auto-startup=""                   <i class="conum" data-value="9"></i><b>(9)</b>
+                  phase=""&gt;                        <i class="conum" data-value="10"></i><b>(10)</b>
+                &lt;int-websocket:http-headers&gt;
+                  &lt;entry key="" value=""/&gt;
+                &lt;/int-websocket:http-headers&gt;      <i class="conum" data-value="11"></i><b>(11)</b>
+&lt;/int-websocket:client-container&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The component bean name.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>WebSocketClient</code> bean reference.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>uri</code> or <code>uriTemplate</code> to the target WebSocket service.
+If you use it as a <code>uriTemplate</code> with URI variable placeholders, the <code>uri-variables</code> attribute is required.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Comma-separated values for the URI variable placeholders within the <code>uri</code> attribute value.
+The values are replaced into the placeholders according to their order in the <code>uri</code>.
+See <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/util/UriComponents.html#expand-java.lang.Object"><code>UriComponents.expand(Object&#8230;&#8203;uriVariableValues)</code></a>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The <code>Origin</code> Handshake HTTP header value.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The WebSocket session 'send' timeout limit.
+Defaults to <code>10000</code>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The WebSocket session 'send' message size limit.
+Defaults to <code>524288</code>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The WebSocket session send buffer overflow strategy
+determines the behavior when a session&#8217;s outbound message buffer has reached the <code>send-buffer-size-limit</code>.
+See <code>ConcurrentWebSocketSessionDecorator.OverflowStrategy</code> for possible values and more details.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Boolean value indicating whether this endpoint should start automatically.
+Defaults to <code>false</code>, assuming that this container is started from the <a href="#web-socket-inbound-adapter">WebSocket inbound adapter</a>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>The lifecycle phase within which this endpoint should start and stop.
+The lower the value, the earlier this endpoint starts and the later it stops.
+The default is <code>Integer.MAX_VALUE</code>.
+Values can be negative.
+See <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/SmartLifecycle.html"><code>SmartLifeCycle</code></a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>A <code>Map</code> of <code>HttpHeaders</code> to be used with the Handshake request.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>[[&lt;int-websocket:server-container&gt;-attributes]]
+=== <code>&lt;int-websocket:server-container&gt;</code> Attributes</p>
+</div>
+<div class="paragraph">
+<p>The following listing shows the attributes available for the <code>&lt;int-websocket:server-container&gt;</code> element:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-websocket:server-container
+          id=""                             <i class="conum" data-value="1"></i><b>(1)</b>
+          path=""                           <i class="conum" data-value="2"></i><b>(2)</b>
+          handshake-handler=""              <i class="conum" data-value="3"></i><b>(3)</b>
+          handshake-interceptors=""         <i class="conum" data-value="4"></i><b>(4)</b>
+          decorator-factories=""            <i class="conum" data-value="5"></i><b>(5)</b>
+          send-time-limit=""                <i class="conum" data-value="6"></i><b>(6)</b>
+          send-buffer-size-limit=""         <i class="conum" data-value="7"></i><b>(7)</b>
+          send-buffer-overflow-strategy=""  <i class="conum" data-value="8"></i><b>(8)</b>
+          allowed-origins=""&gt;               <i class="conum" data-value="9"></i><b>(9)</b>
+          &lt;int-websocket:sockjs
+            client-library-url=""          <i class="conum" data-value="10"></i><b>(10)</b>
+            stream-bytes-limit=""          <i class="conum" data-value="11"></i><b>(11)</b>
+            session-cookie-needed=""       <i class="conum" data-value="12"></i><b>(12)</b>
+            heartbeat-time=""              <i class="conum" data-value="13"></i><b>(13)</b>
+            disconnect-delay=""            <i class="conum" data-value="14"></i><b>(14)</b>
+            message-cache-size=""          <i class="conum" data-value="15"></i><b>(15)</b>
+            websocket-enabled=""           <i class="conum" data-value="16"></i><b>(16)</b>
+            scheduler=""                   <i class="conum" data-value="17"></i><b>(17)</b>
+            message-codec=""               <i class="conum" data-value="18"></i><b>(18)</b>
+            transport-handlers=""          <i class="conum" data-value="19"></i><b>(19)</b>
+            suppress-cors="true" /&gt;        <i class="conum" data-value="20"></i><b>(20)</b>
+&lt;/int-websocket:server-container&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The component bean name.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A path (or comma-separated paths) that maps a particular request to a <code>WebSocketHandler</code>.
+Supports exact path mapping URIs (such as <code>/myPath</code>) and ant-style path patterns (such as <code>/myPath/**</code>).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>HandshakeHandler</code> bean reference.
+Defaults to <code>DefaultHandshakeHandler</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>List of <code>HandshakeInterceptor</code> bean references.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>List of one or more factories (<code>WebSocketHandlerDecoratorFactory</code>) that decorate the handler used to process WebSocket messages.
+This may be useful for some advanced use cases (for example, to allow Spring Security to forcibly close
+the WebSocket session when the corresponding HTTP session expires).
+See the <a href="https://docs.spring.io/spring-session/docs/current/reference/html5/#websocket">Spring Session Project</a> for more information.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>See the same option on the <a href="#websocket-client-container-attributes"><code>&lt;int-websocket:client-container&gt;</code></a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>See the same option on the <a href="#websocket-client-container-attributes"><code>&lt;int-websocket:client-container&gt;</code></a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The WebSocket session send buffer overflow strategy
+determines the behavior when a session&#8217;s outbound message buffer has reached the <code>send-buffer-size-limit</code>.
+See <code>ConcurrentWebSocketSessionDecorator.OverflowStrategy</code> for possible values and more details.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>The allowed origin header values.
+You can specify multiple origins as a comma-separated list.
+This check is mostly designed for browser clients.
+There is nothing preventing other types of client from modifying the origin header value.
+When SockJS is enabled and allowed origins are restricted, transport types that do not use origin headers for cross-origin requests (<code>jsonp-polling</code>, <code>iframe-xhr-polling</code>, <code>iframe-eventsource</code>, and <code>iframe-htmlfile</code>) are disabled.
+As a consequence, IE6 and IE7 are not supported, and IE8 and IE9 are supported only without cookies.
+By default, all origins are allowed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>Transports with no native cross-domain communication (such as <code>eventsource</code> and <code>htmlfile</code>) must get a simple page from the &#8220;foreign&#8221; domain in an invisible iframe so that code in the iframe can run from a domain local to the SockJS server.
+Since the iframe needs to load the SockJS javascript client library, this property lets you specify the location from which to load it.
+By default, it points to <code><a href="https://d1fxtkz8shb9d2.cloudfront.net/sockjs-0.3.4.min.js" class="bare">d1fxtkz8shb9d2.cloudfront.net/sockjs-0.3.4.min.js</a></code>.
+However, you can also set it to point to a URL served by the application.
+Note that it is possible to specify a relative URL, in which case the URL must be relative to the iframe URL.
+For example, assuming a SockJS endpoint mapped to <code>/sockjs</code> and the resulting iframe URL is <code>/sockjs/iframe.html</code>, the relative URL must start with "../../" to traverse up to the location above the SockJS mapping.
+For prefix-based servlet mapping, you may need one more traversal.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Minimum number of bytes that can be sent over a single HTTP streaming request before it is closed.
+Defaults to <code>128K</code> (that is, 128*1024 or 131072 bytes).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>The <code>cookie_needed</code> value in the response from the SockJs <code>/info</code> endpoint.
+This property indicates whether a <code>JSESSIONID</code> cookie is required for the application to function correctly (for example, for load balancing or in Java Servlet containers for the use of an HTTP session).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>The amount of time (in milliseconds) when the server has not sent any messages and after which the server should
+send a heartbeat frame to the client in order to keep the connection from breaking.
+The default value is <code>25,000</code> (25 seconds).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="14"></i><b>14</b></td>
+<td>The amount of time (in milliseconds) before a client is considered disconnected after not having a receiving connection (that is, an active connection over which the server can send data to the client).
+The default value is <code>5000</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="15"></i><b>15</b></td>
+<td>The number of server-to-client messages that a session can cache while waiting for the next HTTP polling request from the client.
+The default size is <code>100</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="16"></i><b>16</b></td>
+<td>Some load balancers do not support WebSockets.
+Set this option to <code>false</code> to disable the WebSocket transport on the server side.
+The default value is <code>true</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="17"></i><b>17</b></td>
+<td>The <code>TaskScheduler</code> bean reference.
+A new <code>ThreadPoolTaskScheduler</code> instance is created if no value is provided.
+This scheduler instance is used for scheduling heart-beat messages.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="18"></i><b>18</b></td>
+<td>The <code>SockJsMessageCodec</code> bean reference to use for encoding and decoding SockJS messages.
+By default, <code>Jackson2SockJsMessageCodec</code> is used, which requires the Jackson library to be present on the classpath.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="19"></i><b>19</b></td>
+<td>List of <code>TransportHandler</code> bean references.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="20"></i><b>20</b></td>
+<td>Whether to disable automatic addition of CORS headers for SockJS requests.
+The default value is <code>false</code>.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="websocket-outbound-channel-adapter-attributes"><a class="anchor" href="#websocket-outbound-channel-adapter-attributes"></a><code>&lt;int-websocket:outbound-channel-adapter&gt;</code> Attributes</h3>
+<div class="paragraph">
+<p>The following listing shows the attributes available for the <code>&lt;int-websocket:outbound-channel-adapter&gt;</code> element:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-websocket:outbound-channel-adapter
+                          id=""                             <i class="conum" data-value="1"></i><b>(1)</b>
+                          channel=""                        <i class="conum" data-value="2"></i><b>(2)</b>
+                          container=""                      <i class="conum" data-value="3"></i><b>(3)</b>
+                          default-protocol-handler=""       <i class="conum" data-value="4"></i><b>(4)</b>
+                          protocol-handlers=""              <i class="conum" data-value="5"></i><b>(5)</b>
+                          message-converters=""             <i class="conum" data-value="6"></i><b>(6)</b>
+                          merge-with-default-converters=""  <i class="conum" data-value="7"></i><b>(7)</b>
+                          auto-startup=""                   <i class="conum" data-value="8"></i><b>(8)</b>
+                          phase=""/&gt;                        <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The component bean name.
+If you do not provide the <code>channel</code> attribute, a <code>DirectChannel</code> is created and registered in the application context with this <code>id</code> attribute as the bean name.
+In this case, the endpoint is registered with the bean name <code>id</code> plus <code>.adapter</code>.
+And the <code>MessageHandler</code> is registered with the bean alias <code>id</code> plus <code>.handler</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Identifies the channel attached to this adapter.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The reference to the <code>IntegrationWebSocketContainer</code> bean, which encapsulates the low-level connection and <code>WebSocketSession</code> handling operations.
+Required.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Optional reference to a <code>SubProtocolHandler</code> instance.
+It is used when the client did not request a sub-protocol or it is a single protocol-handler.
+If this reference or a <code>protocol-handlers</code> list is not provided, the <code>PassThruSubProtocolHandler</code> is used by default.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>List of <code>SubProtocolHandler</code> bean references for this channel adapter.
+If you provide only a single bean reference and do not provide a <code>default-protocol-handler</code>, that single <code>SubProtocolHandler</code> is used as the <code>default-protocol-handler</code>.
+If you do not set this attribute or <code>default-protocol-handler</code>, the <code>PassThruSubProtocolHandler</code> is used by default.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>List of <code>MessageConverter</code> bean references for this channel adapter.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Boolean value indicating whether the default converters should be registered after any custom converters.
+This flag is used only if <code>message-converters</code> is provided.
+Otherwise, all default converters are registered.
+Defaults to <code>false</code>.
+The default converters are (in order): <code>StringMessageConverter</code>, <code>ByteArrayMessageConverter</code>, and <code>MappingJackson2MessageConverter</code> (if the Jackson library is present on the classpath).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>Boolean value indicating whether this endpoint should start automatically.
+Defaults to <code>true</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>The lifecycle phase within which this endpoint should start and stop.
+The lower the value, the earlier this endpoint starts and the later it stops.
+The default is <code>Integer.MIN_VALUE</code>.
+Values can be negative.
+See <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/SmartLifecycle.html"><code>SmartLifeCycle</code></a>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>[[&lt;int-websocket:inbound-channel-adapter&gt;-attributes]]
+=== <code>&lt;int-websocket:inbound-channel-adapter&gt;</code> Attributes</p>
+</div>
+<div class="paragraph">
+<p>The following listing shows the attributes available for the <code>&lt;int-websocket:outbound-channel-adapter&gt;</code> element:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-websocket:inbound-channel-adapter
+                            id=""  <i class="conum" data-value="1"></i><b>(1)</b>
+                            channel=""  <i class="conum" data-value="2"></i><b>(2)</b>
+                            error-channel=""  <i class="conum" data-value="3"></i><b>(3)</b>
+                            container=""  <i class="conum" data-value="4"></i><b>(4)</b>
+                            default-protocol-handler=""  <i class="conum" data-value="5"></i><b>(5)</b>
+                            protocol-handlers=""  <i class="conum" data-value="6"></i><b>(6)</b>
+                            message-converters=""  <i class="conum" data-value="7"></i><b>(7)</b>
+                            merge-with-default-converters=""  <i class="conum" data-value="8"></i><b>(8)</b>
+                            send-timeout=""  <i class="conum" data-value="9"></i><b>(9)</b>
+                            payload-type=""  <i class="conum" data-value="10"></i><b>(10)</b>
+                            use-broker=""  <i class="conum" data-value="11"></i><b>(11)</b>
+                            auto-startup=""  <i class="conum" data-value="12"></i><b>(12)</b>
+                            phase=""/&gt;  <i class="conum" data-value="13"></i><b>(13)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The component bean name.
+If you do not set the <code>channel</code> attribute, a <code>DirectChannel</code> is created and registered in the application context with this <code>id</code> attribute as the bean name.
+In this case, the endpoint is registered with the bean name <code>id</code> plus <code>.adapter</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Identifies the channel attached to this adapter.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>MessageChannel</code> bean reference to which the <code>ErrorMessage</code> instances should be sent.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>See the same option on the <a href="#websocket-outbound-channel-adapter-attributes"><code>&lt;int-websocket:outbound-channel-adapter&gt;</code></a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>See the same option on the <a href="#websocket-outbound-channel-adapter-attributes"><code>&lt;int-websocket:outbound-channel-adapter&gt;</code></a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>See the same option on the <a href="#websocket-outbound-channel-adapter-attributes"><code>&lt;int-websocket:outbound-channel-adapter&gt;</code></a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>See the same option on the <a href="#websocket-outbound-channel-adapter-attributes"><code>&lt;int-websocket:outbound-channel-adapter&gt;</code></a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>See the same option on the <a href="#websocket-outbound-channel-adapter-attributes"><code>&lt;int-websocket:outbound-channel-adapter&gt;</code></a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Maximum amount of time (in milliseconds) to wait when sending a message to the channel if the channel can block.
+For example, a <code>QueueChannel</code> can block until space is available if its maximum capacity has been reached.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>Fully qualified name of the Java type for the target <code>payload</code> to convert from the incoming <code>WebSocketMessage</code>.
+Defaults to <code>java.lang.String</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Indicates whether this adapter sends <code>non-MESSAGE</code> <code>WebSocketMessage</code> instances and messages with broker destinations to the <code>AbstractBrokerMessageHandler</code> from the application context.
+When this attribute is <code>true</code>, the <code>Broker Relay</code> configuration is required.
+This attribute is used only on the server side.
+On the client side, it is ignored.
+Defaults to <code>false</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>See the same option on the <a href="#websocket-outbound-channel-adapter-attributes"><code>&lt;int-websocket:outbound-channel-adapter&gt;</code></a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>See the same option on the <a href="#websocket-outbound-channel-adapter-attributes"><code>&lt;int-websocket:outbound-channel-adapter&gt;</code></a>.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="client-stomp-encoder"><a class="anchor" href="#client-stomp-encoder"></a>Using <code>ClientStompEncoder</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 4.3.13, Spring Integration provides <code>ClientStompEncoder</code> (as an extension of the standard <code>StompEncoder</code>) for use on the client side of WebSocket channel adapters.
+For proper client side message preparation, you must inject an instance of the <code>ClientStompEncoder</code> into the <code>StompSubProtocolHandler</code>.
+One problem with the default <code>StompSubProtocolHandler</code> is that it was designed for the server side, so it updates the <code>SEND</code> <code>stompCommand</code> header into <code>MESSAGE</code> (as required by the STOMP protocol for the server side).
+If the client does not send its messages in the proper <code>SEND</code> web socket frame, some STOMP brokers do not accept them.
+The purpose of the <code>ClientStompEncoder</code>, in this case, is to override the <code>stompCommand</code> header and set it to the <code>SEND</code> value before encoding the message to the <code>byte[]</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="websocket-dynamic-endpoints"><a class="anchor" href="#websocket-dynamic-endpoints"></a>Dynamic WebSocket Endpoints Registration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 5.5, the WebSocket server endpoints (channel adapters based on a <code>ServerWebSocketContainer</code>) can now be registered (and removed) at runtime - the <code>paths</code> a <code>ServerWebSocketContainer</code> is mapped is exposed via <code>HandlerMapping</code> into a <code>DispatcherServlet</code> and accessible for WebSocket clients.
+The <a href="dsl/java-runtime-flows.html" class="xref page">Dynamic and Runtime Integration Flows</a> support helps to register these endpoints in a transparent manner:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Autowired
+IntegrationFlowContext integrationFlowContext;
+
+@Autowired
+HandshakeHandler handshakeHandler;
+...
+ServerWebSocketContainer serverWebSocketContainer =
+       new ServerWebSocketContainer("/dynamic")
+               .setHandshakeHandler(this.handshakeHandler);
+
+WebSocketInboundChannelAdapter webSocketInboundChannelAdapter =
+       new WebSocketInboundChannelAdapter(serverWebSocketContainer);
+
+QueueChannel dynamicRequestsChannel = new QueueChannel();
+
+IntegrationFlow serverFlow =
+       IntegrationFlow.from(webSocketInboundChannelAdapter)
+               .channel(dynamicRequestsChannel)
+               .get();
+
+IntegrationFlowContext.IntegrationFlowRegistration dynamicServerFlow =
+       this.integrationFlowContext.registration(serverFlow)
+               .addBean(serverWebSocketContainer)
+               .register();
+...
+dynamicServerFlow.destroy();</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
+<td class="content">
+It is important to call <code>.addBean(serverWebSocketContainer)</code> on the dynamic flow registration to add the instance of <code>ServerWebSocketContainer</code> into an <code>ApplicationContext</code> for endpoint registration.
+When a dynamic flow registration is destroyed, the associated <code>ServerWebSocketContainer</code> instance is destroyed, too, as well as the respective endpoint registration, including URL path mappings.
 </td>
 </tr>
 </table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The dynamic Websocket endpoints can only be registered via Spring Integration mechanism: when regular Spring <code>@EnableWebsocket</code> is used, Spring Integration configuration backs off and no infrastructure for dynamic endpoints is registered.
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="webflux.html">WebFlux Support</a></span>
+  <span class="next"><a href="ws.html">Web Services Support</a></span>
 </nav>
 </article>
 </div>  </div>

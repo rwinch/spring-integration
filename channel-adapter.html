@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Channel Adapter :: Spring Integration</title>
+    <link rel="prev" href="polling-consumer.html">
+    <link rel="next" href="bridge.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -319,7 +320,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="polling-consumer.html">Poller</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="channel-adapter.html">Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Channel Adapter"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/channel-adapter.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,386 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="core.html">Core Messaging</a></li>
+    <li><a href="channel-adapter.html">Channel Adapter</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Channel Adapter</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>A channel adapter is a message endpoint that enables connecting a single sender or receiver to a message channel.
+Spring Integration provides a number of adapters to support various transports, such as JMS, file, HTTP, web services, mail, and more.
+Upcoming chapters of this reference guide discuss each adapter.
+However, this chapter focuses on the simple but flexible method-invoking channel adapter support.
+There are both inbound and outbound adapters, and each may be configured with XML elements provided in the core namespace.
+These provide an easy way to extend Spring Integration, as long as you have a method that can be invoked as either a source or a destination.</p>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="channel-adapter-namespace-inbound"><a class="anchor" href="#channel-adapter-namespace-inbound"></a>Configuring An Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An <code>inbound-channel-adapter</code> element (a <code>SourcePollingChannelAdapter</code> in Java configuration) can invoke any method on a Spring-managed object and send a non-null return value to a <code>MessageChannel</code> after converting the method&#8217;s output to a <code>Message</code>.
+When the adapter&#8217;s subscription is activated, a poller tries to receive messages from the source.
+The poller is scheduled with the <code>TaskScheduler</code> according to the provided configuration.
+To configure the polling interval or cron expression for an individual channel adapter, you can provide a 'poller' element with one of the scheduling attributes, such as 'fixed-rate' or 'cron'.
+The following example defines two <code>inbound-channel-adapter</code> instances:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_1_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_1_kotlin_dsl" class="tab">
+<p>Kotlin DSL</p>
+</li>
+<li id="_tabs_1_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow source1() {
+    return IntegrationFlow.from(() -&gt; new GenericMessage&lt;&gt;(...),
+                             e -&gt; e.poller(p -&gt; p.fixedRate(5000)))
+                ...
+                .get();
+}
+
+@Bean
+public IntegrationFlow source2() {
+    return IntegrationFlow.from(() -&gt; new GenericMessage&lt;&gt;(...),
+                             e -&gt; e.poller(p -&gt; p.cron("30 * 9-17 * * MON-FRI")))
+                ...
+                .get();
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class SourceService {
+
+    @InboundChannelAdapter(channel = "channel1", poller = @Poller(fixedRate = "5000"))
+    Object method1() {
+        ...
+    }
+
+    @InboundChannelAdapter(channel = "channel2", poller = @Poller(cron = "30 * 9-17 * * MON-FRI"))
+    Object method2() {
+        ...
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_kotlin_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_kotlin_dsl">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Bean
+fun messageSourceFlow() =
+    integrationFlow( { GenericMessage&lt;&gt;(...) },
+                    { poller { it.fixedRate(5000) } }) {
+        ...
+    }</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:inbound-channel-adapter ref="source1" method="method1" channel="channel1"&gt;
+    &lt;int:poller fixed-rate="5000"/&gt;
+&lt;/int:inbound-channel-adapter&gt;
+
+&lt;int:inbound-channel-adapter ref="source2" method="method2" channel="channel2"&gt;
+    &lt;int:poller cron="30 * 9-17 * * MON-FRI"/&gt;
+&lt;/int:channel-adapter&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>See also <a href="#channel-adapter-expressions-and-scripts">Channel Adapter Expressions and Scripts</a>.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+If no poller is provided, then a single default poller must be registered within the context.
+See <a href="endpoint.html#endpoint-namespace" class="xref page">Endpoint Namespace Support</a> for more detail.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+<div class="title">Important: Poller Configuration</div>
+<div class="paragraph">
+<p>All the <code>inbound-channel-adapter</code> types are backed by a <code>SourcePollingChannelAdapter</code>, which means they contain a poller configuration that polls the <code>MessageSource</code> (to invoke a custom method that produces the value that becomes a <code>Message</code> payload) based on the configuration specified in the Poller.
+The following example shows the configuration of two pollers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:poller max-messages-per-poll="1" fixed-rate="1000"/&gt;
+
+&lt;int:poller max-messages-per-poll="10" fixed-rate="1000"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the first configuration, the polling task is invoked once per poll, and, during each task (poll), the method (which results in the production of the message) is invoked once, based on the <code>max-messages-per-poll</code> attribute value.
+In the second configuration, the polling task is invoked 10 times per poll or until it returns 'null', thus possibly producing ten messages per poll while each poll happens at one-second intervals.
+However, what happens if the configuration looks like the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:poller fixed-rate="1000"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that there is no <code>max-messages-per-poll</code> specified.
+As we cover later, the identical poller configuration in the <code>PollingConsumer</code> (for example, <code>service-activator</code>, <code>filter</code>, <code>router</code>, and others) would have a default value of <code>-1</code> for <code>max-messages-per-poll</code>, which means &#8220;execute the polling task non-stop unless the polling method returns null (perhaps because there are no more messages in the <code>QueueChannel</code>)&#8221; and then sleep for one second.</p>
+</div>
+<div class="paragraph">
+<p>However, in the <code>SourcePollingChannelAdapter</code>, it is a bit different.
+The default value for <code>max-messages-per-poll</code> is <code>1</code>, unless you explicitly set it to a negative value (such as <code>-1</code>).
+This makes sure that the poller can react to lifecycle events (such as start and stop) and prevents it from potentially spinning in an infinite loop if the implementation of the custom method of the <code>MessageSource</code> has a potential to never return null and happens to be non-interruptible.</p>
+</div>
+<div class="paragraph">
+<p>However, if you are sure that your method can return null, and you need to poll for as many sources as available per each poll, you should explicitly set <code>max-messages-per-poll</code> to a negative value, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:poller max-messages-per-poll="-1" fixed-rate="1000"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.5, a <code>0</code> value for <code>max-messages-per-poll</code> has a special meaning - skip the <code>MessageSource.receive()</code> call altogether, which may be considered as pausing for this inbound channel adapter until the <code>maxMessagesPerPoll</code> is changed to a non-zero value at a later time, e.g. via a Control Bus.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 6.2, the <code>fixed-delay</code> and <code>fixed-rate</code> can be configured in <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601 Duration</a> format, e.g. <code>PT10S</code>, <code>P1D</code> etc.
+In addition, an <code>initial-interval</code> of the underlying <code>PeriodicTrigger</code> is also exposed with similar value formats as <code>fixed-delay</code> and <code>fixed-rate</code>.</p>
+</div>
+<div class="paragraph">
+<p>Also see <a href="endpoint.html#global-default-poller" class="xref page">Global Default Poller</a> for more information.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="channel-adapter-namespace-outbound"><a class="anchor" href="#channel-adapter-namespace-outbound"></a>Configuring An Outbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An <code>outbound-channel-adapter</code> element (a <code>@ServiceActivator</code> for Java configuration) can also connect a <code>MessageChannel</code> to any POJO consumer method that should be invoked with the payload of messages sent to that channel.
+The following example shows how to define an outbound channel adapter:</p>
+</div>
+<div id="_tabs_2" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_2_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_2_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_2_kotlin_dsl" class="tab">
+<p>Kotlin DSL</p>
+</li>
+<li id="_tabs_2_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_2_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_2_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow outboundChannelAdapterFlow(MyPojo myPojo) {
+    return f -&gt; f
+             .handle(myPojo, "handle");
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyPojo {
+
+    @ServiceActivator(channel = "channel1")
+    void handle(Object payload) {
+        ...
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_kotlin_dsl--panel" class="tabpanel" aria-labelledby="_tabs_2_kotlin_dsl">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Bean
+fun outboundChannelAdapterFlow(myPojo: MyPojo) =
+    integrationFlow {
+        handle(myPojo, "handle")
+    }</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:outbound-channel-adapter channel="channel1" ref="target" method="handle"/&gt;
+
+&lt;beans:bean id="target" class="org.MyPojo"/&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>If the channel being adapted is a <code>PollableChannel</code>, you must provide a poller sub-element (the <code>@Poller</code> sub-annotation on the <code>@ServiceActivator</code>), as the following example shows:</p>
+</div>
+<div id="_tabs_3" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_3_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_3_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyPojo {
+
+    @ServiceActivator(channel = "channel1", poller = @Poller(fixedRate = "3000"))
+    void handle(Object payload) {
+        ...
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:outbound-channel-adapter channel="channel2" ref="target" method="handle"&gt;
+    &lt;int:poller fixed-rate="3000" /&gt;
+&lt;/int:outbound-channel-adapter&gt;
+
+&lt;beans:bean id="target" class="org.MyPojo"/&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>You should use a <code>ref</code> attribute if the POJO consumer implementation can be reused in other <code>&lt;outbound-channel-adapter&gt;</code> definitions.
+However, if the consumer implementation is referenced by only a single definition of the <code>&lt;outbound-channel-adapter&gt;</code>, you can define it as an inner bean, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:outbound-channel-adapter channel="channel" method="handle"&gt;
+    &lt;beans:bean class="org.Foo"/&gt;
+&lt;/int:outbound-channel-adapter&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Using both the <code>ref</code> attribute and an inner handler definition in the same <code>&lt;outbound-channel-adapter&gt;</code> configuration is not allowed, as it creates an ambiguous condition.
+Such a configuration results in an exception being thrown.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>Any channel adapter can be created without a <code>channel</code> reference, in which case it implicitly creates an instance of <code>DirectChannel</code>.
+The created channel&#8217;s name matches the <code>id</code> attribute of the <code>&lt;inbound-channel-adapter&gt;</code> or <code>&lt;outbound-channel-adapter&gt;</code> element.
+Therefore, if <code>channel</code> is not provided, <code>id</code> is required.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="channel-adapter-expressions-and-scripts"><a class="anchor" href="#channel-adapter-expressions-and-scripts"></a>Channel Adapter Expressions and Scripts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Like many other Spring Integration components, the <code>&lt;inbound-channel-adapter&gt;</code> and <code>&lt;outbound-channel-adapter&gt;</code> also provide support for SpEL expression evaluation.
+To use SpEL, provide the expression string in the 'expression' attribute instead of providing the 'ref' and 'method' attributes that are used for method-invocation on a bean.
+When an expression is evaluated, it follows the same contract as method-invocation where: the expression for an <code>&lt;inbound-channel-adapter&gt;</code> generates a message any time the evaluation result is a non-null value, while the expression for an <code>&lt;outbound-channel-adapter&gt;</code> must be the equivalent of a void-returning method invocation.</p>
+</div>
+<div class="paragraph">
+<p>Starting with Spring Integration 3.0, an <code>&lt;int:inbound-channel-adapter/&gt;</code> can also be configured with a SpEL <code>&lt;expression/&gt;</code> (or even with a <code>&lt;script/&gt;</code>) sub-element, for when more sophistication is required than can be achieved with the simple 'expression' attribute.
+If you provide a script as a <code>Resource</code> by using the <code>location</code> attribute, you can also set <code>refresh-check-delay</code>, which allows the resource to be periodically refreshed.
+If you want the script to be checked on each poll, you would need to coordinate this setting with the poller&#8217;s trigger, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:inbound-channel-adapter ref="source1" method="method1" channel="channel1"&gt;
+    &lt;int:poller max-messages-per-poll="1" fixed-delay="5000"/&gt;
+    &lt;script:script lang="ruby" location="Foo.rb" refresh-check-delay="5000"/&gt;
+&lt;/int:inbound-channel-adapter&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See also the <code>cacheSeconds</code> property on the <code>ReloadableResourceBundleExpressionSource</code> when using the <code>&lt;expression/&gt;</code> sub-element.
+For more information regarding expressions, see <a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a>.
+For scripts, see <a href="groovy.html" class="xref page">Groovy support</a> and <a href="scripting.html" class="xref page">Scripting Support</a>.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+The <code>&lt;int:inbound-channel-adapter/&gt;</code> (<code>SourcePollingChannelAdapter</code>) is an endpoint which starts a message flow by periodically triggering to poll some underlying <code>MessageSource</code>.
+Since, at the time of polling, there is no message object, expressions and scripts do not have access to a root <code>Message</code>, so there are no payload or headers properties that are available in most other messaging SpEL expressions.
+The script can generate and return a complete <code>Message</code> object with headers and payload or only a payload, which is added to a message with basic headers by the framework.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="polling-consumer.html">Poller</a></span>
+  <span class="next"><a href="bridge.html">Messaging Bridge</a></span>
 </nav>
 </article>
 </div>  </div>

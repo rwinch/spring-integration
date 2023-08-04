@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Mail Support :: Spring Integration</title>
+    <link rel="prev" href="kafka.html">
+    <link rel="next" href="mongodb.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -864,7 +865,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="kafka.html">Apache Kafka Support</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="mail.html">Mail Support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Mail Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/mail.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,884 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="mail.html">Mail Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Mail Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>This section describes how to work with mail messages in Spring Integration.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-mail&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-mail:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>jakarta.mail:jakarta.mail-api</code> must be included via vendor-specific implementation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-outbound"><a class="anchor" href="#mail-outbound"></a>Mail-sending Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration provides support for outbound email with the <code>MailSendingMessageHandler</code>.
+It delegates to a configured instance of Spring&#8217;s <code>JavaMailSender</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"> JavaMailSender mailSender = context.getBean("mailSender", JavaMailSender.class);
+
+ MailSendingMessageHandler mailSendingHandler = new MailSendingMessageHandler(mailSender);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>MailSendingMessageHandler</code> has various mapping strategies that use Spring&#8217;s <code>MailMessage</code> abstraction.
+If the received message&#8217;s payload is already a <code>MailMessage</code> instance, it is sent directly.
+Therefore, we generally recommend that you precede this consumer with a transformer for non-trivial <code>MailMessage</code> construction requirements.
+However, Spring Integration supports a few simple message mapping strategies.
+For example, if the message payload is a byte array, that is mapped to an attachment.
+For simple text-based emails, you can provide a string-based message payload.
+In that case, a <code>MailMessage</code> is created with that <code>String</code> as the text content.
+If you work with a message payload type whose <code>toString()</code> method returns appropriate mail text content, consider adding Spring Integration&#8217;s <code>ObjectToStringTransformer</code> prior to the outbound mail adapter (see the example in <a href="transformer.html#transformer-namespace" class="xref page">Configuring a Transformer with XML</a> for more detail).</p>
+</div>
+<div class="paragraph">
+<p>You can also configure the outbound <code>MailMessage</code> with certain values from <code>MessageHeaders</code>.
+If available, values are mapped to the outbound mail&#8217;s properties, such as the recipients (To, Cc, and BCc), the <code>from</code>, the <code>reply-to</code>, and the <code>subject</code>.
+The header names are defined by the following constants:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"> MailHeaders.SUBJECT
+ MailHeaders.TO
+ MailHeaders.CC
+ MailHeaders.BCC
+ MailHeaders.FROM
+ MailHeaders.REPLY_TO</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+<code>MailHeaders</code> also lets you override corresponding <code>MailMessage</code> values.
+For example, if <code>MailMessage.to</code> is set to '<a href="mailto:thing1@things.com">thing1@things.com</a>' and the <code>MailHeaders.TO</code> message header is provided, it takes precedence and overrides the corresponding value in <code>MailMessage</code>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-inbound"><a class="anchor" href="#mail-inbound"></a>Mail-receiving Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration also provides support for inbound email with the <code>MailReceivingMessageSource</code>.
+It delegates to a configured instance of Spring Integration&#8217;s own <code>MailReceiver</code> interface.
+There are two implementations: <code>Pop3MailReceiver</code> and <code>ImapMailReceiver</code>.
+The easiest way to instantiate either of these is bypassing the 'uri' for a mail store to the receiver&#8217;s constructor, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">MailReceiver receiver = new Pop3MailReceiver("pop3://usr:pwd@localhost/INBOX");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another option for receiving mail is the IMAP <code>idle</code> command (if supported by your mail server).
+Spring Integration provides the <code>ImapIdleChannelAdapter</code>, which is itself a message-producing endpoint.
+It delegates to an instance of the <code>ImapMailReceiver</code>.
+The next section has examples of configuring both types of inbound channel adapter with Spring Integration&#8217;s namespace support in the 'mail' schema.</p>
+</div>
+<div id="imap-format-important" class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+<div class="paragraph">
+<p>Normally, when the <code>IMAPMessage.getContent()</code> method is called, certain headers as well as the body are rendered (for a simple text email), as the following example shows:</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">To: thing1@things.com
+From: thing2@morethings.com
+Subject: Test Email
+
+something</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With a simple <code>MimeMessage</code>, <code>getContent()</code> returns the mail body (<code>something</code> in the preceding example).</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 2.2, the framework eagerly fetches IMAP messages and exposes them as an internal subclass of <code>MimeMessage</code>.
+This had the undesired side effect of changing the <code>getContent()</code> behavior.
+This inconsistency was further exacerbated by the <a href="#mail-mapping">Mail Mapping</a> enhancement introduced in version 4.3, because, when a header mapper was provided, the payload was rendered by the <code>IMAPMessage.getContent()</code> method.
+This meant that the IMAP content differed, depending on whether a header mapper was provided.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, messages originating from an IMAP source render the content in accordance with <code>IMAPMessage.getContent()</code> behavior, regardless of whether a header mapper is provided.
+If you do not use a header mapper, and you wish to revert to the previous behavior of rendering only the body, set the <code>simpleContent</code> boolean property on the mail receiver to <code>true</code>.
+This property now controls the rendering regardless of whether a header mapper is used.
+It now allows body-only rendering when a header mapper is provided.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.2, the <code>autoCloseFolder</code> option is provided on the mail receiver.
+Setting it to <code>false</code> doesn&#8217;t close the folder automatically after a fetch, but instead an <code>IntegrationMessageHeaderAccessor.CLOSEABLE_RESOURCE</code> header (see <a href="message.html#message-header-accessor" class="xref page"><code>MessageHeaderAccessor</code> API</a> for more information) is populated into every message to producer from the channel adapter.
+This does not work with <code>Pop3MailReceiver</code> as it relies on opening and closing the folder to get new messages.
+It is the target application&#8217;s responsibility to call the <code>close()</code> on this header whenever it is necessary in the downstream flow:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Closeable closeableResource = StaticMessageHeaderAccessor.getCloseableResource(mailMessage);
+if (closeableResource != null) {
+    closeableResource.close();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Keeping the folder open is useful in cases where communication with the server is needed during parsing multipart content of the email with attachments.
+The <code>close()</code> on the <code>IntegrationMessageHeaderAccessor.CLOSEABLE_RESOURCE</code> header delegates to the <code>AbstractMailReceiver</code> to close the folder with <code>expunge</code> option if <code>shouldDeleteMessages</code> is configured respectively on the <code>AbstractMailReceiver</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.4, it is possible now to return a <code>MimeMessage</code> as is without any conversion or eager content loading.
+This functionality is enabled with this combination of options: no <code>headerMapper</code> provided, the <code>simpleContent</code> property is <code>false</code> and the <code>autoCloseFolder</code> property is <code>false</code>.
+The <code>MimeMessage</code> is present as the payload of the Spring message produced.
+In this case, the only header populated is the mentioned above <code>IntegrationMessageHeaderAccessor.CLOSEABLE_RESOURCE</code> for the folder which must be closed when processing of the <code>MimeMessage</code> is complete.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.5.11, the folder is closed automatically after <code>AbstractMailReceiver.receive()</code> if no messages received or all of them are filtered out independently of the <code>autoCloseFolder</code> flag.
+In this case there is nothing to produce downstream for possible logic around <code>IntegrationMessageHeaderAccessor.CLOSEABLE_RESOURCE</code> header.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 6.0.5, the <code>ImapIdleChannelAdapter</code> no longer performs asynchronous message publishing.
+This is necessary to block the idle listener loop for message processing downstream (e.g. with big attachments) because the mail folder must remain open.
+If an async hand-off is required, an <code>ExecutorChannel</code> can be used as the output channel of this channel adapter.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-mapping"><a class="anchor" href="#mail-mapping"></a>Inbound Mail Message Mapping</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, the payload of messages produced by the inbound adapters is the raw <code>MimeMessage</code>.
+You can use that object to interrogate the headers and content.
+Starting with version 4.3, you can provide a <code>HeaderMapper&lt;MimeMessage&gt;</code> to map the headers to <code>MessageHeaders</code>.
+For convenience, Spring Integration provides a <code>DefaultMailHeaderMapper</code> for this purpose.
+It maps the following headers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>mail_from</code>: A <code>String</code> representation of the <code>from</code> address.</p>
+</li>
+<li>
+<p><code>mail_bcc</code>: A <code>String</code> array containing the <code>bcc</code> addresses.</p>
+</li>
+<li>
+<p><code>mail_cc</code>: A <code>String</code> array containing the <code>cc</code> addresses.</p>
+</li>
+<li>
+<p><code>mail_to</code>: A <code>String</code> array containing the <code>to</code> addresses.</p>
+</li>
+<li>
+<p><code>mail_replyTo</code>: A <code>String</code> representation of the <code>replyTo</code> address.</p>
+</li>
+<li>
+<p><code>mail_subject</code>: The mail subject.</p>
+</li>
+<li>
+<p><code>mail_lineCount</code>: A line count (if available).</p>
+</li>
+<li>
+<p><code>mail_receivedDate</code>: The received date (if available).</p>
+</li>
+<li>
+<p><code>mail_size</code>: The mail size (if available).</p>
+</li>
+<li>
+<p><code>mail_expunged</code>: A boolean indicating if the message is expunged.</p>
+</li>
+<li>
+<p><code>mail_raw</code>: A <code>MultiValueMap</code> containing all the mail headers and their values.</p>
+</li>
+<li>
+<p><code>mail_contentType</code>: The content type of the original mail message.</p>
+</li>
+<li>
+<p><code>contentType</code>: The payload content type (see below).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When message mapping is enabled, the payload depends on the mail message and its implementation.
+Email contents are usually rendered by a <code>DataHandler</code> within the <code>MimeMessage</code>.</p>
+</div>
+<div class="paragraph">
+<p>For a <code>text/*</code> email, the payload is a <code>String</code> and the <code>contentType</code> header is the same as <code>mail_contentType</code>.</p>
+</div>
+<div class="paragraph">
+<p>For a messages with embedded <code>jakarta.mail.Part</code> instances, the <code>DataHandler</code> usually renders a <code>Part</code> object.
+These objects are not <code>Serializable</code> and are not suitable for serialization with alternative technologies such as <code>Kryo</code>.
+For this reason, by default, when mapping is enabled, such payloads are rendered as a raw <code>byte[]</code> containing the <code>Part</code> data.
+Examples of <code>Part</code> are <code>Message</code> and <code>Multipart</code>.
+The <code>contentType</code> header is <code>application/octet-stream</code> in this case.
+To change this behavior and receive a <code>Multipart</code> object payload, set <code>embeddedPartsAsBytes</code> to <code>false</code> on <code>MailReceiver</code>.
+For content types that are unknown to the <code>DataHandler</code>, the contents are rendered as a <code>byte[]</code> with a <code>contentType</code> header of <code>application/octet-stream</code>.</p>
+</div>
+<div class="paragraph">
+<p>When you do not provide a header mapper, the message payload is the <code>MimeMessage</code> presented by <code>jakarta.mail</code>.
+The framework provides a <code>MailToStringTransformer</code> that you can use to convert the message by using a strategy to convert the mail contents to a <code>String</code>:</p>
+</div>
+<div id="_tabs_2" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_2_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_2_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_2_kotlin" class="tab">
+<p>Kotlin</p>
+</li>
+<li id="_tabs_2_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_2_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_2_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">   ...
+   .transform(Mail.toStringTransformer())
+   ...</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@Transformer(inputChannel="...", outputChannel="...")
+public Transformer transformer() {
+    return new MailToStringTransformer();
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_kotlin--panel" class="tabpanel" aria-labelledby="_tabs_2_kotlin">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">   ...
+   transform(Mail.toStringTransformer())
+   ...</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:mail-to-string-transformer ... &gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.3, the transformer handles embedded <code>Part</code> instances (as well as <code>Multipart</code> instances, which were handled previously).
+The transformer is a subclass of <code>AbstractMailTransformer</code> that maps the address and subject headers from the preceding list.
+If you wish to perform some other transformation on the message, consider subclassing <code>AbstractMailTransformer</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.4, when no <code>headerMapper</code> is provided, <code>autoCloseFolder</code> is <code>false</code> and <code>simpleContent</code> is <code>false</code>, the <code>MimeMessage</code> is returned as-is in the payload of the Spring message produced.
+This way, the content of the <code>MimeMessage</code> is loaded on demand when referenced, later in the flow.
+All the mentioned above transformations are still valid.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-namespace"><a class="anchor" href="#mail-namespace"></a>Mail Namespace Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration provides a namespace for mail-related configuration.
+To use it, configure the following schema locations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:int-mail="http://www.springframework.org/schema/integration/mail"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    https://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration/mail
+    https://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd"&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To configure an outbound channel adapter, provide the channel from which to receive and the MailSender, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:outbound-channel-adapter channel="outboundMail"
+    mail-sender="mailSender"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can provide the host, username, and password, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:outbound-channel-adapter channel="outboundMail"
+    host="somehost" username="someuser" password="somepassword"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.1.3, the <code>host</code>, <code>username</code> ane <code>mail-sender</code> can be omitted, if <code>java-mail-properties</code> is provided.
+However, the <code>host</code> and <code>username</code> has to be configured with appropriate Java mail properties, e.g. for SMTP:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">mail.user=someuser@gmail.com
+mail.smtp.host=smtp.gmail.com
+mail.smtp.port=587</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+As with any outbound Channel Adapter, if the referenced channel is a <code>PollableChannel</code>, you should provide a <code>&lt;poller&gt;</code> element (see <a href="endpoint.html#endpoint-namespace" class="xref page">Endpoint Namespace Support</a>).
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>When you use the namespace support, you can also use a <code>header-enricher</code> message transformer.
+Doing so simplifies the application of the headers mentioned earlier to any message prior to sending to the mail outbound channel adapter.</p>
+</div>
+<div class="paragraph">
+<p>The following example assumes the payload is a Java bean with appropriate getters for the specified properties, but you can use any SpEL expression:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:header-enricher input-channel="expressionsInput" default-overwrite="false"&gt;
+	&lt;int-mail:to expression="payload.to"/&gt;
+	&lt;int-mail:cc expression="payload.cc"/&gt;
+	&lt;int-mail:bcc expression="payload.bcc"/&gt;
+	&lt;int-mail:from expression="payload.from"/&gt;
+	&lt;int-mail:reply-to expression="payload.replyTo"/&gt;
+	&lt;int-mail:subject expression="payload.subject" overwrite="true"/&gt;
+&lt;/int-mail:header-enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can use the <code>value</code> attribute to specify a literal.
+You also can specify <code>default-overwrite</code> and individual <code>overwrite</code> attributes to control the behavior with existing headers.</p>
+</div>
+<div class="paragraph">
+<p>To configure an inbound channel adapter, you have the choice between polling or event-driven (assuming your mail server supports IMAP <code>idle</code>&#8201;&#8212;&#8201;if not, then polling is the only option).
+A polling channel adapter requires the store URI and the channel to which to send inbound messages.
+The URI may begin with <code>pop3</code> or <code>imap</code>.
+The following example uses an <code>imap</code> URI:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:inbound-channel-adapter id="imapAdapter"
+      store-uri="imaps://[username]:[password]@imap.gmail.com/INBOX"
+      java-mail-properties="javaMailProperties"
+      channel="receiveChannel"
+      should-delete-messages="true"
+      should-mark-messages-as-read="true"
+      auto-startup="true"&gt;
+      &lt;int:poller max-messages-per-poll="1" fixed-rate="5000"/&gt;
+&lt;/int-mail:inbound-channel-adapter&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you do have IMAP <code>idle</code> support, you may want to configure the <code>imap-idle-channel-adapter</code> element instead.
+Since the <code>idle</code> command enables event-driven notifications, no poller is necessary for this adapter.
+It sends a message to the specified channel as soon as it receives the notification that new mail is available.
+The following example configures an IMAP <code>idle</code> mail channel:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:imap-idle-channel-adapter id="customAdapter"
+      store-uri="imaps://[username]:[password]@imap.gmail.com/INBOX"
+      channel="receiveChannel"
+      auto-startup="true"
+      should-delete-messages="false"
+      should-mark-messages-as-read="true"
+      java-mail-properties="javaMailProperties"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can provide <code>javaMailProperties</code> by creating and populating a regular <code>java.utils.Properties</code> object&#8201;&#8212;&#8201;for example, by using the <code>util</code> namespace provided by Spring.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+If your username contains the '@' character, use '%40' instead of '@' to avoid parsing errors from the underlying JavaMail API.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>The following example shows how to configure a <code>java.util.Properties</code> object:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;util:properties id="javaMailProperties"&gt;
+  &lt;prop key="mail.imap.socketFactory.class"&gt;javax.net.ssl.SSLSocketFactory&lt;/prop&gt;
+  &lt;prop key="mail.imap.socketFactory.fallback"&gt;false&lt;/prop&gt;
+  &lt;prop key="mail.store.protocol"&gt;imaps&lt;/prop&gt;
+  &lt;prop key="mail.debug"&gt;false&lt;/prop&gt;
+&lt;/util:properties&gt;</code></pre>
+</div>
+</div>
+<div id="search-term" class="paragraph">
+<p>By default, the <code>ImapMailReceiver</code> searches for messages based on the default <code>SearchTerm</code>, which is all mail messages that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Are RECENT (if supported)</p>
+</li>
+<li>
+<p>Are NOT ANSWERED</p>
+</li>
+<li>
+<p>Are NOT DELETED</p>
+</li>
+<li>
+<p>Are NOT SEEN</p>
+</li>
+<li>
+<p>hHave not been processed by this mail receiver (enabled by the use of the custom USER flag or simply NOT FLAGGED if not supported)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The custom user flag is <code>spring-integration-mail-adapter</code>, but you can configure it.
+Since version 2.2, the <code>SearchTerm</code> used by the <code>ImapMailReceiver</code> is fully configurable with <code>SearchTermStrategy</code>, which you can inject by using the <code>search-term-strategy</code> attribute.
+A <code>SearchTermStrategy</code> is a strategy interface with a single method that lets you create an instance of the <code>SearchTerm</code> used by the <code>ImapMailReceiver</code>.
+The following listing shows the <code>SearchTermStrategy</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface SearchTermStrategy {
+
+    SearchTerm generateSearchTerm(Flags supportedFlags, Folder folder);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example relies on <code>TestSearchTermStrategy</code> rather than the default <code>SearchTermStrategy</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;mail:imap-idle-channel-adapter id="customAdapter"
+			store-uri="imap:something"
+			…
+			search-term-strategy="searchTermStrategy"/&gt;
+
+&lt;bean id="searchTermStrategy"
+  class="o.s.i.mail.config.ImapIdleChannelAdapterParserTests.TestSearchTermStrategy"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <a href="#imap-seen">Marking IMAP Messages When <code>Recent</code> Is Not Supported</a> for information about message flagging.</p>
+</div>
+<div id="imap-peek" class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
+<td class="content">
+<div class="title">Important: IMAP PEEK</div>
+<div class="paragraph">
+<p>Starting with version 4.1.1, the IMAP mail receiver uses the <code>mail.imap.peek</code> or <code>mail.imaps.peek</code> JavaMail property, if specified.
+Previously, the receiver ignored the property and always set the <code>PEEK</code> flag.
+Now, if you explicitly set this property to <code>false</code>, the message ise marked as <code>\Seen</code> regardless of the setting of <code>shouldMarkMessagesRead</code>.
+If not specified, the previous behavior is retained (peek is <code>true</code>).</p>
+</div>
 </td>
 </tr>
 </table>
+</div>
+<div class="sect2">
+<h3 id="imap-idle-and-lost-connections"><a class="anchor" href="#imap-idle-and-lost-connections"></a>IMAP <code>idle</code> and Lost Connections</h3>
+<div class="paragraph">
+<p>When using an IMAP <code>idle</code> channel adapter, connections to the server may be lost (for example, through network failure) and, since the JavaMail documentation explicitly states that the actual IMAP API is experimental, it is important to understand the differences in the API and how to deal with them when configuring IMAP <code>idle</code> adapters.
+Currently, Spring Integration mail adapters were tested with JavaMail 1.4.1 and JavaMail 1.4.3.
+Depending on which one is used, you must pay special attention to some JavaMail properties that need to be set with regard to auto-reconnect.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The following behavior was observed with Gmail but should provide you with some tips on how to solve re-connect issue with other providers.
+However, feedback is always welcome.
+Again, the following notes are based on Gmail.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>With JavaMail 1.4.1, if you set the <code>mail.imaps.timeout</code> property to a relatively short period of time (approximately 5 min in our testing), <code>IMAPFolder.idle()</code> throws <code>FolderClosedException</code> after this timeout.
+However, if this property is not set (it should be indefinite) the  <code>IMAPFolder.idle()</code> method never returns and never throws an exception.
+It does, however, reconnect automatically if the connection was lost for a short period of time (under 10 min in our testing).
+However, if the connection was lost for a long period of time (over 10 min), <code>IMAPFolder.idle()</code>, does not throw <code>FolderClosedException</code> and does not re-establish the connection, and remains in the blocked state indefinitely, thus leaving you no possibility to reconnect without restarting the adapter.
+Consequently, the only way to make re-connecting work with JavaMail 1.4.1 is to set the <code>mail.imaps.timeout</code> property explicitly to some value, but it also means that such value should be relatively short (under 10 min) and the connection should be re-established relatively quickly.
+Again, it may be different with providers other than Gmail.
+With JavaMail 1.4.3 introduced significant improvements to the API, ensuring that there is always a condition that forces the <code>IMAPFolder.idle()</code> method to return  <code>StoreClosedException</code> or <code>FolderClosedException</code> or to simply return, thus letting you proceed with auto-reconnecting.
+Currently, auto-reconnecting runs infinitely making attempts to reconnect every ten seconds.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+In both configurations, <code>channel</code> and <code>should-delete-messages</code> are required attributes.
+You should understand why <code>should-delete-messages</code> is required.
+The issue is with the POP3 protocol, which does not have any knowledge of messages that were read.
+It can only know what has been read within a single session.
+This means that, when your POP3 mail adapter runs, emails are successfully consumed as they become available during each poll and no single email message is delivered more then once.
+However, as soon as you restart your adapter and begin a new session, all the email messages that might have been retrieved in the previous session are retrieved again.
+That is the nature of POP3.
+Some might argue that <code>should-delete-messages</code> should be <code>true</code> by default.
+In other words, there are two valid and mutually exclusive use that make it very hard to pick a single best default.
+You may want to configure your adapter as the only email receiver, in which case you want to be able to restart your adapter without fear that previously delivered messages are not delivered again.
+In this case, setting <code>should-delete-messages</code> to <code>true</code> would make the most sense.
+However, you may have another use case where you may want to have multiple adapters monitor email servers and their content.
+In other words, you want to 'peek but not touch'.
+Then setting <code>should-delete-messages</code> to <code>false</code> is much more appropriate.
+So since it is hard to choose what should be the right default value for the <code>should-delete-messages</code> attribute, we made it a required attribute to be set by you.
+Leaving it up to you also means that you are less likely to end up with unintended behavior.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+When configuring a polling email adapter&#8217;s <code>should-mark-messages-as-read</code> attribute, you should be aware of the protocol you are configuring to retrieve messages.
+For example, POP3 does not support this flag, which means setting it to either value has no effect, as messages are not marked as read.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the case of a silently dropped connection, an idle cancel task is run in the background periodically (a new IDLE will usually immediately be processed).
+To control this interval, a <code>cancelIdleInterval</code> option is provided; default 120 (2 minutes).
+RFC 2177 recommends an interval no larger than 29 minutes.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You should understand that these actions (marking messages read and deleting messages) are performed after the messages are received but before they are processed.
+This can cause messages to be lost.</p>
+</div>
+<div class="paragraph">
+<p>You may wish to consider using transaction synchronization instead.
+See <a href="#mail-tx-sync">Transaction Synchronization</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;imap-idle-channel-adapter/&gt;</code> also accepts the 'error-channel' attribute.
+If a downstream exception is thrown and an 'error-channel' is specified, a <code>MessagingException</code> message containing the failed message and the original exception is sent to this channel.
+Otherwise, if the downstream channels are synchronous, any such exception is logged as a warning by the channel adapter.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Beginning with the 3.0 release, the IMAP <code>idle</code> adapter emits application events (specifically <code>ImapIdleExceptionEvent</code> instances) when exceptions occur.
+This allows applications to detect and act on those exceptions.
+You can obtain the events by using an <code>&lt;int-event:inbound-channel-adapter&gt;</code> or any <code>ApplicationListener</code> configured to receive an <code>ImapIdleExceptionEvent</code> or one of its super classes.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="imap-seen"><a class="anchor" href="#imap-seen"></a>Marking IMAP Messages When <code>\Recent</code> Is Not Supported</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If <code>shouldMarkMessagesAsRead</code> is true, the IMAP adapters set the <code>\Seen</code> flag.</p>
+</div>
+<div class="paragraph">
+<p>In addition, when an email server does not support the <code>\Recent</code> flag, the IMAP adapters mark messages with a user flag (by default, <code>spring-integration-mail-adapter</code>), as long as the server supports user flags.
+If not, <code>Flag.FLAGGED</code> is set to <code>true</code>.
+These flags are applied regardless of the <code>shouldMarkMessagesRead</code> setting.</p>
+</div>
+<div class="paragraph">
+<p>As discussed in <a href="#search-term">null</a>, the default <code>SearchTermStrategy</code> ignore messages that are so flagged.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.2.2, you can set the name of the user flag by using <code>setUserFlag</code> on the <code>MailReceiver</code>.
+Doing so lets multiple receivers use a different flag (as long as the mail server supports user flags).
+The <code>user-flag</code> attribute is available when configuring the adapter with the namespace.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-filtering"><a class="anchor" href="#mail-filtering"></a>Email Message Filtering</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Very often, you may encounter a requirement to filter incoming messages (for example, you want to read only emails that have 'Spring Integration' in the <code>Subject</code> line).
+You can accomplish this by connecting an inbound mail adapter with an expression-based <code>Filter</code>.
+Although it would work, there is a downside to this approach.
+Since messages would be filtered after going through the inbound mail adapter, all such messages would be marked as read (<code>SEEN</code>) or unread (depending on the value of <code>should-mark-messages-as-read</code> attribute).
+However, in reality, it be more useful to mark messages as <code>SEEN</code> only if they pass the filtering criteria.
+This is similar to looking at your email client while scrolling through all the messages in the preview pane, but only flagging messages that were actually opened and read as <code>SEEN</code>.</p>
+</div>
+<div class="paragraph">
+<p>Spring Integration 2.0.4 introduced the <code>mail-filter-expression</code> attribute on <code>inbound-channel-adapter</code> and <code>imap-idle-channel-adapter</code>.
+This attribute lets you provide an expression that is a combination of SpEL and a regular expression.
+For example if you would like to read only emails that contain 'Spring Integration' in the subject line, you would configure the <code>mail-filter-expression</code> attribute like as follows: <code>mail-filter-expression="subject matches '(?i).<strong>Spring Integration.</strong>"</code>.</p>
+</div>
+<div class="paragraph">
+<p>Since <code>jakarta.mail.internet.MimeMessage</code> is the root context of the SpEL evaluation context, you can filter on any value available through <code>MimeMessage</code>, including the actual body of the message.
+This one is particularly important, since reading the body of the message typically results in such messages being marked as <code>SEEN</code> by default.
+However, since we now set the <code>PEEK</code> flag of every incoming message to 'true', only messages that were explicitly marked as <code>SEEN</code> are marked as read.</p>
+</div>
+<div class="paragraph">
+<p>So, in the following example, only messages that match the filter expression are output by this adapter and only those messages are marked as read:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:imap-idle-channel-adapter id="customAdapter"
+	store-uri="imaps://some_google_address:${password}@imap.gmail.com/INBOX"
+	channel="receiveChannel"
+	should-mark-messages-as-read="true"
+	java-mail-properties="javaMailProperties"
+	mail-filter-expression="subject matches '(?i).*Spring Integration.*'"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example, thanks to the <code>mail-filter-expression</code> attribute, only messages that contain 'Spring Integration' in the subject line are produced by this adapter.</p>
+</div>
+<div class="paragraph">
+<p>Another reasonable question is what happens on the next poll or idle event or what happens when such an adapter is restarted.
+Can there be duplication of massages to be filtered? In other words, if, on the last retrieval where you had five new messages and only one passed the filter, what would happen with the other four?
+Would they go through the filtering logic again on the next poll or idle?
+After all, they were not marked as <code>SEEN</code>.
+The answer is no.
+They would not be subject to duplicate processing due to another flag (<code>RECENT</code>) that is set by the email server and is used by the Spring Integration mail search filter.
+Folder implementations set this flag to indicate that this message is new to this folder.
+That is, it has arrived since the last time this folder was opened.
+In other words, while our adapter may peek at the email, it also lets the email server know that such email was touched and should therefore be marked as <code>RECENT</code> by the email server.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-tx-sync"><a class="anchor" href="#mail-tx-sync"></a>Transaction Synchronization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Transaction synchronization for inbound adapters lets you take different actions after a transaction commits or rolls back.
+You can enable transaction synchronization by adding a <code>&lt;transactional/&gt;</code> element to the poller for the polled <code>&lt;inbound-adapter/&gt;</code> or to the <code>&lt;imap-idle-inbound-adapter/&gt;</code>.
+Even if there is no 'real' transaction involved, you can still enable this feature by using a <code>PseudoTransactionManager</code> with the <code>&lt;transactional/&gt;</code> element.
+For more information, see <a href="transactions.html#transaction-synchronization" class="xref page">Transaction Synchronization</a>.</p>
+</div>
+<div class="paragraph">
+<p>Because of the different mail servers and specifically the limitations that some have, at this time we provide only a strategy for these transaction synchronizations.
+You can send the messages to some other Spring Integration components or invoke a custom bean to perform some action.
+For example, to move an IMAP message to a different folder after the transaction commits, you might use something similar to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:imap-idle-channel-adapter id="customAdapter"
+    store-uri="imaps://something.com:password@imap.something.com/INBOX"
+    channel="receiveChannel"
+    auto-startup="true"
+    should-delete-messages="false"
+    java-mail-properties="javaMailProperties"&gt;
+    &lt;int:transactional synchronization-factory="syncFactory"/&gt;
+&lt;/int-mail:imap-idle-channel-adapter&gt;
+
+&lt;int:transaction-synchronization-factory id="syncFactory"&gt;
+    &lt;int:after-commit expression="@syncProcessor.process(payload)"/&gt;
+&lt;/int:transaction-synchronization-factory&gt;
+
+&lt;bean id="syncProcessor" class="thing1.thing2.Mover"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows what the <code>Mover</code> class might look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class Mover {
+
+    public void process(MimeMessage message) throws Exception {
+        Folder folder = message.getFolder();
+        folder.open(Folder.READ_WRITE);
+        String messageId = message.getMessageID();
+        Message[] messages = folder.getMessages();
+        FetchProfile contentsProfile = new FetchProfile();
+        contentsProfile.add(FetchProfile.Item.ENVELOPE);
+        contentsProfile.add(FetchProfile.Item.CONTENT_INFO);
+        contentsProfile.add(FetchProfile.Item.FLAGS);
+        folder.fetch(messages, contentsProfile);
+        // find this message and mark for deletion
+        for (int i = 0; i &lt; messages.length; i++) {
+            if (((MimeMessage) messages[i]).getMessageID().equals(messageId)) {
+                messages[i].setFlag(Flags.Flag.DELETED, true);
+                break;
+            }
+        }
+
+        Folder somethingFolder = store.getFolder("SOMETHING");
+        somethingFolder.appendMessages(new MimeMessage[]{message});
+        folder.expunge();
+        folder.close(true);
+        somethingFolder.close(false);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+For the message to be still available for manipulation after the transaction, <em>should-delete-messages</em> must be set to 'false'.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-java-dsl-configuration"><a class="anchor" href="#mail-java-dsl-configuration"></a>Configuring channel adapters with the Java DSL</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To configure mail component in Java DSL, the framework provides a <code>o.s.i.mail.dsl.Mail</code> factory, which can be used like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SpringBootApplication
+public class MailApplication {
+
+    public static void main(String[] args) {
+        new SpringApplicationBuilder(MailApplication.class)
+            .web(false)
+            .run(args);
+    }
+
+    @Bean
+    public IntegrationFlow imapMailFlow() {
+        return IntegrationFlow
+                .from(Mail.imapInboundAdapter("imap://user:pw@host:port/INBOX")
+                            .searchTermStrategy(this::fromAndNotSeenTerm)
+                            .userFlag("testSIUserFlag")
+                            .simpleContent(true)
+                            .javaMailProperties(p -&gt; p.put("mail.debug", "false")),
+                    e -&gt; e.autoStartup(true)
+                            .poller(p -&gt; p.fixedDelay(1000)))
+                .channel(MessageChannels.queue("imapChannel"))
+                .get();
+    }
+
+    @Bean
+    public IntegrationFlow sendMailFlow() {
+        return IntegrationFlow.from("sendMailChannel")
+                .enrichHeaders(Mail.headers()
+                        .subjectFunction(m -&gt; "foo")
+                        .from("foo@bar")
+                        .toFunction(m -&gt; new String[] { "bar@baz" }))
+                .handle(Mail.outboundAdapter("gmail")
+                            .port(smtpServer.getPort())
+                            .credentials("user", "pw")
+                            .protocol("smtp"),
+                    e -&gt; e.id("sendMailEndpoint"))
+                .get();
+    }
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="kafka.html">Apache Kafka Support</a></span>
+  <span class="next"><a href="mongodb.html">MongoDb Support</a></span>
 </nav>
 </article>
 </div>  </div>

@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Filter :: Spring Integration</title>
+    <link rel="prev" href="router/process-manager.html">
+    <link rel="next" href="splitter.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -367,7 +368,7 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="filter.html">Filter</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Filter"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/filter.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,352 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="message-routing.html">Message Routing</a></li>
+    <li><a href="filter.html">Filter</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Filter</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>Message filters are used to decide whether a <code>Message</code> should be passed along or dropped based on some criteria, such as a message header value or message content itself.
+Therefore, a message filter is similar to a router, except that, for each message received from the filter&#8217;s input channel, that same message may or may not be sent to the filter&#8217;s output channel.
+Unlike the router, it makes no decision regarding which message channel to send the message to but decides only whether to send the message at all.</p>
 </div>
-<div class="hdlist">
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+As we describe later in this section, the filter also supports a discard channel.
+In certain cases, it can play the role of a very simple router (or &#8220;switch&#8221;), based on a boolean condition.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>In Spring Integration, you can configure a message filter as a message endpoint that delegates to an implementation of the <code>MessageSelector</code> interface.
+That interface is itself quite simple, as the following listing shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface MessageSelector {
+
+    boolean accept(Message&lt;?&gt; message);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>MessageFilter</code> constructor accepts a selector instance, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">MessageFilter filter = new MessageFilter(someSelector);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="filter-dsl"><a class="anchor" href="#filter-dsl"></a>Configuring a Filter with Java, Groovy and Kotlin DSLs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>IntegrationFlowBuilder</code> provided by the Java DSL (which is also used as a base for the Groovy and Kotlin DSLs) provides a number of overloaded methods for the <code>filter()</code> operator.
+The <code>MessageSelector</code> abstraction mentioned above can be used as a Lambda in a <code>filter()</code> definition:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_1_kotlin_dsl" class="tab">
+<p>Kotlin DSL</p>
+</li>
+<li id="_tabs_1_groovy_dsl" class="tab">
+<p>Groovy DSL</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow someFlow() {
+    return f -&gt; f
+              .&lt;String&gt;filter((payload) -&gt; !"junk".equals(payload));
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_kotlin_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_kotlin_dsl">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Bean
+fun someFlow() =
+    integrationFlow {
+        filter&lt;String&gt; { it != "junk" }
+    }</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_groovy_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_groovy_dsl">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@Bean
+someFlow() {
+    integrationFlow {
+        filter String, { it != 'junk' }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>See more information about DSLs in the respective chapters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="dsl.html#java-dsl" class="xref page">Java DSL</a></p>
+</li>
+<li>
+<p><a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a></p>
+</li>
+<li>
+<p><a href="groovy-dsl.html" class="xref page">Groovy DSL</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="filter-xml"><a class="anchor" href="#filter-xml"></a>Configuring a Filter with XML</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In combination with the namespace and SpEL, you can configure powerful filters with very little Java code.</p>
+</div>
+<div class="paragraph">
+<p>You can use the <code>&lt;filter&gt;</code> element is used to create a message-selecting endpoint.
+In addition to <code>input-channel</code> and <code>output-channel</code> attributes, it requires a <code>ref</code> attribute.
+The <code>ref</code> can point to a <code>MessageSelector</code> implementation, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:filter input-channel="input" ref="selector" output-channel="output"/&gt;
+
+&lt;bean id="selector" class="example.MessageSelectorImpl"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can add the <code>method</code> attribute.
+In that case, the <code>ref</code> attribute may refer to any object.
+The referenced method may expect either the <code>Message</code> type or the payload type of inbound messages.
+The method must return a boolean value.
+If the method returns 'true', the message is sent to the output channel.
+The following example shows how to configure a filter that uses the <code>method</code> attribute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:filter input-channel="input" output-channel="output"
+    ref="exampleObject" method="someBooleanReturningMethod"/&gt;
+
+&lt;bean id="exampleObject" class="example.SomeObject"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the selector or adapted POJO method returns <code>false</code>, a few settings  control the handling of the rejected message.
+By default, (if configured as in the preceding example) rejected messages are silently dropped.
+If rejection should instead result in an error condition, set the <code>throw-exception-on-rejection</code> attribute to <code>true</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:filter input-channel="input" ref="selector"
+    output-channel="output" throw-exception-on-rejection="true"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want rejected messages to be routed to a specific channel, provide that reference as the <code>discard-channel</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:filter input-channel="input" ref="selector"
+    output-channel="output" discard-channel="rejectedMessages"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the <code>throwExceptionOnRejection == false</code> and no <code>discardChannel</code> is provided, the message is silently dropped and an <code>o.s.i.filter.MessageFilter</code> instance just emits a warning log message (starting with version 6.1) about this discarded message.
+To drop the message with no warning in the logs, a <code>NullChannel</code> can be configured as the <code>discardChannel</code> on the filter.
+The goal of the framework is to not be completely silent, by default, requiring an explicit option to be set, if that is the desired behavior.</p>
+</div>
+<div class="paragraph">
+<p>See also <a href="handler-advice/advising-filters.html" class="xref page">Advising Filters</a>.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Message filters are commonly used in conjunction with a publish-subscribe channel.
+Many filter endpoints may be subscribed to the same channel, and they decide whether to pass the message to the next endpoint, which could be any of the supported types (such as a service activator).
+This provides a reactive alternative to the more proactive approach of using a message router with a single point-to-point input channel and multiple output channels.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>We recommend using a <code>ref</code> attribute if the custom filter implementation is referenced in other <code>&lt;filter&gt;</code> definitions.
+However, if the custom filter implementation is scoped to a single <code>&lt;filter&gt;</code> element, you should provide an inner bean definition, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:filter method="someMethod" input-channel="inChannel" output-channel="outChannel"&gt;
+  &lt;beans:bean class="org.foo.MyCustomFilter"/&gt;
+&lt;/filter&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Using both the <code>ref</code> attribute and an inner handler definition in the same <code>&lt;filter&gt;</code> configuration is not allowed, as it creates an ambiguous condition and throws an exception.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+If the <code>ref</code> attribute references a bean that extends <code>MessageFilter</code> (such as filters provided by the framework itself), the configuration is optimized by injecting the output channel into the filter bean directly.
+In this case, each <code>ref</code> must be to a separate bean instance (or a <code>prototype</code>-scoped bean) or use the inner <code>&lt;bean/&gt;</code> configuration type.
+However, this optimization applies only if you do not provide any filter-specific attributes in the filter XML definition.
+If you inadvertently reference the same message handler from multiple beans, you get a configuration exception.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>With the introduction of SpEL support, Spring Integration added the <code>expression</code> attribute to the filter element.
+It can be used to avoid Java entirely for simple filters, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:filter input-channel="input" expression="payload.equals('nonsense')"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The string passed as the value of the expression attribute is evaluated as a SpEL expression with the message available in the evaluation context.
+If you must include the result of an expression in the scope of the application context, you can use the <code>#{}</code> notation, as defined in the <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions-beandef">SpEL reference documentation</a>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:filter input-channel="input"
+            expression="payload.matches(#{filterPatterns.nonsensePattern})"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the expression itself needs to be dynamic, you can use an 'expression' sub-element.
+That provides a level of indirection for resolving the expression by its key from an <code>ExpressionSource</code>.
+That is a strategy interface that you can implement directly, or you can rely upon a version available in Spring Integration that loads expressions from a &#8220;resource bundle&#8221; and can check for modifications after a given number of seconds.
+All of this is demonstrated in the following configuration example, where the expression could be reloaded within one minute if the underlying file had been modified:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:filter input-channel="input" output-channel="output"&gt;
+    &lt;int:expression key="filterPatterns.example" source="myExpressions"/&gt;
+&lt;/int:filter&gt;
+
+&lt;beans:bean id="myExpressions"
+    class="o.s.i.expression.ReloadableResourceBundleExpressionSource"&gt;
+    &lt;beans:property name="basename" value="config/integration/expressions"/&gt;
+    &lt;beans:property name="cacheSeconds" value="60"/&gt;
+&lt;/beans:bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the <code>ExpressionSource</code> bean is named <code>expressionSource</code>, you need not provide the` source` attribute on the <code>&lt;expression&gt;</code> element.
+However, in the preceding example, we show it for completeness.</p>
+</div>
+<div class="paragraph">
+<p>The 'config/integration/expressions.properties' file (or any more-specific version with a locale extension to be resolved in the typical way that resource-bundles are loaded) can contain a key/value pair, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">filterPatterns.example=payload &gt; 100</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
+<td class="content">
+All of these examples that use <code>expression</code> as an attribute or sub-element can also be applied within transformer, router, splitter, service-activator, and header-enricher elements.
+The semantics and role of the given component type would affect the interpretation of the evaluation result, in the same way that the return value of a method-invocation would be interpreted.
+For example, an expression can return strings that are to be treated as message channel names by a router component.
+However, the underlying functionality of evaluating the expression against the message as the root object and resolving bean names if prefixed with '@' is consistent across all of the core EIP components within Spring Integration.
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="filter-annotations"><a class="anchor" href="#filter-annotations"></a>Configuring a Filter with Annotations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following example shows how to configure a filter by using annotations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class PetFilter {
+    ...
+    @Filter  <i class="conum" data-value="1"></i><b>(1)</b>
+    public boolean dogsOnly(String input) {
+        ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>An annotation indicating that this method is to be used as a filter.
+It must be specified if this class is to be used as a filter.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All the configuration options provided by the XML element are also available for the <code>@Filter</code> annotation.</p>
+</div>
+<div class="paragraph">
+<p>The filter can be either referenced explicitly from XML or, if the <code>@MessageEndpoint</code> annotation is defined on the class, detected automatically through classpath scanning.</p>
+</div>
+<div class="paragraph">
+<p>See also <a href="handler-advice/advising-with-annotations.html" class="xref page">Advising Endpoints Using Annotations</a>.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="router/process-manager.html">Process Manager Enterprise Integration Pattern</a></span>
+  <span class="next"><a href="splitter.html">Splitter</a></span>
 </nav>
 </article>
 </div>  </div>

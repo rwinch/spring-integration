@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>ZeroMQ Support :: Spring Integration</title>
+    <link rel="prev" href="xmpp.html">
+    <link rel="next" href="zookeeper.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1041,7 +1042,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="xmpp.html">XMPP Support</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="zeromq.html">ZeroMQ Support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="ZeroMQ Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/zeromq.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,266 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="zeromq.html">ZeroMQ Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">ZeroMQ Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>Spring Integration provides components to support <a href="https://zeromq.org/">ZeroMQ</a> communication in the application.
+The implementation is based on the well-supported Java API of the <a href="https://github.com/zeromq/jeromq">JeroMQ</a> library.
+All components encapsulate ZeroMQ socket lifecycles and manage threads for them internally making interactions with these components lock-free and thread-safe.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
-</td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-zeromq&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-zeromq:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="zeromq-proxy"><a class="anchor" href="#zeromq-proxy"></a>ZeroMQ Proxy</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>ZeroMqProxy</code> is a Spring-friendly wrapper for the built-in <code>ZMQ.proxy()</code> <a href="https://zguide.zeromq.org/page:chapter2#toc15">function</a>.
+It encapsulates socket lifecycles and thread management.
+The clients of this proxy still can use a standard ZeroMQ socket connection and interaction API.
+Alongside with the standard <code>ZContext</code> it requires one of the well-known ZeroMQ proxy modes: SUB/PUB, PULL/PUSH or ROUTER/DEALER.
+This way an appropriate pair of ZeroMQ socket types are used for the frontend and backend of the proxy.
+See <code>ZeroMqProxy.Type</code> for details.</p>
+</div>
+<div class="paragraph">
+<p>The <code>ZeroMqProxy</code> implements <code>SmartLifecycle</code> to create, bind and configure the sockets and to start <code>ZMQ.proxy()</code> in a dedicated thread from an <code>Executor</code> (if any).
+The binding for frontend and backend sockets is done over the <code>tcp://</code> protocol onto all of the available network interfaces with the provided ports.
+Otherwise, they are bound to random ports which can be obtained later via the respective <code>getFrontendPort()</code> and <code>getBackendPort()</code> API methods.</p>
+</div>
+<div class="paragraph">
+<p>The control socket is exposed as a <code>SocketType.PAIR</code> with an inter-thread transport on the <code>"inproc://" + beanName + ".control"</code> address; it can be obtained via <code>getControlAddress()</code>.
+It should be used with the same application from another <code>SocketType.PAIR</code> socket to send <code>ZMQ.PROXY_TERMINATE</code>, <code>ZMQ.PROXY_PAUSE</code> and/or <code>ZMQ.PROXY_RESUME</code> commands.
+The <code>ZeroMqProxy</code> performs a <code>ZMQ.PROXY_TERMINATE</code> command when <code>stop()</code> is called for its lifecycle to terminate the <code>ZMQ.proxy()</code> loop and close all the bound sockets gracefully.</p>
+</div>
+<div class="paragraph">
+<p>The <code>setExposeCaptureSocket(boolean)</code> option causes this component to bind an additional inter-thread socket with <code>SocketType.PUB</code> to capture and publish all the communication between the frontend and backend sockets as it states with <code>ZMQ.proxy()</code> implementation.
+This socket is bound to the <code>"inproc://" + beanName + ".capture"</code> address and doesn&#8217;t expect any specific subscription for filtering.</p>
+</div>
+<div class="paragraph">
+<p>The frontend and backend sockets can be customized with additional properties, such as read/write timeout or security.
+This customization is available through <code>setFrontendSocketConfigurer(Consumer&lt;ZMQ.Socket&gt;)</code> and <code>setBackendSocketConfigurer(Consumer&lt;ZMQ.Socket&gt;)</code> callbacks, respectively.</p>
+</div>
+<div class="paragraph">
+<p>The <code>ZeroMqProxy</code> could be provided as simple bean like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+ZeroMqProxy zeroMqProxy() {
+    ZeroMqProxy proxy = new ZeroMqProxy(CONTEXT, ZeroMqProxy.Type.SUB_PUB);
+    proxy.setExposeCaptureSocket(true);
+    proxy.setFrontendPort(6001);
+    proxy.setBackendPort(6002);
+    return proxy;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All the client nodes should connect to the host of this proxy via <code>tcp://</code> and use the respective port of their interest.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="zeromq-message-channel"><a class="anchor" href="#zeromq-message-channel"></a>ZeroMQ Message Channel</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>ZeroMqChannel</code> is a <code>SubscribableChannel</code> which uses a pair of ZeroMQ sockets to connect publishers and subscribers for messaging interaction.
+It can work in a PUB/SUB mode (defaults to PUSH/PULL); it can also be used as a local inter-thread channel (uses <code>PAIR</code> sockets) - the <code>connectUrl</code> is not provided in this case.
+In distributed mode it has to be connected to an externally managed ZeroMQ proxy, where it can exchange messages with other similar channels connected to the same proxy.
+The connection url option is a standard ZeroMQ connection string with the protocol and host and a pair of ports over colon for frontend and backend sockets of the ZeroMQ proxy.
+For convenience, the channel could be supplied with the <code>ZeroMqProxy</code> instance instead of connection string, if it is configured in the same application as the proxy.</p>
+</div>
+<div class="paragraph">
+<p>Both sending and receiving sockets are managed in their own dedicated threads making this channel concurrency-friendly.
+This way we can publish and consume to/from a <code>ZeroMqChannel</code> from different threads without synchronization.</p>
+</div>
+<div class="paragraph">
+<p>By default, the <code>ZeroMqChannel</code> uses an <code>EmbeddedJsonHeadersMessageMapper</code> to (de)serialize the <code>Message</code> (including headers) from/to <code>byte[]</code> using a Jackson JSON processor.
+This logic can be configured via <code>setMessageMapper(BytesMessageMapper)</code>.</p>
+</div>
+<div class="paragraph">
+<p>Sending and receiving sockets can be customized for any options (read/write timeout, security etc.) via respective <code>setSendSocketConfigurer(Consumer&lt;ZMQ.Socket&gt;)</code> and <code>setSubscribeSocketConfigurer(Consumer&lt;ZMQ.Socket&gt;)</code> callbacks.</p>
+</div>
+<div class="paragraph">
+<p>The internal logic of the <code>ZeroMqChannel</code> is based on the reactive streams via Project Reactor <code>Flux</code> and <code>Mono</code> operators.
+This provides easier threading control and allows lock-free concurrent publication and consumption to/from the channel.
+Local PUB/SUB logic is implemented as a <code>Flux.publish()</code> operator to allow all of the local subscribers to this channel to receive the same published message, as distributed subscribers to the <code>PUB</code> socket.</p>
+</div>
+<div class="paragraph">
+<p>The following is a simple example of a <code>ZeroMqChannel</code> configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+ZeroMqChannel zeroMqPubSubChannel(ZContext context) {
+    ZeroMqChannel channel = new ZeroMqChannel(context, true);
+    channel.setConnectUrl("tcp://localhost:6001:6002");
+    channel.setConsumeDelay(Duration.ofMillis(100));
+    return channel;
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="zeromq-inbound-channel-adapter"><a class="anchor" href="#zeromq-inbound-channel-adapter"></a>ZeroMQ Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>ZeroMqMessageProducer</code> is a <code>MessageProducerSupport</code> implementation with reactive semantics.
+It constantly reads the data from a ZeroMQ socket in a non-blocking manner and publishes the messages to an infinite <code>Flux</code> which is subscribed to by a <code>FluxMessageChannel</code> or explicitly in the <code>start()</code> method, if the output channel is not reactive.
+When no data are received on the socket, a <code>consumeDelay</code> (defaults to 1 second) is applied before the next read attempt.</p>
+</div>
+<div class="paragraph">
+<p>Only <code>SocketType.PAIR</code>, <code>SocketType.PULL</code> and <code>SocketType.SUB</code> are supported by the <code>ZeroMqMessageProducer</code>.
+This component can connect to the remote socket or bind onto TCP protocol with the provided or random port.
+The actual port can be obtained via <code>getBoundPort()</code> after this component is started and ZeroMQ socket is bound.
+The socket options (e.g. security or write timeout) can be configured via <code>setSocketConfigurer(Consumer&lt;ZMQ.Socket&gt; socketConfigurer)</code> callback.</p>
+</div>
+<div class="paragraph">
+<p>If the <code>receiveRaw</code> option is set to <code>true</code>, a <code>ZMsg</code>, consumed from the socket, is sent as is in the payload of the produced <code>Message</code>: it&#8217;s up to the downstream flow to parse and convert  the <code>ZMsg</code>.
+Otherwise, an <code>InboundMessageMapper</code> is used to convert the consumed data into a <code>Message</code>.
+If the received <code>ZMsg</code> is multi-frame, the first frame is treated as the <code>ZeroMqHeaders.TOPIC</code> header this ZeroMQ message was published to.</p>
+</div>
+<div class="paragraph">
+<p>With <code>SocketType.SUB</code>, the <code>ZeroMqMessageProducer</code> uses the provided <code>topics</code> option for subscriptions; defaults to subscribe to all.
+Subscriptions can be adjusted at runtime using <code>subscribeToTopics()</code> and <code>unsubscribeFromTopics()</code> <code>@ManagedOperation</code> s.</p>
+</div>
+<div class="paragraph">
+<p>Here is a sample of <code>ZeroMqMessageProducer</code> configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+ZeroMqMessageProducer zeroMqMessageProducer(ZContext context, MessageChannel outputChannel) {
+    ZeroMqMessageProducer messageProducer = new ZeroMqMessageProducer(context, SocketType.SUB);
+    messageProducer.setOutputChannel(outputChannel);
+    messageProducer.setTopics("some");
+    messageProducer.setReceiveRaw(true);
+    messageProducer.setBindPort(7070);
+    messageProducer.setConsumeDelay(Duration.ofMillis(100));
+    return messageProducer;
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="zeromq-outbound-channel-adapter"><a class="anchor" href="#zeromq-outbound-channel-adapter"></a>ZeroMQ Outbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>ZeroMqMessageHandler</code> is a <code>ReactiveMessageHandler</code> implementation to produce publish messages into a ZeroMQ socket.
+Only <code>SocketType.PAIR</code>, <code>SocketType.PUSH</code> and <code>SocketType.PUB</code> are supported.
+The <code>ZeroMqMessageHandler</code> only supports connecting the ZeroMQ socket; binding is not supported.
+When the <code>SocketType.PUB</code> is used, the <code>topicExpression</code> is evaluated against a request message to inject a topic frame into a ZeroMQ message if it is not null.
+The subscriber side (<code>SocketType.SUB</code>) must receive the topic frame first before parsing the actual data.
+When the payload of the request message is a <code>ZMsg</code>, no conversion or topic extraction is performed: the <code>ZMsg</code> is sent into a socket as is and it is not destroyed for possible further reuse.
+Otherwise, an <code>OutboundMessageMapper&lt;byte[]&gt;</code> is used to convert a request message (or just its payload) into a ZeroMQ frame to publish.
+By default, a <code>ConvertingBytesMessageMapper</code> is used supplied with a <code>ConfigurableCompositeMessageConverter</code>.
+The socket options (e.g. security or write timeout) can be configured via <code>setSocketConfigurer(Consumer&lt;ZMQ.Socket&gt; socketConfigurer)</code> callback.</p>
+</div>
+<div class="paragraph">
+<p>Here is a sample of <code>ZeroMqMessageHandler</code> configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@ServiceActivator(inputChannel = "zeroMqPublisherChannel")
+ZeroMqMessageHandler zeroMqMessageHandler(ZContext context) {
+    ZeroMqMessageHandler messageHandler =
+                  new ZeroMqMessageHandler(context, "tcp://localhost:6060", SocketType.PUB);
+    messageHandler.setTopicExpression(
+                  new FunctionExpression&lt;Message&lt;?&gt;&gt;((message) -&gt; message.getHeaders().get("topic")));
+    messageHandler.setMessageMapper(new EmbeddedJsonHeadersMessageMapper());
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="zeromq-dsl"><a class="anchor" href="#zeromq-dsl"></a>ZeroMQ Java DSL Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>spring-integration-zeromq</code> provide a convenient Java DSL fluent API via <code>ZeroMq</code> factory and <code>IntegrationComponentSpec</code> implementations for the components mentioned above.</p>
+</div>
+<div class="paragraph">
+<p>This is a sample of Java DSL for <code>ZeroMqChannel</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">.channel(ZeroMq.zeroMqChannel(this.context)
+            .connectUrl("tcp://localhost:6001:6002")
+            .consumeDelay(Duration.ofMillis(100)))
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Inbound Channel Adapter for ZeroMQ Java DSL is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">IntegrationFlow.from(
+            ZeroMq.inboundChannelAdapter(this.context, SocketType.SUB)
+                        .connectUrl("tcp://localhost:9000")
+                        .topics("someTopic")
+                        .receiveRaw(true)
+                        .consumeDelay(Duration.ofMillis(100)))
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Outbound Channel Adapter for ZeroMQ Java DSL is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">.handle(ZeroMq.outboundChannelAdapter(this.context, "tcp://localhost:9001", SocketType.PUB)
+                  .topicFunction(message -&gt; message.getHeaders().get("myTopic")))
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="xmpp.html">XMPP Support</a></span>
+  <span class="next"><a href="zookeeper.html">Zookeeper Support</a></span>
 </nav>
 </article>
 </div>  </div>

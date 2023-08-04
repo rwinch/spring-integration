@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Message Store :: Spring Integration</title>
+    <link rel="prev" href="message-history.html">
+    <link rel="next" href="meta-data-store.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -586,7 +587,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="message-history.html">Message History</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="message-store.html">Message Store</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Message Store"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/message-store.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,258 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="system-management.html">System Management</a></li>
+    <li><a href="message-store.html">Message Store</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Message Store</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>The <a href="https://www.enterpriseintegrationpatterns.com/"><em>Enterprise Integration Patterns</em></a> (EIP) book identifies several patterns that have the ability to buffer messages.
+For example, an aggregator buffers messages until they can be released, and a <code>QueueChannel</code> buffers messages until consumers explicitly receive those messages from that channel.
+Because of the failures that can occur at any point within your message flow, EIP components that buffer messages also introduce a point where messages could be lost.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>To mitigate the risk of losing messages, EIP defines the <a href="https://www.enterpriseintegrationpatterns.com/MessageStore.html">message store</a> pattern, which lets EIP components store messages, typically in some type of persistent store (such as an RDBMS).</p>
+</div>
+<div class="paragraph">
+<p>Spring Integration provides support for the message store pattern by:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Defining an <code>org.springframework.integration.store.MessageStore</code> strategy interface</p>
+</li>
+<li>
+<p>Providing several implementations of this interface</p>
+</li>
+<li>
+<p>Exposing a <code>message-store</code> attribute on all components that have the capability to buffer messages so that you can inject any instance that implements the <code>MessageStore</code> interface.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Details on how to configure a specific message store implementation and how to inject a <code>MessageStore</code> implementation into a specific buffering component are described throughout the manual (see the specific component, such as <a href="channel/configuration.html#channel-configuration-queuechannel" class="xref page">QueueChannel</a>, <a href="overview.html#overview-endpoints-aggregator" class="xref page">Aggregator</a>, <a href="delayer.html" class="xref page">Delayer</a>, and others).
+The following pair of examples show how to add a reference to a message store for a <code>QueueChannel</code> and for an aggregator:</p>
+</div>
+<div class="listingblock">
+<div class="title">QueueChannel</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:channel id="myQueueChannel"&gt;
+    &lt;int:queue message-store="refToMessageStore"/&gt;
+&lt;int:channel&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Aggregator</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:aggregator … message-store="refToMessageStore"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, messages are stored in-memory by using <code>o.s.i.store.SimpleMessageStore</code>, an implementation of <code>MessageStore</code>.
+That might be fine for development or simple low-volume environments where the potential loss of non-persistent messages is not a concern.
+However, the typical production application needs a more robust option, not only to mitigate the risk of message loss but also to avoid potential out-of-memory errors.
+Therefore, we also provide <code>MessageStore</code> implementations for a variety of data-stores.
+The following is a complete list of supported implementations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="hazelcast.html#hazelcast-message-store" class="xref page">Hazelcast Message Store</a>: Uses a Hazelcast distributed cache to store messages</p>
+</li>
+<li>
+<p><a href="jdbc/message-store.html" class="xref page">JDBC Message Store</a>: Uses an RDBMS to store messages</p>
+</li>
+<li>
+<p><a href="redis.html#redis-message-store" class="xref page">Redis Message Store</a>: Uses a Redis key/value datastore to store messages</p>
+</li>
+<li>
+<p><a href="mongodb.html#mongodb-message-store" class="xref page">MongoDB Message Store</a>: Uses a MongoDB document store to store messages</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+<div class="paragraph">
+<p>However, be aware of some limitations while using persistent implementations of the <code>MessageStore</code>.</p>
+</div>
+<div class="paragraph">
+<p>The Message data (payload and headers) is serialized and deserialized by using different serialization strategies, depending on the implementation of the <code>MessageStore</code>.
+For example, when using <code>JdbcMessageStore</code>, only <code>Serializable</code> data is persisted by default.
+In this case, non-Serializable headers are removed before serialization occurs.
+Also, be aware of the protocol-specific headers that are injected by transport adapters (such as FTP, HTTP, JMS, and others).
+For example, <code>&lt;http:inbound-channel-adapter/&gt;</code> maps HTTP headers into message headers, and one of them is an <code>ArrayList</code> of non-serializable <code>org.springframework.http.MediaType</code> instances.
+However, you can inject your own implementation of the <code>Serializer</code> and <code>Deserializer</code> strategy interfaces into some <code>MessageStore</code> implementations (such as <code>JdbcMessageStore</code>) to change the behavior of serialization and deserialization.</p>
+</div>
+<div class="paragraph">
+<p>Pay special attention to the headers that represent certain types of data.
+For example, if one of the headers contains an instance of some Spring bean, upon deserialization, you may end up with a different instance of that bean, which directly affects some of the implicit headers created by the framework (such as <code>REPLY_CHANNEL</code> or <code>ERROR_CHANNEL</code>).
+Currently, they are not serializable, but, even if they were, the deserialized channel would not represent the expected instance.</p>
+</div>
+<div class="paragraph">
+<p>Beginning with Spring Integration version 3.0, you can resolve this issue with a header enricher configured to replace these headers with a name after registering the channel with the <code>HeaderChannelRegistry</code>.</p>
+</div>
+<div class="paragraph">
+<p>Also, consider what happens when you configure a message-flow as follows: gateway &#8594; queue-channel (backed by a persistent Message Store) &#8594; service-activator.
+That gateway creates a temporary reply channel, which is lost by the time the service-activator&#8217;s poller reads from the queue.
+Again, you can use the header enricher to replace the headers with a <code>String</code> representation.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="content-enrichment.html#header-enricher" class="xref page">Header Enricher</a>.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>Spring Integration 4.0 introduced two new interfaces:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ChannelMessageStore</code>: To implement operations specific for <code>QueueChannel</code> instances</p>
+</li>
+<li>
+<p><code>PriorityCapableChannelMessageStore</code>: To mark <code>MessageStore</code> implementations to be used for <code>PriorityChannel</code> instances and to provide priority order for persisted messages.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The real behavior depends on the implementation.
+The framework provides the following implementations, which can be used as a persistent <code>MessageStore</code> for <code>QueueChannel</code> and <code>PriorityChannel</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="redis.html#redis-cms" class="xref page">Redis Channel Message Stores</a></p>
+</li>
+<li>
+<p><a href="mongodb.html#mongodb-priority-channel-message-store" class="xref page">MongoDB Channel Message Store</a></p>
+</li>
+<li>
+<p><a href="jdbc/message-store.html#jdbc-message-store-channels" class="xref page">Backing Message Channels</a></p>
+</li>
+</ul>
+</div>
+<div id="sms-caution" class="admonitionblock warning">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+<div class="title">Caution about <code>SimpleMessageStore</code></div>
+<div class="paragraph">
+<p>Starting with version 4.1, the <code>SimpleMessageStore</code> no longer copies the message group when calling <code>getMessageGroup()</code>.
+For large message groups, this was a significant performance problem.
+4.0.1 introduced a boolean <code>copyOnGet</code> property that lets you control this behavior.
+When used internally by the aggregator, this property was set to <code>false</code> to improve performance.
+It is now <code>false</code> by default.</p>
+</div>
+<div class="paragraph">
+<p>Users accessing the group store outside of components such as aggregators now get a direct reference to the group being used by the aggregator instead of a copy.
+Manipulation of the group outside the aggregator may cause unpredictable results.</p>
+</div>
+<div class="paragraph">
+<p>For this reason, you should either not perform such manipulation or set the <code>copyOnGet</code> property to <code>true</code>.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+<div class="sect1">
+<h2 id="message-group-factory"><a class="anchor" href="#message-group-factory"></a>Using <code>MessageGroupFactory</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 4.3, some <code>MessageGroupStore</code> implementations can be injected with a custom <code>MessageGroupFactory</code> strategy to create and customize the <code>MessageGroup</code> instances used by the <code>MessageGroupStore</code>.
+This defaults to a <code>SimpleMessageGroupFactory</code>, which produces <code>SimpleMessageGroup</code> instances based on the <code>GroupType.HASH_SET</code> (<code>LinkedHashSet</code>) internal collection.
+Other possible options are <code>SYNCHRONISED_SET</code> and <code>BLOCKING_QUEUE</code>, where the last one can be used to reinstate the previous <code>SimpleMessageGroup</code> behavior.
+Also, the <code>PERSISTENT</code> option is available.
+See the next section for more information.
+Starting with version 5.0.1, the <code>LIST</code> option is also available for when the order and uniqueness of messages in the group does not matter.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="lazy-load-message-group"><a class="anchor" href="#lazy-load-message-group"></a>Persistent <code>MessageGroupStore</code> and Lazy-load</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 4.3, all persistent <code>MessageGroupStore</code> instances retrieve <code>MessageGroup</code> instances and their <code>messages</code> from the store in the lazy-load manner.
+In most cases, it is useful for the correlation <code>MessageHandler</code> instances (see <a href="overview.html#overview-endpoints-aggregator" class="xref page">Aggregator</a> and <a href="resequencer.html" class="xref page">Resequencer</a>), when it would add overhead to load entire the <code>MessageGroup</code> from the store on each correlation operation.</p>
+</div>
+<div class="paragraph">
+<p>You can use the <code>AbstractMessageGroupStore.setLazyLoadMessageGroups(false)</code> option to switch off the lazy-load behavior from the configuration.</p>
+</div>
+<div class="paragraph">
+<p>Our performance tests for lazy-load on MongoDB <code>MessageStore</code> (<a href="mongodb.html#mongodb-message-store" class="xref page">MongoDB Message Store</a>) and <code>&lt;aggregator&gt;</code> (<a href="overview.html#overview-endpoints-aggregator" class="xref page">Aggregator</a>) use a custom <code>release-strategy</code> similar to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:aggregator input-channel="inputChannel"
+                output-channel="outputChannel"
+                message-store="mongoStore"
+                release-strategy-expression="size() == 1000"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It produces results similar to the following for 1000 simple messages:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">...
+StopWatch 'Lazy-Load Performance': running time (millis) = 38918
+-----------------------------------------
+ms     %     Task name
+-----------------------------------------
+02652  007%  Lazy-Load
+36266  093%  Eager
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, starting with version 5.5, all the persistent <code>MessageGroupStore</code> implementations provide a <code>streamMessagesForGroup(Object groupId)</code> contract based on the target database streaming API.
+This improves resources utilization when groups are very big in the store.
+Internally in the framework this new API is used in the <a href="delayer.html" class="xref page">Delayer</a> (for example) when it reschedules persisted messages on startup.
+A returned <code>Stream&lt;Message&lt;?&gt;&gt;</code> must be closed in the end of processing, e.g. via auto-close by the <code>try-with-resources</code>.
+Whenever a <code>PersistentMessageGroup</code> is used, its <code>streamMessages()</code> delegates to the <code>MessageGroupStore.streamMessagesForGroup()</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="message-group-condition"><a class="anchor" href="#message-group-condition"></a>Message Group Condition</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 5.5, the <code>MessageGroup</code> abstraction provides a <code>condition</code> string option.
+The value of this option can be anything that could be parsed later on for any reason to make a decision for the group.
+For example a <code>ReleaseStrategy</code> from a <a href="aggregator.html#aggregator-api" class="xref page">correlation message handler</a> may consult this property from the group instead of iterating all the messages in the group.
+The <code>MessageGroupStore</code> exposes a <code>setGroupCondition(Object groupId, String condition)</code> API.
+For this purpose a <code>setGroupConditionSupplier(BiFunction&lt;Message&lt;?&gt;, String, String&gt;)</code> option has been added to the <code>AbstractCorrelatingMessageHandler</code>.
+This function is evaluated against each message after it has been added to the group as well as the existing condition of the group.
+The implementation may decide to return a new value, the existing value, or reset the target condition to <code>null</code>.
+The value for a <code>condition</code> can be a JSON, SpEL expression, number or anything what can be serialized as a string and parsed afterwards.
+For example, the <code>FileMarkerReleaseStrategy</code> from the <a href="file/aggregator.html" class="xref page">File Aggregator</a> component, populates a condition into a group from the <code>FileHeaders.LINE_COUNT</code> header of the <code>FileSplitter.FileMarker.Mark.END</code> message and consults with it from its <code>canRelease()</code> comparing a group size with the value in this condition.
+This way it doesn&#8217;t iterate all the messages in group to find a <code>FileSplitter.FileMarker.Mark.END</code> message with the <code>FileHeaders.LINE_COUNT</code> header.
+It also allows the end marker to arrive at the aggregator before all the other records; for example when processing a file in a multi-threaded environment.</p>
+</div>
+<div class="paragraph">
+<p>In addition, for configuration convenience, a <code>GroupConditionProvider</code> contract has been introduced.
+The <code>AbstractCorrelatingMessageHandler</code> checks if the provided <code>ReleaseStrategy</code> implements this interface and extracts a <code>conditionSupplier</code> for group condition evaluation logic.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="message-history.html">Message History</a></span>
+  <span class="next"><a href="meta-data-store.html">Metadata Store</a></span>
 </nav>
 </article>
 </div>  </div>

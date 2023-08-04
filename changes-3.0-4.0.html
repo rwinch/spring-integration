@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Changes between 3.0 and 4.0 :: Spring Integration</title>
+    <link rel="prev" href="changes-4.0-4.1.html">
+    <link rel="next" href="changes-2.2-3.0.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1132,7 +1133,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="changes-4.0-4.1.html">Changes between 4.0 and 4.1</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Changes between 3.0 and 4.0"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/changes-3.0-4.0.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,326 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="history.html">Change History</a></li>
+    <li><a href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Changes between 3.0 and 4.0</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>See the <a href="https://github.com/spring-projects/spring-integration/wiki/Spring-Integration-3.0-to-4.0-Migration-Guide">Migration Guide</a> for important changes that might affect your applications.
+You can find migration guides for all versions back to 2.1 on the <a href="https://github.com/spring-projects/spring-integration/wiki">wiki</a>.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
-</td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
+<div class="sect1">
+<h2 id="x4.0-new-components"><a class="anchor" href="#x4.0-new-components"></a>New Components</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Version 4.0 added a number of new components.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
+<div class="sect2">
+<h3 id="x4.0-mqtt"><a class="anchor" href="#x4.0-mqtt"></a>MQTT Channel Adapters</h3>
+<div class="paragraph">
+<p>The MQTT channel adapters (previously available in the Spring Integration Extensions repository) are now available as part of the normal Spring Integration distribution.
+See <a href="mqtt.html" class="xref page">MQTT Support</a>.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+</div>
+<div class="sect2">
+<h3 id="x4.0-enable-configuration"><a class="anchor" href="#x4.0-enable-configuration"></a><code>@EnableIntegration</code></h3>
+<div class="paragraph">
+<p>We added the <code>@EnableIntegration</code> annotation to permit declaration of standard Spring Integration beans when using <code>@Configuration</code> classes.
+See <a href="configuration/annotations.html" class="xref page">Annotation Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-component-scan"><a class="anchor" href="#x4.0-component-scan"></a><code>@IntegrationComponentScan</code></h3>
+<div class="paragraph">
+<p>We added the <code>@IntegrationComponentScan</code> annotation to permit classpath scanning for Spring Integration-specific components.
+See <a href="configuration/annotations.html" class="xref page">Annotation Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-message-history"><a class="anchor" href="#x4.0-message-history"></a>&#8220;@EnableMessageHistory&#8221;</h3>
+<div class="paragraph">
+<p>You can now enable message history with the <code>@EnableMessageHistory</code> annotation in a <code>@Configuration</code> class.
+In addition, a JMX MBean can modify the message history settings.
+Also, <code>MessageHistory</code> can track auto-created <code>MessageHandler</code> instances for annotated endpoints (such as <code>@ServiceActivator</code>, <code>@Splitter</code>, and others).
+For more information, see <a href="message-history.html" class="xref page">Message History</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-messaging-gateway"><a class="anchor" href="#x4.0-messaging-gateway"></a><code>@MessagingGateway</code></h3>
+<div class="paragraph">
+<p>You can now configure messaging gateway interfaces with the <code>@MessagingGateway</code> annotation.
+It is an analogue of the <code>&lt;int:gateway/&gt;</code> XML element.
+For more information, see <a href="gateway.html#messaging-gateway-annotation" class="xref page"><code>@MessagingGateway</code> Annotation</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-boot"><a class="anchor" href="#x4.0-boot"></a>Spring Boot <code>@EnableAutoConfiguration</code></h3>
+<div class="paragraph">
+<p>As well as the <code>@EnableIntegration</code> annotation mentioned earlier, we introduced a hook to allow the Spring Integration infrastructure beans to be configured with Spring Boot&#8217;s <code>@EnableAutoConfiguration</code> annotation.
+For more information, see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-auto-configuration.html">&#8220;Auto-configuration&#8221;</a> in the Spring Boot Reference Guide.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-global-channel-interceptor"><a class="anchor" href="#x4.0-global-channel-interceptor"></a><code>@GlobalChannelInterceptor</code></h3>
+<div class="paragraph">
+<p>As well as the <code>@EnableIntegration</code> annotation mentioned above, we introduced the <code>@GlobalChannelInterceptor</code> annotation.
+For more information, see <a href="configuration/annotations.html" class="xref page">Annotation Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-integration-converter"><a class="anchor" href="#x4.0-integration-converter"></a><code>@IntegrationConverter</code></h3>
+<div class="paragraph">
+<p>We introduced the <code>@IntegrationConverter</code> annotation as an analogue of the <code>&lt;int:converter/&gt;</code> component.
+For more information, see <a href="configuration/annotations.html" class="xref page">Annotation Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-enable-publisher"><a class="anchor" href="#x4.0-enable-publisher"></a><code>@EnablePublisher</code></h3>
+<div class="paragraph">
+<p>We added the <code>@EnablePublisher</code> annotation to allow the specification of a <code>default-publisher-channel</code> for <code>@Publisher</code> annotations.
+See <a href="configuration/annotations.html" class="xref page">Annotation Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-redis-cms"><a class="anchor" href="#x4.0-redis-cms"></a>Redis Channel Message Stores</h3>
+<div class="paragraph">
+<p>We added a Redis <code>MessageGroupStore</code> that is optimized for use when backing a <code>QueueChannel</code> for persistence.
+For more information, see <a href="redis.html#redis-cms" class="xref page">Redis Channel Message Stores</a>.</p>
+</div>
+<div class="paragraph">
+<p>We added a Redis <code>ChannelPriorityMessageStore</code>.
+You can use it to retrieve messages by priority.
+For more information, see <a href="redis.html#redis-cms" class="xref page">Redis Channel Message Stores</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-priority-channel-mondodb"><a class="anchor" href="#x4.0-priority-channel-mondodb"></a>MongodDB Channel Message Store</h3>
+<div class="paragraph">
+<p>The MongoDB support now provides the <code>MongoDbChannelMessageStore</code>, which is a channel-specific <code>MessageStore</code> implementation.
+With <code>priorityEnabled = true</code>, you can use it in <code>&lt;int:priority-queue&gt;</code> elements to achieve priority order polling of persisted messages.
+For more information see <a href="mongodb.html#mongodb-priority-channel-message-store" class="xref page">MongoDB Channel Message Store</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-MBeanExport-annotation"><a class="anchor" href="#x4.0-MBeanExport-annotation"></a><code>@EnableIntegrationMBeanExport</code></h3>
+<div class="paragraph">
+<p>You can now enable the <code>IntegrationMBeanExporter</code> with the <code>@EnableIntegrationMBeanExport</code> annotation in a <code>@Configuration</code> class.
+For more information, see <a href="jmx.html#jmx-mbean-exporter" class="xref page">MBean Exporter</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-channel-security-interceptor"><a class="anchor" href="#x4.0-channel-security-interceptor"></a><code>ChannelSecurityInterceptorFactoryBean</code></h3>
+<div class="paragraph">
+<p><code>ChannelSecurityInterceptorFactoryBean</code> now supports configuration of Spring Security for message channels that use <code>@Configuration</code> classes.
+For more information, see <a href="security.html" class="xref page">Security in Spring Integration</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-redis-outbound-gateway"><a class="anchor" href="#x4.0-redis-outbound-gateway"></a>Redis Command Gateway</h3>
+<div class="paragraph">
+<p>The Redis support now provides the <code>&lt;outbound-gateway&gt;</code> component to perform generic Redis commands by using the <code>RedisConnection#execute</code> method.
+For more information, see <a href="redis.html#redis-outbound-gateway" class="xref page">Redis Outbound Command Gateway</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-redis-lock-registry"><a class="anchor" href="#x4.0-redis-lock-registry"></a><code>RedisLockRegistry</code></h3>
+<div class="paragraph">
+<p>The <code>RedisLockRegistry</code> is now available to support global locks visible to multiple application instances and servers.
+These can be used with aggregating message handlers across multiple application instances such that group release occurs on only one instance.
+For more information, see <a href="redis.html#redis-lock-registry" class="xref page">Redis Lock Registry</a> and <a href="overview.html#overview-endpoints-aggregator" class="xref page">Aggregator</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-poller-annotation"><a class="anchor" href="#x4.0-poller-annotation"></a><code>@Poller</code></h3>
+<div class="paragraph">
+<p>Annotation-based messaging configuration can now have a <code>poller</code> attribute.
+This means that methods annotated with <code>@ServiceActivator</code>, <code>@Aggregator</code>, and similar annotations can now use an <code>inputChannel</code> that is a reference to a <code>PollableChannel</code>.
+For more information, see <a href="configuration/annotations.html" class="xref page">Annotation Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-inbound-channel-adapter-annotation"><a class="anchor" href="#x4.0-inbound-channel-adapter-annotation"></a><code>@InboundChannelAdapter</code> and <code>SmartLifecycle</code> for Annotated Endpoints</h3>
+<div class="paragraph">
+<p>We added the <code>@InboundChannelAdapter</code> method annotation.
+It is an analogue of the <code>&lt;int:inbound-channel-adapter&gt;</code> XML component.
+In addition, all messaging annotations now provide <code>SmartLifecycle</code> options.
+For more information, see <a href="configuration/annotations.html" class="xref page">Annotation Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-twitter-sog"><a class="anchor" href="#x4.0-twitter-sog"></a>Twitter Search Outbound Gateway</h3>
+<div class="paragraph">
+<p>We added a new twitter endpoint: <code>&lt;int-twitter-search-outbound-gateway/&gt;</code>.
+Unlike the search inbound adapter, which polls by using the same search query each time, the outbound gateway allows on-demand customized queries.
+For more information, see <a href="https://github.com/spring-projects/spring-integration-extensions/tree/main/spring-integration-social-twitter">Spring Integration Social Twitter</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-bridge-annotations"><a class="anchor" href="#x4.0-bridge-annotations"></a><code>@BridgeFrom</code> and <code>@BridgeTo</code> Annotations</h3>
+<div class="paragraph">
+<p>We introduced <code>@BridgeFrom</code> and <code>@BridgeTo</code> <code>@Bean</code> method annotations to mark <code>MessageChannel</code> beans in <code>@Configuration</code> classes.
+For more information, see <a href="configuration/annotations.html" class="xref page">Annotation Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-meta-messaging-annotations"><a class="anchor" href="#x4.0-meta-messaging-annotations"></a>Meta-messaging Annotations</h3>
+<div class="paragraph">
+<p>Messaging annotations (<code>@ServiceActivator</code>, <code>@Router</code>, <code>@MessagingGateway</code>, and others) can now be configured as meta-annotations for user-defined messaging annotations.
+In addition, the user-defined annotations can have the same attributes (<code>inputChannel</code>, <code>@Poller</code>, <code>autoStartup</code>, and others).
+For more information, see <a href="configuration/annotations.html" class="xref page">Annotation Support</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x4.0-general"><a class="anchor" href="#x4.0-general"></a>General Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section describes general changes from version 3.0 to version 4.0.</p>
+</div>
+<div class="sect2">
+<h3 id="requires-spring-framework-4-0"><a class="anchor" href="#requires-spring-framework-4-0"></a>Requires Spring Framework 4.0</h3>
+<div class="paragraph">
+<p>We moved the core messaging abstractions (<code>Message</code>, <code>MessageChannel</code>, and others) to the Spring Framework <code>spring-messaging</code> module.
+Developers who reference these classes directly in their code need to make changes, as described in the first section of the <a href="https://github.com/spring-projects/spring-integration/wiki/Spring-Integration-3.0-to-4.0-Migration-Guide">3.0 to 4.0 Migration Guide</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-xpath-header-enricher-header-type"><a class="anchor" href="#x4.0-xpath-header-enricher-header-type"></a>Header Type for XPath Header Enricher</h3>
+<div class="paragraph">
+<p>We introduced the <code>header-type</code> attribute for the <code>header</code> child element of the <code>&lt;int-xml:xpath-header-enricher&gt;</code>.
+This attribute provides the target type for the header value (to which the result of the XPath expression evaluation is converted).
+For more information see <a href="xml/xpath-header-enricher.html" class="xref page">XPath Header Enricher</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-object-to-json-transformer-result-type"><a class="anchor" href="#x4.0-object-to-json-transformer-result-type"></a>Object To JSON Transformer: Node Result</h3>
+<div class="paragraph">
+<p>We introduced the <code>result-type</code> attribute for the <code>&lt;int:object-to-json-transformer&gt;</code>.
+This attribute provides the target type for the result of mapping an object to JSON.
+It supports <code>STRING</code> (the default) and <code>NODE</code>.
+For more information see <a href="transformer.html#transformer-xpath-spel-function" class="xref page">Since version 3.0, Spring Integration also provides a built-in <code>#xpath</code> SpEL function for use in expressions.</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-jms-header-mapping"><a class="anchor" href="#x4.0-jms-header-mapping"></a>JMS Header Mapping</h3>
+<div class="paragraph">
+<p>The <code>DefaultJmsHeaderMapper</code> now maps an incoming <code>JMSPriority</code> header to the Spring Integration <code>priority</code> header.
+Previously, <code>priority</code> was only considered for outbound messages.
+For more information, see <a href="#x4.0-jms-header-mapping">Mapping Message Headers to and from JMS Message</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-jms-ob"><a class="anchor" href="#x4.0-jms-ob"></a>JMS Outbound Channel Adapter</h3>
+<div class="paragraph">
+<p>The JMS outbound channel adapter now supports the <code>session-transacted</code> attribute (default: <code>false</code>).
+Previously, you had to inject a customized <code>JmsTemplate</code> to use transactions.
+See <a href="#x4.0-jms-ob">Outbound Channel Adapter</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-jms-ib"><a class="anchor" href="#x4.0-jms-ib"></a>JMS Inbound Channel Adapter</h3>
+<div class="paragraph">
+<p>The JMS inbound channel adapter now supports the <code>session-transacted</code> attribute (default: <code>false</code>).
+Previously, you had to inject a customized <code>JmsTemplate</code> to use transactions.
+The adapter allowed 'transacted' in the <code>acknowledgeMode</code>, which was incorrect and didn&#8217;t work.
+This value is no longer allowed.
+See <a href="#x4.0-jms-ib">Inbound Channel Adapter</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-datatype-channel"><a class="anchor" href="#x4.0-datatype-channel"></a>Datatype Channels</h3>
+<div class="paragraph">
+<p>You can now specify a <code>MessageConverter</code> to be used when converting (if necessary) payloads to one of the accepted <code>datatype</code> instances in a Datatype channel.
+For more information, see <a href="channel/configuration.html#channel-datatype-channel" class="xref page">Datatype Channel Configuration</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-retry-config"><a class="anchor" href="#x4.0-retry-config"></a>Simpler Retry Advice Configuration</h3>
+<div class="paragraph">
+<p>We added simplified namespace support to configure a <code>RequestHandlerRetryAdvice</code>.
+For more information, see <a href="handler-advice/classes.html#retry-config" class="xref page">Configuring the Retry Advice</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-release-strategy-group-timeout"><a class="anchor" href="#x4.0-release-strategy-group-timeout"></a>Correlation Endpoint: Time-based Release Strategy</h3>
+<div class="paragraph">
+<p>We added the mutually exclusive <code>group-timeout</code> and <code>group-timeout-expression</code> attributes to <code>&lt;int:aggregator&gt;</code> and <code>&lt;int:resequencer&gt;</code>.
+These attributes allow forced completion of a partial <code>MessageGroup</code>, provided the <code>ReleaseStrategy</code> does not release a group and no further messages arrive within the time specified.
+For more information, see <a href="aggregator.html#aggregator-xml" class="xref page">Configuring an Aggregator with XML</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-redis-metadata"><a class="anchor" href="#x4.0-redis-metadata"></a>Redis Metadata Store</h3>
+<div class="paragraph">
+<p>The <code>RedisMetadataStore</code> now implements <code>ConcurrentMetadataStore</code>, letting it be used, for example, in an <code>AbstractPersistentAcceptOnceFileListFilter</code> implementation in a multiple application instance or server environment.
+For more information, see <a href="redis.html#redis-metadata-store" class="xref page">Redis Metadata Store</a>, <a href="file/reading.html" class="xref page">Reading Files</a>, <a href="ftp/inbound.html" class="xref page">FTP Inbound Channel Adapter</a>, and <a href="sftp/inbound.html" class="xref page">SFTP Inbound Channel Adapter</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-jdbc-cs"><a class="anchor" href="#x4.0-jdbc-cs"></a><code>JdbcChannelMessageStore</code> and <code>PriorityChannel</code></h3>
+<div class="paragraph">
+<p>T`JdbcChannelMessageStore` now implements <code>PriorityCapableChannelMessageStore</code>, letting it be used as a <code>message-store</code> reference for <code>priority-queue</code> instances.
+For more information, see <a href="jdbc/message-store.html#jdbc-message-store-channels" class="xref page">Backing Message Channels</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-amqp"><a class="anchor" href="#x4.0-amqp"></a>AMQP Endpoints Delivery Mode</h3>
+<div class="paragraph">
+<p>Spring AMQP, by default, creates persistent messages on the broker.
+You can override this behavior by setting the <code>amqp_deliveryMode</code> header or customizing the mappers.
+We added a convenient <code>default-delivery-mode</code> attribute to the adapters to provide easier configuration of this important setting.
+For more information, see <a href="amqp/outbound-channel-adapter.html" class="xref page">Outbound Channel Adapter</a> and <a href="amqp/outbound-gateway.html" class="xref page">Outbound Gateway</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-ftp"><a class="anchor" href="#x4.0-ftp"></a>FTP Timeouts</h3>
+<div class="paragraph">
+<p>The <code>DefaultFtpSessionFactory</code> now exposes the <code>connectTimeout</code>, <code>defaultTimeout</code>, and <code>dataTimeout</code> properties, avoiding the need to subclass the factory to set these common properties.
+The <code>postProcess*</code> methods are still available for more advanced configuration.
+See <a href="ftp/session-factory.html" class="xref page">FTP Session Factory</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-twitter-status-updating"><a class="anchor" href="#x4.0-twitter-status-updating"></a>Twitter: <code>StatusUpdatingMessageHandler</code></h3>
+<div class="paragraph">
+<p>The <code>StatusUpdatingMessageHandler</code> (<code>&lt;int-twitter:outbound-channel-adapter&gt;</code>) now supports the <code>tweet-data-expression</code> attribute to build a <code>org.springframework.social.twitter.api.TweetData</code> object for updating the timeline status.
+This feature allows, for example, attaching an image.
+See <a href="https://github.com/spring-projects/spring-integration-extensions/tree/main/spring-integration-social-twitter">Spring Integration Social Twitter</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-jpa-id-expression"><a class="anchor" href="#x4.0-jpa-id-expression"></a>JPA Retrieving Gateway: <code>id-expression</code></h3>
+<div class="paragraph">
+<p>We introduced the <code>id-expression</code> attribute for <code>&lt;int-jpa:retrieving-outbound-gateway&gt;</code> to perform <code>EntityManager.find(Class entityClass, Object primaryKey)</code>.
+See <a href="jpa/outbound-gateways.html#jpa-retrieving-outbound-gateway" class="xref page">Retrieving Outbound Gateway</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-tcp-deserializer-events"><a class="anchor" href="#x4.0-tcp-deserializer-events"></a>TCP Deserialization Events</h3>
+<div class="paragraph">
+<p>When one of the standard deserializers encounters a problem decoding the input stream to a message, it now emits a <code>TcpDeserializationExceptionEvent</code>, letting applications examine the data at the point at which the exception occurred.
+See <a href="changes-4.1-4.2.html#x4.2-tcp-events" class="xref page">TCP Connection Events</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x4.0-bean-messaging-annotations"><a class="anchor" href="#x4.0-bean-messaging-annotations"></a>Messaging Annotations on <code>@Bean</code> Definitions</h3>
+<div class="paragraph">
+<p>You can now configure messaging annotations (<code>@ServiceActivator</code>, <code>@Router</code>, <code>@InboundChannelAdapter</code>, and others) on <code>@Bean</code> definitions in <code>@Configuration</code> classes.
+For more information, see <a href="configuration/annotations.html" class="xref page">Annotation Support</a>.</p>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="changes-4.0-4.1.html">Changes between 4.0 and 4.1</a></span>
+  <span class="next"><a href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a></span>
 </nav>
 </article>
 </div>  </div>

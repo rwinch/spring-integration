@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Scripting Support :: Spring Integration</title>
+    <link rel="prev" href="delayer.html">
+    <link rel="next" href="groovy.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -430,7 +431,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="delayer.html">Delayer</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="scripting.html">Scripting Support</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Scripting Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/scripting.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,515 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="messaging-endpoints.html">Messaging Endpoints</a></li>
+    <li><a href="scripting.html">Scripting Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Scripting Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>Spring Integration 2.1 added support for the <a href="https://www.jcp.org/en/jsr/detail?id=223">JSR223 Scripting for Java specification</a>, introduced in Java version 6.
+It lets you use scripts written in any supported language (including Ruby, JRuby, Groovy and Kotlin) to provide the logic for various integration components, similar to the way the Spring Expression Language (SpEL) is used in Spring Integration.
+For more information about JSR223, see the <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/prog_guide/api.html">documentation</a>.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-scripting&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-scripting:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition, you need to add a script engine implementation, e.g. JRuby, Jython.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.2, Spring Integration provides a Kotlin Jsr223 support.
+You need to add these dependencies into your project to make it working:</p>
+</div>
+<div id="_tabs_2" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_2_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_2_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_2_maven--panel" class="tabpanel" aria-labelledby="_tabs_2_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.jetbrains.kotlin&lt;/groupId&gt;
+    &lt;artifactId&gt;kotlin-script-util&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jetbrains.kotlin&lt;/groupId&gt;
+    &lt;artifactId&gt;kotlin-compiler-embeddable&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jetbrains.kotlin&lt;/groupId&gt;
+    &lt;artifactId&gt;kotlin-scripting-compiler-embeddable&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_gradle--panel" class="tabpanel" aria-labelledby="_tabs_2_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">runtime 'org.jetbrains.kotlin:kotlin-script-util'
+runtime 'org.jetbrains.kotlin:kotlin-compiler-embeddable'
+runtime 'org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable'</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>KotlinScriptExecutor</code> is selected by the provided <code>kotlin</code> language indicator or script file comes with the <code>.kts</code> extension.</p>
+</div>
+<div class="paragraph">
+<p>In order to use a JVM scripting language, a JSR223 implementation for that language must be included in your class path.
+The <a href="https://groovy-lang.org/">Groovy</a> and <a href="https://www.jruby.org">JRuby</a> projects provide JSR233 support in their standard distributions.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+Various JSR223 language implementations have been developed by third parties.
+A particular implementation&#8217;s compatibility with Spring Integration depends on how well it conforms to the specification and the implementer&#8217;s interpretation of the specification.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock tip">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+If you plan to use Groovy as your scripting language, we recommended you use <a href="groovy.html" class="xref page">Spring-Integration&#8217;s Groovy Support</a> as it offers additional features specific to Groovy.
+However, this section is relevant as well.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="scripting-config"><a class="anchor" href="#scripting-config"></a>Script Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Depending on the complexity of your integration requirements, scripts may be provided inline as CDATA in XML configuration or as a reference to a Spring resource that contains the script.
+To enable scripting support, Spring Integration defines a <code>ScriptExecutingMessageProcessor</code>, which binds the message payload to a variable named <code>payload</code> and the message headers to a <code>headers</code> variable, both accessible within the script execution context.
+All you need to do is write a script that uses these variables.
+The following pair of examples show sample configurations that create filters:</p>
+</div>
+<div id="_tabs_3" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_3_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_3_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_3_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_3_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow scriptFilter() {
+    return f -&gt; f.filter(Scripts.processor("some/path/to/ruby/script/RubyFilterTests.rb"));
+}
+...
+@Bean
+public Resource scriptResource() {
+	return new ByteArrayResource("headers.type == 'good'".getBytes());
+}
+
+@Bean
+public IntegrationFlow scriptFilter() {
+	return f -&gt; f.filter(Scripts.processor(scriptResource()).lang("groovy"));
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:filter input-channel="referencedScriptInput"&gt;
+   &lt;int-script:script location="some/path/to/ruby/script/RubyFilterTests.rb"/&gt;
+&lt;/int:filter&gt;
+
+&lt;int:filter input-channel="inlineScriptInput"&gt;
+     &lt;int-script:script lang="groovy"&gt;
+     &lt;![CDATA[
+     return payload == 'good'
+   ]]&gt;
+  &lt;/int-script:script&gt;
+&lt;/int:filter&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>As the preceding examples show, the script can be included inline or can be included by reference to a resource location (by using the <code>location</code> attribute).
+Additionally, the <code>lang</code> attribute corresponds to the language name (or its JSR223 alias).</p>
+</div>
+<div class="paragraph">
+<p>Other Spring Integration endpoint elements that support scripting include <code>router</code>, <code>service-activator</code>, <code>transformer</code>, and <code>splitter</code>.
+The scripting configuration in each case would be identical to the above (besides the endpoint element).</p>
+</div>
+<div class="paragraph">
+<p>Another useful feature of scripting support is the ability to update (reload) scripts without having to restart the application context.
+To do so, specify the <code>refresh-check-delay</code> attribute on the <code>script</code> element, as the following example shows:</p>
+</div>
+<div id="_tabs_4" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_4_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_4_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_4_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_4_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Scripts.processor(...).refreshCheckDelay(5000)
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-script:script location="..." refresh-check-delay="5000"/&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example, the script location is checked for updates every 5 seconds.
+If the script is updated, any invocation that occurs later than 5 seconds since the update results in running the new script.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following example:</p>
+</div>
+<div id="_tabs_5" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_5_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_5_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_5_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_5_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Scripts.processor(...).refreshCheckDelay(0)
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-script:script location="..." refresh-check-delay="0"/&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example, the context is updated with any script modifications as soon as such modification occurs, providing a simple mechanism for 'real-time' configuration.
+Any negative value means the script is not reloaded after initialization of the application context.
+This is the default behavior.
+The following example shows a script that never updates:</p>
+</div>
+<div id="_tabs_6" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_6_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_6_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_6_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_6_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Scripts.processor(...).refreshCheckDelay(-1)
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-script:script location="..." refresh-check-delay="-1"/&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Inline scripts can not be reloaded.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="sect2">
+<h3 id="scripting-script-variable-bindings"><a class="anchor" href="#scripting-script-variable-bindings"></a>Script Variable Bindings</h3>
+<div class="paragraph">
+<p>Variable bindings are required to enable the script to reference variables externally provided to the script&#8217;s execution context.
+By default, <code>payload</code> and <code>headers</code> are used as binding variables.
+You can bind additional variables to a script by using <code>&lt;variable&gt;</code> elements (or <code>ScriptSpec.variables()</code> option), as the following example shows:</p>
+</div>
+<div id="_tabs_7" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_7_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_7_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_7_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_7_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Scripts.processor("foo/bar/MyScript.py")
+    .variables(Map.of("var1", "thing1", "var2", "thing2", "date", date))
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;script:script lang="py" location="foo/bar/MyScript.py"&gt;
+    &lt;script:variable name="var1" value="thing1"/&gt;
+    &lt;script:variable name="var2" value="thing2"/&gt;
+    &lt;script:variable name="date" ref="date"/&gt;
+&lt;/script:script&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>As shown in the preceding example, you can bind a script variable either to a scalar value or to a Spring bean reference.
+Note that <code>payload</code> and <code>headers</code> are still included as binding variables.</p>
+</div>
+<div class="paragraph">
+<p>With Spring Integration 3.0, in addition to the <code>variable</code> element, the <code>variables</code> attribute has been introduced.
+This attribute and the <code>variable</code> elements are not mutually exclusive, and you can combine them within one <code>script</code> component.
+However, variables must be unique, regardless of where they are defined.
+Also, since Spring Integration 3.0, variable bindings are allowed for inline scripts, too, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;service-activator input-channel="input"&gt;
+    &lt;script:script lang="ruby" variables="thing1=THING1, date-ref=dateBean"&gt;
+        &lt;script:variable name="thing2" ref="thing2Bean"/&gt;
+        &lt;script:variable name="thing3" value="thing2"/&gt;
+        &lt;![CDATA[
+            payload.foo = thing1
+            payload.date = date
+            payload.bar = thing2
+            payload.baz = thing3
+            payload
+        ]]&gt;
+    &lt;/script:script&gt;
+&lt;/service-activator&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding example shows a combination of an inline script, a <code>variable</code> element, and a <code>variables</code> attribute.
+The <code>variables</code> attribute contains a comma-separated value, where each segment contains an '=' separated pair of the variable and its value.
+The variable name can be suffixed with <code>-ref</code>, as in the <code>date-ref</code> variable in the preceding example.
+That means that the binding variable has the name, <code>date</code>, but the value is a reference to the <code>dateBean</code> bean from the application context.
+This may be useful when using property placeholder configuration or command-line arguments.</p>
+</div>
+<div class="paragraph">
+<p>If you need more control over how variables are generated, you can implement your own Java class that uses the <code>ScriptVariableGenerator</code> strategy, which is defined by the following interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface ScriptVariableGenerator {
+
+    Map&lt;String, Object&gt; generateScriptVariables(Message&lt;?&gt; message);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This interface requires you to implement the <code>generateScriptVariables(Message)</code> method.
+The message argument lets you access any data available in the message payload and headers, and the return value is the <code>Map</code> of bound variables.
+This method is called every time the script is executed for a message.
+The following example shows how to provide an implementation of <code>ScriptVariableGenerator</code> and reference it with the <code>script-variable-generator</code> attribute:</p>
+</div>
+<div id="_tabs_8" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_8_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_8_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_8_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_8_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Scripts.processor("foo/bar/MyScript.groovy")
+    .variableGenerator(new foo.bar.MyScriptVariableGenerator())
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_8_xml--panel" class="tabpanel" aria-labelledby="_tabs_8_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-script:script location="foo/bar/MyScript.groovy"
+        script-variable-generator="variableGenerator"/&gt;
+
+&lt;bean id="variableGenerator" class="foo.bar.MyScriptVariableGenerator"/&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>If a <code>script-variable-generator</code> is not provided, script components use <code>DefaultScriptVariableGenerator</code>, which merges any provided <code>&lt;variable&gt;</code> elements with <code>payload</code> and <code>headers</code> variables from the <code>Message</code> in its <code>generateScriptVariables(Message)</code> method.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+You cannot provide both the <code>script-variable-generator</code> attribute and <code>&lt;variable&gt;</code> element(s).
+They are mutually exclusive.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+</div>
+<div class="sect2">
+<h3 id="graalmv-polyglot"><a class="anchor" href="#graalmv-polyglot"></a>GraalVM Polyglot</h3>
+<div class="paragraph">
+<p>Starting with version 6.0, the framework provides a <code>PolyglotScriptExecutor</code> which is based the <a href="https://www.graalvm.org/22.2/reference-manual/embed-languages">GraalVM Polyglot API</a>.
+The JSR223 engine implementation for JavaScript, removed from Java by itself, has been replaced by using this new script executor.
+See more information about enabling JavaScript support in GraalVM and what <a href="https://www.graalvm.org/22.2/reference-manual/js">configuration options</a> can be propagated via script variables.
+By default, the framework sets <code>allowAllAccess</code> to <code>true</code> on the shared Polyglot <code>Context</code> which enables this interaction with host JVM:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The creation and use of new threads.</p>
+</li>
+<li>
+<p>The access to public host classes.</p>
+</li>
+<li>
+<p>The loading of new host classes by adding entries to the class path.</p>
+</li>
+<li>
+<p>Exporting new members into the polyglot bindings.</p>
+</li>
+<li>
+<p>Unrestricted IO operations on host system.</p>
+</li>
+<li>
+<p>Passing experimental options.</p>
+</li>
+<li>
+<p>The creation and use of new sub-processes.</p>
+</li>
+<li>
+<p>The access to process environment variables.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This can be customized via overloaded <code>PolyglotScriptExecutor</code> constructor which accepts a <code>org.graalvm.polyglot.Context.Builder</code>.</p>
+</div>
+<div class="paragraph">
+<p>To enable this JavaScript support, GraalVM with the <code>js</code> component installed has to be used or, when using a regular JVM, the <code>org.graalvm.sdk:graal-sdk</code> and <code>org.graalvm.js:js</code> dependencies must be included.</p>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="delayer.html">Delayer</a></span>
+  <span class="next"><a href="groovy.html">Groovy Support</a></span>
 </nav>
 </article>
 </div>  </div>

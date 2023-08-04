@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Debezium Support :: Spring Integration</title>
+    <link rel="prev" href="cassandra.html">
+    <link rel="next" href="event.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -681,7 +682,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="cassandra.html">Apache Cassandra Support</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="debezium.html">Debezium Support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Debezium Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/debezium.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,344 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="debezium.html">Debezium Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Debezium Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p><a href="https://debezium.io/documentation/reference/development/engine.html">Debezium Engine</a>, Change Data Capture (CDC) inbound channel adapter.
+The <code>DebeziumMessageProducer</code> allows capturing database change events, converting them into messages and streaming later to the outbound channels.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>You need to include the spring integration Debezium dependency to your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-debezium&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-debezium:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>You also need to include a <a href="https://debezium.io/documentation/reference/connectors/index.html">debezium connector</a> dependency for your input Database.
+For example to use Debezium with PostgreSQL you will need the postgres debezium connector:</p>
+</div>
+<div id="_tabs_2" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_2_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_2_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_2_maven--panel" class="tabpanel" aria-labelledby="_tabs_2_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.debezium&lt;/groupId&gt;
+    &lt;artifactId&gt;debezium-connector-postgres&lt;/artifactId&gt;
+    &lt;version&gt;${debezium-version}&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_gradle--panel" class="tabpanel" aria-labelledby="_tabs_2_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "io.debezium:debezium-connector-postgres:{debezium-version}"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+<div class="paragraph">
+<p>Replace the <code>debezium-version</code> with the version compatible with the <code>spring-integration-debezium</code> version being used.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="debezium-inbound"><a class="anchor" href="#debezium-inbound"></a>Inbound Debezium Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Debezium adapter expects a pre-configured <code>DebeziumEngine.Builder&lt;ChangeEvent&lt;byte[], byte[]&gt;&gt;</code> instance.</p>
+</div>
+<div class="admonitionblock tip">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+<div class="paragraph">
+<p>The <a href="https://github.com/spring-cloud/stream-applications/tree/main/functions/supplier/debezium-supplier">debezium-supplier</a> provides an out of the box <code>DebeziumEngine.Builder</code> Spring Boot auto-configuration with a handy <a href="https://github.com/spring-cloud/stream-applications/blob/main/functions/supplier/debezium-supplier/src/main/java/org/springframework/cloud/fn/supplier/debezium/DebeziumProperties.java">DebeziumProperties</a> configuration abstraction.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock tip">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The <a href="#debezium-java-dsl">Debezium Java DSL</a> can create a <code>DebeziumMessageProducer</code> instance from a provided <code>DebeziumEngine.Builder</code>, as well as from a plain Debezium configuration (e.g. <code>java.util.Properties</code>).
+Later can be handy for some common use-cases with opinionated configuration and serialization formats.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>Additionally, the <code>DebeziumMessageProducer</code> can be tuned with the following configuration properties:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>contentType</code> - allows handling for  <code>JSON</code> (default), <code>AVRO</code> and <code>PROTOBUF</code> message contents.
+The contentType <code>must</code> be be aligned with the <code>SerializationFormat</code> configured for the provided <code>DebeziumEngine.Builder</code>.</p>
+</li>
+<li>
+<p><code>enableBatch</code> - when set to <code>false</code> (default), the debezium adapter would send new <code>Message</code> for every <code>ChangeEvent</code> data change event received from the source database.
+If set to <code>true</code> then the adapter sends downstream a single <code>Message</code> for each batch of <code>ChangeEvent</code> received from the Debezium engine.
+Such a payload is not serializable and would require a custom serialization/deserialization implementation.</p>
+</li>
+<li>
+<p><code>enableEmptyPayload</code> - Enables support for tombstone (aka delete) messages.
+On a database row delete, Debezium can send a tombstone change event that has the same key as the deleted row and a value of <code>Optional.empty</code>.
+Defaults to <code>false</code>.</p>
+</li>
+<li>
+<p><code>headerMapper</code> - custom <code>HeaderMapper</code> implementation that allows for selecting and converting the <code>ChangeEvent</code> headers into <code>Message</code> headers.
+The default <code>DefaultDebeziumHeaderMapper</code> implementation provides a setter for <code>setHeaderNamesToMap</code>.
+By default, all headers are mapped.</p>
+</li>
+<li>
+<p><code>taskExecutor</code> - Set a custom <code>TaskExecutor</code> for the Debezium engine.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following code snippets demonstrate various configuration for this channel adapter:</p>
+</div>
+<div class="sect2">
+<h3 id="configuring-with-java-configuration"><a class="anchor" href="#configuring-with-java-configuration"></a>Configuring with Java Configuration</h3>
+<div class="paragraph">
+<p>The following Spring Boot application shows an example of how to configure the inbound adapter with Java configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SpringBootApplication
+public class DebeziumJavaApplication {
+
+    public static void main(String[] args) {
+        new SpringApplicationBuilder(DebeziumJavaApplication.class)
+                .web(WebApplicationType.NONE)
+                .run(args);
+    }
+
+    @Bean
+    public MessageChannel debeziumInputChannel() {
+        return new DirectChannel();
+    }
+
+    @Bean
+    public MessageProducer debeziumMessageProducer(
+            DebeziumEngine.Builder&lt;ChangeEvent&lt;byte[], byte[]&gt;&gt; debeziumEngineBuilder,
+            MessageChannel debeziumInputChannel) {
+
+        DebeziumMessageProducer debeziumMessageProducer =
+            new DebeziumMessageProducer(debeziumEngineBuilder);
+        debeziumMessageProducer.setOutputChannel(debeziumInputChannel);
+        return debeziumMessageProducer;
+    }
+
+    @ServiceActivator(inputChannel = "debeziumInputChannel")
+    public void handler(Message&lt;?&gt; message) {
+
+        Object destination = message.getHeaders().get(DebeziumHeaders.DESTINATION); <i class="conum" data-value="1"></i><b>(1)</b>
+
+        String key = new String((byte[]) message.getHeaders().get(DebeziumHeaders.KEY)); <i class="conum" data-value="2"></i><b>(2)</b>
+
+        String payload = new String((byte[]) message.getPayload()); <i class="conum" data-value="3"></i><b>(3)</b>
+
+        System.out.println("KEY: " + key + ", DESTINATION: " + destination + ", PAYLOAD: " + payload);
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A name of the logical destination for which the event is intended.
+Usually the destination is composed of the <code>topic.prefix</code> configuration option, the database name and the table name. For example: <code>my-topic.inventory.orders</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Contains the schema for the changed table&#8217;s key and the changed row&#8217;s actual key.
+Both the key schema and its corresponding key payload contain a field for each column in the changed table&#8217;s <code>PRIMARY KEY</code> (or unique constraint) at the time the connector created the event.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Like the key, the payload has a schema section and a payload value section.
+The schema section contains the schema that describes the Envelope structure of the payload value section, including its nested fields.
+Change events for operations that create, update or delete data all have a value payload with an envelope structure.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+<div class="paragraph">
+<p>The <code>key.converter.schemas.enable=false</code> and/or <code>value.converter.schemas.enable=false</code> permit disabling the in-message schema content for key or payload respectively.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>Similarly, we can configure the <code>DebeziumMessageProducer</code> to process the incoming change events in batches:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public MessageProducer debeziumMessageProducer(
+        DebeziumEngine.Builder&lt;ChangeEvent&lt;byte[], byte[]&gt;&gt; debeziumEngineBuilder,
+        MessageChannel debeziumInputChannel) {
+
+    DebeziumMessageProducer debeziumMessageProducer = new DebeziumMessageProducer(debeziumEngineBuilder);
+	debeziumMessageProducer.setEnableBatch(true);
+    debeziumMessageProducer.setOutputChannel(debeziumInputChannel);
+    return debeziumMessageProducer;
+}
+
+@ServiceActivator(inputChannel = "debeziumInputChannel")
+public void handler(List&lt;ChangeEvent&lt;Object, Object&gt;&gt; payload) {
+    System.out.println(payload);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="debezium-java-dsl"><a class="anchor" href="#debezium-java-dsl"></a>Debezium Java DSL Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>spring-integration-debezium</code> provides a convenient Java DSL fluent API via the <code>Debezium</code> factory and the <code>DebeziumMessageProducerSpec</code> implementations.</p>
+</div>
+<div class="paragraph">
+<p>The Inbound Channel Adapter for Debezium Java DSL is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"> DebeziumEngine.Builder&lt;ChangeEvent&lt;byte[], byte[]&gt;&gt;   debeziumEngineBuilder = ...
+ IntegrationFlow.from(
+    Debezium.inboundChannelAdapter(debeziumEngineBuilder)
+        .headerNames("special*")
+        .contentType("application/json")
+        .enableBatch(false))
+    .handle(m -&gt; System.out.println(new String((byte[]) m.getPayload())))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or create an <code>DebeziumMessageProducerSpec</code> instance from native debezium configuration properties and default to <code>JSON</code> serialization formats.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"> Properties debeziumConfig = ...
+ IntegrationFlow
+    .from(Debezium.inboundChannelAdapter(debeziumConfig))
+    .handle(m -&gt; System.out.println(new String((byte[]) m.getPayload())))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following Spring Boot application provides an example of configuring the inbound adapter with the Java DSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SpringBootApplication
+public class DebeziumJavaApplication {
+
+    public static void main(String[] args) {
+        new SpringApplicationBuilder(DebeziumJavaApplication.class)
+            .web(false)
+            .run(args);
+    }
+
+    @Bean
+    public IntegrationFlow debeziumInbound(
+        DebeziumEngine.Builder&lt;ChangeEvent&lt;byte[], byte[]&gt;&gt; debeziumEngineBuilder) {
+
+        return IntegrationFlow
+                .from(Debezium
+                        .inboundChannelAdapter(debeziumEngineBuilder)
+					    .headerNames("special*")
+					    .contentType("application/json")
+					    .enableBatch(false))
+                .handle(m -&gt; System.out.println(new String((byte[]) m.getPayload())))
+                .get();
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="cassandra.html">Apache Cassandra Support</a></span>
+  <span class="next"><a href="event.html">Spring <code>ApplicationEvent</code> Support</a></span>
 </nav>
 </article>
 </div>  </div>

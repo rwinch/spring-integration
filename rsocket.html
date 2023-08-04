@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>RSocket Support :: Spring Integration</title>
+    <link rel="prev" href="resource.html">
+    <link rel="next" href="sftp.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -882,7 +883,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="resource.html">Resource Support</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="rsocket.html">RSocket Support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="RSocket Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/rsocket.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,402 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="rsocket.html">RSocket Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">RSocket Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>The RSocket Spring Integration module (<code>spring-integration-rsocket</code>) allows for executions of <a href="https://rsocket.io/">RSocket application protocol</a>.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
-</td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-rsocket&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-rsocket:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>This module is available starting with version 5.2 and is based on the Spring Messaging foundation with its RSocket component implementations, such as <code>RSocketRequester</code>, <code>RSocketMessageHandler</code> and <code>RSocketStrategies</code>.
+See <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#rsocket">Spring Framework RSocket Support</a> for more information about the RSocket protocol, terminology and components.</p>
+</div>
+<div class="paragraph">
+<p>Before starting an integration flow processing via channel adapters, we need to establish an RSocket connection between server and client.
+For this purpose, Spring Integration RSocket support provides the <code>ServerRSocketConnector</code> and <code>ClientRSocketConnector</code> implementations of the <code>AbstractRSocketConnector</code>.</p>
+</div>
+<div class="paragraph">
+<p>The <code>ServerRSocketConnector</code> exposes a listener on the host and port according to provided <code>io.rsocket.transport.ServerTransport</code> for accepting connections from clients.
+An internal <code>RSocketServer</code> instance can be customized with the <code>setServerConfigurer()</code>, as well as other options that can be configured, e.g. <code>RSocketStrategies</code> and <code>MimeType</code> for payload data and headers metadata.
+When a <code>setupRoute</code> is provided from the client requester (see <code>ClientRSocketConnector</code> below), a connected client is stored as a <code>RSocketRequester</code> under the key determined by the <code>clientRSocketKeyStrategy</code> <code>BiFunction&lt;Map&lt;String, Object&gt;, DataBuffer, Object&gt;</code>.
+By default, a connection data is used for the key as a converted value to string with UTF-8 charset.
+Such an <code>RSocketRequester</code> registry can be used in the application logic to determine a particular client connection for interaction with it, or for publishing the same message to all connected clients.
+When a connection is established from the client, an <code>RSocketConnectedEvent</code> is emitted from the <code>ServerRSocketConnector</code>.
+This is similar to what is provided by the <code>@ConnectMapping</code> annotation in Spring Messaging module.
+The mapping pattern <code>*</code> means accept all the client routes.
+The <code>RSocketConnectedEvent</code> can be used to distinguish different routes via <code>DestinationPatternsMessageCondition.LOOKUP_DESTINATION_HEADER</code> header.</p>
+</div>
+<div class="paragraph">
+<p>A typical server configuration might look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public RSocketStrategies rsocketStrategies() {
+    return RSocketStrategies.builder()
+        .decoder(StringDecoder.textPlainOnly())
+        .encoder(CharSequenceEncoder.allMimeTypes())
+        .dataBufferFactory(new DefaultDataBufferFactory(true))
+        .build();
+}
+
+@Bean
+public ServerRSocketConnector serverRSocketConnector() {
+    ServerRSocketConnector serverRSocketConnector = new ServerRSocketConnector("localhost", 0);
+    serverRSocketConnector.setRSocketStrategies(rsocketStrategies());
+    serverRSocketConnector.setMetadataMimeType(new MimeType("message", "x.rsocket.routing.v0"));
+    serverRSocketConnector.setServerConfigurer((server) -&gt; server.payloadDecoder(PayloadDecoder.ZERO_COPY));
+    serverRSocketConnector.setClientRSocketKeyStrategy((headers, data) -&gt; ""
+                                    + headers.get(DestinationPatternsMessageCondition.LOOKUP_DESTINATION_HEADER));
+    return serverRSocketConnector;
+}
+
+@EventListener
+public void onApplicationEvent(RSocketConnectedEvent event) {
+	...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All the options, including <code>RSocketStrategies</code> bean and <code>@EventListener</code> for <code>RSocketConnectedEvent</code>, are optional.
+See <code>ServerRSocketConnector</code> JavaDocs for more information.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.2.1, the <code>ServerRSocketMessageHandler</code> is extracted to a public, top-level class for possible connection with an existing RSocket server.
+When a <code>ServerRSocketConnector</code> is supplied with an external instance of <code>ServerRSocketMessageHandler</code>, it doesn&#8217;t create an RSocket server internally and just delegates all the handling logic to the provided instance.
+In addition, the <code>ServerRSocketMessageHandler</code> can be configured with a <code>messageMappingCompatible</code> flag to handle also <code>@MessageMapping</code> for an RSocket controller, fully replacing the functionality provided by the standard <code>RSocketMessageHandler</code>.
+This can be useful in mixed configurations, when classic <code>@MessageMapping</code> methods are present in the same application along with RSocket channel adapters and an externally configured RSocket server is present in the application.</p>
+</div>
+<div class="paragraph">
+<p>The <code>ClientRSocketConnector</code> serves as a holder for <code>RSocketRequester</code> based on the <code>RSocket</code> connected via the provided <code>ClientTransport</code>.
+The <code>RSocketConnector</code> can be customized with the provided <code>RSocketConnectorConfigurer</code>.
+The <code>setupRoute</code> (with optional templates variables) and <code>setupData</code> with metadata can be also configured on this component.</p>
+</div>
+<div class="paragraph">
+<p>A typical client configuration might look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public RSocketStrategies rsocketStrategies() {
+    return RSocketStrategies.builder()
+        .decoder(StringDecoder.textPlainOnly())
+        .encoder(CharSequenceEncoder.allMimeTypes())
+        .dataBufferFactory(new DefaultDataBufferFactory(true))
+        .build();
+}
+
+@Bean
+public ClientRSocketConnector clientRSocketConnector() {
+    ClientRSocketConnector clientRSocketConnector =
+            new ClientRSocketConnector("localhost", serverRSocketConnector().getBoundPort().block());
+    clientRSocketConnector.setRSocketStrategies(rsocketStrategies());
+    clientRSocketConnector.setSetupRoute("clientConnect/{user}");
+    clientRSocketConnector.setSetupRouteVariables("myUser");
+    return clientRSocketConnector;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Most of these options (including <code>RSocketStrategies</code> bean) are optional.
+Note how we connect to the locally started RSocket server on the arbitrary port.
+See <code>ServerRSocketConnector.clientRSocketKeyStrategy</code> for <code>setupData</code> use cases.
+Also see <code>ClientRSocketConnector</code> and its <code>AbstractRSocketConnector</code> superclass JavaDocs for more information.</p>
+</div>
+<div class="paragraph">
+<p>Both <code>ClientRSocketConnector</code> and <code>ServerRSocketConnector</code> are responsible for mapping inbound channel adapters to their <code>path</code> configuration for routing incoming RSocket requests.
+See the next section for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rsocket-inbound"><a class="anchor" href="#rsocket-inbound"></a>RSocket Inbound Gateway</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>RSocketInboundGateway</code> is responsible for receiving RSocket requests and producing responses (if any).
+It requires an array of <code>path</code> mapping which could be as patterns similar to MVC request mapping or <code>@MessageMapping</code> semantics.
+In addition, (since version 5.2.2), a set of interaction models (see <code>RSocketInteractionModel</code>) can be configured on the <code>RSocketInboundGateway</code> to restrict RSocket requests to this endpoint by the particular frame type.
+By default, all the interaction models are supported.
+Such a bean, according its <code>IntegrationRSocketEndpoint</code> implementation (extension of a <code>ReactiveMessageHandler</code>), is auto detected either by the <code>ServerRSocketConnector</code> or <code>ClientRSocketConnector</code> for a routing logic in the internal <code>IntegrationRSocketMessageHandler</code> for incoming requests.
+An <code>AbstractRSocketConnector</code> can be provided to the <code>RSocketInboundGateway</code> for explicit endpoint registration.
+This way, the auto-detection option is disabled on that <code>AbstractRSocketConnector</code>.
+The <code>RSocketStrategies</code> can also be injected into the <code>RSocketInboundGateway</code> or they are obtained from the provided <code>AbstractRSocketConnector</code> overriding any explicit injection.
+Decoders are used from those <code>RSocketStrategies</code> to decode a request payload according to the provided <code>requestElementType</code>.
+If an <code>RSocketPayloadReturnValueHandler.RESPONSE_HEADER</code> header is not provided in incoming the <code>Message</code>, the <code>RSocketInboundGateway</code> treats a request as a <code>fireAndForget</code> RSocket interaction model.
+In this case, an <code>RSocketInboundGateway</code> performs a plain <code>send</code> operation into the <code>outputChannel</code>.
+Otherwise, a <code>MonoProcessor</code> value from the <code>RSocketPayloadReturnValueHandler.RESPONSE_HEADER</code> header is used for sending a reply to the RSocket.
+For this purpose, an <code>RSocketInboundGateway</code> performs a <code>sendAndReceiveMessageReactive</code> operation on the <code>outputChannel</code>.
+The <code>payload</code> of the message to send downstream is always a <code>Flux</code> according to <code>MessagingRSocket</code> logic.
+When in a <code>fireAndForget</code> RSocket interaction model, the message has a plain converted <code>payload</code>.
+The reply <code>payload</code> could be a plain object or a <code>Publisher</code> - the <code>RSocketInboundGateway</code> converts both of them properly into an RSocket response according to the encoders provided in the <code>RSocketStrategies</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.3, a <code>decodeFluxAsUnit</code> option (default <code>false</code>) is added to the <code>RSocketInboundGateway</code>.
+By default, incoming <code>Flux</code> is transformed the way that each its event is decoded separately.
+This is an exact behavior present currently with <code>@MessageMapping</code> semantics.
+To restore a previous behavior or decode the whole <code>Flux</code> as single unit according application requirements, the <code>decodeFluxAsUnit</code> has to be set to <code>true</code>.
+However the target decoding logic depends on the <code>Decoder</code> selected, e.g. a <code>StringDecoder</code> requires a new line separator (by default) to be present in the stream to indicate a byte buffer end.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="#rsocket-java-config">Configuring RSocket Endpoints with Java</a> for samples how to configure an <code>RSocketInboundGateway</code> endpoint and deal with payloads downstream.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rsocket-outbound"><a class="anchor" href="#rsocket-outbound"></a>RSocket Outbound Gateway</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>RSocketOutboundGateway</code> is an <code>AbstractReplyProducingMessageHandler</code> to perform requests into RSocket and produce replies based on the RSocket replies (if any).
+A low level RSocket protocol interaction is delegated into an <code>RSocketRequester</code> resolved from the provided <code>ClientRSocketConnector</code> or from the <code>RSocketRequesterMethodArgumentResolver.RSOCKET_REQUESTER_HEADER</code> header in the request message on the server side.
+A  target <code>RSocketRequester</code> on the server side can be resolved from an <code>RSocketConnectedEvent</code> or using <code>ServerRSocketConnector.getClientRSocketRequester()</code> API according some business key selected for connect request mappings via <code>ServerRSocketConnector.setClientRSocketKeyStrategy()</code>.
+See  <code>ServerRSocketConnector</code> JavaDocs for more information.</p>
+</div>
+<div class="paragraph">
+<p>The <code>route</code> to send request has to be configured explicitly (together with path variables) or via a SpEL expression which is evaluated against request message.</p>
+</div>
+<div class="paragraph">
+<p>The RSocket interaction model can be provided via <code>RSocketInteractionModel</code> option or respective expression setting.
+By default, a <code>requestResponse</code> is used for common gateway use-cases.</p>
+</div>
+<div class="paragraph">
+<p>When request message payload is a <code>Publisher</code>, a <code>publisherElementType</code> option can be provided to encode its elements according an <code>RSocketStrategies</code> supplied in the target <code>RSocketRequester</code>.
+An expression for this option can evaluate to a <code>ParameterizedTypeReference</code>.
+See the <code>RSocketRequester.RequestSpec.data()</code> JavaDocs for more information about data and its type.</p>
+</div>
+<div class="paragraph">
+<p>An RSocket request can also be enhanced with a <code>metadata</code>.
+For this purpose a <code>metadataExpression</code> against request message can be configured on the <code>RSocketOutboundGateway</code>.
+Such an expression must evaluate to a <code>Map&lt;Object, MimeType&gt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>When <code>interactionModel</code> is not <code>fireAndForget</code>, an <code>expectedResponseType</code> must be supplied.
+It is a <code>String.class</code> by default.
+An expression for this option can evaluate to a <code>ParameterizedTypeReference</code>.
+See the <code>RSocketRequester.RetrieveSpec.retrieveMono()</code> and <code>RSocketRequester.RetrieveSpec.retrieveFlux()</code> JavaDocs for more information about reply data and its type.</p>
+</div>
+<div class="paragraph">
+<p>A reply <code>payload</code> from the <code>RSocketOutboundGateway</code> is a <code>Mono</code> (even for a <code>fireAndForget</code> interaction model it is <code>Mono&lt;Void&gt;</code>) always making this component as <code>async</code>.
+Such a <code>Mono</code> is subscribed before producing into the <code>outputChannel</code> for regular channels or processed on demand by the <code>FluxMessageChannel</code>.
+A <code>Flux</code> response for the <code>requestStream</code> or <code>requestChannel</code> interaction model is also wrapped into a reply <code>Mono</code>.
+It can be flattened downstream by the <code>FluxMessageChannel</code> with a passthrough service activator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ServiceActivator(inputChannel = "rsocketReplyChannel", outputChannel ="fluxMessageChannel")
+public Flux&lt;?&gt; flattenRSocketResponse(Flux&lt;?&gt; payload) {
+    return payload;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or subscribed explicitly in the target application logic.</p>
+</div>
+<div class="paragraph">
+<p>The expected response type can also be configured (or evaluated via expression) to <code>void</code> treating this gateway as an outbound channel adapter.
+However, the <code>outputChannel</code> still has to be configured (even if it just a <code>NullChannel</code>) to initiate a subscription to the returned <code>Mono</code>.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="#rsocket-java-config">Configuring RSocket Endpoints with Java</a> for samples how to configure an <code>RSocketOutboundGateway</code> endpoint a deal with payloads downstream.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rsocket-namespace"><a class="anchor" href="#rsocket-namespace"></a>RSocket Namespace Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration provides an <code>rsocket</code> namespace and the corresponding schema definition.
+To include it in your configuration, add the following namespace declaration in your application context configuration file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:int="http://www.springframework.org/schema/integration"
+  xmlns:int-rsocket="http://www.springframework.org/schema/integration/rsocket"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    https://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    https://www.springframework.org/schema/integration/spring-integration.xsd
+    http://www.springframework.org/schema/integration/rsocket
+    https://www.springframework.org/schema/integration/rsocket/spring-integration-rsocket.xsd"&gt;
+    ...
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="inbound"><a class="anchor" href="#inbound"></a>Inbound</h3>
+<div class="paragraph">
+<p>To configure Spring Integration RSocket inbound channel adapters with XML, you need to use an appropriate <code>inbound-gateway</code> components from the <code>int-rsocket</code> namespace.
+The following example shows how to configure it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-rsocket:inbound-gateway id="inboundGateway"
+                             path="testPath"
+                             interaction-models="requestStream,requestChannel"
+                             rsocket-connector="clientRSocketConnector"
+                             request-channel="requestChannel"
+                             rsocket-strategies="rsocketStrategies"
+                             request-element-type="byte[]"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <code>ClientRSocketConnector</code> and <code>ServerRSocketConnector</code> should be configured as generic <code>&lt;bean&gt;</code> definitions.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="outbound"><a class="anchor" href="#outbound"></a>Outbound</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-rsocket:outbound-gateway id="outboundGateway"
+                              client-rsocket-connector="clientRSocketConnector"
+                              auto-startup="false"
+                              interaction-model="fireAndForget"
+                              route-expression="'testRoute'"
+                              request-channel="requestChannel"
+                              publisher-element-type="byte[]"
+                              expected-response-type="java.util.Date"
+                              metadata-expression="{'metadata': new org.springframework.util.MimeType('*')}"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <code>spring-integration-rsocket.xsd</code> for description for all those XML attributes.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rsocket-java-config"><a class="anchor" href="#rsocket-java-config"></a>Configuring RSocket Endpoints with Java</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following example shows how to configure an RSocket inbound endpoint with Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public RSocketInboundGateway rsocketInboundGatewayRequestReply() {
+    RSocketInboundGateway rsocketInboundGateway = new RSocketInboundGateway("echo");
+    rsocketInboundGateway.setRequestChannelName("requestReplyChannel");
+    return rsocketInboundGateway;
+}
+
+@Transformer(inputChannel = "requestReplyChannel")
+public Mono&lt;String&gt; echoTransformation(Flux&lt;String&gt; payload) {
+    return payload.next().map(String::toUpperCase);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <code>ClientRSocketConnector</code> or <code>ServerRSocketConnector</code> is assumed in this configuration with meaning for auto-detection of such an endpoint on the &#8220;echo&#8221; path.
+Pay attention to the <code>@Transformer</code> signature with its fully reactive processing of the RSocket requests and producing reactive replies.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows how to configure a RSocket inbound gateway with the Java DSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow rsocketUpperCaseFlow() {
+    return IntegrationFlow
+        .from(RSockets.inboundGateway("/uppercase")
+                   .interactionModels(RSocketInteractionModel.requestChannel))
+        .&lt;Flux&lt;String&gt;, Mono&lt;String&gt;&gt;transform((flux) -&gt; flux.next().map(String::toUpperCase))
+        .get();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <code>ClientRSocketConnector</code> or <code>ServerRSocketConnector</code> is assumed in this configuration with meaning for auto-detection of such an endpoint on the &#8220;/uppercase&#8221; path and expected interaction model as &#8220;request channel&#8221;.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows how to configure a RSocket outbound gateway with Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@ServiceActivator(inputChannel = "requestChannel", outputChannel = "replyChannel")
+public RSocketOutboundGateway rsocketOutboundGateway() {
+    RSocketOutboundGateway rsocketOutboundGateway =
+            new RSocketOutboundGateway(
+                    new FunctionExpression&lt;Message&lt;?&gt;&gt;((m) -&gt;
+                        m.getHeaders().get("route_header")));
+    rsocketOutboundGateway.setInteractionModelExpression(
+            new FunctionExpression&lt;Message&lt;?&gt;&gt;((m) -&gt; m.getHeaders().get("rsocket_interaction_model")));
+    rsocketOutboundGateway.setClientRSocketConnector(clientRSocketConnector());
+    return rsocketOutboundGateway;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>setClientRSocketConnector()</code> is required only for the client side.
+On the server side, the <code>RSocketRequesterMethodArgumentResolver.RSOCKET_REQUESTER_HEADER</code> header with an <code>RSocketRequester</code> value must be supplied in the request message.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows how to configure a RSocket outbound gateway with the Java DSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow rsocketUpperCaseRequestFlow(ClientRSocketConnector clientRSocketConnector) {
+    return IntegrationFlow
+        .from(Function.class)
+        .handle(RSockets.outboundGateway("/uppercase")
+            .interactionModel(RSocketInteractionModel.requestResponse)
+            .expectedResponseType(String.class)
+            .clientRSocketConnector(clientRSocketConnector))
+        .get();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <a href="dsl/integration-flow-as-gateway.html" class="xref page"><code>IntegrationFlow</code> as a Gateway</a> for more information how to use a mentioned <code>Function</code> interface in the beginning of the flow above.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="resource.html">Resource Support</a></span>
+  <span class="next"><a href="sftp.html">SFTP Adapters</a></span>
 </nav>
 </article>
 </div>  </div>

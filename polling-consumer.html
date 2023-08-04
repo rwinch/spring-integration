@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Poller :: Spring Integration</title>
+    <link rel="prev" href="channel/special-channels.html">
+    <link rel="next" href="channel-adapter.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -316,7 +317,7 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="polling-consumer.html">Poller</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Poller"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/polling-consumer.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,384 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="core.html">Core Messaging</a></li>
+    <li><a href="polling-consumer.html">Poller</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Poller</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>This section describes how polling works in Spring Integration.</p>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="polling-consumer"><a class="anchor" href="#polling-consumer"></a>Polling Consumer</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When Message Endpoints (Channel Adapters) are connected to channels and instantiated, they produce one of the following instances:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/endpoint/PollingConsumer.html"><code>PollingConsumer</code></a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/endpoint/EventDrivenConsumer.html"><code>EventDrivenConsumer</code></a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The actual implementation depends on the type of channel to which these endpoints connect.
+A channel adapter connected to a channel that implements the <a href="https://docs.spring.io/spring/docs/current/javadoc-api/index.html?org/springframework/messaging/SubscribableChannel.html"><code>org.springframework.messaging.SubscribableChannel</code></a> interface produces an instance of <code>EventDrivenConsumer</code>.
+On the other hand, a channel adapter connected to a channel that implements the  <a href="https://docs.spring.io/spring/docs/current/javadoc-api/index.html?org/springframework/messaging/PollableChannel.html"><code>org.springframework.messaging.PollableChannel</code></a> interface (such as a <code>QueueChannel</code>) produces an instance of <code>PollingConsumer</code>.</p>
+</div>
+<div class="paragraph">
+<p>Polling consumers let Spring Integration components actively poll for Messages rather than process messages in an event-driven manner.</p>
+</div>
+<div class="paragraph">
+<p>They represent a critical cross-cutting concern in many messaging scenarios.
+In Spring Integration, polling consumers are based on the pattern with the same name, which is described in the book <em>Enterprise Integration Patterns</em>, by Gregor Hohpe and Bobby Woolf.
+You can find a description of the pattern on the <a href="https://www.enterpriseintegrationpatterns.com/PollingConsumer.html">book&#8217;s website</a>.</p>
+</div>
+<div class="paragraph">
+<p>For more information polling consumer configuration, see <a href="endpoint.html" class="xref page">Message Endpoints</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="pollable-message-source"><a class="anchor" href="#pollable-message-source"></a>Pollable Message Source</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration offers a second variation of the polling consumer pattern.
+When inbound channel adapters are used, these adapters are often wrapped by a <code>SourcePollingChannelAdapter</code>.
+For example, when retrieving messages from a remote FTP Server location, the adapter described in <a href="ftp/inbound.html" class="xref page">FTP Inbound Channel Adapter</a> is configured with a poller to periodically retrieve messages.
+So, when components are configured with pollers, the resulting instances are of one of the following types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/endpoint/PollingConsumer.html"><code>PollingConsumer</code></a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/endpoint/SourcePollingChannelAdapter.html"><code>SourcePollingChannelAdapter</code></a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This means that pollers are used in both inbound and outbound messaging scenarios.
+Here are some use cases in which pollers are used:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Polling certain external systems, such as FTP Servers, Databases, and Web Services</p>
+</li>
+<li>
+<p>Polling internal (pollable) message channels</p>
+</li>
+<li>
+<p>Polling internal services (such as repeatedly executing methods on a Java class)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+AOP advice classes can be applied to pollers, in an <code>advice-chain</code>, such as a transaction advice to start a transaction.
+Starting with version 4.1, a <code>PollSkipAdvice</code> is provided.
+Pollers use triggers to determine the time of the next poll.
+The <code>PollSkipAdvice</code> can be used to suppress (skip) a poll, perhaps because there is some downstream condition that would prevent the message being processed.
+To use this advice, you have to provide it with an implementation of a <code>PollSkipStrategy</code>.
+Starting with version 4.2.5, a <code>SimplePollSkipStrategy</code> is provided.
+To use it, you can add an instance as a bean to the application context, inject it into a <code>PollSkipAdvice</code>, and add that to the poller&#8217;s advice chain.
+To skip polling, call <code>skipPolls()</code>.
+To resume polling, call <code>reset()</code>.
+Version 4.2 added more flexibility in this area.
+See <a href="changes-4.1-4.2.html#x4.2-conditional-pollers" class="xref page">Conditional Pollers</a>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>This chapter is meant to only give a high-level overview of polling consumers and how they fit into the concept of message channels (see <a href="channel.html" class="xref page">Message Channels</a>) and channel adapters (see <a href="overview.html#overview-endpoints-channeladapter" class="xref page">Channel Adapter</a>).
+For more information regarding messaging endpoints in general and polling consumers in particular, see <a href="endpoint.html" class="xref page">Message Endpoints</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="deferred-acks-message-source"><a class="anchor" href="#deferred-acks-message-source"></a>Deferred Acknowledgment Pollable Message Source</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 5.0.1, certain modules provide <code>MessageSource</code> implementations that support deferring acknowledgment until the downstream flow completes (or hands off the message to another thread).
+This is currently limited to the <code>AmqpMessageSource</code> and the <code>KafkaMessageSource</code>.</p>
+</div>
+<div class="paragraph">
+<p>With these message sources, the <code>IntegrationMessageHeaderAccessor.ACKNOWLEDGMENT_CALLBACK</code> header (see <a href="message.html#message-header-accessor" class="xref page"><code>MessageHeaderAccessor</code> API</a>) is added to the message.
+When used with pollable message sources, the value of the header is an instance of <code>AcknowledgmentCallback</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@FunctionalInterface
+public interface AcknowledgmentCallback {
+
+    void acknowledge(Status status);
+
+    boolean isAcknowledged();
+
+    void noAutoAck();
+
+    default boolean isAutoAck();
+
+    enum Status {
+
+        /**
+         * Mark the message as accepted.
+         */
+        ACCEPT,
+
+        /**
+         * Mark the message as rejected.
+         */
+        REJECT,
+
+        /**
+         * Reject the message and requeue so that it will be redelivered.
+         */
+        REQUEUE
+
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Not all message sources (for example, a <code>KafkaMessageSource</code>) support the <code>REJECT</code> status.
+It is treated the same as <code>ACCEPT</code>.</p>
+</div>
+<div class="paragraph">
+<p>Applications can acknowledge a message at any time, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Message&lt;?&gt; received = source.receive();
+
+...
+
+StaticMessageHeaderAccessor.getAcknowledgmentCallback(received)
+        .acknowledge(Status.ACCEPT);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the <code>MessageSource</code> is wired into a <code>SourcePollingChannelAdapter</code>, when the poller thread returns to the adapter after the downstream flow completes, the adapter checks whether the acknowledgment has already been acknowledged and, if not, sets its status to <code>ACCEPT</code> it (or <code>REJECT</code> if the flow throws an exception).
+The status values are defined in the <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/support/AcknowledgmentCallback.Status.html"><code>AcknowledgmentCallback.Status</code> enumeration</a>.</p>
+</div>
+<div class="paragraph">
+<p>Spring Integration provides <code>MessageSourcePollingTemplate</code> to perform ad-hoc polling of a <code>MessageSource</code>.
+This, too, takes care of setting <code>ACCEPT</code> or <code>REJECT</code> on the <code>AcknowledgmentCallback</code> when the <code>MessageHandler</code> callback returns (or throws an exception).
+The following example shows how to poll with the <code>MessageSourcePollingTemplate</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">MessageSourcePollingTemplate template =
+    new MessageSourcePollingTemplate(this.source);
+template.poll(h -&gt; {
+    ...
+});</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In both cases (<code>SourcePollingChannelAdapter</code> and <code>MessageSourcePollingTemplate</code>), you can disable auto ack/nack by calling <code>noAutoAck()</code> on the callback.
+You might do this if you hand off the message to another thread and wish to acknowledge later.
+Not all implementations support this (for example, Apache Kafka does not, because the offset commit has to be performed on the same thread).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="conditional-pollers"><a class="anchor" href="#conditional-pollers"></a>Conditional Pollers for Message Sources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section covers how to use conditional pollers.</p>
+</div>
+<div class="sect2">
+<h3 id="background"><a class="anchor" href="#background"></a>Background</h3>
+<div class="paragraph">
+<p><code>Advice</code> objects, in an <code>advice-chain</code> on a poller, advise the whole polling task (both message retrieval and processing).
+These &#8220;around advice&#8221; methods do not have access to any context for the poll&#8201;&#8212;&#8201;only the poll itself.
+This is fine for requirements such as making a task transactional or skipping a poll due to some external condition, as discussed earlier.
+What if we wish to take some action depending on the result of the <code>receive</code> part of the poll or if we want to adjust the poller depending on conditions? For those instances, Spring Integration offers &#8220;Smart&#8221; Polling.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="smart-polling"><a class="anchor" href="#smart-polling"></a>&#8220;Smart&#8221; Polling</h3>
+<div class="paragraph">
+<p>Version 5.3 introduced the <code>ReceiveMessageAdvice</code> interface.
+Any <code>Advice</code> objects in the <code>advice-chain</code> that implement this interface are applied only to the <code>receive()</code> operation - <code>MessageSource.receive()</code> and <code>PollableChannel.receive(timeout)</code>.
+Therefore, they can be applied only for the <code>SourcePollingChannelAdapter</code> or <code>PollingConsumer</code>.
+Such classes implement the following methods:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>beforeReceive(Object source)</code>
+This method is called before the <code>Object.receive()</code> method.
+It lets you examine and reconfigure the source.
+Returning <code>false</code> cancels this poll (similar to the <code>PollSkipAdvice</code> mentioned earlier).</p>
+</li>
+<li>
+<p><code>Message&lt;?&gt; afterReceive(Message&lt;?&gt; result, Object source)</code>
+This method is called after the <code>receive()</code> method.
+Again, you can reconfigure the source or take any action (perhaps depending on the result, which can be <code>null</code> if there was no message created by the source).
+You can even return a different message</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+<div class="title">Thread safety</div>
+<div class="paragraph">
+<p>If an <code>Advice</code> mutates the source, you should not configure the poller with a <code>TaskExecutor</code>.
+If an <code>Advice</code> mutates the source, such mutations are not thread safe and could cause unexpected results, especially with high frequency pollers.
+If you need to process poll results concurrently, consider using a downstream <code>ExecutorChannel</code> instead of adding an executor to the poller.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="title">Advice Chain Ordering</div>
+<div class="paragraph">
+<p>You should understand how the advice chain is processed during initialization.
+<code>Advice</code> objects that do not implement <code>ReceiveMessageAdvice</code> are applied to the whole poll process and are all invoked first, in order, before any <code>ReceiveMessageAdvice</code>.
+Then <code>ReceiveMessageAdvice</code> objects are invoked in order around the source <code>receive()</code> method.
+If you have, for example, <code>Advice</code> objects <code>a, b, c, d</code>, where <code>b</code> and <code>d</code> are <code>ReceiveMessageAdvice</code>, the objects are applied in the following order: <code>a, c, b, d</code>.
+Also, if a source is already a <code>Proxy</code>, the <code>ReceiveMessageAdvice</code> is invoked after any existing <code>Advice</code> objects.
+If you wish to change the order, you must wire up the proxy yourself.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+</div>
+<div class="sect2">
+<h3 id="simpleactiveidlereceivemessageadvice"><a class="anchor" href="#simpleactiveidlereceivemessageadvice"></a><code>SimpleActiveIdleReceiveMessageAdvice</code></h3>
+<div class="paragraph">
+<p>This advice is a simple implementation of <code>ReceiveMessageAdvice</code>.
+When used in conjunction with a <code>DynamicPeriodicTrigger</code>, it adjusts the polling frequency, depending on whether the previous poll resulted in a message or not.
+The poller must also have a reference to the same <code>DynamicPeriodicTrigger</code>.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+<div class="title">Important: Async Handoff</div>
+<code>SimpleActiveIdleReceiveMessageAdvice</code> modifies the trigger based on the <code>receive()</code> result.
+This works only if the advice is called on the poller thread.
+It does not work if the poller has a <code>task-executor</code>.
+To use this advice where you wish to use async operations after the result of a poll, do the async handoff later, perhaps by using an <code>ExecutorChannel</code>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+</div>
+<div class="sect2">
+<h3 id="compoundtriggeradvice"><a class="anchor" href="#compoundtriggeradvice"></a><code>CompoundTriggerAdvice</code></h3>
+<div class="paragraph">
+<p>This advice allows the selection of one of two triggers based on whether a poll returns a message or not.
+Consider a poller that uses a <code>CronTrigger</code>.
+<code>CronTrigger</code> instances are immutable, so they cannot be altered once constructed.
+Consider a use case where we want to use a cron expression to trigger a poll once each hour but, if no message is received, poll once per minute and, when a message is retrieved, revert to using the cron expression.</p>
+</div>
+<div class="paragraph">
+<p>The advice (and poller) use a <code>CompoundTrigger</code> for this purpose.
+The trigger&#8217;s <code>primary</code> trigger can be a <code>CronTrigger</code>.
+When the advice detects that no message is received, it adds the secondary trigger to the <code>CompoundTrigger</code>.
+When the <code>CompoundTrigger</code> instance&#8217;s <code>nextExecutionTime</code> method is invoked, it delegates to the secondary trigger, if present.
+Otherwise, it delegates to the primary trigger.</p>
+</div>
+<div class="paragraph">
+<p>The poller must also have a reference to the same <code>CompoundTrigger</code>.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows the configuration for the hourly cron expression with a fallback to every minute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:inbound-channel-adapter channel="nullChannel" auto-startup="false"&gt;
+    &lt;bean class="org.springframework.integration.endpoint.PollerAdviceTests.Source" /&gt;
+    &lt;int:poller trigger="compoundTrigger"&gt;
+        &lt;int:advice-chain&gt;
+            &lt;bean class="org.springframework.integration.aop.CompoundTriggerAdvice"&gt;
+                &lt;constructor-arg ref="compoundTrigger"/&gt;
+                &lt;constructor-arg ref="secondary"/&gt;
+            &lt;/bean&gt;
+        &lt;/int:advice-chain&gt;
+    &lt;/int:poller&gt;
+&lt;/int:inbound-channel-adapter&gt;
+
+&lt;bean id="compoundTrigger" class="org.springframework.integration.util.CompoundTrigger"&gt;
+    &lt;constructor-arg ref="primary" /&gt;
+&lt;/bean&gt;
+
+&lt;bean id="primary" class="org.springframework.scheduling.support.CronTrigger"&gt;
+    &lt;constructor-arg value="0 0 * * * *" /&gt; &lt;!-- top of every hour --&gt;
+&lt;/bean&gt;
+
+&lt;bean id="secondary" class="org.springframework.scheduling.support.PeriodicTrigger"&gt;
+    &lt;constructor-arg value="60000" /&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
+<td class="content">
+<div class="title">Important: Async Handoff</div>
+<code>CompoundTriggerAdvice</code> modifies the trigger based on the <code>receive()</code> result.
+This works only if the advice is called on the poller thread.
+It does not work if the poller has a <code>task-executor</code>.
+To use this advice where you wish to use async operations after the result of a poll, do the async handoff later, perhaps by using an <code>ExecutorChannel</code>.
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="messagesource-only-advices"><a class="anchor" href="#messagesource-only-advices"></a>MessageSource-only Advices</h3>
+<div class="paragraph">
+<p>Some advices might be applied only for the <code>MessageSource.receive()</code> and they don&#8217;t make sense for <code>PollableChannel</code>.
+For this purpose a <code>MessageSourceMutator</code> interface (an extension of the <code>ReceiveMessageAdvice</code>) is still present.
+See <a href="ftp/rotating-server-advice.html" class="xref page">Inbound Channel Adapters: Polling Multiple Servers and Directories</a> for more information.</p>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="channel/special-channels.html">Special Channels</a></span>
+  <span class="next"><a href="channel-adapter.html">Channel Adapter</a></span>
 </nav>
 </article>
 </div>  </div>

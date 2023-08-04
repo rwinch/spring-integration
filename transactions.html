@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Transaction Support :: Spring Integration</title>
+    <link rel="prev" href="message-publishing.html">
+    <link rel="next" href="security.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1056,7 +1057,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="message-publishing.html">Message Publishing</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="transactions.html">Transaction Support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Transaction Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/transactions.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,349 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="transactions.html">Transaction Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Transaction Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>This chapter covers Spring Integration&#8217;s support for transactions.
+It covers the following topics:</p>
 </div>
-<div class="hdlist">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#understanding-transaction">Understanding Transactions in Message flows</a></p>
+</li>
+<li>
+<p><a href="#transaction-boundaries">Transaction Boundaries</a></p>
+</li>
+<li>
+<p><a href="#transaction-synchronization">Transaction Synchronization</a></p>
+</li>
+<li>
+<p><a href="#pseudo-transactions">Pseudo Transactions</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="understanding-transaction"><a class="anchor" href="#understanding-transaction"></a>Understanding Transactions in Message flows</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration exposes several hooks to address the transactional needs of your message flows.
+To better understand these hooks and how you can benefit from them, we must first revisit the six mechanisms that you can use to initiate message flows and see how you can address the transactional needs of these flows within each of these mechanisms.</p>
+</div>
+<div class="paragraph">
+<p>The following six mechanisms initiate a message flow (details for each are provided throughout this manual):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gateway proxy: A basic messaging gateway.</p>
+</li>
+<li>
+<p>Message channel: Direct interactions with <code>MessageChannel</code> methods (for example, <code>channel.send(message)</code>).</p>
+</li>
+<li>
+<p>Message publisher: The way to initiate a message flow as the by-product of method invocations on Spring beans.</p>
+</li>
+<li>
+<p>Inbound channel adapters and gateways: The way to initiate a message flow based on connecting third-party system with the Spring Integration messaging system (for example, <code>[JmsMessage] &#8594; Jms Inbound Adapter[SI Message] &#8594; SI Channel</code>).</p>
+</li>
+<li>
+<p>Scheduler: The way to initiate a message flow based on scheduling events distributed by a pre-configured scheduler.</p>
+</li>
+<li>
+<p>Poller: Similar to the scheduler, this is the way to initiate message flow based on scheduling or interval-based events distributed by a pre-configured poller.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We can split these six mechanisms into two general categories:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Message flows initiated by a user process: Example scenarios in this category would be invoking a gateway method or explicitly sending a <code>Message</code> to a <code>MessageChannel</code>.
+In other words, these message flows depend on a third party process (such as some code that you wrote) to be initiated.</p>
+</li>
+<li>
+<p>Message flows initiated by a daemon process: Example scenarios in this category include a Poller polling a message queue to initiate a new message flow with the polled message or a scheduler scheduling the process by creating a new message and initiating a message flow at a predefined time.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Clearly the gateway proxy, <code>MessageChannel.send(&#8230;&#8203;)</code> and <code>MessagePublisher</code> all belong to the first category, and inbound adapters and gateways, scheduler, and poller belong to the second category.</p>
+</div>
+<div class="paragraph">
+<p>So, how can you address transactional needs in various scenarios within each category, and is there a need for Spring Integration to provide something explicit with regard to transactions for a particular scenario?
+Or can you use Spring&#8217;s transaction support instead?</p>
+</div>
+<div class="paragraph">
+<p>Spring itself provides first class support for transaction management.
+So our goal here is not to provide something new but rather use Spring to benefit from its existing support for transactions.
+In other words, as a framework, we must expose hooks to Spring&#8217;s transaction management functionality.
+However, since Spring Integration configuration is based on Spring configuration, we need not always expose these hooks, because Spring already exposes them .
+After all, every Spring Integration component is a Spring Bean.</p>
+</div>
+<div class="paragraph">
+<p>With this goal in mind, we can again consider the two scenarios: message flows initiated by a user process and message flows initiated by a daemon.</p>
+</div>
+<div class="paragraph">
+<p>Message flows that are initiated by a user process and configured in a Spring application context are subject to the usual transactional configuration of such processes.
+Therefore, they need not be explicitly configured by Spring Integration to support transactions.
+The transaction could and should be initiated through Spring&#8217;s standard transaction support.
+The Spring Integration message flow naturally honors the transactional semantics of the components, because it is itself configured by Spring.
+For example, a gateway or service activator method could be annotated with <code>@Transactional</code>, or a <code>TransactionInterceptor</code> could be defined in an XML configuration with a pointcut expression that points to specific methods that should be transactional.
+The bottom line is that you have full control over transaction configuration and boundaries in these scenarios.</p>
+</div>
+<div class="paragraph">
+<p>However, things are a bit different when it comes to message flows initiated by a daemon process.
+Although configured by the developer, these flows do not directly involve a human or some other process to be initiated.
+These are trigger-based flows that are initiated by a trigger process (a daemon process) based on the configuration of the process.
+For example, we could have a scheduler initiate a message flow every Friday night.
+We can also configure a trigger that initiates a message flow every second and so on.
+As a result, we need a way to let these trigger-based processes know of our intention to make the resulting message flows be transactional, so that a Transaction context can be created whenever a new message flow is initiated.
+In other words, we need to expose some transaction configuration, but only enough to delegate to the transaction support already provided by Spring (as we do in other scenarios).</p>
+</div>
+<div class="sect2">
+<h3 id="transaction-poller"><a class="anchor" href="#transaction-poller"></a>Poller Transaction Support</h3>
+<div class="paragraph">
+<p>Spring Integration provides transactional support for pollers.
+Pollers are a special type of component because, within a poller task, we can call <code>receive()</code> against a resource that is itself transactional, thus including the <code>receive()</code> call in the boundaries of the transaction, which lets it be rolled back in case of a task failure.
+If we were to add the same support for channels, the added transactions would affect all downstream components starting with the <code>send()</code> call.
+That provides a rather wide scope for transaction demarcation without any strong reason, especially when Spring already provides several ways to address the transactional needs of any component downstream.
+However, the <code>receive()</code> method being included in a transaction boundary is the &#8220;strong reason&#8221; for pollers.</p>
+</div>
+<div class="paragraph">
+<p>Any time you configure a Poller, you can provide transactional configuration by using the <code>transactional</code> child element and its attributes,as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:poller max-messages-per-poll="1" fixed-rate="1000"&gt;
+    &lt;transactional transaction-manager="txManager"
+                   isolation="DEFAULT"
+                   propagation="REQUIRED"
+                   read-only="true"
+                   timeout="1000"/&gt;
+&lt;/poller&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding configuration looks similar to a native Spring transaction configuration.
+You must still provide a reference to a transaction manager and either specify transaction attributes or rely on defaults (for example, if the 'transaction-manager' attribute is not specified, it defaults to the bean named 'transactionManager').
+Internally, the process is wrapped in Spring&#8217;s native transaction, where <code>TransactionInterceptor</code> is responsible for handling transactions.
+For more information on how to configure a transaction manager, the types of transaction managers (such as JTA, Datasource, and others), and other details related to transaction configuration, see the <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/data-access.html#transaction">Spring Framework Reference Guide</a>.</p>
+</div>
+<div class="paragraph">
+<p>With the preceding configuration, all message flows initiated by this poller are transactional.
+For more information and details on a poller&#8217;s transactional configuration, see <a href="jdbc/inbound-channel-adapter.html#jdbc-polling-transactions" class="xref page">Polling and Transactions</a>.</p>
+</div>
+<div class="paragraph">
+<p>Along with transactions, you might need to address several more cross-cutting concerns when you run a poller.
+To help with that, the poller element accepts an <code>&lt;advice-chain&gt;</code> child element, which lets you define a custom chain of advice instances to be applied on the Poller.
+(See <a href="polling-consumer.html#pollable-message-source" class="xref page">Pollable Message Source</a> for more details.)
+In Spring Integration 2.0, the Poller went through a refactoring effort and now uses a proxy mechanism to address transactional concerns as well as other cross-cutting concerns.
+One of the significant changes evolving from this effort is that we made the <code>&lt;transactional&gt;</code> and <code>&lt;advice-chain&gt;</code> elements be mutually exclusive.
+The rationale behind this is that, if you need more than one advice and one of them is Transaction advice, you can include it in the <code>&lt;advice-chain&gt;</code> with the same convenience as before but with much more control, since you now have an option to position the advice in the desired order.
+The following example shows how to do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:poller max-messages-per-poll="1" fixed-rate="10000"&gt;
+  &lt;advice-chain&gt;
+    &lt;ref bean="txAdvice"/&gt;
+    &lt;ref bean="someOtherAdviceBean" /&gt;
+    &lt;beans:bean class="foo.bar.SampleAdvice"/&gt;
+  &lt;/advice-chain&gt;
+&lt;/poller&gt;
+
+&lt;tx:advice id="txAdvice" transaction-manager="txManager"&gt;
+  &lt;tx:attributes&gt;
+    &lt;tx:method name="get*" read-only="true"/&gt;
+    &lt;tx:method name="*"/&gt;
+  &lt;/tx:attributes&gt;
+&lt;/tx:advice&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding example shows a basic XML-based configuration of Spring Transaction advice (<code>txAdvice</code>) and included it within the <code>&lt;advice-chain&gt;</code> defined by the Poller.
+If you need to address only the transactional concerns of the poller, you can still use the <code>&lt;transactional&gt;</code> element as a convenience.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transaction-boundaries"><a class="anchor" href="#transaction-boundaries"></a>Transaction Boundaries</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Another important factor is the boundaries of Transactions within a Message flow.
+When a transaction is started, the transaction context is bound to the current thread.
+So regardless of how many endpoints and channels you have in your Message flow your transaction context will be preserved as long as you are ensuring that the flow continues on the same thread.
+As soon as you break it by introducing a <em>Pollable Channel</em> or <em>Executor Channel</em> or initiate a new thread manually in some service, the Transactional boundary will be broken as well.
+Essentially the Transaction will END right there, and if a successful handoff has transpired between the threads, the flow would be considered a success and a COMMIT signal would be sent even though the flow will continue and might still result in an Exception somewhere downstream.
+If such a flow were synchronous, that Exception could be thrown back to the initiator of the Message flow who is also the initiator of the transactional context and the transaction would result in a ROLLBACK.
+The middle ground is to use transactional channels at any point where a thread boundary is being broken.
+For example, you can use a Queue-backed Channel that delegates to a transactional MessageStore strategy, or you could use a JMS-backed channel.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="transaction-synchronization"><a class="anchor" href="#transaction-synchronization"></a>Transaction Synchronization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In some environments, it helps to synchronize operations with a transaction that encompasses the entire flow.
+For example, consider a <code>&lt;file:inbound-channel-adapter/&gt;</code> at the start of a flow that performs a number of database updates.
+If the transaction commits, we might want to move the file to a <code>success</code> directory, while we might want to move it to a <code>failure</code> directory if the transaction rolls back.</p>
+</div>
+<div class="paragraph">
+<p>Spring Integration 2.2 introduced the capability of synchronizing these operations with a transaction.
+In addition, you can configure a <code>PseudoTransactionManager</code> if you do not have a 'real' transaction but still want to perform different actions on success or failure.
+For more information, see <a href="#pseudo-transactions">Pseudo Transactions</a>.</p>
+</div>
+<div class="paragraph">
+<p>The following listing shows the key strategy interfaces for this feature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface TransactionSynchronizationFactory {
+
+    TransactionSynchronization create(Object key);
+}
+
+public interface TransactionSynchronizationProcessor {
+
+    void processBeforeCommit(IntegrationResourceHolder holder);
+
+    void processAfterCommit(IntegrationResourceHolder holder);
+
+    void processAfterRollback(IntegrationResourceHolder holder);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The factory is responsible for creating a <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/support/TransactionSynchronization.html"><code>TransactionSynchronization</code></a> object.
+You can implement your own or use the one provided by the framework: <code>DefaultTransactionSynchronizationFactory</code>.
+This implementation returns a <code>TransactionSynchronization</code> that delegates to a default implementation of <code>TransactionSynchronizationProcessor</code>: <code>ExpressionEvaluatingTransactionSynchronizationProcessor</code>.
+This processor supports three SpEL expressions: <code>beforeCommitExpression</code>, <code>afterCommitExpression</code>, and <code>afterRollbackExpression</code>.</p>
+</div>
+<div class="paragraph">
+<p>These actions should be self-explanatory to those familiar with transactions.
+In each case, the <code>#root</code> variable is the original <code>Message</code>.
+In some cases, other SpEL variables are made available, depending on the <code>MessageSource</code> being polled by the poller.
+For example, the <code>MongoDbMessageSource</code> provides the <code>#mongoTemplate</code> variable, which references the message source&#8217;s <code>MongoTemplate</code>.
+Similarly, the <code>RedisStoreMessageSource</code> provides the <code>#store</code> variable, which references the <code>RedisStore</code> created by the poll.</p>
+</div>
+<div class="paragraph">
+<p>To enable the feature for a particular poller, you can provide a reference to the <code>TransactionSynchronizationFactory</code> on the poller&#8217;s <code>&lt;transactional/&gt;</code> element by using the <code>synchronization-factory</code> attribute.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, Spring Integration provides <code>PassThroughTransactionSynchronizationFactory</code>, which is applied by default to polling endpoints when no <code>TransactionSynchronizationFactory</code> is configured but an advice of type <code>TransactionInterceptor</code> exists in the advice chain.
+When using any out-of-the-box <code>TransactionSynchronizationFactory</code> implementation, polling endpoints bind a polled message to the current transactional context and provide it as a <code>failedMessage</code> in a <code>MessagingException</code> if an exception is thrown after the transaction advice.
+When using a custom transaction advice that does not implement <code>TransactionInterceptor</code>, you can explicitly configure a <code>PassThroughTransactionSynchronizationFactory</code> to achieve this behavior.
+In either case, the <code>MessagingException</code> becomes the payload of the <code>ErrorMessage</code> that is sent to the <code>errorChannel</code>, and the cause is the raw exception thrown by the advice.
+Previously, the <code>ErrorMessage</code> had a payload that was the raw exception thrown by the advice and did not provide a reference to the <code>failedMessage</code> information, making it difficult to determine the reasons for the transaction commit problem.</p>
+</div>
+<div class="paragraph">
+<p>To simplify configuration of these components, Spring Integration provides namespace support for the default factory.
+The following example shows how to use the namespace to configure a file inbound channel adapter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-file:inbound-channel-adapter id="inputDirPoller"
+    channel="someChannel"
+    directory="/foo/bar"
+    filter="filter"
+    comparator="testComparator"&gt;
+    &lt;int:poller fixed-rate="5000"&gt;
+        &lt;int:transactional transaction-manager="transactionManager" synchronization-factory="syncFactory" /&gt;
+    &lt;/int:poller&gt;
+&lt;/int-file:inbound-channel-adapter&gt;
+
+&lt;int:transaction-synchronization-factory id="syncFactory"&gt;
+    &lt;int:after-commit expression="payload.renameTo(new java.io.File('/success/' + payload.name))"
+        channel="committedChannel" /&gt;
+    &lt;int:after-rollback expression="payload.renameTo(new java.io.File('/failed/' + payload.name))"
+        channel="rolledBackChannel" /&gt;
+&lt;/int:transaction-synchronization-factory&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result of the SpEL evaluation is sent as the payload to either <code>committedChannel</code> or <code>rolledBackChannel</code> (in this case, this would be <code>Boolean.TRUE</code> or <code>Boolean.FALSE</code>&#8201;&#8212;&#8201;the result of the <code>java.io.File.renameTo()</code> method call).</p>
+</div>
+<div class="paragraph">
+<p>If you wish to send the entire payload for further Spring Integration processing, use the 'payload' expression.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+<div class="paragraph">
+<p>It is important to understand that this synchronizes the actions with a transaction.
+It does not make a resource that is not inherently transactional actually be transactional.
+Instead, the transaction (be it JDBC or otherwise) is started before the poll and either committed or rolled back when the flow completes, followed by the synchronized action.</p>
+</div>
+<div class="paragraph">
+<p>If you provide a custom <code>TransactionSynchronizationFactory</code>, it is responsible for creating a resource synchronization that causes the bound resource to be unbound automatically when the transaction completes.
+The default <code>TransactionSynchronizationFactory</code> does so by returning a subclass of <code>ResourceHolderSynchronization</code>, with the default <code>shouldUnbindAtCompletion()</code> returning <code>true</code>.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>In addition to the <code>after-commit</code> and <code>after-rollback</code> expressions, <code>before-commit</code> is also supported.
+In that case, if the evaluation (or downstream processing) throws an exception, the transaction is rolled back instead of being committed.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+<div class="sect1">
+<h2 id="pseudo-transactions"><a class="anchor" href="#pseudo-transactions"></a>Pseudo Transactions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After reading the <a href="#transaction-synchronization">Transaction Synchronization</a> section, you might think it would be useful to take these 'success' or 'failure' actions when a flow completes, even if there is no &#8220;real&#8221; transactional resources (such as JDBC) downstream of the poller.
+For example, consider a &#8220;&lt;file:inbound-channel-adapter/&gt;&#8221; followed by an &#8220;&lt;ftp:outbout-channel-adapter/&gt;&#8221;.
+Neither of these components is transactional, but we might want to move the input file to different directories, based on the success or failure of the FTP transfer.</p>
+</div>
+<div class="paragraph">
+<p>To provide this functionality, the framework provides a <code>PseudoTransactionManager</code>, enabling the above configuration even when there is no real transactional resource involved.
+If the flow completes normally, the <code>beforeCommit</code> and <code>afterCommit</code> synchronizations are called.
+On failure, the <code>afterRollback</code> synchronization is called.
+Because it is not a real transaction, no actual commit or rollback occurs.
+The pseudo transaction is a vehicle used to enable the synchronization features.</p>
+</div>
+<div class="paragraph">
+<p>To use a <code>PseudoTransactionManager</code>, you can define it as a &lt;bean/&gt;, in the same way you would configure a real transaction manager.
+The following example shows how to do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="transactionManager" class="o.s.i.transaction.PseudoTransactionManager" /&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="reactive-transactions"><a class="anchor" href="#reactive-transactions"></a>Reactive Transactions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 5.3, a <code>ReactiveTransactionManager</code> can also be used together with a <code>TransactionInterceptor</code> advice for endpoints returning a reactive type.
+This includes <code>MessageSource</code> and <code>ReactiveMessageHandler</code> implementations (e.g. <code>ReactiveMongoDbMessageSource</code>) which produce a message with a <code>Flux</code> or <code>Mono</code> payload.
+All other reply producing message handler implementations can rely on a <code>ReactiveTransactionManager</code> when their reply payload is also some reactive type.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="message-publishing.html">Message Publishing</a></span>
+  <span class="next"><a href="security.html">Security in Spring Integration</a></span>
 </nav>
 </article>
 </div>  </div>

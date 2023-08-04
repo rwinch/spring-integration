@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Changes between 5.0 and 5.1 :: Spring Integration</title>
+    <link rel="prev" href="changes-5.1-5.2.html">
+    <link rel="next" href="changes-4.3-5.0.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1117,7 +1118,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="changes-5.1-5.2.html">Changes between 5.1 and 5.2</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Changes between 5.0 and 5.1"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/changes-5.0-5.1.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,381 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="history.html">Change History</a></li>
+    <li><a href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Changes between 5.0 and 5.1</h1>
+<div class="sect1">
+<h2 id="x5.1-new-components"><a class="anchor" href="#x5.1-new-components"></a>New Components</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>The following components are new in 5.1:</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
-</td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
-</td>
-</tr>
-</table>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#x5.1-AmqpDedicatedChannelAdvice"><code>AmqpDedicatedChannelAdvice</code></a></p>
+</li>
+</ul>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
+<div class="sect2">
+<h3 id="x5.1-AmqpDedicatedChannelAdvice"><a class="anchor" href="#x5.1-AmqpDedicatedChannelAdvice"></a><code>AmqpDedicatedChannelAdvice</code></h3>
+<div class="paragraph">
+<p>See <a href="amqp/strict-ordering.html" class="xref page">Strict Message Ordering</a>.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
+<div class="sect2">
+<h3 id="x5.1-Functions"><a class="anchor" href="#x5.1-Functions"></a>Improved Function Support</h3>
+<div class="paragraph">
+<p>The <code>java.util.function</code> interfaces now have improved integration support in the Framework components.
+Also Kotlin lambdas now can be used for handler and source methods.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>See <a href="functions-support.html" class="xref page"><code>java.util.function</code> Interfaces Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x5.1-LongRunningTest"><a class="anchor" href="#x5.1-LongRunningTest"></a><code>@LongRunningTest</code></h3>
+<div class="paragraph">
+<p>A JUnit 5 <code>@LongRunningTest</code> conditional annotation is provided to check the environment or system properties for the <code>RUN_LONG_INTEGRATION_TESTS</code> entry with the value of <code>true</code> to determine if test should be run or skipped.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="testing.html#test-junit-rules" class="xref page">JUnit Rules and Conditions</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x5.1-general"><a class="anchor" href="#x5.1-general"></a>General Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following changes have been made in version 5.1:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#x5.1-java-dsl">Java DSL</a></p>
+</li>
+<li>
+<p><a href="#x5.1-dispatcher-exceptions">Dispatcher Exceptions</a></p>
+</li>
+<li>
+<p><a href="#x5.1-global-channel-interceptors">Global Channel Interceptors</a></p>
+</li>
+<li>
+<p><a href="#x5.1-object-to-json-transformer"><code>ObjectToJsonTransformer</code></a></p>
+</li>
+<li>
+<p><a href="#x5.1-integration-flows-generated-bean-names">Integration Flows: Generated Bean Names</a></p>
+</li>
+<li>
+<p><a href="#x5.1-aggregator">Aggregator Changes</a></p>
+</li>
+<li>
+<p><a href="#x5.1-publisher">@Publisher annotation changes</a></p>
+</li>
+<li>
+<p><a href="#x51.-integration-graph">Integration Graph Customization</a></p>
+</li>
+<li>
+<p><a href="#x51.-global-properties">Integration Global Properties</a></p>
+</li>
+<li>
+<p><a href="#x51.-poller-annotation">The <code>receiveTimeout</code> for <code>@Poller</code></a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="x5.1-java-dsl"><a class="anchor" href="#x5.1-java-dsl"></a>Java DSL</h3>
+<div class="paragraph">
+<p>The <code>IntegrationFlowContext</code> is now an interface and <code>IntegrationFlowRegistration</code> is an inner interface of <code>IntegrationFlowContext</code>.</p>
+</div>
+<div class="paragraph">
+<p>A new <code>logAndReply()</code> operator has been introduced for convenience when you wish to log at the end of a flow for request-reply configurations.
+This avoids confusion with <code>log()</code> which is treated as a one-way end flow component.</p>
+</div>
+<div class="paragraph">
+<p>A generated bean name for any <code>NamedComponent</code> within an integration flow is now based on the component type for better readability from visual tools, logs analyzers and metrics collectors.</p>
+</div>
+<div class="paragraph">
+<p>The <code>GenericHandler.handle()</code> now excepts a <code>MessageHeaders</code> type for the second argument.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x5.1-dispatcher-exceptions"><a class="anchor" href="#x5.1-dispatcher-exceptions"></a>Dispatcher Exceptions</h3>
+<div class="paragraph">
+<p>Exceptions caught and re-thrown by <code>AbstractDispatcher</code> are now more consistent:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A <code>MessagingException</code> of any kind that has a <code>failedMessage</code> property is re-thrown unchanged.</p>
+</li>
+<li>
+<p>All other exceptions are wrapped in a <code>MessageDeliveryException</code> with the <code>failedMessage</code> property set.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Previously:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A <code>MessagingException</code> of any kind that has a <code>failedMessage</code> property was re-thrown unchanged</p>
+</li>
+<li>
+<p>A <code>MessagingException</code> that had no <code>failedMessage</code> property was wrapped in a <code>MessagingException</code> with the <code>failedMessage</code> property set.</p>
+</li>
+<li>
+<p>Other <code>RuntimeException</code> instances were re-thrown unchanged.</p>
+</li>
+<li>
+<p>Checked exceptions were wrapped in a <code>MessageDeliveryException</code> with the <code>failedMessage</code> property set.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x5.1-global-channel-interceptors"><a class="anchor" href="#x5.1-global-channel-interceptors"></a>Global Channel Interceptors</h3>
+<div class="paragraph">
+<p>Global channel interceptors now apply to dynamically registered channels, such as through the <code>IntegrationFlowContext</code> when using the Java DSL or beans that are initialized using <code>beanFactory.initializeBean()</code>.
+Previously, when beans were created after the application context was refreshed, interceptors were not applied.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x5.1-channel-interceptors"><a class="anchor" href="#x5.1-channel-interceptors"></a>Channel Interceptors</h3>
+<div class="paragraph">
+<p><code>ChannelInterceptor.postReceive()</code> is no longer called when no message is received; it is no longer necessary to check for a <code>null</code> <code>Message&lt;?&gt;</code>.
+Previously, the method was called.
+If you have an interceptor that relies on the previous behavior, implement <code>afterReceiveCompleted()</code> instead, since that method is invoked, regardless of whether a message is received or not.
+Furthermore, the <code>PolledAmqpChannel</code> and <code>PolledJmsChannel</code> previously did not invoke <code>afterReceiveCompleted()</code> with <code>null</code>; they now do.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x5.1-object-to-json-transformer"><a class="anchor" href="#x5.1-object-to-json-transformer"></a><code>ObjectToJsonTransformer</code></h3>
+<div class="paragraph">
+<p>A new <code>ResultType.BYTES</code> mode is introduced for the <code>ObjectToJsonTransformer</code>.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="transformer.html#json-transformers" class="xref page">JSON Transformers</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x5.1-integration-flows-generated-bean-names"><a class="anchor" href="#x5.1-integration-flows-generated-bean-names"></a>Integration Flows: Generated Bean Names</h3>
+<div class="paragraph">
+<p>Starting with version 5.0.5, generated bean names for the components in an <code>IntegrationFlow</code> include the flow bean name, followed by a dot, as a prefix.
+For example, if a flow bean were named <code>flowBean</code>, a generated bean might be named <code>flowBean.generatedBean</code>.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="dsl/java-flows.html" class="xref page">Working With Message Flows</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x5.1-aggregator"><a class="anchor" href="#x5.1-aggregator"></a>Aggregator Changes</h3>
+<div class="paragraph">
+<p>If the <code>groupTimeout</code> is evaluated to a negative value, an aggregator now expires the group immediately.
+Only <code>null</code> is considered as a signal to do nothing for the current message.</p>
+</div>
+<div class="paragraph">
+<p>A new <code>popSequence</code> property has been introduced to allow (by default) to call a <code>MessageBuilder.popSequenceDetails()</code> for the output message.
+Also an <code>AbstractAggregatingMessageGroupProcessor</code> returns now an <code>AbstractIntegrationMessageBuilder</code> instead of the whole <code>Message</code> for optimization.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="overview.html#overview-endpoints-aggregator" class="xref page">Aggregator</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x5.1-publisher"><a class="anchor" href="#x5.1-publisher"></a>@Publisher annotation changes</h3>
+<div class="paragraph">
+<p>Starting with version 5.1, you must explicitly turn on the <code>@Publisher</code> AOP functionality by using <code>@EnablePublisher</code> or by using the <code>&lt;int:enable-publisher&gt;</code> child element on <code>&lt;int:annotation-config&gt;</code>.
+Also the <code>proxy-target-class</code> and <code>order</code> attributes have been added for tuning the <code>ProxyFactory</code> configuration.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="message-publishing.html#publisher-annotation" class="xref page">Annotation-driven Configuration with the <code>@Publisher</code> Annotation</a> for more information.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x5.1-files"><a class="anchor" href="#x5.1-files"></a>Files Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you are using <code>FileExistsMode.APPEND</code> or <code>FileExistsMode.APPEND_NO_FLUSH</code> you can provide a <code>newFileCallback</code> that will be called when creating a new file.
+This callback receives the newly created file and the message that triggered the callback.
+This could be used to write a CSV header, for an example.</p>
+</div>
+<div class="paragraph">
+<p>The <code>FileReadingMessageSource</code> now doesn&#8217;t check and create a directory until its <code>start()</code> is called.
+So, if an Inbound Channel Adapter for the <code>FileReadingMessageSource</code> has <code>autoStartup = false</code>, there are no failures against the file system during application start up.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="file.html" class="xref page">File Support</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x5.1-amqp"><a class="anchor" href="#x5.1-amqp"></a>AMQP Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We have made <code>ID</code> and <code>Timestamp</code> header mapping changes in the <code>DefaultAmqpHeaderMapper</code>.
+See the note near the bottom of <a href="amqp/message-headers.html" class="xref page">AMQP Message Headers</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>The <code>contentType</code> header is now correctly mapped as an entry in the general headers map.
+See <a href="amqp/message-headers.html#amqp-content-type" class="xref page">contentType Header</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.1.3, if a message conversion exception occurs when using manual acknowledgments, and an error channel is defined, the payload is a <code>ManualAckListenerExecutionFailedException</code> with additional <code>channel</code> and <code>deliveryTag</code> properties.
+This enables the error flow to ack/nack the original message.
+See <a href="amqp/conversion-inbound.html" class="xref page">Inbound Message Conversion</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x5.1-jdbc"><a class="anchor" href="#x5.1-jdbc"></a>JDBC Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A confusing <code>max-rows-per-poll</code> property on the JDBC Inbound Channel Adapter and JDBC Outbound Gateway has been deprecated in favor of the newly introduced <code>max-rows</code> property.</p>
+</div>
+<div class="paragraph">
+<p>The <code>JdbcMessageHandler</code> supports now a <code>batchUpdate</code> functionality when the payload of the request message is an instance of an <code>Iterable</code> type.</p>
+</div>
+<div class="paragraph">
+<p>The indexes for the <code>INT_CHANNEL_MESSAGE</code> table (for the <code>JdbcChannelMessageStore</code>) have been optimized.
+If you have large message groups in such a store, you may wish to alter the indexes.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="jdbc.html" class="xref page">JDBC Support</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x5.1-ftp-sftp"><a class="anchor" href="#x5.1-ftp-sftp"></a>FTP and SFTP Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A <code>RotatingServerAdvice</code> is now available to poll multiple servers and directories with the inbound channel adapters.
+See <a href="ftp/rotating-server-advice.html" class="xref page">Inbound Channel Adapters: Polling Multiple Servers and Directories</a> and <a href="sftp/rotating-server-advice.html" class="xref page">Inbound Channel Adapters: Polling Multiple Servers and Directories</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>Also, inbound adapter <code>localFilenameExpression</code> instances can contain the <code>#remoteDirectory</code> variable, which contains the remote directory being polled.
+The generic type of the comparators (used to sort the fetched file list for the streaming adapters) has changed from <code>Comparator&lt;AbstractFileInfo&lt;F&gt;&gt;</code> to <code>Comparator&lt;F&gt;</code>.
+See <a href="ftp/streaming.html" class="xref page">FTP Streaming Inbound Channel Adapter</a> and <a href="sftp/streaming.html" class="xref page">SFTP Streaming Inbound Channel Adapter</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>In addition, the synchronizers for inbound channel adapters can now be provided with a <code>Comparator</code>.
+This is useful when using <code>maxFetchSize</code> to limit the files retrieved.</p>
+</div>
+<div class="paragraph">
+<p>The <code>CachingSessionFactory</code> has a new property <code>testSession</code> which, when true, causes the factory to perform a <code>test()</code> operation on the <code>Session</code> when checking out an existing session from the cache.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="sftp/session-caching.html" class="xref page">SFTP Session Caching</a> and <a href="ftp/session-caching.html" class="xref page">FTP Session Caching</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>The outbound gateway MPUT command now supports a message payload with a collection of files or strings.
+See <a href="sftp/outbound-gateway.html" class="xref page">SFTP Outbound Gateway</a> and <a href="ftp/outbound-gateway.html" class="xref page">FTP Outbound Gateway</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x51.-tcp"><a class="anchor" href="#x51.-tcp"></a>TCP Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When using SSL, host verification is now enabled, by default, to prevent man-in-the-middle attacks with a trusted certificate.
+See <a href="ip/ssl-tls.html#tcp-ssl-host-verification" class="xref page">Host Verification</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>In addition the key and trust store types can now be configured on the <code>DefaultTcpSSLContextSupport</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x5.1-twitter"><a class="anchor" href="#x5.1-twitter"></a>Twitter Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Since the Spring Social project has moved to <a href="https://spring.io/blog/2018/07/03/spring-social-end-of-life-announcement">end of life status</a>, Twitter support in Spring Integration has been moved to the Extensions project.
+See <a href="https://github.com/spring-projects/spring-integration-extensions/tree/main/spring-integration-social-twitter">Spring Integration Social Twitter</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x51.-jms"><a class="anchor" href="#x51.-jms"></a>JMS Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>JmsSendingMessageHandler</code> now provides <code>deliveryModeExpression</code> and <code>timeToLiveExpression</code> options to determine respective QoS options for JMS message to send at runtime.
+The <code>DefaultJmsHeaderMapper</code> now allows to map inbound <code>JMSDeliveryMode</code> and <code>JMSExpiration</code> properties via setting to <code>true</code> respective <code>setMapInboundDeliveryMode()</code> and <code>setMapInboundExpiration()</code> options.
+When a <code>JmsMessageDrivenEndpoint</code> or <code>JmsInboundGateway</code> is stopped, the associated listener container is now shut down; this closes its shared connection and any consumers.
+You can configure the endpoints to revert to the previous behavior.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="jms.html" class="xref page">JMS Support</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x51.-http"><a class="anchor" href="#x51.-http"></a>HTTP/WebFlux Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>statusCodeExpression</code> (and <code>Function</code>) is now supplied with the <code>RequestEntity&lt;?&gt;</code> as a root object for evaluation context, so request headers, method, URI and body are available for target status code calculation.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="http.html" class="xref page">HTTP Support</a> and <a href="webflux.html" class="xref page">WebFlux Support</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x51.-jmx"><a class="anchor" href="#x51.-jmx"></a>JMX Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Object name key values are now quoted if they contain any characters other than those allowed in a Java identifier (or period <code>.</code>).
+For example <code>org.springframework.integration:type=MessageChannel,</code> <code>name="input:foo.myGroup.errors"</code>.
+This has the side effect that previously "allowed" names, with such characters, will now be quoted.
+For example <code>org.springframework.integration:type=MessageChannel,</code> <code>name="input#foo.myGroup.errors"</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x51.-micrometer"><a class="anchor" href="#x51.-micrometer"></a>Micrometer Support Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It is now simpler to customize the standard Micrometer meters created by the framework.
+See <a href="metrics.html#micrometer-integration" class="xref page">Micrometer Integration</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x51.-integration-graph"><a class="anchor" href="#x51.-integration-graph"></a>Integration Graph Customization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It is now possible to add additional properties to the <code>IntegrationNode</code> s via <code>Function&lt;NamedComponent, Map&lt;String, Object&gt;&gt; additionalPropertiesCallback</code> on the <code>IntegrationGraphServer</code>.
+See <a href="graph.html#integration-graph" class="xref page">Integration Graph</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x51.-global-properties"><a class="anchor" href="#x51.-global-properties"></a>Integration Global Properties</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Integration global properties (including defaults) can now be printed in the logs, when a <code>DEBUG</code> logic level is turned on for the <code>org.springframework.integration</code> category.
+See <a href="configuration/global-properties.html" class="xref page">Global Properties</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x51.-poller-annotation"><a class="anchor" href="#x51.-poller-annotation"></a>The <code>receiveTimeout</code> for <code>@Poller</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>@Poller</code> annotation now provides a <code>receiveTimeout</code> option for convenience.
+See <a href="configuration/annotations.html#configuration-using-poller-annotation" class="xref page">Using the <code>@Poller</code> Annotation</a> for more information.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="changes-5.1-5.2.html">Changes between 5.1 and 5.2</a></span>
+  <span class="next"><a href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a></span>
 </nav>
 </article>
 </div>  </div>

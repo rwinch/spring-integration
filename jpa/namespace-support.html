@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Namespace Support :: Spring Integration</title>
+    <link rel="prev" href="java-implementation.html">
+    <link rel="next" href="inbound-channel-adapter.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -13,13 +14,13 @@
 }(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'),
   localStorage && localStorage.getItem('nav-width'))
     </script>
-    <link rel="stylesheet" href="./_/css/site.css">
-    <link rel="stylesheet" href="./_/css/vendor/search.css">
-    <link rel="stylesheet" href="./_/css/vendor/asciidoctor-tabs.css">
+    <link rel="stylesheet" href="../_/css/site.css">
+    <link rel="stylesheet" href="../_/css/vendor/search.css">
+    <link rel="stylesheet" href="../_/css/vendor/asciidoctor-tabs.css">
 
     <meta name="version" content="6.2.0">
     <meta name="component" content="integration">
-    <link rel="icon" href="./_/img/favicon.ico" type="image/vnd.microsoft.icon">
+    <link rel="icon" href="../_/img/favicon.ico" type="image/vnd.microsoft.icon">
   </head>
   <body class="article">
 <header class="header">
@@ -29,7 +30,7 @@
         <img
           id="springlogo"
           class="block"
-          src="./_/img/spring-logo.svg"
+          src="../_/img/spring-logo.svg"
           alt="Spring"
         />
       </a>
@@ -276,881 +277,881 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="index.html">Overview</a>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="preface.html">Preface</a>
+    <a class="nav-link" href="../preface.html">Preface</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="whats-new.html">What&#8217;s New?</a>
+    <a class="nav-link" href="../whats-new.html">What&#8217;s New?</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="overview.html">Overview</a>
+    <a class="nav-link" href="../overview.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="core.html">Core Messaging</a>
+    <a class="nav-link" href="../core.html">Core Messaging</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="channel.html">Message Channels</a>
+    <a class="nav-link" href="../channel.html">Message Channels</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="channel/interfaces.html">The MessageChannel Interface</a>
+    <a class="nav-link" href="../channel/interfaces.html">The MessageChannel Interface</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="channel/implementations.html">Message Channel Implementations</a>
+    <a class="nav-link" href="../channel/implementations.html">Message Channel Implementations</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="channel/interceptors.html">Channel Interceptors</a>
+    <a class="nav-link" href="../channel/interceptors.html">Channel Interceptors</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="channel/template.html"><code>MessagingTemplate</code></a>
+    <a class="nav-link" href="../channel/template.html"><code>MessagingTemplate</code></a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="channel/configuration.html">Configuring Message Channels</a>
+    <a class="nav-link" href="../channel/configuration.html">Configuring Message Channels</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="channel/special-channels.html">Special Channels</a>
+    <a class="nav-link" href="../channel/special-channels.html">Special Channels</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="polling-consumer.html">Poller</a>
+    <a class="nav-link" href="../polling-consumer.html">Poller</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="channel-adapter.html">Channel Adapter</a>
+    <a class="nav-link" href="../channel-adapter.html">Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="bridge.html">Messaging Bridge</a>
+    <a class="nav-link" href="../bridge.html">Messaging Bridge</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="message.html">Message</a>
+    <a class="nav-link" href="../message.html">Message</a>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="message-routing.html">Message Routing</a>
+    <a class="nav-link" href="../message-routing.html">Message Routing</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="router.html">Routers</a>
+    <a class="nav-link" href="../router.html">Routers</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="router/overview.html">Overview</a>
+    <a class="nav-link" href="../router/overview.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="router/common-parameters.html">Common Router Parameters</a>
+    <a class="nav-link" href="../router/common-parameters.html">Common Router Parameters</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="router/implementations.html">Router Implementations</a>
+    <a class="nav-link" href="../router/implementations.html">Router Implementations</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="router/namespace.html">Configuring a Generic Router</a>
+    <a class="nav-link" href="../router/namespace.html">Configuring a Generic Router</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="router/spel.html">Routers and the Spring Expression Language (SpEL)</a>
+    <a class="nav-link" href="../router/spel.html">Routers and the Spring Expression Language (SpEL)</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="router/annotation.html">Configuring a Router with Annotations</a>
+    <a class="nav-link" href="../router/annotation.html">Configuring a Router with Annotations</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="router/dynamic-routers.html">Dynamic Routers</a>
+    <a class="nav-link" href="../router/dynamic-routers.html">Dynamic Routers</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="router/routing-slip.html">Routing Slip</a>
+    <a class="nav-link" href="../router/routing-slip.html">Routing Slip</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="router/process-manager.html">Process Manager Enterprise Integration Pattern</a>
+    <a class="nav-link" href="../router/process-manager.html">Process Manager Enterprise Integration Pattern</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="filter.html">Filter</a>
+    <a class="nav-link" href="../filter.html">Filter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="splitter.html">Splitter</a>
+    <a class="nav-link" href="../splitter.html">Splitter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="aggregator.html">Aggregator</a>
+    <a class="nav-link" href="../aggregator.html">Aggregator</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="resequencer.html">Resequencer</a>
+    <a class="nav-link" href="../resequencer.html">Resequencer</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="chain.html">Message Handler Chain</a>
+    <a class="nav-link" href="../chain.html">Message Handler Chain</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="scatter-gather.html">Scatter-Gather</a>
+    <a class="nav-link" href="../scatter-gather.html">Scatter-Gather</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="barrier.html">Thread Barrier</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="message-transformation.html">Message Transformation</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="transformer.html">Transformer</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="content-enrichment.html">Content Enricher</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="claim-check.html">Claim Check</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="codec.html">Codec</a>
+    <a class="nav-link" href="../barrier.html">Thread Barrier</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="messaging-endpoints.html">Messaging Endpoints</a>
+    <a class="nav-link" href="../message-transformation.html">Message Transformation</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="endpoint.html">Message Endpoints</a>
+    <a class="nav-link" href="../transformer.html">Transformer</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="endpoint-roles.html">Endpoint Roles</a>
+    <a class="nav-link" href="../content-enrichment.html">Content Enricher</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="leadership-event-handling.html">Leadership Event Handling</a>
+    <a class="nav-link" href="../claim-check.html">Claim Check</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="gateway.html">Messaging Gateways</a>
+    <a class="nav-link" href="../codec.html">Codec</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../messaging-endpoints.html">Messaging Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../endpoint.html">Message Endpoints</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="service-activator.html">Service Activator</a>
+    <a class="nav-link" href="../endpoint-roles.html">Endpoint Roles</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="delayer.html">Delayer</a>
+    <a class="nav-link" href="../leadership-event-handling.html">Leadership Event Handling</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="scripting.html">Scripting Support</a>
+    <a class="nav-link" href="../gateway.html">Messaging Gateways</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="groovy.html">Groovy Support</a>
+    <a class="nav-link" href="../service-activator.html">Service Activator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../delayer.html">Delayer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../scripting.html">Scripting Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../groovy.html">Groovy Support</a>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="handler-advice.html">Adding Behavior to Endpoints</a>
+    <a class="nav-link" href="../handler-advice.html">Adding Behavior to Endpoints</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/classes.html">Provided Advice Classes</a>
+    <a class="nav-link" href="../handler-advice/classes.html">Provided Advice Classes</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/reactive.html">Reactive Advice</a>
+    <a class="nav-link" href="../handler-advice/reactive.html">Reactive Advice</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/context-holder.html">Context Holder Advice</a>
+    <a class="nav-link" href="../handler-advice/context-holder.html">Context Holder Advice</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/custom.html">Custom Advice Classes</a>
+    <a class="nav-link" href="../handler-advice/custom.html">Custom Advice Classes</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/other.html">Other Advice Chain Elements</a>
+    <a class="nav-link" href="../handler-advice/other.html">Other Advice Chain Elements</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/handle-message.html">Handling Message Advice</a>
+    <a class="nav-link" href="../handler-advice/handle-message.html">Handling Message Advice</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/tx-handle-message.html">Transaction Support</a>
+    <a class="nav-link" href="../handler-advice/tx-handle-message.html">Transaction Support</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/advising-filters.html">Advising Filters</a>
+    <a class="nav-link" href="../handler-advice/advising-filters.html">Advising Filters</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/advising-with-annotations.html">Advising Endpoints Using Annotations</a>
+    <a class="nav-link" href="../handler-advice/advising-with-annotations.html">Advising Endpoints Using Annotations</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/order.html">Ordering Advices within Advice Chain</a>
+    <a class="nav-link" href="../handler-advice/order.html">Ordering Advices within Advice Chain</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/advised-properties.html">Advised Handler Properties</a>
+    <a class="nav-link" href="../handler-advice/advised-properties.html">Advised Handler Properties</a>
   </li>
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="handler-advice/idempotent-receiver.html">Idempotent Receiver Enterprise Integration Pattern</a>
+    <a class="nav-link" href="../handler-advice/idempotent-receiver.html">Idempotent Receiver Enterprise Integration Pattern</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="logging-adapter.html">Logging Channel Adapter</a>
+    <a class="nav-link" href="../logging-adapter.html">Logging Channel Adapter</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
-    <a class="nav-link" href="functions-support.html"><code>java.util.function</code> Interfaces Support</a>
+    <a class="nav-link" href="../functions-support.html"><code>java.util.function</code> Interfaces Support</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="kotlin-functions.html">Kotlin Support</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="dsl.html">Java DSL</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-basics.html">DSL Basics</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-channels.html">Message Channels</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-pollers.html">Pollers</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-reactive.html">The <code>reactive()</code> Endpoint</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-endpoints.html">DSL and Endpoint Configuration</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-transformers.html">Transformers</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-inbound-adapters.html">Inbound Channel Adapters</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-routers.html">Message Routers</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-splitters.html">Splitters</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-aggregators.html">Aggregators and Resequencers</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-handle.html">Service Activators and the <code>.handle()</code> method</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-gateway.html">Operator gateway()</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-log.html">Operator log()</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-intercept.html">Operator intercept()</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-wiretap.html"><code>MessageChannelSpec.wireTap()</code></a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-flows.html">Working With Message Flows</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-function-expression.html"><code>FunctionExpression</code></a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-subflows.html">Sub-flows support</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-protocol-adapters.html">Using Protocol Adapters</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-flow-adapter.html"><code>IntegrationFlowAdapter</code></a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-runtime-flows.html">Dynamic and Runtime Integration Flows</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/integration-flow-as-gateway.html"><code>IntegrationFlow</code> as a Gateway</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/java-extensions.html">DSL Extensions</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="dsl/integration-flows-composition.html">Integration Flows Composition</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="groovy-dsl.html">Groovy DSL</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="kotlin-dsl.html">Kotlin DSL</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="system-management.html">System Management</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="metrics.html">Metrics and Management</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="message-history.html">Message History</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="message-store.html">Message Store</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="meta-data-store.html">Metadata Store</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="control-bus.html">Control Bus</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="shutdown.html">Orderly Shutdown</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="graph.html">Integration Graph</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="integration-graph-controller.html">Integration Graph Controller</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="reactive-streams.html">Reactive Streams Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="native-aot.html">Native Images Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="endpoint-summary.html">Integration Endpoints</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="amqp.html">AMQP Support</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/inbound-channel-adapter.html">Inbound Channel Adapter</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/polled-inbound-channel-adapter.html">Polled Inbound Channel Adapter</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/inbound-gateway.html">Inbound Gateway</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/inbound-ack.html">Inbound Endpoint Acknowledge Mode</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/outbound-endpoints.html">Outbound Endpoints</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/outbound-channel-adapter.html">Outbound Channel Adapter</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/outbound-gateway.html">Outbound Gateway</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/async-outbound-gateway.html">Asynchronous Outbound Gateway</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/alternative-confirms-returns.html">Alternative Mechanism for Publisher Confirms and Returns</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/conversion-inbound.html">Inbound Message Conversion</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/content-type-conversion-outbound.html">Outbound Message Conversion</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/user-id.html">Outbound User ID</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/delay.html">Delayed Message Exchange</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/channels.html">AMQP-backed Message Channels</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/message-headers.html">AMQP Message Headers</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/strict-ordering.html">Strict Message Ordering</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/samples.html">AMQP Samples</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="amqp/rmq-streams.html">RabbitMQ Stream Queue Support</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="camel.html">Apache Camel Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cassandra.html">Apache Cassandra Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="debezium.html">Debezium Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="event.html">Spring <code>ApplicationEvent</code> Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="feed.html">Feed Adapter</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="file.html">File Support</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="file/reading.html">Reading Files</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="file/writing.html">Writing files</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="file/transforming.html">File Transformers</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="file/splitter.html">File Splitter</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="file/aggregator.html">File Aggregator</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="file/remote-persistent-flf.html">Remote Persistent File List Filters</a>
+    <a class="nav-link" href="../kotlin-functions.html">Kotlin Support</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="ftp.html">FTP/FTPS Adapters</a>
+    <a class="nav-link" href="../dsl.html">Java DSL</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/session-factory.html">FTP Session Factory</a>
+    <a class="nav-link" href="../dsl/java-basics.html">DSL Basics</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/advanced-configuration.html">Advanced Configuration</a>
+    <a class="nav-link" href="../dsl/java-channels.html">Message Channels</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/dsf.html">Delegating Session Factory</a>
+    <a class="nav-link" href="../dsl/java-pollers.html">Pollers</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/inbound.html">FTP Inbound Channel Adapter</a>
+    <a class="nav-link" href="../dsl/java-reactive.html">The <code>reactive()</code> Endpoint</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/streaming.html">FTP Streaming Inbound Channel Adapter</a>
+    <a class="nav-link" href="../dsl/java-endpoints.html">DSL and Endpoint Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+    <a class="nav-link" href="../dsl/java-transformers.html">Transformers</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+    <a class="nav-link" href="../dsl/java-inbound-adapters.html">Inbound Channel Adapters</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/outbound.html">FTP Outbound Channel Adapter</a>
+    <a class="nav-link" href="../dsl/java-routers.html">Message Routers</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/outbound-gateway.html">FTP Outbound Gateway</a>
+    <a class="nav-link" href="../dsl/java-splitters.html">Splitters</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/session-caching.html">FTP Session Caching</a>
+    <a class="nav-link" href="../dsl/java-aggregators.html">Aggregators and Resequencers</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+    <a class="nav-link" href="../dsl/java-handle.html">Service Activators and the <code>.handle()</code> method</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/session-callback.html">Using <code>MessageSessionCallback</code></a>
+    <a class="nav-link" href="../dsl/java-gateway.html">Operator gateway()</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/server-events.html">Apache Mina FTP Server Events</a>
+    <a class="nav-link" href="../dsl/java-log.html">Operator log()</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ftp/remote-file-info.html">Remote File Information</a>
+    <a class="nav-link" href="../dsl/java-intercept.html">Operator intercept()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../dsl/java-wiretap.html"><code>MessageChannelSpec.wireTap()</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../dsl/java-flows.html">Working With Message Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../dsl/java-function-expression.html"><code>FunctionExpression</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../dsl/java-subflows.html">Sub-flows support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../dsl/java-protocol-adapters.html">Using Protocol Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../dsl/java-flow-adapter.html"><code>IntegrationFlowAdapter</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../dsl/java-runtime-flows.html">Dynamic and Runtime Integration Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../dsl/integration-flow-as-gateway.html"><code>IntegrationFlow</code> as a Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../dsl/java-extensions.html">DSL Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../dsl/integration-flows-composition.html">Integration Flows Composition</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="graphql.html">GraphQL Support</a>
+    <a class="nav-link" href="../groovy-dsl.html">Groovy DSL</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="hazelcast.html">Hazelcast Support</a>
+    <a class="nav-link" href="../kotlin-dsl.html">Kotlin DSL</a>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="http.html">HTTP Support</a>
+    <a class="nav-link" href="../system-management.html">System Management</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="http/inbound.html">Http Inbound Components</a>
+    <a class="nav-link" href="../metrics.html">Metrics and Management</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="http/outbound.html">HTTP Outbound Components</a>
+    <a class="nav-link" href="../message-history.html">Message History</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="http/namespace.html">HTTP Namespace Support</a>
+    <a class="nav-link" href="../message-store.html">Message Store</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="http/java-config.html">Configuring HTTP Endpoints with Java</a>
+    <a class="nav-link" href="../meta-data-store.html">Metadata Store</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="http/timeout.html">Timeout Handling</a>
+    <a class="nav-link" href="../control-bus.html">Control Bus</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="http/proxy.html">HTTP Proxy configuration</a>
+    <a class="nav-link" href="../shutdown.html">Orderly Shutdown</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="http/header-mapping.html">HTTP Header Mappings</a>
+    <a class="nav-link" href="../graph.html">Integration Graph</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="http/int-graph-controller.html">Integration Graph Controller</a>
+    <a class="nav-link" href="../integration-graph-controller.html">Integration Graph Controller</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reactive-streams.html">Reactive Streams Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../native-aot.html">Native Images Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../endpoint-summary.html">Integration Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../amqp.html">AMQP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/inbound-channel-adapter.html">Inbound Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="http/samples.html">HTTP Samples</a>
+    <a class="nav-link" href="../amqp/polled-inbound-channel-adapter.html">Polled Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/inbound-gateway.html">Inbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/inbound-ack.html">Inbound Endpoint Acknowledge Mode</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/outbound-endpoints.html">Outbound Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/async-outbound-gateway.html">Asynchronous Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/alternative-confirms-returns.html">Alternative Mechanism for Publisher Confirms and Returns</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/conversion-inbound.html">Inbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/content-type-conversion-outbound.html">Outbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/user-id.html">Outbound User ID</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/delay.html">Delayed Message Exchange</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/channels.html">AMQP-backed Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/message-headers.html">AMQP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/strict-ordering.html">Strict Message Ordering</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/samples.html">AMQP Samples</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../amqp/rmq-streams.html">RabbitMQ Stream Queue Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../camel.html">Apache Camel Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../cassandra.html">Apache Cassandra Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../debezium.html">Debezium Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../event.html">Spring <code>ApplicationEvent</code> Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../feed.html">Feed Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../file.html">File Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../file/reading.html">Reading Files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../file/writing.html">Writing files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../file/transforming.html">File Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../file/splitter.html">File Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../file/aggregator.html">File Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../file/remote-persistent-flf.html">Remote Persistent File List Filters</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="jdbc.html">JDBC Support</a>
+    <a class="nav-link" href="../ftp.html">FTP/FTPS Adapters</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jdbc/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+    <a class="nav-link" href="../ftp/session-factory.html">FTP Session Factory</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jdbc/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+    <a class="nav-link" href="../ftp/advanced-configuration.html">Advanced Configuration</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jdbc/outbound-gateway.html">Outbound Gateway</a>
+    <a class="nav-link" href="../ftp/dsf.html">Delegating Session Factory</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jdbc/message-store.html">JDBC Message Store</a>
+    <a class="nav-link" href="../ftp/inbound.html">FTP Inbound Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jdbc/stored-procedures.html">Stored Procedures</a>
+    <a class="nav-link" href="../ftp/streaming.html">FTP Streaming Inbound Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jdbc/lock-registry.html">JDBC Lock Registry</a>
+    <a class="nav-link" href="../ftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jdbc/metadata-store.html">JDBC Metadata Store</a>
+    <a class="nav-link" href="../ftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ftp/outbound.html">FTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ftp/outbound-gateway.html">FTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ftp/session-caching.html">FTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ftp/session-callback.html">Using <code>MessageSessionCallback</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ftp/server-events.html">Apache Mina FTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../graphql.html">GraphQL Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../hazelcast.html">Hazelcast Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../http.html">HTTP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../http/inbound.html">Http Inbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../http/outbound.html">HTTP Outbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../http/namespace.html">HTTP Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../http/java-config.html">Configuring HTTP Endpoints with Java</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../http/timeout.html">Timeout Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../http/proxy.html">HTTP Proxy configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../http/header-mapping.html">HTTP Header Mappings</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../http/int-graph-controller.html">Integration Graph Controller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../http/samples.html">HTTP Samples</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="jpa.html">JPA Support</a>
+    <a class="nav-link" href="../jdbc.html">JDBC Support</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jpa/functionality.html">Functionality</a>
+    <a class="nav-link" href="../jdbc/inbound-channel-adapter.html">Inbound Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jpa/supported-persistence-providers.html">Supported Persistence Providers</a>
+    <a class="nav-link" href="../jdbc/outbound-channel-adapter.html">Outbound Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jpa/java-implementation.html">Java Implementation</a>
+    <a class="nav-link" href="../jdbc/outbound-gateway.html">Outbound Gateway</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jpa/namespace-support.html">Namespace Support</a>
+    <a class="nav-link" href="../jdbc/message-store.html">JDBC Message Store</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jpa/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+    <a class="nav-link" href="../jdbc/stored-procedures.html">Stored Procedures</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jpa/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+    <a class="nav-link" href="../jdbc/lock-registry.html">JDBC Lock Registry</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="jpa/outbound-gateways.html">Outbound Gateways</a>
+    <a class="nav-link" href="../jdbc/metadata-store.html">JDBC Metadata Store</a>
   </li>
 </ul>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="jms.html">JMS Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="jmx.html">JMX Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="kafka.html">Apache Kafka Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="mail.html">Mail Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="mongodb.html">MongoDb Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="mqtt.html">MQTT Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="r2dbc.html">R2DBC Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="redis.html">Redis Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="resource.html">Resource Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="rsocket.html">RSocket Support</a>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="sftp.html">SFTP Adapters</a>
+    <a class="nav-link" href="../jpa.html">JPA Support</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/session-factory.html">SFTP Session Factory</a>
+    <a class="nav-link" href="functionality.html">Functionality</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/dsf.html">Delegating Session Factory</a>
+    <a class="nav-link" href="supported-persistence-providers.html">Supported Persistence Providers</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/session-caching.html">SFTP Session Caching</a>
+    <a class="nav-link" href="java-implementation.html">Java Implementation</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="namespace-support.html">Namespace Support</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+    <a class="nav-link" href="inbound-channel-adapter.html">Inbound Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/inbound.html">SFTP Inbound Channel Adapter</a>
+    <a class="nav-link" href="outbound-channel-adapter.html">Outbound Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/streaming.html">SFTP Streaming Inbound Channel Adapter</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/outbound.html">SFTP Outbound Channel Adapter</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/outbound-gateway.html">SFTP Outbound Gateway</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/session-callback.html">MessageSessionCallback</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/server-events.html">Apache Mina SFTP Server Events</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="sftp/remote-file-info.html">Remote File Information</a>
+    <a class="nav-link" href="outbound-gateways.html">Outbound Gateways</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="smb.html">SMB Support</a>
+    <a class="nav-link" href="../jms.html">JMS Support</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="stomp.html">STOMP Support</a>
+    <a class="nav-link" href="../jmx.html">JMX Support</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="stream.html">Stream Support</a>
+    <a class="nav-link" href="../kafka.html">Apache Kafka Support</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="syslog.html">Syslog Support</a>
+    <a class="nav-link" href="../mail.html">Mail Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../mongodb.html">MongoDb Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../mqtt.html">MQTT Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../r2dbc.html">R2DBC Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../redis.html">Redis Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../resource.html">Resource Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../rsocket.html">RSocket Support</a>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="ip.html">TCP and UDP Support</a>
+    <a class="nav-link" href="../sftp.html">SFTP Adapters</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/intro.html">Introduction</a>
+    <a class="nav-link" href="../sftp/session-factory.html">SFTP Session Factory</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/udp-adapters.html">UDP Adapters</a>
+    <a class="nav-link" href="../sftp/dsf.html">Delegating Session Factory</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/tcp-connection-factories.html">TCP Connection Factories</a>
+    <a class="nav-link" href="../sftp/session-caching.html">SFTP Session Caching</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/testing-connections.html">Testing Connections</a>
+    <a class="nav-link" href="../sftp/rft.html">Using <code>RemoteFileTemplate</code></a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/interceptors.html">TCP Connection Interceptors</a>
+    <a class="nav-link" href="../sftp/inbound.html">SFTP Inbound Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/tcp-events.html">TCP Connection Events</a>
+    <a class="nav-link" href="../sftp/streaming.html">SFTP Streaming Inbound Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/tcp-adapters.html">TCP Adapters</a>
+    <a class="nav-link" href="../sftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/tcp-gateways.html">TCP Gateways</a>
+    <a class="nav-link" href="../sftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/correlation.html">TCP Message Correlation</a>
+    <a class="nav-link" href="../sftp/outbound.html">SFTP Outbound Channel Adapter</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/note-nio.html">About Non-blocking I/O (NIO)</a>
+    <a class="nav-link" href="../sftp/outbound-gateway.html">SFTP Outbound Gateway</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/ssl-tls.html">SSL/TLS Support</a>
+    <a class="nav-link" href="../sftp/session-callback.html">MessageSessionCallback</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/tcp-advanced-techniques.html">Advanced Techniques</a>
+    <a class="nav-link" href="../sftp/server-events.html">Apache Mina SFTP Server Events</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/endpoint-reference.html">IP Configuration Attributes</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/msg-headers.html">IP Message Headers</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/annotation.html">Annotation-Based Configuration</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="ip/dsl.html">Using the Java DSL for TCP Components</a>
+    <a class="nav-link" href="../sftp/remote-file-info.html">Remote File Information</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="webflux.html">WebFlux Support</a>
+    <a class="nav-link" href="../smb.html">SMB Support</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="web-sockets.html">WebSockets Support</a>
+    <a class="nav-link" href="../stomp.html">STOMP Support</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="ws.html">Web Services Support</a>
+    <a class="nav-link" href="../stream.html">Stream Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../syslog.html">Syslog Support</a>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="xml.html">XML Support - Dealing with XML Payloads</a>
+    <a class="nav-link" href="../ip.html">TCP and UDP Support</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="xml/xpath-namespace-support.html">Namespace Support</a>
+    <a class="nav-link" href="../ip/intro.html">Introduction</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="xml/transformation.html">Transforming XML Payloads</a>
+    <a class="nav-link" href="../ip/udp-adapters.html">UDP Adapters</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="xml/xpath-transformer.html">Transforming XML Messages with XPath</a>
+    <a class="nav-link" href="../ip/tcp-connection-factories.html">TCP Connection Factories</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="xml/xpath-splitting.html">Splitting XML Messages</a>
+    <a class="nav-link" href="../ip/testing-connections.html">Testing Connections</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="xml/xpath-routing.html">Routing XML Messages with XPath</a>
+    <a class="nav-link" href="../ip/interceptors.html">TCP Connection Interceptors</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="xml/xpath-header-enricher.html">XPath Header Enricher</a>
+    <a class="nav-link" href="../ip/tcp-events.html">TCP Connection Events</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="xml/xpath-filter.html">Using the XPath Filter</a>
+    <a class="nav-link" href="../ip/tcp-adapters.html">TCP Adapters</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="xml/xpath-spel-function.html">#xpath SpEL Function</a>
+    <a class="nav-link" href="../ip/tcp-gateways.html">TCP Gateways</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="xml/validating-filter.html">XML Validating Filter</a>
+    <a class="nav-link" href="../ip/correlation.html">TCP Message Correlation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ip/note-nio.html">About Non-blocking I/O (NIO)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ip/ssl-tls.html">SSL/TLS Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ip/tcp-advanced-techniques.html">Advanced Techniques</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ip/endpoint-reference.html">IP Configuration Attributes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ip/msg-headers.html">IP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ip/annotation.html">Annotation-Based Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../ip/dsl.html">Using the Java DSL for TCP Components</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="xmpp.html">XMPP Support</a>
+    <a class="nav-link" href="../webflux.html">WebFlux Support</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="zeromq.html">ZeroMQ Support</a>
+    <a class="nav-link" href="../web-sockets.html">WebSockets Support</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="zookeeper.html">Zookeeper Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="error-handling.html">Error Handling</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="spel.html">Spring Expression Language (SpEL)</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="message-publishing.html">Message Publishing</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="transactions.html">Transaction Support</a>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="security.html">Security in Spring Integration</a>
+    <a class="nav-link" href="../ws.html">Web Services Support</a>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="configuration.html">Configuration</a>
+    <a class="nav-link" href="../xml.html">XML Support - Dealing with XML Payloads</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="configuration/namespace.html">Namespace Support</a>
+    <a class="nav-link" href="../xml/xpath-namespace-support.html">Namespace Support</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="configuration/namespace-taskscheduler.html">Configuring the Task Scheduler</a>
+    <a class="nav-link" href="../xml/transformation.html">Transforming XML Payloads</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="configuration/global-properties.html">Global Properties</a>
+    <a class="nav-link" href="../xml/xpath-transformer.html">Transforming XML Messages with XPath</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="configuration/annotations.html">Annotation Support</a>
+    <a class="nav-link" href="../xml/xpath-splitting.html">Splitting XML Messages</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="configuration/meta-annotations.html">Messaging Meta-Annotations</a>
+    <a class="nav-link" href="../xml/xpath-routing.html">Routing XML Messages with XPath</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="configuration/message-mapping-rules.html">Message Mapping Rules and Conventions</a>
+    <a class="nav-link" href="../xml/xpath-header-enricher.html">XPath Header Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../xml/xpath-filter.html">Using the XPath Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../xml/xpath-spel-function.html">#xpath SpEL Function</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../xml/validating-filter.html">XML Validating Filter</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="testing.html">Testing support</a>
+    <a class="nav-link" href="../xmpp.html">XMPP Support</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="samples.html">Spring Integration Samples</a>
+    <a class="nav-link" href="../zeromq.html">ZeroMQ Support</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="resources.html">Additional Resources</a>
+    <a class="nav-link" href="../zookeeper.html">Zookeeper Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../error-handling.html">Error Handling</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../spel.html">Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../message-publishing.html">Message Publishing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../transactions.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../security.html">Security in Spring Integration</a>
   </li>
   <li class="nav-item" data-depth="1">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="history.html">Change History</a>
+    <a class="nav-link" href="../configuration.html">Configuration</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-6.0-6.1.html">Changes between 6.0 and 6.1</a>
+    <a class="nav-link" href="../configuration/namespace.html">Namespace Support</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-5.5-6.0.html">Changes between 5.5 and 6.0</a>
+    <a class="nav-link" href="../configuration/namespace-taskscheduler.html">Configuring the Task Scheduler</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-5.4-5.5.html">Changes between 5.4 and 5.5</a>
+    <a class="nav-link" href="../configuration/global-properties.html">Global Properties</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-5.3-5.4.html">Changes between 5.3 and 5.4</a>
+    <a class="nav-link" href="../configuration/annotations.html">Annotation Support</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-5.2-5.3.html">Changes between 5.2 and 5.3</a>
+    <a class="nav-link" href="../configuration/meta-annotations.html">Messaging Meta-Annotations</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-5.1-5.2.html">Changes between 5.1 and 5.2</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-4.2-4.3.html">Changes between 4.2 and 4.3</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-4.1-4.2.html">Changes between 4.1 and 4.2</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-4.0-4.1.html">Changes between 4.0 and 4.1</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-2.1-2.2.html">Changes between 2.1 and 2.2</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-2.0-2.1.html">Changes between 2.0 and 2.1</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="changes-1.0-2.0.html">Changes between Versions 1.0 and 2.0</a>
+    <a class="nav-link" href="../configuration/message-mapping-rules.html">Message Mapping Rules and Conventions</a>
   </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="zip.html">Zip Support</a>
+    <a class="nav-link" href="../testing.html">Testing support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../samples.html">Spring Integration Samples</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../resources.html">Additional Resources</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../history.html">Change History</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-6.0-6.1.html">Changes between 6.0 and 6.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-5.5-6.0.html">Changes between 5.5 and 6.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-5.4-5.5.html">Changes between 5.4 and 5.5</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-5.3-5.4.html">Changes between 5.3 and 5.4</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-5.2-5.3.html">Changes between 5.2 and 5.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-5.1-5.2.html">Changes between 5.1 and 5.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-4.3-5.0.html">Changes between 4.3 and 5.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-4.2-4.3.html">Changes between 4.2 and 4.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-4.1-4.2.html">Changes between 4.1 and 4.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-4.0-4.1.html">Changes between 4.0 and 4.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-2.1-2.2.html">Changes between 2.1 and 2.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-2.0-2.1.html">Changes between 2.0 and 2.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../changes-1.0-2.0.html">Changes between Versions 1.0 and 2.0</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../zip.html">Zip Support</a>
   </li>
 </ul>
   </li>
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Namespace Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/jpa/namespace-support.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1234,539 +1235,222 @@
 </aside><div class="doc">
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="../index.html">Spring Integration</a></li>
+    <li><a href="../jpa.html">JPA Support</a></li>
+    <li><a href="namespace-support.html">Namespace Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Namespace Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>When using XML namespace support, the underlying parser classes instantiate the relevant Java classes for you.
+Thus, you typically need not deal with the inner workings of the JPA adapter.
+This section documents the XML namespace support provided by Spring Integration and shows you how to use the XML Namespace support to configure the JPA components.</p>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="jpa-namespace-support-common-attributes"><a class="anchor" href="#jpa-namespace-support-common-attributes"></a>Common XML Namespace Configuration Attributes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Certain configuration parameters are shared by all JPA components:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><code>auto-startup</code></dt>
+<dd>
+<p>Lifecycle attribute that signals whether this component should be started during application context startup.
+Defaults to <code>true</code>.
+Optional.</p>
+</dd>
+<dt class="hdlist1"><code>id</code></dt>
+<dd>
+<p>Identifies the underlying Spring bean definition, which is an instance of either <code>EventDrivenConsumer</code> or <code>PollingConsumer</code>.
+Optional.</p>
+</dd>
+<dt class="hdlist1"><code>entity-manager-factory</code></dt>
+<dd>
+<p>The reference to the JPA entity manager factory that the adapter uses to create the <code>EntityManager</code>.
+You must provide this attribute, the <code>entity-manager</code> attribute, or the <code>jpa-operations</code> attribute.</p>
+</dd>
+<dt class="hdlist1"><code>entity-manager</code></dt>
+<dd>
+<p>The reference to the JPA Entity Manager that the component uses.
+You must provide this attribute, the <code>entity-manager-factory</code> attribute, or the <code>jpa-operations</code> attribute.</p>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+Usually, your Spring application context defines only a JPA entity manager factory, and the <code>EntityManager</code> is injected by using the <code>@PersistenceContext</code> annotation.
+This approach does not apply for the Spring Integration JPA components.
+Usually, injecting the JPA entity manager factory is best, but, when you want to inject an <code>EntityManager</code> explicitly, you have to define a <code>SharedEntityManagerBean</code>.
+For more information, see the relevant <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/orm/jpa/support/SharedEntityManagerBean.html">Javadoc</a>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>The following example shows how to explicitly include an entity manager factory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="entityManager"
+      class="org.springframework.orm.jpa.support.SharedEntityManagerBean"&gt;
+    &lt;property name="entityManagerFactory" ref="entityManagerFactoryBean" /&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1"><code>jpa-operations</code></dt>
+<dd>
+<p>A reference to a bean that implements the <code>JpaOperations</code> interface.
+In rare cases, it might be advisable to provide your own implementation of the <code>JpaOperations</code> interface instead of relying on the default implementation (<code>org.springframework.integration.jpa.core.DefaultJpaOperations</code>).
+If you use the <code>jpa-operations</code> attribute, you must not provide the JPA entity manager or JPA entity manager factory, because <code>JpaOperations</code> wraps the necessary datasource.</p>
+</dd>
+<dt class="hdlist1"><code>entity-class</code></dt>
+<dd>
+<p>The fully qualified name of the entity class.
+The exact semantics of this attribute vary, depending on whether we are performing a <code>persist</code> or <code>update</code> operation or whether we are retrieving objects from the database.</p>
+<div class="paragraph">
+<p>When retrieving data, you can specify the <code>entity-class</code> attribute to indicate that you would like to retrieve objects of this type from the database.
+In that case, you must not define any of the query attributes (<code>jpa-query</code>, <code>native-query</code>, or <code>named-query</code>).</p>
+</div>
+<div class="paragraph">
+<p>When persisting data, the <code>entity-class</code> attribute indicates the type of object to persist.
+If not specified (for persist operations) the entity class is automatically retrieved from the message&#8217;s payload.</p>
+</div>
+</dd>
+<dt class="hdlist1"><code>jpa-query</code></dt>
+<dd>
+<p>Defines the JPA query (Java Persistence Query Language) to be used.</p>
+</dd>
+<dt class="hdlist1"><code>native-query</code></dt>
+<dd>
+<p>Defines the native SQL query to be used.</p>
+</dd>
+<dt class="hdlist1"><code>named-query</code></dt>
+<dd>
+<p>Refers to a named query.
+A named query can be defined in either Native SQL or JPAQL, but the underlying JPA persistence provider handles that distinction internally.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="jpa-parameters"><a class="anchor" href="#jpa-parameters"></a>Providing JPA Query Parameters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To provide parameters, you can use the <code>parameter</code> XML element.
+It has a mechanism that lets you provide parameters for queries that are based on either the Java Persistence Query Language (JPQL) or native SQL queries.
+You can also provide parameters for named queries.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Expression-based Parameters</dt>
+<dd>
+<p>The following example shows how to set an expression-based parameter:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-jpa:parameter expression="payload.name" name="firstName"/&gt;</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Value-based Parameters</dt>
+<dd>
+<p>The following example shows how to set an value-based parameter:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-jpa:parameter name="name" type="java.lang.String" value="myName"/&gt;</code></pre>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Positional Parameters</dt>
+<dd>
+<p>The following example shows how to set an expression-based parameter:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-jpa:parameter expression="payload.name"/&gt;
+&lt;int-jpa:parameter type="java.lang.Integer" value="21"/&gt;</code></pre>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="jpa-transactions"><a class="anchor" href="#jpa-transactions"></a>Transaction Handling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All JPA operations (such as <code>INSERT</code>, <code>UPDATE</code>, and <code>DELETE</code>) require a transaction to be active whenever they are performed.
+For inbound channel adapters, you need do nothing special.
+It works similarly to the way we configure transaction managers with pollers that are used with other inbound channel adapters.
+The following XML example configures a transaction manager that uses a poller with an inbound channel adapter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-jpa:inbound-channel-adapter
+    channel="inboundChannelAdapterOne"
+    entity-manager="em"
+    auto-startup="true"
+    jpa-query="select s from Student s"
+    expect-single-result="true"
+    delete-after-poll="true"&gt;
+    &lt;int:poller fixed-rate="2000" &gt;
+        &lt;int:transactional propagation="REQUIRED"
+            transaction-manager="transactionManager"/&gt;
+    &lt;/int:poller&gt;
+&lt;/int-jpa:inbound-channel-adapter&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, you may need to specifically start a transaction when using an outbound channel adapter or gateway.
+If a <code>DirectChannel</code> is an input channel for the outbound adapter or gateway and if the transaction is active in the current thread of execution, the JPA operation is performed in the same transaction context.
+You can also configure this JPA operation to run as a new transaction, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-jpa:outbound-gateway
+    request-channel="namedQueryRequestChannel"
+    reply-channel="namedQueryResponseChannel"
+    named-query="updateStudentByRollNumber"
+    entity-manager="em"
+    gateway-type="UPDATING"&gt;
+    &lt;int-jpa:parameter name="lastName" expression="payload"/&gt;
+    &lt;int-jpa:parameter name="rollNumber" expression="headers['rollNumber']"/&gt;
+		&lt;int-jpa:transactional propagation="REQUIRES_NEW"
+        transaction-manager="transactionManager"/&gt;
+&lt;/int-jpa:outbound-gateway&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example, the transactional element of the outbound gateway or adapter specifies the transaction attributes.
+It is optional to define this child element if you have <code>DirectChannel</code> as an input channel to the adapter and you want the adapter to execute the operations in the same transaction context as the caller.
+If, however, you use an <code>ExecutorChannel</code>, you must have the <code>transactional</code> element, because the invoking client&#8217;s transaction context is not propagated.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Unlike the <code>transactional</code> element of the poller, which is defined in Spring Integration&#8217;s namespace, the <code>transactional</code> element for the outbound gateway or adapter is defined in the JPA namespace.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
-</div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="java-implementation.html">Java Implementation</a></span>
+  <span class="next"><a href="inbound-channel-adapter.html">Inbound Channel Adapter</a></span>
 </nav>
 </article>
 </div>  </div>
@@ -1782,10 +1466,10 @@
                 <div class="col-left">
                   <ul class="nav-versions">
                     <li class="component is-current">
-                      <a class="title" href="index.html">Spring Integration</a>
+                      <a class="title" href="../index.html">Spring Integration</a>
                       <ul class="versions">
                         <li class="version is-current is-latest">
-                          <a href="index.html">
+                          <a href="../index.html">
                             6.2.0-SNAPSHOT<span class="current">current</span>
                           </a>
                         </li>
@@ -1816,7 +1500,7 @@
 </div>
 <footer class="footer flex">
     <div id="spring-links flex">
-        <img id="springlogo" src="./_/img/spring-logo.svg" alt="Spring">
+        <img id="springlogo" src="../_/img/spring-logo.svg" alt="Spring">
         <p class="smallest antialiased">© <script>var d = new Date();
         document.write(d.getFullYear());</script> <a href="https://www.vmware.com/">VMware</a>, Inc. or its affiliates. <a href="https://www.vmware.com/help/legal.html">Terms of Use</a> • <a href="https://www.vmware.com/help/privacy.html" rel="noopener noreferrer">Privacy</a> • <a href="https://spring.io/trademarks">Trademark Guidelines</a> <span id="thank-you-mobile">• <a href="https://spring.io/thank-you">Thank you</a></span> • <a href="https://www.vmware.com/help/privacy/california-privacy-rights.html">Your California Privacy Rights</a> • <a class="ot-sdk-show-settings">Cookie Settings</a> <span id="teconsent"></span></p>
         <p class="smallest antialiased has-gray-text">Apache®, Apache Tomcat®, Apache Kafka®, Apache Cassandra&trade;, and Apache Geode&trade; are trademarks or registered trademarks of the Apache Software Foundation in the United States and/or other countries. Java&trade;, Java&trade; SE, Java&trade; EE, and OpenJDK&trade; are trademarks of Oracle and/or its affiliates. Kubernetes® is a registered trademark of the Linux Foundation in the United States and other countries. Linux® is the registered trademark of Linus Torvalds in the United States and other countries. Windows® and Microsoft® Azure are registered trademarks of Microsoft Corporation. “AWS” and “Amazon Web Services” are trademarks or registered trademarks of Amazon.com Inc. or its affiliates. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes. Other names may be trademarks of their respective owners.</p>
@@ -1827,10 +1511,10 @@
         <a href="https://twitter.com/springcentral" title="Twitter"><svg id="twitter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><circle class="cls-1" cx="37.97" cy="37.97" r="37.97"/><path id="Twitter-2" data-name="Twitter" class="cls-2" d="M55.2,22.73a15.43,15.43,0,0,1-4.88,1.91,7.56,7.56,0,0,0-5.61-2.49A7.78,7.78,0,0,0,37,30a7.56,7.56,0,0,0,.2,1.79,21.63,21.63,0,0,1-15.84-8.23,8,8,0,0,0,2.37,10.52,7.66,7.66,0,0,1-3.48-1v.09A7.84,7.84,0,0,0,26.45,41a7.54,7.54,0,0,1-2,.28A7.64,7.64,0,0,1,23,41.09a7.71,7.71,0,0,0,7.18,5.47,15.21,15.21,0,0,1-9.55,3.37,15.78,15.78,0,0,1-1.83-.11,21.41,21.41,0,0,0,11.78,3.54c14.13,0,21.86-12,21.86-22.42,0-.34,0-.68,0-1a15.67,15.67,0,0,0,3.83-4.08,14.9,14.9,0,0,1-4.41,1.24A7.8,7.8,0,0,0,55.2,22.73Z"/></svg></a>
     </div>
 </footer>
-<script src="./_/js/vendor/import.js"></script>
-<script src="./_/js/site.js"></script>
-<script async src="./_/js/vendor/highlight.js"></script>
-<script async src="./_/js/vendor/asciidoctor-tabs.js" data-sync-storage-key="docs:preferred-tab"></script>
+<script src="../_/js/vendor/import.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script async src="../_/js/vendor/asciidoctor-tabs.js" data-sync-storage-key="docs:preferred-tab"></script>
 
 <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
     <div class="modal__overlay" tabindex="-1" data-micromodal-close>
@@ -1840,8 +1524,8 @@
                 <div id="counter"></div>
                 <div class="search-by">
                     <a target="_blank" rel="noopener noreferrer" href="https://www.algolia.com/" aria-label="Search by Algolia">
-                        <img class="light" width="140" src="./_/img/algolia-light.svg" />
-                        <img class="dark" width="140" src="./_/img/algolia-dark.svg" />
+                        <img class="light" width="140" src="../_/img/algolia-light.svg" />
+                        <img class="dark" width="140" src="../_/img/algolia-dark.svg" />
                     </a>
                 </div>
                 <div id="hits"></div>
@@ -1853,7 +1537,7 @@
 <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.17.0/dist/algoliasearch-lite.umd.js" integrity="sha256-Lf9DrpGmcRip6OQzbcL6lnvNmoZNSKpyQX5pMlwatWE=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.54.1/dist/instantsearch.production.min.js" integrity="sha256-xYsZPDeNjYNTBWLvqD2Lxe98hOxcDgOHyMPfz4tVAbk=" crossorigin="anonymous"></script>
-<script async id="search-script" src="./_/js/vendor/search.js" data-app-id="WB1FQYI187" data-api-key="9d489079e5ec46dbb238909fee5c9c29" data-index-name="springintegration" data-stylesheet="./_/css/vendor/search.css" data-page-version="6.2.0"></script>
+<script async id="search-script" src="../_/js/vendor/search.js" data-app-id="WB1FQYI187" data-api-key="9d489079e5ec46dbb238909fee5c9c29" data-index-name="springintegration" data-stylesheet="../_/css/vendor/search.css" data-page-version="6.2.0"></script>
 
   </body>
 </html>

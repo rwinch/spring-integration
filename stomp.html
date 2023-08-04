@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>STOMP Support :: Spring Integration</title>
+    <link rel="prev" href="smb.html">
+    <link rel="next" href="stream.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -933,7 +934,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="smb.html">SMB Support</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="stomp.html">STOMP Support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="STOMP Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/stomp.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,444 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="stomp.html">STOMP Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">STOMP Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>Spring Integration version 4.2 introduced STOMP (Simple Text Orientated Messaging Protocol) client support.
+It is based on the architecture, infrastructure, and API from the Spring Framework&#8217;s messaging module, stomp package.
+Spring Integration uses many of Spring STOMP components (such as <code>StompSession</code> and <code>StompClientSupport</code>).
+For more information, see the <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#websocket-stomp-client">Spring Framework STOMP Support</a> chapter in the Spring Framework reference manual.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-stomp&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-stomp:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>For server side components you need to add a <code>org.springframework:spring-websocket</code> and/or <code>io.projectreactor.netty:reactor-netty</code> dependencies.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stomp-overview"><a class="anchor" href="#stomp-overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To configure STOMP, you should start with the STOMP client object.
+The Spring Framework provides the following implementations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>WebSocketStompClient</code>: Built on the Spring WebSocket API with support for standard JSR-356 WebSocket, Jetty 9, and SockJS for HTTP-based WebSocket emulation with SockJS Client.</p>
+</li>
+<li>
+<p><code>ReactorNettyTcpStompClient</code>: Built on <code>ReactorNettyTcpClient</code> from the <code>reactor-netty</code> project.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can provide any other <code>StompClientSupport</code> implementation.
+See the <a href="https://docs.spring.io/spring-integration/api/">Javadoc</a> of those classes.</p>
+</div>
+<div class="paragraph">
+<p>The <code>StompClientSupport</code> class is designed as a <em>factory</em> to produce a <code>StompSession</code> for the provided <code>StompSessionHandler</code> and all the remaining work is done through the <em>callbacks</em> to that <code>StompSessionHandler</code> and <code>StompSession</code> abstraction.
+With the Spring Integration <em>adapter</em> abstraction, we need to provide some managed shared object to represent our application as a STOMP client with its unique session.
+For this purpose, Spring Integration provides the <code>StompSessionManager</code> abstraction to manage the <em>single</em> <code>StompSession</code> between any provided <code>StompSessionHandler</code>.
+This allows the use of <em>inbound</em> or <em>outbound</em> channel adapters (or both) for the particular STOMP Broker.
+See <code>StompSessionManager</code> (and its implementations) JavaDocs for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stomp-inbound-adapter"><a class="anchor" href="#stomp-inbound-adapter"></a>STOMP Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>StompInboundChannelAdapter</code> is a one-stop <code>MessageProducer</code> component that subscribes your Spring Integration application to the provided STOMP destinations and receives messages from them (converted from the STOMP frames by using the provided <code>MessageConverter</code> on the connected <code>StompSession</code>).
+You can change the destinations (and therefore STOMP subscriptions) at runtime by using appropriate <code>@ManagedOperation</code> annotations on the <code>StompInboundChannelAdapter</code>.</p>
+</div>
+<div class="paragraph">
+<p>For more configuration options, see <a href="#stomp-namespace">STOMP Namespace Support</a> and the <code>StompInboundChannelAdapter</code> <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/stomp/inbound/StompInboundChannelAdapter.html">Javadoc</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stomp-outbound-adapter"><a class="anchor" href="#stomp-outbound-adapter"></a>STOMP Outbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>StompMessageHandler</code> is the <code>MessageHandler</code> for the <code>&lt;int-stomp:outbound-channel-adapter&gt;</code> and is used to send the outgoing <code>Message&lt;?&gt;</code> instances to the STOMP <code>destination</code> (pre-configured or determined at runtime with a SpEL expression) through the <code>StompSession</code> (which is provided by the shared <code>StompSessionManager</code>).</p>
+</div>
+<div class="paragraph">
+<p>For more configuration options see <a href="#stomp-namespace">STOMP Namespace Support</a> and the <code>StompMessageHandler</code> <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/stomp/outbound/StompMessageHandler.html">Javadoc</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stomp-headers"><a class="anchor" href="#stomp-headers"></a>STOMP Headers Mapping</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The STOMP protocol provides headers as part of its frame.
+The entire structure of the STOMP frame has the following format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">....
+COMMAND
+header1:value1
+header2:value2
+
+Body^@
+....</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Spring Framework provides <code>StompHeaders</code> to represent these headers.
+See the <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/messaging/simp/stomp/StompHeaders.html">Javadoc</a> for more details.
+STOMP frames are converted to and from <code>Message&lt;?&gt;</code> instances and these headers are mapped to and from <code>MessageHeaders</code> instances.
+Spring Integration provides a default <code>HeaderMapper</code> implementation for the STOMP adapters.
+The implementation is <code>StompHeaderMapper</code>.
+It provides <code>fromHeaders()</code> and <code>toHeaders()</code> operations for the inbound and outbound adapters, respectively.</p>
+</div>
+<div class="paragraph">
+<p>As with many other Spring Integration modules, the <code>IntegrationStompHeaders</code> class has been introduced to map standard STOMP headers to <code>MessageHeaders</code>, with <code>stomp_</code> as the header name prefix.
+In addition, all <code>MessageHeaders</code> instances with that prefix are mapped to the <code>StompHeaders</code> when sending to a destination.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see the <a href="https://docs.spring.io/spring-integration/api/">Javadoc</a> for those classes and the <code>mapped-headers</code> attribute description in the <a href="#stomp-namespace">STOMP Namespace Support</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stomp-events"><a class="anchor" href="#stomp-events"></a>STOMP Integration Events</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Many STOMP operations are asynchronous, including error handling.
+For example, STOMP has a <code>RECEIPT</code> server frame that it returns when a client frame has requested one by adding the <code>RECEIPT</code> header.
+To provide access to these asynchronous events, Spring Integration emits <code>StompIntegrationEvent</code> instances, which you can obtain by implementing an <code>ApplicationListener</code> or by using an <code>&lt;int-event:inbound-channel-adapter&gt;</code> (see <a href="event.html#appevent-inbound" class="xref page">Receiving Spring Application Events</a>).</p>
+</div>
+<div class="paragraph">
+<p>Specifically, a <code>StompExceptionEvent</code> is emitted from the <code>AbstractStompSessionManager</code> when a <code>stompSessionListenableFuture</code> receives <code>onFailure()</code> due to failure to connect to STOMP broker.
+Another example is the <code>StompMessageHandler</code>.
+It processes <code>ERROR</code> STOMP frames, which are server responses to improper (unaccepted) messages sent by this <code>StompMessageHandler</code>.</p>
+</div>
+<div class="paragraph">
+<p>The <code>StompMessageHandler</code> emits <code>StompReceiptEvent</code> as a part of <code>StompSession.Receiptable</code> callbacks in the asynchronous answers for the messages sent to the <code>StompSession</code>.
+The <code>StompReceiptEvent</code> can be positive or negative, depending on whether or not the <code>RECEIPT</code> frame was received from the server within the <code>receiptTimeLimit</code> period, which you can configure on the <code>StompClientSupport</code> instance.
+It defaults to <code>15 * 1000</code> (in milliseconds, so 15 seconds).</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+The <code>StompSession.Receiptable</code> callbacks are added only if the <code>RECEIPT</code> STOMP header of the message to send is not <code>null</code>.
+You can enable automatic <code>RECEIPT</code> header generation on the <code>StompSession</code> through its <code>autoReceipt</code> option and on the <code>StompSessionManager</code> respectively.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>See <a href="#stomp-java-config">STOMP Adapters Java Configuration</a> for more information how to configure Spring Integration to accept those <code>ApplicationEvent</code> instances.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stomp-java-config"><a class="anchor" href="#stomp-java-config"></a>STOMP Adapters Java Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following example shows a comprehensive Java configuration for STOMP adapters:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Configuration
+@EnableIntegration
+public class StompConfiguration {
+
+    @Bean
+    public ReactorNettyTcpStompClient stompClient() {
+        ReactorNettyTcpStompClient stompClient = new ReactorNettyTcpStompClient("127.0.0.1", 61613);
+        stompClient.setMessageConverter(new PassThruMessageConverter());
+        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+        taskScheduler.afterPropertiesSet();
+        stompClient.setTaskScheduler(taskScheduler);
+        stompClient.setReceiptTimeLimit(5000);
+        return stompClient;
+    }
+
+    @Bean
+    public StompSessionManager stompSessionManager() {
+        ReactorNettyTcpStompSessionManager stompSessionManager = new ReactorNettyTcpStompSessionManager(stompClient());
+        stompSessionManager.setAutoReceipt(true);
+        return stompSessionManager;
+    }
+
+    @Bean
+    public PollableChannel stompInputChannel() {
+        return new QueueChannel();
+    }
+
+    @Bean
+    public StompInboundChannelAdapter stompInboundChannelAdapter() {
+        StompInboundChannelAdapter adapter =
+        		new StompInboundChannelAdapter(stompSessionManager(), "/topic/myTopic");
+        adapter.setOutputChannel(stompInputChannel());
+        return adapter;
+    }
+
+    @Bean
+    @ServiceActivator(inputChannel = "stompOutputChannel")
+    public MessageHandler stompMessageHandler() {
+        StompMessageHandler handler = new StompMessageHandler(stompSessionManager());
+        handler.setDestination("/topic/myTopic");
+        return handler;
+    }
+
+    @Bean
+    public PollableChannel stompEvents() {
+        return new QueueChannel();
+    }
+
+    @Bean
+    public ApplicationListener&lt;ApplicationEvent&gt; stompEventListener() {
+        ApplicationEventListeningMessageProducer producer = new ApplicationEventListeningMessageProducer();
+        producer.setEventTypes(StompIntegrationEvent.class);
+        producer.setOutputChannel(stompEvents());
+        return producer;
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="stomp-namespace"><a class="anchor" href="#stomp-namespace"></a>STOMP Namespace Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Spring Integration STOMP namespace implements the inbound and outbound channel adapter components.
+To include it in your configuration, provide the following namespace declaration in your application context configuration file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:int="http://www.springframework.org/schema/integration"
+  xmlns:int-stomp="http://www.springframework.org/schema/integration/stomp"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    https://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration
+    https://www.springframework.org/schema/integration/spring-integration.xsd
+    http://www.springframework.org/schema/integration/stomp
+    https://www.springframework.org/schema/integration/stomp/spring-integration-stomp.xsd"&gt;
+    ...
+&lt;/beans&gt;</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="stomp-outbound-channel-adapter"><a class="anchor" href="#stomp-outbound-channel-adapter"></a>Understanding the <code>&lt;int-stomp:outbound-channel-adapter&gt;</code> Element</h3>
+<div class="paragraph">
+<p>The following listing shows the available attributes for the STOMP outbound channel adapter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-stomp:outbound-channel-adapter
+                           id=""                      <i class="conum" data-value="1"></i><b>(1)</b>
+                           channel=""                 <i class="conum" data-value="2"></i><b>(2)</b>
+                           stomp-session-manager=""   <i class="conum" data-value="3"></i><b>(3)</b>
+                           header-mapper=""           <i class="conum" data-value="4"></i><b>(4)</b>
+                           mapped-headers=""          <i class="conum" data-value="5"></i><b>(5)</b>
+                           destination=""             <i class="conum" data-value="6"></i><b>(6)</b>
+                           destination-expression=""  <i class="conum" data-value="7"></i><b>(7)</b>
+                           auto-startup=""            <i class="conum" data-value="8"></i><b>(8)</b>
+                           phase=""/&gt;                 <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
-</td>
-<td class="hdlist2">
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The component bean name.
+The <code>MessageHandler</code> is registered with a bean alias of <code>id</code> plus <code>.handler</code>.
+If you do not set the <code>channel</code> attribute, a <code>DirectChannel</code> is created and registered in the application context with the value of this <code>id</code> attribute as the bean name.
+In this case, the endpoint is registered with a bean name <code>id</code> plus <code>.adapter</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Identifies the channel attached to this adapter if <code>id</code> is present.
+See <code>id</code>.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Reference to a <code>StompSessionManager</code> bean, which encapsulates the low-level connection and <code>StompSession</code> handling operations.
+Required.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Reference to a bean that implements <code>HeaderMapper&lt;StompHeaders&gt;</code>, which maps Spring Integration <code>MessageHeaders</code> to and from
+STOMP frame headers.
+It is mutually exclusive with <code>mapped-headers</code>.
+It defaults to <code>StompHeaderMapper</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Comma-separated list of names of STOMP Headers to be mapped to the STOMP frame headers.
+It can be provided only if the <code>header-mapper</code> reference is not set.
+The values in this list can also be simple patterns to be matched against the header names (such as <code>myheader*</code> or <code>*myheader</code>).
+A special token (<code>STOMP_OUTBOUND_HEADERS</code>) represents all the standard STOMP headers (content-length, receipt, heart-beat, and so on).
+They are included by default.
+If you want to add your own headers and want the standard headers to also be mapped, you must include this token or provide your own <code>HeaderMapper</code> implementation by using <code>header-mapper</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Name of the destination to which STOMP Messages are sent.
+It is mutually exclusive with the <code>destination-expression</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>A SpEL expression to be evaluated at runtime against each Spring Integration <code>Message</code> as the root object.
+It is mutually exclusive with the <code>destination</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>Boolean value indicating whether this endpoint should start automatically.
+It defaults to <code>true</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>The lifecycle phase within which this endpoint should start and stop.
+The lower the value, the earlier this endpoint starts and the later it stops.
+The default is <code>Integer.MIN_VALUE</code>.
+Values can be negative.
+See <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/SmartLifecycle.html"><code>SmartLifeCycle</code></a>.</td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>[[understanding-the-&lt;int-stomp:inbound-channel-adapter&gt;-element]]
+=== Understanding the <code>&lt;int-stomp:inbound-channel-adapter&gt;</code> Element</p>
+</div>
+<div class="paragraph">
+<p>The following listing shows the available attributes for the STOMP inbound channel adapter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-stomp:inbound-channel-adapter
+                           id=""                     <i class="conum" data-value="1"></i><b>(1)</b>
+                           channel=""                <i class="conum" data-value="2"></i><b>(2)</b>
+                           error-channel=""          <i class="conum" data-value="3"></i><b>(3)</b>
+                           stomp-session-manager=""  <i class="conum" data-value="4"></i><b>(4)</b>
+                           header-mapper=""          <i class="conum" data-value="5"></i><b>(5)</b>
+                           mapped-headers=""         <i class="conum" data-value="6"></i><b>(6)</b>
+                           destinations=""           <i class="conum" data-value="7"></i><b>(7)</b>
+                           send-timeout=""           <i class="conum" data-value="8"></i><b>(8)</b>
+                           payload-type=""           <i class="conum" data-value="9"></i><b>(9)</b>
+                           auto-startup=""           <i class="conum" data-value="10"></i><b>(10)</b>
+                           phase=""/&gt;                <i class="conum" data-value="11"></i><b>(11)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The component bean name.
+If you do not set the <code>channel</code> attribute, a <code>DirectChannel</code> is created and registered in the application context with the value of this <code>id</code> attribute as the bean name.
+In this case, the endpoint is registered with the bean name <code>id</code> plus <code>.adapter</code>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Identifies the channel attached to this adapter.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>MessageChannel</code> bean reference to which <code>ErrorMessage</code> instances should be sent.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>See the same option on the <a href="#stomp-outbound-channel-adapter"><code>&lt;int-stomp:outbound-channel-adapter&gt;</code></a>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Comma-separated list of names of STOMP Headers to be mapped from the STOMP frame headers.
+You can only provide this if the <code>header-mapper</code> reference is not set.
+The values in this list can also be simple patterns to be matched against the header names (for example, <code>myheader*</code> or <code>*myheader</code>).
+A special token (<code>STOMP_INBOUND_HEADERS</code>) represents all the standard STOMP headers (content-length, receipt, heart-beat, and so on).
+They are included by default.
+If you want to add your own headers and want the standard headers to also be mapped, you must also include this token or provide your own <code>HeaderMapper</code> implementation using <code>header-mapper</code>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>See the same option on the <a href="#stomp-outbound-channel-adapter"><code>&lt;int-stomp:outbound-channel-adapter&gt;</code></a>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Comma-separated list of STOMP destination names to subscribe.
+The list of destinations (and therefore subscriptions) can be modified at runtime through the <code>addDestination()</code> and <code>removeDestination()</code> <code>@ManagedOperation</code> annotations.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>Maximum amount of time (in milliseconds) to wait when sending a message to the channel if the channel can block.
+For example, a <code>QueueChannel</code> can block until space is available if its maximum capacity has been reached.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Fully qualified name of the Java type for the target <code>payload</code> to convert from the incoming STOMP frame.
+It defaults to <code>String.class</code>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>See the same option on the <a href="#stomp-outbound-channel-adapter"><code>&lt;int-stomp:outbound-channel-adapter&gt;</code></a>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>See the same option on the <a href="#stomp-outbound-channel-adapter"><code>&lt;int-stomp:outbound-channel-adapter&gt;</code></a>.</td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="smb.html">SMB Support</a></span>
+  <span class="next"><a href="stream.html">Stream Support</a></span>
 </nav>
 </article>
 </div>  </div>

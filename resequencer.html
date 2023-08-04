@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Resequencer :: Spring Integration</title>
+    <link rel="prev" href="aggregator.html">
+    <link rel="next" href="chain.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -376,7 +377,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="aggregator.html">Aggregator</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="resequencer.html">Resequencer</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Resequencer"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/resequencer.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,235 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="message-routing.html">Message Routing</a></li>
+    <li><a href="resequencer.html">Resequencer</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Resequencer</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>The resequencer is related to the aggregator but serves a different purpose.
+While the aggregator combines messages, the resequencer passes messages through without changing them.</p>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="resequencer-functionality"><a class="anchor" href="#resequencer-functionality"></a>Functionality</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The resequencer works in a similar way to the aggregator, in the sense that it uses the <code>CORRELATION_ID</code> to store messages in groups.
+The difference is that the Resequencer does not process the messages in any way.
+Instead, it releases them in the order of their <code>SEQUENCE_NUMBER</code> header values.</p>
+</div>
+<div class="paragraph">
+<p>With respect to that, you can opt to release all messages at once (after the whole sequence, according to the <code>SEQUENCE_SIZE</code>, and other possibilities) or as soon as a valid sequence is available.
+(We cover what we mean by "a valid sequence" later in this chapter.)</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+The resequencer is intended to resequence relatively short sequences of messages with small gaps.
+If you have a large number of disjoint sequences with many gaps, you may experience performance issues.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-a-resequencer"><a class="anchor" href="#configuring-a-resequencer"></a>Configuring a Resequencer</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>See <a href="dsl/java-aggregators.html" class="xref page">Aggregators and Resequencers</a> for configuring a resequencer in Java DSL.</p>
+</div>
+<div class="paragraph">
+<p>Configuring a resequencer requires only including the appropriate element in XML.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows a resequencer configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:channel id="inputChannel"/&gt;
+
+&lt;int:channel id="outputChannel"/&gt;
+
+&lt;int:resequencer id="completelyDefinedResequencer"  <i class="conum" data-value="1"></i><b>(1)</b>
+  input-channel="inputChannel"  <i class="conum" data-value="2"></i><b>(2)</b>
+  output-channel="outputChannel"  <i class="conum" data-value="3"></i><b>(3)</b>
+  discard-channel="discardChannel"  <i class="conum" data-value="4"></i><b>(4)</b>
+  release-partial-sequences="true"  <i class="conum" data-value="5"></i><b>(5)</b>
+  message-store="messageStore"  <i class="conum" data-value="6"></i><b>(6)</b>
+  send-partial-result-on-expiry="true"  <i class="conum" data-value="7"></i><b>(7)</b>
+  send-timeout="86420000"  <i class="conum" data-value="8"></i><b>(8)</b>
+  correlation-strategy="correlationStrategyBean"  <i class="conum" data-value="9"></i><b>(9)</b>
+  correlation-strategy-method="correlate"  <i class="conum" data-value="10"></i><b>(10)</b>
+  correlation-strategy-expression="headers['something']"  <i class="conum" data-value="11"></i><b>(11)</b>
+  release-strategy="releaseStrategyBean"  <i class="conum" data-value="12"></i><b>(12)</b>
+  release-strategy-method="release"  <i class="conum" data-value="13"></i><b>(13)</b>
+  release-strategy-expression="size() == 10"  <i class="conum" data-value="14"></i><b>(14)</b>
+  empty-group-min-timeout="60000"  <i class="conum" data-value="15"></i><b>(15)</b>
+
+  lock-registry="lockRegistry"  <i class="conum" data-value="16"></i><b>(16)</b>
+
+  group-timeout="60000"  <i class="conum" data-value="17"></i><b>(17)</b>
+  group-timeout-expression="size() ge 2 ? 100 : -1"  <i class="conum" data-value="18"></i><b>(18)</b>
+  scheduler="taskScheduler" /&gt;  <i class="conum" data-value="19"></i><b>(19)</b>
+  expire-group-upon-timeout="false" /&gt;  <i class="conum" data-value="20"></i><b>(20)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The id of the resequencer is optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The input channel of the resequencer.
+Required.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The channel to which the resequencer sends the reordered messages.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The channel to which the resequencer  sends the messages that timed out (if <code>send-partial-result-on-timeout</code> is set to <code>false</code>).
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Whether to send out ordered sequences as soon as they are available or only after the whole message group arrives.
+Optional.
+(The default is <code>false</code>.)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>A reference to a <code>MessageGroupStore</code> that can be used to store groups of messages under their correlation key until they are complete.
+Optional.
+(The default is a volatile in-memory store.)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Whether, upon the expiration of the group, the ordered group should be sent out (even if some messages are missing).
+Optional.
+(The default is false.)
+See <a href="aggregator.html#reaper" class="xref page">Managing State in an Aggregator: <code>MessageGroupStore</code></a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The timeout interval to wait when sending a reply <code>Message</code> to the <code>output-channel</code> or <code>discard-channel</code>.
+It is applied only if the output channel has some 'sending' limitations, such as a  <code>QueueChannel</code> with a fixed 'capacity'.
+In this case, a <code>MessageDeliveryException</code> is thrown.
+The <code>send-timeout</code> is ignored for <code>AbstractSubscribableChannel</code> implementations.
+For <code>group-timeout(-expression)</code>, the <code>MessageDeliveryException</code> from the scheduled expired task leads this task to be rescheduled.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>A reference to a bean that implements the message correlation (grouping) algorithm.
+The bean can be an implementation of the <code>CorrelationStrategy</code> interface or a POJO.
+In the latter case, the <code>correlation-strategy-method</code> attribute must also be defined.
+Optional.
+(By default, the aggregator uses the <code>IntegrationMessageHeaderAccessor.CORRELATION_ID</code> header.)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>A method that is defined on the bean referenced by <code>correlation-strategy</code> and that implements the correlation decision algorithm.
+Optional, with restrictions (requires <code>correlation-strategy</code> to be present).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>A SpEL expression representing the correlation strategy.
+Example: <code>"headers['something']"</code>.
+Only one of <code>correlation-strategy</code> or <code>correlation-strategy-expression</code> is allowed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>A reference to a bean that implements the release strategy.
+The bean can be an implementation of the <code>ReleaseStrategy</code> interface or a POJO.
+In the latter case, the <code>release-strategy-method</code> attribute must also be defined.
+Optional (by default, the aggregator will use the <code>IntegrationMessageHeaderAccessor.SEQUENCE_SIZE</code> header attribute).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>A method that is defined on the bean referenced by <code>release-strategy</code> and that implements the completion decision algorithm.
+Optional, with restrictions (requires <code>release-strategy</code> to be present).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="14"></i><b>14</b></td>
+<td>A SpEL expression representing the release strategy.
+The root object for the expression is a <code>MessageGroup</code>.
+Example: <code>"size() == 5"</code>.
+Only one of <code>release-strategy</code> or <code>release-strategy-expression</code> is allowed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="15"></i><b>15</b></td>
+<td>Only applies if a <code>MessageGroupStoreReaper</code> is configured for the <code>&lt;resequencer&gt;</code> <code>MessageStore</code>.
+By default, when a <code>MessageGroupStoreReaper</code> is configured to expire partial groups, empty groups are also removed.
+Empty groups exist after a group is released normally.
+This is to enable the detection and discarding of late-arriving messages.
+If you wish to expire empty groups on a longer schedule than expiring partial groups, set this property.
+Empty groups are then not removed from the <code>MessageStore</code> until they have not been modified for at least this number of milliseconds.
+Note that the actual time to expire an empty group is also affected by the reaper&#8217;s timeout property, and it could be as much as this value plus the timeout.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="16"></i><b>16</b></td>
+<td>See <a href="aggregator.html#aggregator-xml" class="xref page">Configuring an Aggregator with XML</a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="17"></i><b>17</b></td>
+<td>See <a href="aggregator.html#aggregator-xml" class="xref page">Configuring an Aggregator with XML</a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="18"></i><b>18</b></td>
+<td>See <a href="aggregator.html#aggregator-xml" class="xref page">Configuring an Aggregator with XML</a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="19"></i><b>19</b></td>
+<td>See <a href="aggregator.html#aggregator-xml" class="xref page">Configuring an Aggregator with XML</a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="20"></i><b>20</b></td>
+<td>By default, when a group is completed due to a timeout (or by a <code>MessageGroupStoreReaper</code>), the empty group&#8217;s metadata is retained.
+Late arriving messages are immediately discarded.
+Set this to <code>true</code> to remove the group completely.
+Then, late arriving messages start a new group and are not be discarded until the group again times out.
+The new group is never released normally because of the &#8220;hole&#8221; in the sequence range that caused the timeout.
+Empty groups can be expired (completely removed) later by using a <code>MessageGroupStoreReaper</code> together with the <code>empty-group-min-timeout</code> attribute.
+Starting with version 5.0, empty groups are also scheduled for removal after the <code>empty-group-min-timeout</code> elapses.
+The default is 'false'.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Also see <a href="aggregator.html#aggregator-expiring-groups" class="xref page">Aggregator Expiring Groups</a> for more information.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Since there is no custom behavior to be implemented in Java classes for resequencers, there is no annotation support for it.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
-</div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="aggregator.html">Aggregator</a></span>
+  <span class="next"><a href="chain.html">Message Handler Chain</a></span>
 </nav>
 </article>
 </div>  </div>

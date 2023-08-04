@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Splitter :: Spring Integration</title>
+    <link rel="prev" href="filter.html">
+    <link rel="next" href="aggregator.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -370,7 +371,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="filter.html">Filter</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="splitter.html">Splitter</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Splitter"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/splitter.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,308 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="message-routing.html">Message Routing</a></li>
+    <li><a href="splitter.html">Splitter</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Splitter</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>The splitter is a component whose role is to partition a message into several parts and send the resulting messages to be processed independently.
+Very often, they are upstream producers in a pipeline that includes an aggregator.</p>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="programming-model"><a class="anchor" href="#programming-model"></a>Programming Model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The API for performing splitting consists of one base class, <code>AbstractMessageSplitter</code>.
+It is a <code>MessageHandler</code> implementation that encapsulates features common to splitters, such as filling in the appropriate message headers (<code>CORRELATION_ID</code>, <code>SEQUENCE_SIZE</code>, and <code>SEQUENCE_NUMBER</code>) on the messages that are produced.
+This filling enables tracking down the messages and the results of their processing (in a typical scenario, these headers get copied to the messages that are produced by the various transforming endpoints).
+The values can then be used, for example, by a <a href="https://www.enterpriseintegrationpatterns.com/DistributionAggregate.html">composed message processor</a>.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows an excerpt from <code>AbstractMessageSplitter</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public abstract class AbstractMessageSplitter
+    extends AbstractReplyProducingMessageConsumer {
+    ...
+    protected abstract Object splitMessage(Message&lt;?&gt; message);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To implement a specific splitter in an application, you can extend <code>AbstractMessageSplitter</code> and implement the <code>splitMessage</code> method, which contains logic for splitting the messages.
+The return value can be one of the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A <code>Collection</code> or an array of messages or an <code>Iterable</code> (or <code>Iterator</code>) that iterates over messages.
+In this case, the messages are sent as messages (after the <code>CORRELATION_ID</code>, <code>SEQUENCE_SIZE</code> and <code>SEQUENCE_NUMBER</code> are populated).
+Using this approach gives you more control&#8201;&#8212;&#8201;for example, to populate custom message headers as part of the splitting process.</p>
+</li>
+<li>
+<p>A <code>Collection</code> or an array of non-message objects or an <code>Iterable</code> (or <code>Iterator</code>) that iterates over non-message objects.
+It works like the prior case, except that each collection element is used as a message payload.
+Using this approach lets you focus on the domain objects without having to consider the messaging system and produces code that is easier to test.</p>
+</li>
+<li>
+<p>a <code>Message</code> or non-message object (but not a collection or an array).
+It works like the previous cases, except that a single message is sent out.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In Spring Integration, any POJO can implement the splitting algorithm, provided that it defines a method that accepts a single argument and has a return value.
+In this case, the return value of the method is interpreted as described earlier.
+The input argument might either be a <code>Message</code> or a simple POJO.
+In the latter case, the splitter receives the payload of the incoming message.
+We recommend this approach, because it decouples the code from the Spring Integration API and is typically easier to test.</p>
+</div>
+<div class="sect2">
+<h3 id="iterators"><a class="anchor" href="#iterators"></a>Iterators</h3>
+<div class="paragraph">
+<p>Starting with version 4.1, the <code>AbstractMessageSplitter</code> supports the <code>Iterator</code> type for the <code>value</code> to split.
+Note, in the case of an <code>Iterator</code> (or <code>Iterable</code>), we don&#8217;t have access to the number of underlying items and the <code>SEQUENCE_SIZE</code> header is set to <code>0</code>.
+This means that the default <code>SequenceSizeReleaseStrategy</code> of an <code>&lt;aggregator&gt;</code> won&#8217;t work and the group for the <code>CORRELATION_ID</code> from the <code>splitter</code> won&#8217;t be released; it will remain as <code>incomplete</code>.
+In this case you should use an appropriate custom <code>ReleaseStrategy</code> or rely on <code>send-partial-result-on-expiry</code> together with <code>group-timeout</code> or a <code>MessageGroupStoreReaper</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, the <code>AbstractMessageSplitter</code> provides <code>protected obtainSizeIfPossible()</code> methods to allow the determination of the size of the <code>Iterable</code> and <code>Iterator</code> objects if that is possible.
+For example <code>XPathMessageSplitter</code> can determine the size of the underlying <code>NodeList</code> object.
+And starting with version 5.0.9, this method also properly returns a size of the <code>com.fasterxml.jackson.core.TreeNode</code>.</p>
+</div>
+<div class="paragraph">
+<p>An <code>Iterator</code> object is useful to avoid the need for building an entire collection in the memory before splitting.
+For example, when underlying items are populated from some external system (e.g. DataBase or FTP <code>MGET</code>) using iterations or streams.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="split-stream-and-flux"><a class="anchor" href="#split-stream-and-flux"></a>Stream and Flux</h3>
+<div class="paragraph">
+<p>Starting with version 5.0, the <code>AbstractMessageSplitter</code> supports the Java <code>Stream</code> and Reactive Streams <code>Publisher</code> types for the <code>value</code> to split.
+In this case, the target <code>Iterator</code> is built on their iteration functionality.</p>
+</div>
+<div class="paragraph">
+<p>In addition, if the splitter&#8217;s output channel is an instance of a <code>ReactiveStreamsSubscribableChannel</code>, the <code>AbstractMessageSplitter</code> produces a <code>Flux</code> result instead of an <code>Iterator</code>, and the output channel is subscribed to this <code>Flux</code> for back-pressure-based splitting on downstream flow demand.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.2, the splitter supports a <code>discardChannel</code> option for sending those request messages for which a split function has returned an empty container (collection, array, stream, <code>Flux</code> etc.).
+In this case there is just no item to iterate for sending to the <code>outputChannel</code>.
+The <code>null</code> splitting result remains as an end of flow indicator.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-a-splitter-with-java-groovy-and-kotlin-dsls"><a class="anchor" href="#configuring-a-splitter-with-java-groovy-and-kotlin-dsls"></a>Configuring a Splitter with Java, Groovy and Kotlin DSLs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An example of simple splitter based on a <code>Message</code> and its iterable payload with DSL configuration:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_1_kotlin_dsl" class="tab">
+<p>Kotlin DSL</p>
+</li>
+<li id="_tabs_1_groovy_dsl" class="tab">
+<p>Groovy DSL</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow someFlow() {
+    return f -&gt; f.split(Message.class, Message::getPayload);
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_kotlin_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_kotlin_dsl">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Bean
+fun someFlow() =
+    integrationFlow {
+        split&lt;Message&lt;*&gt;&gt; { it.payload }
+    }</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_groovy_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_groovy_dsl">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@Bean
+someFlow() {
+    integrationFlow {
+        splitWith {
+		    expectedType Message&lt;?&gt;
+		    function { it.payload }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>See more information about the DSLs in the respective chapters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="dsl.html#java-dsl" class="xref page">Java DSL</a></p>
+</li>
+<li>
+<p><a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a></p>
+</li>
+<li>
+<p><a href="groovy-dsl.html" class="xref page">Groovy DSL</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-a-splitter-with-xml"><a class="anchor" href="#configuring-a-splitter-with-xml"></a>Configuring a Splitter with XML</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A splitter can be configured through XML as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:channel id="inputChannel"/&gt;
+
+&lt;int:splitter id="splitter"           <i class="conum" data-value="1"></i><b>(1)</b>
+  ref="splitterBean"                  <i class="conum" data-value="2"></i><b>(2)</b>
+  method="split"                      <i class="conum" data-value="3"></i><b>(3)</b>
+  input-channel="inputChannel"        <i class="conum" data-value="4"></i><b>(4)</b>
+  output-channel="outputChannel"      <i class="conum" data-value="5"></i><b>(5)</b>
+  discard-channel="discardChannel" /&gt; <i class="conum" data-value="6"></i><b>(6)</b>
+
+&lt;int:channel id="outputChannel"/&gt;
+
+&lt;beans:bean id="splitterBean" class="sample.PojoSplitter"/&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
-</td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The ID of the splitter is optional.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A reference to a bean defined in the application context.
+The bean must implement the splitting logic, as described in the earlier section.
+Optional.
+If a reference to a bean is not provided, it is assumed that the payload of the message that arrived on the <code>input-channel</code> is an implementation of <code>java.util.Collection</code> and the default splitting logic is applied to the collection, incorporating each individual element into a message and sending it to the <code>output-channel</code>.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The method (defined on the bean) that implements the splitting logic.
+Optional.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The input channel of the splitter.
+Required.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The channel to which the splitter sends the results of splitting the incoming message.
+Optional (because incoming messages can specify a reply channel themselves).</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The channel to which the request message is sent in case of empty splitting result.
+Optional (they will stop as in case of <code>null</code> result).</td>
 </tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We recommend using a <code>ref</code> attribute if the custom splitter implementation can be referenced in other <code>&lt;splitter&gt;</code> definitions.
+However, if the custom splitter handler implementation should be scoped to a single definition of the <code>&lt;splitter&gt;</code>, you can configure an inner bean definition, as the following example follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:splitter id="testSplitter" input-channel="inChannel" method="split"
+                output-channel="outChannel"&gt;
+  &lt;beans:bean class="org.foo.TestSplitter"/&gt;
+&lt;/int:splitter&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
 <tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+Using both a <code>ref</code> attribute and an inner handler definition in the same <code>&lt;int:splitter&gt;</code> configuration is not allowed, as it creates an ambiguous condition and results in an exception being thrown.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+If the <code>ref</code> attribute references a bean that extends <code>AbstractMessageProducingHandler</code> (such as splitters provided by the framework itself), the configuration is optimized by injecting the output channel into the handler directly.
+In this case, each <code>ref</code> must be a separate bean instance (or a <code>prototype</code>-scoped bean) or use the inner <code>&lt;bean/&gt;</code> configuration type.
+However, this optimization applies only if you do not provide any splitter-specific attributes in the splitter XML definition.
+If you inadvertently reference the same message handler from multiple beans, you get a configuration exception.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+<div class="sect1">
+<h2 id="configuring-a-splitter-with-annotations"><a class="anchor" href="#configuring-a-splitter-with-annotations"></a>Configuring a Splitter with Annotations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>@Splitter</code> annotation is applicable to methods that expect either the <code>Message</code> type or the message payload type, and the return values of the method should be a <code>Collection</code> of any type.
+If the returned values are not actual <code>Message</code> objects, each item is wrapped in a <code>Message</code> as the payload of the <code>Message</code>.
+Each resulting <code>Message</code> is sent to the designated output channel for the endpoint on which the <code>@Splitter</code> is defined.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows how to configure a splitter by using the <code>@Splitter</code> annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Splitter
+List&lt;LineItem&gt; extractItems(Order order) {
+    return order.getItems()
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See also <a href="handler-advice/advising-with-annotations.html" class="xref page">Advising Endpoints Using Annotations</a> and <a href="file/splitter.html" class="xref page">File Splitter</a>.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="filter.html">Filter</a></span>
+  <span class="next"><a href="aggregator.html">Aggregator</a></span>
 </nav>
 </article>
 </div>  </div>

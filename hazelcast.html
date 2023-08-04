@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Hazelcast Support :: Spring Integration</title>
+    <link rel="prev" href="graphql.html">
+    <link rel="next" href="http.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -765,7 +766,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="graphql.html">GraphQL Support</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="hazelcast.html">Hazelcast Support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Hazelcast Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/hazelcast.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,902 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="hazelcast.html">Hazelcast Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Hazelcast Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>Spring Integration provides channel adapters and other utility components to interact with an in-memory data grid <a href="https://hazelcast.com">Hazelcast</a>.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-hazelcast&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-hazelcast:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The XML namespace and schemaLocation definitions for Hazelcast components are:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">xmlns:int-hazelcast="http://www.springframework.org/schema/integration/hazelcast"
+xsi:schemaLocation="http://www.springframework.org/schema/integration/hazelcast
+          https://www.springframework.org/schema/integration/hazelcast/spring-integration-hazelcast.xsd"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hazelcast-inbound"><a class="anchor" href="#hazelcast-inbound"></a>Hazelcast Event-driven Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hazelcast provides distributed data structures such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>com.hazelcast.map.IMap</code></p>
+</li>
+<li>
+<p><code>com.hazelcast.multimap.MultiMap</code></p>
+</li>
+<li>
+<p><code>com.hazelcast.collection.IList</code></p>
+</li>
+<li>
+<p><code>com.hazelcast.collection.ISet</code></p>
+</li>
+<li>
+<p><code>com.hazelcast.collection.IQueue</code></p>
+</li>
+<li>
+<p><code>com.hazelcast.topic.ITopic</code></p>
+</li>
+<li>
+<p><code>com.hazelcast.replicatedmap.ReplicatedMap</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>It also provides event listeners in order to listen to modifications made to these data structures.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>com.hazelcast.core.EntryListener&lt;K, V&gt;</code></p>
+</li>
+<li>
+<p><code>com.hazelcast.collection.ItemListener</code></p>
+</li>
+<li>
+<p><code>com.hazelcast.topic.MessageListener</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Hazelcast Event-Driven Inbound Channel Adapter listens to related cache events and sends event messages to the defined channel.
+It supports both XML and JavaConfig driven configurations.</p>
+</div>
+<div class="sect2">
+<h3 id="xml-configuration-:"><a class="anchor" href="#xml-configuration-:"></a>XML Configuration :</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-hazelcast:inbound-channel-adapter channel="mapChannel"
+                      cache="map"
+                      cache-events="UPDATED, REMOVED"
+                      cache-listening-policy="SINGLE" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Hazelcast Event-Driven Inbound Channel Adapter requires the following attributes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>channel</code>: Specifies the channel to which messages are sent;</p>
+</li>
+<li>
+<p><code>cache</code>: Specifies the distributed Object reference which is listened to.
+It is a mandatory attribute;</p>
+</li>
+<li>
+<p><code>cache-events</code>: Specifies cache events which are listened for.
+It is an optional attribute and its default value is <code>ADDED</code>.
+Its supported values are as follows :</p>
+</li>
+<li>
+<p>Supported cache event types for <code>IMap</code> and <code>MultiMap</code>: <code>ADDED</code>, <code>REMOVED</code>, <code>UPDATED</code>, <code>EVICTED</code>, <code>EVICT_ALL</code> and <code>CLEAR_ALL</code>;</p>
+</li>
+<li>
+<p>Supported cache event types for <code>ReplicatedMap</code>: <code>ADDED</code>, <code>REMOVED</code>, <code>UPDATED</code>, <code>EVICTED</code>;</p>
+</li>
+<li>
+<p>Supported cache event types for <code>IList</code>, <code>ISet</code> and <code>IQueue</code>: <code>ADDED</code>, <code>REMOVED</code>.
+There are no cache event types for <code>ITopic</code>.</p>
+</li>
+<li>
+<p><code>cache-listening-policy</code>: Specifies the cache listening policy as <code>SINGLE</code> or <code>ALL</code>.
+It is an optional attribute and its default value is <code>SINGLE</code>.
+Each Hazelcast inbound channel adapter listening to the same cache object with the same cache-events attribute, can receive a single event message or all event messages.
+If it is <code>ALL</code>, all Hazelcast inbound channel adapters listening to the same cache object with the same cache-events attribute, will receive all event messages.
+If it is <code>SINGLE</code>, they will receive unique event messages.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Some configuration samples:</p>
+</div>
+<div class="listingblock">
+<div class="title">Distributed Map</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:channel id="mapChannel"/&gt;
+
+&lt;int-hazelcast:inbound-channel-adapter channel="mapChannel"
+                              cache="map"
+                              cache-events="UPDATED, REMOVED" /&gt;
+
+&lt;bean id="map" factory-bean="instance" factory-method="getMap"&gt;
+    &lt;constructor-arg value="map"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="instance" class="com.hazelcast.core.Hazelcast"
+            factory-method="newHazelcastInstance"&gt;
+    &lt;constructor-arg&gt;
+        &lt;bean class="com.hazelcast.config.Config" /&gt;
+    &lt;/constructor-arg&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Distributed MultiMap</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-hazelcast:inbound-channel-adapter channel="multiMapChannel"
+                              cache="multiMap"
+                              cache-events="ADDED, REMOVED, CLEAR_ALL" /&gt;
+
+&lt;bean id="multiMap" factory-bean="instance" factory-method="getMultiMap"&gt;
+    &lt;constructor-arg value="multiMap"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Distributed List</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-hazelcast:inbound-channel-adapter  channel="listChannel"
+                               cache="list"
+                               cache-events="ADDED, REMOVED"
+                               cache-listening-policy="ALL" /&gt;
+
+&lt;bean id="list" factory-bean="instance" factory-method="getList"&gt;
+    &lt;constructor-arg value="list"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Distributed Set</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-hazelcast:inbound-channel-adapter channel="setChannel" cache="set" /&gt;
+
+&lt;bean id="set" factory-bean="instance" factory-method="getSet"&gt;
+    &lt;constructor-arg value="set"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Distributed Queue</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-hazelcast:inbound-channel-adapter  channel="queueChannel"
+                               cache="queue"
+                               cache-events="REMOVED"
+                               cache-listening-policy="ALL" /&gt;
+
+&lt;bean id="queue" factory-bean="instance" factory-method="getQueue"&gt;
+    &lt;constructor-arg value="queue"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Distributed Topic</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-hazelcast:inbound-channel-adapter channel="topicChannel" cache="topic" /&gt;
+
+&lt;bean id="topic" factory-bean="instance" factory-method="getTopic"&gt;
+    &lt;constructor-arg value="topic"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Replicated Map</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-hazelcast:inbound-channel-adapter channel="replicatedMapChannel"
+                              cache="replicatedMap"
+                              cache-events="ADDED, UPDATED, REMOVED"
+                              cache-listening-policy="SINGLE"  /&gt;
+
+&lt;bean id="replicatedMap" factory-bean="instance" factory-method="getReplicatedMap"&gt;
+    &lt;constructor-arg value="replicatedMap"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="java-configuration-sample:"><a class="anchor" href="#java-configuration-sample:"></a>Java Configuration Sample:</h3>
+<div class="paragraph">
+<p>The following sample shows a <code>DistributedMap</code> configuration.
+The same configuration can be used for other distributed data structures(<code>IMap</code>, <code>MultiMap</code>, <code>ReplicatedMap</code>, <code>IList</code>, <code>ISet</code>, <code>IQueue</code> and <code>ITopic</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public PollableChannel distributedMapChannel() {
+    return new QueueChannel();
+}
+
+@Bean
+public IMap&lt;Integer, String&gt; distributedMap() {
+    return hazelcastInstance().getMap("Distributed_Map");
+}
+
+@Bean
+public HazelcastInstance hazelcastInstance() {
+    return Hazelcast.newHazelcastInstance();
+}
+
+@Bean
+public HazelcastEventDrivenMessageProducer hazelcastEventDrivenMessageProducer() {
+    final HazelcastEventDrivenMessageProducer producer = new HazelcastEventDrivenMessageProducer(distributedMap());
+    producer.setOutputChannel(distributedMapChannel());
+    producer.setCacheEventTypes("ADDED,REMOVED,UPDATED,CLEAR_ALL");
+    producer.setCacheListeningPolicy(CacheListeningPolicyType.SINGLE);
+
+    return producer;
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hazelcast-continuous-query"><a class="anchor" href="#hazelcast-continuous-query"></a>Hazelcast Continuous Query Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hazelcast Continuous Query enables listening to modifications performed on specific map entries.
+The Hazelcast Continuous Query Inbound Channel Adapter is an event-driven channel adapter which listens to the related distributed map events in the light of the defined predicate.</p>
+</div>
+<div id="_tabs_2" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_2_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_2_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public PollableChannel cqDistributedMapChannel() {
+    return new QueueChannel();
+}
+
+@Bean
+public IMap&lt;Integer, String&gt; cqDistributedMap() {
+    return hazelcastInstance().getMap("CQ_Distributed_Map");
+}
+
+@Bean
+public HazelcastInstance hazelcastInstance() {
+    return Hazelcast.newHazelcastInstance();
+}
+
+@Bean
+public HazelcastContinuousQueryMessageProducer hazelcastContinuousQueryMessageProducer() {
+    final HazelcastContinuousQueryMessageProducer producer =
+        new HazelcastContinuousQueryMessageProducer(cqDistributedMap(), "surname=TestSurname");
+    producer.setOutputChannel(cqDistributedMapChannel());
+    producer.setCacheEventTypes("UPDATED");
+    producer.setIncludeValue(false);
+
+    return producer;
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:channel id="cqMapChannel"/&gt;
+
+&lt;int-hazelcast:cq-inbound-channel-adapter
+                channel="cqMapChannel"
+                cache="cqMap"
+                cache-events="UPDATED, REMOVED"
+                predicate="name=TestName AND surname=TestSurname"
+                include-value="true"
+                cache-listening-policy="SINGLE"/&gt;
+
+&lt;bean id="cqMap" factory-bean="instance" factory-method="getMap"&gt;
+    &lt;constructor-arg value="cqMap"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="instance" class="com.hazelcast.core.Hazelcast"
+            factory-method="newHazelcastInstance"&gt;
+    &lt;constructor-arg&gt;
+        &lt;bean class="com.hazelcast.config.Config" /&gt;
+    &lt;/constructor-arg&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>It supports six attributes as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>channel</code>: Specifies the channel to which messages are sent;</p>
+</li>
+<li>
+<p><code>cache</code>: Specifies the distributed Map reference which is listened to.
+Mandatory;</p>
+</li>
+<li>
+<p><code>cache-events</code>: Specifies cache events which are listened for.
+Optional attribute with <code>ADDED</code> being its default value.
+Supported values are <code>ADDED</code>, <code>REMOVED</code>, <code>UPDATED</code>, <code>EVICTED</code>, <code>EVICT_ALL</code> and <code>CLEAR_ALL</code>;</p>
+</li>
+<li>
+<p><code>predicate</code>: Specifies a predicate to listen to the modifications performed on specific map entries.
+Mandatory;</p>
+</li>
+<li>
+<p><code>include-value</code>: Specifies including the value and oldValue in a continuous query result.
+Optional with <code>true</code> being the default;</p>
+</li>
+<li>
+<p><code>cache-listening-policy</code>: Specifies the cache listening policy as <code>SINGLE</code> or <code>ALL</code>.
+Optional with the default value being <code>SINGLE</code>.
+Each Hazelcast CQ inbound channel adapter listening to the same cache object with the same cache-events attribute, can receive a single event message or all event messages.
+If it is <code>ALL</code>, all Hazelcast CQ inbound channel adapters listening to the same cache object with the same cache-events attribute, will receive all event messages.
+If it is <code>SINGLE</code>, they will receive unique event messages.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hazelcast-cluster-monitor"><a class="anchor" href="#hazelcast-cluster-monitor"></a>Hazelcast Cluster Monitor Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A Hazelcast Cluster Monitor supports listening to modifications performed on the cluster.
+The Hazelcast Cluster Monitor Inbound Channel Adapter is an event-driven channel adapter and listens to related Membership, Distributed Object, Migration, Lifecycle and Client events:</p>
+</div>
+<div id="_tabs_3" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_3_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_3_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public PollableChannel eventChannel() {
+    return new QueueChannel();
+}
+
+@Bean
+public HazelcastInstance hazelcastInstance() {
+    return Hazelcast.newHazelcastInstance();
+}
+
+@Bean
+public HazelcastClusterMonitorMessageProducer hazelcastClusterMonitorMessageProducer() {
+    HazelcastClusterMonitorMessageProducer producer = new HazelcastClusterMonitorMessageProducer(hazelcastInstance());
+    producer.setOutputChannel(eventChannel());
+    producer.setMonitorEventTypes("DISTRIBUTED_OBJECT");
+
+    return producer;
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:channel id="monitorChannel"/&gt;
+
+&lt;int-hazelcast:cm-inbound-channel-adapter
+                 channel="monitorChannel"
+                 hazelcast-instance="instance"
+                 monitor-types="MEMBERSHIP, DISTRIBUTED_OBJECT" /&gt;
+
+&lt;bean id="instance" class="com.hazelcast.core.Hazelcast"
+            factory-method="newHazelcastInstance"&gt;
+    &lt;constructor-arg&gt;
+        &lt;bean class="com.hazelcast.config.Config" /&gt;
+    &lt;/constructor-arg&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>It supports three attributes as follows :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>channel</code>: Specifies the channel to which messages are sent;</p>
+</li>
+<li>
+<p><code>hazelcast-instance</code>: Specifies the Hazelcast Instance reference to listen for cluster events.
+It is a mandatory attribute;</p>
+</li>
+<li>
+<p><code>monitor-types</code>: Specifies the monitor types which are listened for.
+It is an optional attribute with <code>MEMBERSHIP</code> being the default value.
+Supported values are <code>MEMBERSHIP</code>, <code>DISTRIBUTED_OBJECT</code>, <code>MIGRATION</code>, <code>LIFECYCLE</code>, <code>CLIENT</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hazelcast-distributed-sql"><a class="anchor" href="#hazelcast-distributed-sql"></a>Hazelcast Distributed SQL Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Hazelcast allows running distributed queries on the distributed map.
+The Hazelcast Distributed SQL Inbound Channel Adapter is a polling inbound channel adapter.
+It runs the defined distributed-sql command and returns results depending on the iteration type.</p>
+</div>
+<div id="_tabs_4" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_4_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_4_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public PollableChannel dsDistributedMapChannel() {
+    return new QueueChannel();
+}
+
+@Bean
+public IMap&lt;Integer, String&gt; dsDistributedMap() {
+    return hazelcastInstance().getMap("DS_Distributed_Map");
+}
+
+@Bean
+public HazelcastInstance hazelcastInstance() {
+    return Hazelcast.newHazelcastInstance();
+}
+
+@Bean
+@InboundChannelAdapter(value = "dsDistributedMapChannel", poller = @Poller(maxMessagesPerPoll = "1"))
+public HazelcastDistributedSQLMessageSource hazelcastDistributedSQLMessageSource() {
+    final HazelcastDistributedSQLMessageSource messageSource =
+        new HazelcastDistributedSQLMessageSource(dsDistributedMap(),
+            "name='TestName' AND surname='TestSurname'");
+    messageSource.setIterationType(DistributedSQLIterationType.ENTRY);
+
+    return messageSource;
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:channel id="dsMapChannel"/&gt;
+
+&lt;int-hazelcast:ds-inbound-channel-adapter
+            channel="dsMapChannel"
+            cache="dsMap"
+            iteration-type="ENTRY"
+            distributed-sql="active=false OR age &gt;= 25 OR name = 'TestName'"&gt;
+    &lt;int:poller fixed-delay="100"/&gt;
+&lt;/int-hazelcast:ds-inbound-channel-adapter&gt;
+
+&lt;bean id="dsMap" factory-bean="instance" factory-method="getMap"&gt;
+    &lt;constructor-arg value="dsMap"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="instance" class="com.hazelcast.core.Hazelcast"
+            factory-method="newHazelcastInstance"&gt;
+    &lt;constructor-arg&gt;
+        &lt;bean class="com.hazelcast.config.Config" /&gt;
+    &lt;/constructor-arg&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>It requires a poller and supports four attributes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>channel</code>: Specifies the channel to which messages are sent.
+It is a mandatory attribute;</p>
+</li>
+<li>
+<p><code>cache</code>: Specifies the distributed <code>IMap</code> reference which is queried.
+It is mandatory attribute;</p>
+</li>
+<li>
+<p><code>iteration-type</code>: Specifies result type.
+Distributed SQL can be run on <code>EntrySet</code>, <code>KeySet</code>, <code>LocalKeySet</code> or <code>Values</code>.
+It is an optional attribute with <code>VALUE</code> being the default.
+Supported values are <code>ENTRY, `KEY</code>, <code>LOCAL_KEY</code> and <code>VALUE</code>;</p>
+</li>
+<li>
+<p><code>distributed-sql</code>: Specifies the where clause of the sql statement.
+It is a mandatory attribute.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hazelcast-outbound-channel-adapter"><a class="anchor" href="#hazelcast-outbound-channel-adapter"></a>Hazelcast Outbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Hazelcast Outbound Channel Adapter listens to its defined channel and writes incoming messages to related distributed cache.
+It expects one of <code>cache</code>, <code>cache-expression</code> or <code>HazelcastHeaders.CACHE_NAME</code> for distributed object definition.
+Supported Distributed Objects are: <code>IMap</code>, <code>MultiMap</code>, <code>ReplicatedMap</code>, <code>IList</code>, <code>ISet</code>, <code>IQueue</code> and <code>ITopic</code>.</p>
+</div>
+<div id="_tabs_5" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_5_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_5_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public MessageChannel distributedMapChannel() {
+    return new DirectChannel();
+}
+
+@Bean
+public IMap&lt;Integer, String&gt; distributedMap() {
+    return hzInstance().getMap("Distributed_Map");
+}
+
+@Bean
+public HazelcastInstance hzInstance() {
+    return Hazelcast.newHazelcastInstance();
+}
+
+@Bean
+@ServiceActivator(inputChannel = "distributedMapChannel")
+public HazelcastCacheWritingMessageHandler hazelcastCacheWritingMessageHandler() {
+    HazelcastCacheWritingMessageHandler handler = new HazelcastCacheWritingMessageHandler();
+    handler.setDistributedObject(distributedMap());
+    handler.setKeyExpression(new SpelExpressionParser().parseExpression("payload.id"));
+    handler.setExtractPayload(true);
+    return handler;
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-hazelcast:outbound-channel-adapter channel="mapChannel"
+                    cache-expression="headers['CACHE_HEADER']"
+                    key-expression="payload.key"
+                    extract-payload="true"/&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>It requires the following attributes :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>channel</code>: Specifies the channel to which messages are sent;</p>
+</li>
+<li>
+<p><code>cache</code>: Specifies the distributed object reference.
+Optional;</p>
+</li>
+<li>
+<p><code>cache-expression</code>: Specifies the distributed object via Spring Expression Language (SpEL).
+Optional;</p>
+</li>
+<li>
+<p><code>key-expression</code>: Specifies the key of a key-value pair via Spring Expression Language (SpEL).
+Optional and required for only for <code>IMap</code>, <code>MultiMap</code> and <code>ReplicatedMap</code> distributed data structures.</p>
+</li>
+<li>
+<p><code>extract-payload</code>: Specifies whether to send the whole message or just the payload.
+Optional attribute with <code>true</code> being the default.
+If it is true, just the payload will be written to the distributed object.
+Otherwise, the whole message will be written by converting both message headers and payload.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>By setting distributed object name in the header, messages can be written to different distributed objects via same channel.
+If <code>cache</code> or <code>cache-expression</code> attributes are not defined, a <code>HazelcastHeaders.CACHE_NAME</code> header has to be set in a request <code>Message</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hazelcast-leader-election"><a class="anchor" href="#hazelcast-leader-election"></a>Hazelcast Leader Election</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If leader election is needed (e.g. for highly available message consumer where only one node should receive messages) a Hazelcast-based <code>LeaderInitiator</code> can be used:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public HazelcastInstance hazelcastInstance() {
+    return Hazelcast.newHazelcastInstance();
+}
+
+@Bean
+public LeaderInitiator initiator() {
+    return new LeaderInitiator(hazelcastInstance());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When a node is elected leader it will send an <code>OnGrantedEvent</code> to all application listeners.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hazelcast-message-store"><a class="anchor" href="#hazelcast-message-store"></a>Hazelcast Message Store</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For distributed messaging state management, for example for a persistent <code>QueueChannel</code> or tracking <code>Aggregator</code> message groups, the <code>HazelcastMessageStore</code> implementation is provided:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public HazelcastInstance hazelcastInstance() {
+    return Hazelcast.newHazelcastInstance();
+}
+
+@Bean
+public MessageGroupStore messageStore() {
+    return new HazelcastMessageStore(hazelcastInstance());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default, the <code>SPRING_INTEGRATION_MESSAGE_STORE</code> <code>IMap</code> is used to store messages and groups as a key/value.
+Any custom <code>IMap</code> can be provided to the <code>HazelcastMessageStore</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hazelcast-metadata-store"><a class="anchor" href="#hazelcast-metadata-store"></a>Hazelcast Metadata Store</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An implementation of a <code>ListenableMetadataStore</code> is available using a backing Hazelcast <code>IMap</code>.
+The default map is created with a name <code>SPRING_INTEGRATION_METADATA_STORE</code> which can be customized.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public HazelcastInstance hazelcastInstance() {
+    return Hazelcast.newHazelcastInstance();
+}
+
+@Bean
+public MetadataStore metadataStore() {
+    return new HazelcastMetadataStore(hazelcastInstance());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>HazelcastMetadataStore</code> implements <code>ListenableMetadataStore</code> which allows you to register your own listeners of type <code>MetadataStoreListener</code> to listen for events via <code>addListener(MetadataStoreListener callback)</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hazelcast-lock-registry"><a class="anchor" href="#hazelcast-lock-registry"></a>Hazelcast Lock Registry</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An implementation of a <code>LockRegistry</code> is available using a backing Hazelcast distributed <code>ILock</code> support:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public HazelcastInstance hazelcastInstance() {
+    return Hazelcast.newHazelcastInstance();
+}
+
+@Bean
+public LockRegistry lockRegistry() {
+    return new HazelcastLockRegistry(hazelcastInstance());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When used with a shared <code>MessageGroupStore</code> (e.g. <code>Aggregator</code> store management), the <code>HazelcastLockRegistry</code> can be used to provide this functionality across multiple application instances, such that only one instance can manipulate the group at a time.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+For all the distributed operations the CP Subsystem must be enabled on <code>HazelcastInstance</code>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
+<div class="sect1">
+<h2 id="hazelcast-message-channels"><a class="anchor" href="#hazelcast-message-channels"></a>Message Channels with Hazelcast</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Hazelcast <code>IQueue</code> and <code>ITopic</code> distributed objects are, essentially, messaging primitives and can be use with Spring Integration core components without extra implementations in this Hazelcast module.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>The <a href="channel/implementations.html#channel-implementations-queuechannel" class="xref page"><code>QueueChannel</code></a> can be supplied by any <code>java.util.Queue</code>, including the mentioned Hazelcast distributed <code>IQueue</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+PollableChannel hazelcastQueueChannel(HazelcastInstance hazelcastInstance) {
+    return new QueueChannel(hazelcastInstance.Message&lt;?&gt;&gt;getQueue("springIntegrationQueue"));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Placing this config on several nodes in Hazelcast cluster of the application, will make the <code>QueueChannel</code> as distributed and only one node will be able to poll a single <code>Message</code> from that <code>IQueue</code>.
+This works similar to <a href="jms.html#jms-channel" class="xref page"><code>PollableJmsChannel</code></a>, <a href="kafka.html#kafka-channels" class="xref page"><code>PollableKafkaChannel</code></a> or <a href="amqp/channels.html" class="xref page"><code>PollableAmqpChannel</code></a>.</p>
+</div>
+<div class="paragraph">
+<p>If the producer side is not a Spring Integration application, there is no way to configure a <code>QueueChannel</code>, and therefore the plain Hazelcast <code>IQueue</code> API is used to produce the data.
+In this case, the <code>QueueChannel</code> approach is wrong on the consumer side: an <a href="channel-adapter.html#channel-adapter-namespace-inbound" class="xref page">Inbound Channel Adapter</a> solution must be used instead:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IQueue&lt;String&gt; myStringHzQueue(HazelcastInstance hazelcastInstance) {
+    return hazelcastInstance.getQueue("springIntegrationQueue");
+}
+
+@Bean
+@InboundChannelAdapter(channel = "stringValuesFromHzQueueChannel")
+Supplier&lt;String&gt; fromHzIQueueSource(IQueue&lt;String&gt; myStringHzQueue) {
+    return myStringHzQueue::poll;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>ITopic</code> abstraction in Hazelcast has similar semantics to a <code>Topic</code> in JMS: all subscribers receive published messages.
+With a pair of simple <code>MessageChannel</code> beans this mechanism is supported as an out-of-the-box feature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public ITopic&lt;Message&lt;?&gt;&gt; springIntegrationTopic(HazelcastInstance hazelcastInstance,
+        MessageChannel fromHazelcastTopicChannel) {
+
+    ITopic&lt;Message&lt;?&gt;&gt; topic = hazelcastInstance.getTopic("springIntegrationTopic");
+	topic.addMessageListener(m -&gt; fromHazelcastTopicChannel.send(m.getMessageObject()));
+	return topic;
+}
+
+@Bean
+public MessageChannel publishToHazelcastTopicChannel(ITopic&lt;Message&lt;?&gt;&gt; springIntegrationTopic) {
+    return new FixedSubscriberChannel(springIntegrationTopic::publish);
+}
+
+@Bean
+public MessageChannel fromHazelcastTopicChannel() {
+    return new DirectChannel();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>FixedSubscriberChannel</code> is an optimized variant of <code>DirectChannel</code>, which requires a <code>MessageHandler</code> on initialization.
+Since the <code>MessageHandler</code> is a functional interface a simple lambda for the <code>handleMessage</code> method can be provided.
+When a message is sent to the <code>publishToHazelcastTopicChannel</code> it is just published onto the Hazelcast <code>ITopic</code>.
+The <code>com.hazelcast.topic.MessageListener</code> is a functional interface, too, hence a lambda to the <code>ITopic#addMessageListener</code> can be provided.
+So, a subscriber to the <code>fromHazelcastTopicChannel</code> will consume all messages sent to the mentioned <code>ITopic</code>.</p>
+</div>
+<div class="paragraph">
+<p>An <code>ExecutorChannel</code> can be supplied with an <code>IExecutorService</code>.
+For example, with respective configuration a cluster-wide singleton can be achieved:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public HazelcastInstance hazelcastInstance() {
+    return Hazelcast.newHazelcastInstance(
+                new Config()
+                    .addExecutorConfig(new ExecutorConfig()
+                         .setName("singletonExecutor")
+                         .setPoolSize(1)));
+}
+
+@Bean
+public MessageChannel hazelcastSingletonExecutorChannel(HazelcastInstance hazelcastInstance) {
+    return new ExecutorChannel(hazelcastInstance.getExecutorService("singletonExecutor"));
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="graphql.html">GraphQL Support</a></span>
+  <span class="next"><a href="http.html">HTTP Support</a></span>
 </nav>
 </article>
 </div>  </div>

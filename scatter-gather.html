@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Scatter-Gather :: Spring Integration</title>
+    <link rel="prev" href="chain.html">
+    <link rel="next" href="barrier.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -382,7 +383,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="chain.html">Message Handler Chain</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="scatter-gather.html">Scatter-Gather</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Scatter-Gather"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/scatter-gather.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,313 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="message-routing.html">Message Routing</a></li>
+    <li><a href="scatter-gather.html">Scatter-Gather</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Scatter-Gather</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>Starting with version 4.1, Spring Integration provides an implementation of the <a href="https://www.enterpriseintegrationpatterns.com/BroadcastAggregate.html">scatter-gather</a> enterprise integration pattern.
+It is a compound endpoint for which the goal is to send a message to the recipients and aggregate the results.
+As noted in <a href="https://www.enterpriseintegrationpatterns.com/"><em>Enterprise Integration Patterns</em></a>, it is a component for scenarios such as &#8220;best quote&#8221;, where we need to request information from several suppliers and decide which one provides us with the best term for the requested item.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>Previously, the pattern could be configured by using discrete components.
+This enhancement brings more convenient configuration.</p>
+</div>
+<div class="paragraph">
+<p>The <code>ScatterGatherHandler</code> is a request-reply endpoint that combines a <code>PublishSubscribeChannel</code> (or a <code>RecipientListRouter</code>) and an <code>AggregatingMessageHandler</code>.
+The request message is sent to the <code>scatter</code> channel, and the <code>ScatterGatherHandler</code> waits for the reply that the aggregator sends to the <code>outputChannel</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="scatter-gather-functionality"><a class="anchor" href="#scatter-gather-functionality"></a>Functionality</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>Scatter-Gather</code> pattern suggests two scenarios: &#8220;auction&#8221; and &#8220;distribution&#8221;.
+In both cases, the <code>aggregation</code> function is the same and provides all the options available for the <code>AggregatingMessageHandler</code>.
+(Actually, the <code>ScatterGatherHandler</code> requires only an <code>AggregatingMessageHandler</code> as a constructor argument.)
+See <a href="overview.html#overview-endpoints-aggregator" class="xref page">Aggregator</a> for more information.</p>
+</div>
+<div class="sect2">
+<h3 id="auction"><a class="anchor" href="#auction"></a>Auction</h3>
+<div class="paragraph">
+<p>The auction <code>Scatter-Gather</code> variant uses &#8220;publish-subscribe&#8221; logic for the request message, where the &#8220;scatter&#8221; channel is a <code>PublishSubscribeChannel</code> with <code>apply-sequence="true"</code>.
+However, this channel can be any <code>MessageChannel</code> implementation (as is the case with the <code>request-channel</code> in the <code>ContentEnricher</code>&#8201;&#8212;&#8201;see <a href="content-enrichment.html" class="xref page">Content Enricher</a>).
+However, in this case, you should create your own custom <code>correlationStrategy</code> for the <code>aggregation</code> function.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="distribution"><a class="anchor" href="#distribution"></a>Distribution</h3>
+<div class="paragraph">
+<p>The distribution <code>Scatter-Gather</code> variant is based on the <code>RecipientListRouter</code> (see <a href="router/implementations.html#router-implementations-recipientlistrouter" class="xref page"><code>RecipientListRouter</code></a>) with all available options for the <code>RecipientListRouter</code>.
+This is the second <code>ScatterGatherHandler</code> constructor argument.
+If you want to rely on only the default <code>correlationStrategy</code> for the <code>recipient-list-router</code> and the <code>aggregator</code>, you should specify <code>apply-sequence="true"</code>.
+Otherwise, you should supply a custom <code>correlationStrategy</code> for the <code>aggregator</code>.
+Unlike the <code>PublishSubscribeChannel</code> variant (the auction variant), having a <code>recipient-list-router</code> <code>selector</code> option lets filter target suppliers based on the message.
+With <code>apply-sequence="true"</code>, the default <code>sequenceSize</code> is supplied, and the <code>aggregator</code> can release the group correctly.
+The distribution option is mutually exclusive with the auction option.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+The <code>applySequence=true</code> is required only for plain Java configuration based on the <code>ScatterGatherHandler(MessageHandler scatterer, MessageHandler gatherer)</code> constructor configuration since the framework cannot mutate externally provided components.
+For convenience, the XML and Java DSL for <code>Scatter-Gather</code> sets <code>applySequence</code> to true starting with version 6.0.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>For both the auction and the distribution variants, the request (scatter) message is enriched with the <code>gatherResultChannel</code> header to wait for a reply message from the <code>aggregator</code>.</p>
+</div>
+<div class="paragraph">
+<p>By default, all suppliers should send their result to the <code>replyChannel</code> header (usually by omitting the <code>output-channel</code> from the ultimate endpoint).
+However, the <code>gatherChannel</code> option is also provided, letting suppliers send their reply to that channel for the aggregation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="scatter-gather-namespace"><a class="anchor" href="#scatter-gather-namespace"></a>Configuring a Scatter-Gather Endpoint</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following example shows Java configuration for the bean definition for <code>Scatter-Gather</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public MessageHandler distributor() {
+    RecipientListRouter router = new RecipientListRouter();
+    router.setApplySequence(true);
+    router.setChannels(Arrays.asList(distributionChannel1(), distributionChannel2(),
+            distributionChannel3()));
+    return router;
+}
+
+@Bean
+public MessageHandler gatherer() {
+	return new AggregatingMessageHandler(
+			new ExpressionEvaluatingMessageGroupProcessor("^[payload gt 5] ?: -1D"),
+			new SimpleMessageStore(),
+			new HeaderAttributeCorrelationStrategy(
+			       IntegrationMessageHeaderAccessor.CORRELATION_ID),
+			new ExpressionEvaluatingReleaseStrategy("size() == 2"));
+}
+
+@Bean
+@ServiceActivator(inputChannel = "distributionChannel")
+public MessageHandler scatterGatherDistribution() {
+	ScatterGatherHandler handler = new ScatterGatherHandler(distributor(), gatherer());
+	handler.setOutputChannel(output());
+	return handler;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example, we configure the <code>RecipientListRouter</code> <code>distributor</code> bean with <code>applySequence="true"</code> and the list of recipient channels.
+The next bean is for an <code>AggregatingMessageHandler</code>.
+Finally, we inject both those beans into the <code>ScatterGatherHandler</code> bean definition and mark it as a <code>@ServiceActivator</code> to wire the scatter-gather component into the integration flow.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows how to configure the <code>&lt;scatter-gather&gt;</code> endpoint by using the XML namespace:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;scatter-gather
+		id=""  <i class="conum" data-value="1"></i><b>(1)</b>
+		auto-startup=""  <i class="conum" data-value="2"></i><b>(2)</b>
+		input-channel=""  <i class="conum" data-value="3"></i><b>(3)</b>
+		output-channel=""  <i class="conum" data-value="4"></i><b>(4)</b>
+		scatter-channel=""  <i class="conum" data-value="5"></i><b>(5)</b>
+		gather-channel=""  <i class="conum" data-value="6"></i><b>(6)</b>
+		order=""  <i class="conum" data-value="7"></i><b>(7)</b>
+		phase=""  <i class="conum" data-value="8"></i><b>(8)</b>
+		send-timeout=""  <i class="conum" data-value="9"></i><b>(9)</b>
+		gather-timeout=""  <i class="conum" data-value="10"></i><b>(10)</b>
+		requires-reply="" &gt; <i class="conum" data-value="11"></i><b>(11)</b>
+			&lt;scatterer/&gt;  <i class="conum" data-value="12"></i><b>(12)</b>
+			&lt;gatherer/&gt;  <i class="conum" data-value="13"></i><b>(13)</b>
+&lt;/scatter-gather&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The id of the endpoint.
+The <code>ScatterGatherHandler</code> bean is registered with an alias of <code>id + '.handler'</code>.
+The <code>RecipientListRouter</code> bean is registered with an alias of <code>id + '.scatterer'</code>.
+The <code>AggregatingMessageHandler`bean is registered with an alias of `id + '.gatherer'</code>.
+Optional.
+(The <code>BeanFactory</code> generates a default <code>id</code> value.)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Lifecycle attribute signaling whether the endpoint should be started during application context initialization.
+In addition, the <code>ScatterGatherHandler</code> also implements <code>Lifecycle</code> and starts and stops <code>gatherEndpoint</code>, which is created internally if a <code>gather-channel</code> is provided.
+Optional.
+(The default is <code>true</code>.)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The channel on which to receive request messages to handle them in the <code>ScatterGatherHandler</code>.
+Required.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The channel to which the <code>ScatterGatherHandler</code> sends the aggregation results.
+Optional.
+(Incoming messages can specify a reply channel themselves in the <code>replyChannel</code> message header).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The channel to which to send the scatter message for the auction scenario.
+Optional.
+Mutually exclusive with the <code>&lt;scatterer&gt;</code> sub-element.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The channel on which to receive replies from each supplier for the aggregation.
+It is used as the <code>replyChannel</code> header in the scatter message.
+Optional.
+By default, the <code>FixedSubscriberChannel</code> is created.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The order of this component when more than one handler is subscribed to the same <code>DirectChannel</code> (use for load balancing purposes).
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>Specifies the phase in which the endpoint should be started and stopped.
+The startup order proceeds from lowest to highest, and the shutdown order is from highest to lowest.
+By default, this value is <code>Integer.MAX_VALUE</code>, meaning that this container starts as late as possible and stops as soon as possible.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>The timeout interval to wait when sending a reply <code>Message</code> to the <code>output-channel</code>.
+By default, the <code>send()</code> blocks for one second.
+It applies only if the output channel has some 'sending' limitations&#8201;&#8212;&#8201;for example, a <code>QueueChannel</code> with a fixed 'capacity' that is full.
+In this case, a <code>MessageDeliveryException</code> is thrown.
+The <code>send-timeout</code> is ignored for <code>AbstractSubscribableChannel</code> implementations.
+For <code>group-timeout(-expression)</code>, the <code>MessageDeliveryException</code> from the scheduled expired task leads this task to be rescheduled.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>Lets you specify how long the scatter-gather waits for the reply message before returning.
+By default, it waits for <code>30</code> seconds.
+'null' is returned if the reply times out.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Specifies whether the scatter-gather must return a non-null value.
+This value is <code>true</code> by default.
+Consequently, a <code>ReplyRequiredException</code> is thrown when the underlying aggregator returns a null value after <code>gather-timeout</code>.
+Note, if <code>null</code> is a possibility, the <code>gather-timeout</code> should be specified to avoid an indefinite wait.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>The <code>&lt;recipient-list-router&gt;</code> options.
+Optional.
+Mutually exclusive with <code>scatter-channel</code> attribute.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>The <code>&lt;aggregator&gt;</code> options.
+Required.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="scatter-gather-error-handling"><a class="anchor" href="#scatter-gather-error-handling"></a>Error Handling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Since Scatter-Gather is a multi request-reply component, error handling has some extra complexity.
+In some cases, it is better to just catch and ignore downstream exceptions if the <code>ReleaseStrategy</code> allows the process to finish with fewer replies than requests.
+In other cases something like a &#8220;compensation message&#8221; should be considered for returning from sub-flow, when an error happens.</p>
+</div>
+<div class="paragraph">
+<p>Every async sub-flow should be configured with a <code>errorChannel</code> header for the proper error message sending from the <code>MessagePublishingErrorHandler</code>.
+Otherwise, an error will be sent to the global <code>errorChannel</code> with the common error handling logic.
+See <a href="#scatter-gather-error-handling">Error Handling</a> for more information about async error processing.</p>
+</div>
+<div class="paragraph">
+<p>Synchronous flows may use an <code>ExpressionEvaluatingRequestHandlerAdvice</code> for ignoring the exception or returning a compensation message.
+When an exception is thrown from one of the sub-flows to the <code>ScatterGatherHandler</code>, it is just re-thrown to upstream.
+This way all other sub-flows will work for nothing and their replies are going to be ignored in the <code>ScatterGatherHandler</code>.
+This might be an expected behavior sometimes, but in most cases it would be better to handle the error in the particular sub-flow without impacting all others and the expectations in the gatherer.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.1.3, the <code>ScatterGatherHandler</code> is supplied with the <code>errorChannelName</code> option.
+It is populated to the <code>errorChannel</code> header of the scatter message and is used in the  when async error happens or can be used in the regular synchronous sub-flow for directly sending an error message.</p>
+</div>
+<div class="paragraph">
+<p>The sample configuration below demonstrates async error handling by returning a compensation message:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow scatterGatherAndExecutorChannelSubFlow(TaskExecutor taskExecutor) {
+    return f -&gt; f
+            .scatterGather(
+                    scatterer -&gt; scatterer
+                            .recipientFlow(f1 -&gt; f1.transform(p -&gt; "Sub-flow#1"))
+                            .recipientFlow(f2 -&gt; f2
+                                    .channel(c -&gt; c.executor(taskExecutor))
+                                    .transform(p -&gt; {
+                                        throw new RuntimeException("Sub-flow#2");
+                                    })),
+                    null,
+                    s -&gt; s.errorChannel("scatterGatherErrorChannel"));
+}
+
+@ServiceActivator(inputChannel = "scatterGatherErrorChannel")
+public Message&lt;?&gt; processAsyncScatterError(MessagingException payload) {
+    return MessageBuilder.withPayload(payload.getCause().getCause())
+            .copyHeaders(payload.getFailedMessage().getHeaders())
+            .build();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To produce a proper reply, we have to copy headers (including <code>replyChannel</code> and <code>errorChannel</code>) from the <code>failedMessage</code> of the <code>MessagingException</code> that has been sent to the <code>scatterGatherErrorChannel</code> by the <code>MessagePublishingErrorHandler</code>.
+This way the target exception is returned to the gatherer of the <code>ScatterGatherHandler</code> for reply messages group completion.
+Such an exception <code>payload</code> can be filtered out in the <code>MessageGroupProcessor</code> of the gatherer or processed other way downstream, after the scatter-gather endpoint.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Before sending scattering results to the gatherer, <code>ScatterGatherHandler</code> reinstates the request message headers, including reply and error channels if any.
+This way errors from the <code>AggregatingMessageHandler</code> are going to be propagated to the caller, even if an async hand off is applied in scatter recipient subflows.
+For successful operation, a <code>gatherResultChannel</code>, <code>originalReplyChannel</code> and <code>originalErrorChannel</code> headers must be transferred back to replies from scatter recipient subflows.
+In this case a reasonable, finite <code>gatherTimeout</code> must be configured for the <code>ScatterGatherHandler</code>.
+Otherwise, it is going to be blocked waiting for a reply from the gatherer forever, by default.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
-</div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="chain.html">Message Handler Chain</a></span>
+  <span class="next"><a href="barrier.html">Thread Barrier</a></span>
 </nav>
 </article>
 </div>  </div>

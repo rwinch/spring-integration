@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Message Handler Chain :: Spring Integration</title>
+    <link rel="prev" href="resequencer.html">
+    <link rel="next" href="scatter-gather.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -379,7 +380,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="resequencer.html">Resequencer</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="chain.html">Message Handler Chain</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Message Handler Chain"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/chain.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,267 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="message-routing.html">Message Routing</a></li>
+    <li><a href="chain.html">Message Handler Chain</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Message Handler Chain</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>The <code>MessageHandlerChain</code> is an implementation of <code>MessageHandler</code> that can be configured as a single message endpoint while actually delegating to a chain of other handlers, such as filters, transformers, splitters, and so on.
+When several handlers need to be connected in a fixed, linear progression, this can lead to a much simpler configuration.
+For example, it is fairly common to provide a transformer before other components.
+Similarly, when you provide a filter before some other component in a chain, you essentially create a <a href="https://www.enterpriseintegrationpatterns.com/MessageSelector.html">selective consumer</a>.
+In either case, the chain requires only a single <code>input-channel</code> and a single <code>output-channel</code>, eliminating the need to define channels for each individual component.</p>
 </div>
-<div class="hdlist">
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+The <code>MessageHandlerChain</code> is mostly designed for an XML configuration.
+For Java DSL, an <code>IntegrationFlow</code> definition can be treated as a chain component, but it has nothing to do with concepts and principles described in this chapter below.
+See <a href="dsl.html#java-dsl" class="xref page">Java DSL</a> for more information.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock tip">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Spring Integration&#8217;s <code>Filter</code> provides a boolean property: <code>throwExceptionOnRejection</code>.
+When you provide multiple selective consumers on the same point-to-point channel with different acceptance criteria, you should set this value 'true' (the default is <code>false</code>) so that the dispatcher knows that the message was rejected and, as a result, tries to pass the message on to other subscribers.
+If the exception were not thrown, it would appear to the dispatcher that the message had been passed on successfully even though the filter had dropped the message to prevent further processing.
+If you do indeed want to &#8220;drop&#8221; the messages, the filter&#8217;s 'discard-channel' might be useful, since it does give you a chance to perform some operation with the dropped message (such as sending it to a JMS queue or writing it to a log).
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>The handler chain simplifies configuration while internally maintaining the same degree of loose coupling between components, and it is trivial to modify the configuration if at some point a non-linear arrangement is required.</p>
+</div>
+<div class="paragraph">
+<p>Internally, the chain is expanded into a linear setup of the listed endpoints, separated by anonymous channels.
+The reply channel header is not taken into account within the chain.
+Only after the last handler is invoked is the resulting message forwarded to the reply channel or the chain&#8217;s output channel.
+Because of this setup, all handlers except the last must implement the <code>MessageProducer</code> interface (which provides a 'setOutputChannel()' method).
+If the <code>outputChannel</code> on the <code>MessageHandlerChain</code> is set, the last handler needs only an output channel.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+As with other endpoints, the <code>output-channel</code> is optional.
+If there is a reply message at the end of the chain, the output-channel takes precedence.
+However, if it is not available, the chain handler checks for a reply channel header on the inbound message as a fallback.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>In most cases, you need not implement <code>MessageHandler</code> yourself.
+The next section focuses on namespace support for the chain element.
+Most Spring Integration endpoints, such as service activators and transformers, are suitable for use within a <code>MessageHandlerChain</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="chain-namespace"><a class="anchor" href="#chain-namespace"></a>Configuring a Chain</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>&lt;chain&gt;</code> element provides an <code>input-channel</code> attribute.
+If the last element in the chain is capable of producing reply messages (optional), it also supports an <code>output-channel</code> attribute.
+The sub-elements are then filters, transformers, splitters, and service-activators.
+The last element may also be a router or an outbound channel adapter.
+The following example shows a chain definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:chain input-channel="input" output-channel="output"&gt;
+    &lt;int:filter ref="someSelector" throw-exception-on-rejection="true"/&gt;
+    &lt;int:header-enricher&gt;
+        &lt;int:header name="thing1" value="thing2"/&gt;
+    &lt;/int:header-enricher&gt;
+    &lt;int:service-activator ref="someService" method="someMethod"/&gt;
+&lt;/int:chain&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;header-enricher&gt;</code> element used in the preceding example sets a message header named <code>thing1</code> with a value of <code>thing2</code> on the message.
+A header enricher is a specialization of <code>Transformer</code> that touches only header values.
+You could obtain the same result by implementing a <code>MessageHandler</code> that did the header modifications and wiring that as a bean, but the header-enricher is a simpler option.</p>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;chain&gt;</code> can be configured as the last &#8220;closed-box&#8221; consumer of the message flow.
+For this solution, you can to put it at the end of the &lt;chain&gt; some &lt;outbound-channel-adapter&gt;, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:chain input-channel="input"&gt;
+    &lt;int-xml:marshalling-transformer marshaller="marshaller" result-type="StringResult" /&gt;
+    &lt;int:service-activator ref="someService" method="someMethod"/&gt;
+    &lt;int:header-enricher&gt;
+        &lt;int:header name="thing1" value="thing2"/&gt;
+    &lt;/int:header-enricher&gt;
+    &lt;int:logging-channel-adapter level="INFO" log-full-message="true"/&gt;
+&lt;/int:chain&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+<div class="title">Disallowed Attributes and Elements</div>
+<div class="paragraph">
+<p>Certain attributes, such as <code>order</code> and <code>input-channel</code> are not allowed to be specified on components used within a chain.
+The same is true for the poller sub-element.</p>
+</div>
+<div class="paragraph">
+<p>For the Spring Integration core components, the XML schema itself enforces some of these constraints.
+However, for non-core components or your own custom components, these constraints are enforced by the XML namespace parser, not by the XML schema.</p>
+</div>
+<div class="paragraph">
+<p>These XML namespace parser constraints were added with Spring Integration 2.2.
+If you try to use disallowed attributes and elements, the XML namespace parser throws a <code>BeanDefinitionParsingException</code>.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="using-the-id-attribute"><a class="anchor" href="#using-the-id-attribute"></a>Using the 'id' Attribute</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Beginning with Spring Integration 3.0, if a chain element is given an <code>id</code> attribute, the bean name for the element is a combination of the chain&#8217;s <code>id</code> and the <code>id</code> of the element itself.
+Elements without <code>id</code> attributes are not registered as beans, but each one is given a <code>componentName</code> that includes the chain <code>id</code>.
+Consider the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:chain id="somethingChain" input-channel="input"&gt;
+    &lt;int:service-activator id="somethingService" ref="someService" method="someMethod"/&gt;
+    &lt;int:object-to-json-transformer/&gt;
+&lt;/int:chain&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>&lt;chain&gt;</code> root element has an <code>id</code> of 'somethingChain'.
+Consequently, the <code>AbstractEndpoint</code> implementation (<code>PollingConsumer</code> or <code>EventDrivenConsumer</code>, depending on the <code>input-channel</code> type) bean takes this value as its bean name.</p>
+</li>
+<li>
+<p>The <code>MessageHandlerChain</code> bean acquires a bean alias ('somethingChain.handler'), which allows direct access to this bean from the <code>BeanFactory</code>.</p>
+</li>
+<li>
+<p>The <code>&lt;service-activator&gt;</code> is not a fully fledged messaging endpoint (it is not a <code>PollingConsumer</code> or <code>EventDrivenConsumer</code>).
+It is a <code>MessageHandler</code> within the <code>&lt;chain&gt;</code>.
+In this case, the bean name registered with the <code>BeanFactory</code> is 'somethingChain$child.somethingService.handler'.</p>
+</li>
+<li>
+<p>The <code>componentName</code> of this <code>ServiceActivatingHandler</code> takes the same value but without the '.handler' suffix.
+It becomes 'somethingChain$child.somethingService'.</p>
+</li>
+<li>
+<p>The last <code>&lt;chain&gt;</code> sub-component, <code>&lt;object-to-json-transformer&gt;</code>, does not have an <code>id</code> attribute.
+Its <code>componentName</code> is based on its position in the <code>&lt;chain&gt;</code>.
+In this case, it is 'somethingChain$child#1'.
+(The final element of the name is the order within the chain, beginning with '#0').
+Note, this transformer is not registered as a bean within the application context, so it does not get a <code>beanName</code>.
+However, its <code>componentName</code> has a value that is useful for logging and other purposes.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code>id</code> attribute for <code>&lt;chain&gt;</code> elements lets them be eligible for <a href="jmx.html#jmx-mbean-exporter" class="xref page">JMX export</a>, and they are trackable in the <a href="message-history.html" class="xref page">message history</a>.
+You can access them from the <code>BeanFactory</code> by using the appropriate bean name, as discussed earlier.</p>
+</div>
+<div class="admonitionblock tip">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
 </td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
+<td class="content">
+It is useful to provide an explicit <code>id</code> attribute on <code>&lt;chain&gt;</code> elements to simplify the identification of sub-components in logs and to provide access to them from the <code>BeanFactory</code> etc.
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="chain-gateway"><a class="anchor" href="#chain-gateway"></a>Calling a Chain from within a Chain</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes, you need to make a nested call to another chain from within a chain and then come back and continue execution within the original chain.
+To accomplish this, you can use a messaging gateway by including a &lt;gateway&gt; element, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:chain id="main-chain" input-channel="in" output-channel="out"&gt;
+    &lt;int:header-enricher&gt;
+      &lt;int:header name="name" value="Many" /&gt;
+    &lt;/int:header-enricher&gt;
+    &lt;int:service-activator&gt;
+      &lt;bean class="org.foo.SampleService" /&gt;
+    &lt;/int:service-activator&gt;
+    &lt;int:gateway request-channel="inputA"/&gt;
+&lt;/int:chain&gt;
+
+&lt;int:chain id="nested-chain-a" input-channel="inputA"&gt;
+    &lt;int:header-enricher&gt;
+        &lt;int:header name="name" value="Moe" /&gt;
+    &lt;/int:header-enricher&gt;
+    &lt;int:gateway request-channel="inputB"/&gt;
+    &lt;int:service-activator&gt;
+        &lt;bean class="org.foo.SampleService" /&gt;
+    &lt;/int:service-activator&gt;
+&lt;/int:chain&gt;
+
+&lt;int:chain id="nested-chain-b" input-channel="inputB"&gt;
+    &lt;int:header-enricher&gt;
+        &lt;int:header name="name" value="Jack" /&gt;
+    &lt;/int:header-enricher&gt;
+    &lt;int:service-activator&gt;
+        &lt;bean class="org.foo.SampleService" /&gt;
+    &lt;/int:service-activator&gt;
+&lt;/int:chain&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example, <code>nested-chain-a</code> is called at the end of <code>main-chain</code> processing by the 'gateway' element configured there.
+While in <code>nested-chain-a</code>, a call to a <code>nested-chain-b</code> is made after header enrichment.
+Then the flow comes back to finish execution in <code>nested-chain-b</code>.
+Finally, the flow returns to <code>main-chain</code>.
+When the nested version of a <code>&lt;gateway&gt;</code> element is defined in the chain, it does not require the <code>service-interface</code> attribute.
+Instead, it takes the message in its current state and places it on the channel defined in the <code>request-channel</code> attribute.
+When the downstream flow initiated by that gateway completes, a <code>Message</code> is returned to the gateway and continues its journey within the current chain.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="resequencer.html">Resequencer</a></span>
+  <span class="next"><a href="scatter-gather.html">Scatter-Gather</a></span>
 </nav>
 </article>
 </div>  </div>

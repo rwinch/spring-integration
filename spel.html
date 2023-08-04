@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Spring Expression Language (SpEL) :: Spring Integration</title>
+    <link rel="prev" href="error-handling.html">
+    <link rel="next" href="message-publishing.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1050,7 +1051,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="error-handling.html">Error Handling</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="spel.html">Spring Expression Language (SpEL)</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Spring Expression Language (SpEL)"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/spel.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,296 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="spel.html">Spring Expression Language (SpEL)</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Spring Expression Language (SpEL)</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>You can configure many Spring Integration components by using expressions written in the <a href="https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#expressions">Spring Expression Language</a>.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>In most cases, the <code>#root</code> object is the <code>Message</code>, which has two properties (<code>headers</code> and <code>payload</code>) that allow such expressions as <code>payload</code>, <code>payload.thing</code>, <code>headers['my.header']</code>, and so on.</p>
+</div>
+<div class="paragraph">
+<p>In some cases, additional variables are provided.
+For example, <code>&lt;int-http:inbound-gateway/&gt;</code> provides <code>#requestParams</code> (parameters from the HTTP request) and <code>#pathVariables</code> (values from path placeholders in the URI).</p>
+</div>
+<div class="paragraph">
+<p>For all SpEL expressions, a <code>BeanResolver</code> is available to enable references to any bean in the application context (for example, <code>@myBean.foo(payload)</code>).
+In addition, two <code>PropertyAccessors</code> are available.
+A <code>MapAccessor</code> enables accessing values in a <code>Map</code> by using a key and a <code>ReflectivePropertyAccessor</code>, which allows access to fields and JavaBean compliant properties (by using getters and setters).
+This is how you can access the <code>Message</code> headers and payload properties.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="spel-customization"><a class="anchor" href="#spel-customization"></a>SpEL Evaluation Context Customization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with Spring Integration 3.0, you can add additional <code>PropertyAccessor</code> instances to the SpEL evaluation contexts used by the framework.
+The framework provides the (read-only) <code>JsonPropertyAccessor</code>, which you can use to access fields from a <code>JsonNode</code> or JSON in a <code>String</code>.
+You can also create your own <code>PropertyAccessor</code> if you have specific needs.</p>
+</div>
+<div class="paragraph">
+<p>In addition, you can add custom functions.
+Custom functions are <code>static</code> methods declared on a class.
+Functions and property accessors are available in any SpEL expression used throughout the framework.</p>
+</div>
+<div class="paragraph">
+<p>The following configuration shows how to directly configure the <code>IntegrationEvaluationContextFactoryBean</code> with custom property accessors and functions:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="integrationEvaluationContext"
+			class="org.springframework.integration.config.IntegrationEvaluationContextFactoryBean"&gt;
+	&lt;property name="propertyAccessors"&gt;
+		&lt;util:map&gt;
+			&lt;entry key="things"&gt;
+				&lt;bean class="things.MyCustomPropertyAccessor"/&gt;
+			&lt;/entry&gt;
+		&lt;/util:map&gt;
+	&lt;/property&gt;
+	&lt;property name="functions"&gt;
+		&lt;map&gt;
+			&lt;entry key="barcalc" value="#{T(things.MyFunctions).getMethod('calc', T(things.MyThing))}"/&gt;
+		&lt;/map&gt;
+	&lt;/property&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For convenience, Spring Integration provides namespace support for both property accessors and functions, as described in the following sections.
+The framework automatically configures the factory bean on your behalf.</p>
+</div>
+<div class="paragraph">
+<p>This factory bean definition overrides the default <code>integrationEvaluationContext</code> bean definition.
+It adds the custom accessor and one custom function to the list (which also includes the standard accessors <a href="#">mentioned earlier</a>).</p>
+</div>
+<div class="paragraph">
+<p>Note that custom functions are static methods.
+In the preceding example, the custom function is a static method called <code>calc</code> on a class called <code>MyFunctions</code> and takes a single parameter of type <code>MyThing</code>.</p>
+</div>
+<div class="paragraph">
+<p>Suppose you have a <code>Message</code> with a payload that has a type of <code>MyThing</code>.
+Further, suppose that you need to perform some action to create an object called <code>MyObject</code> from <code>MyThing</code> and then invoke a custom function called <code>calc</code> on that object.</p>
+</div>
+<div class="paragraph">
+<p>The standard property accessors do not know how to get a <code>MyObject</code> from a <code>MyThing</code>, so you could write and configure a custom property accessor to do so.
+As a result, your final expression might be <code>"#barcalc(payload.myObject)"</code>.</p>
+</div>
+<div class="paragraph">
+<p>The factory bean has another property (<code>typeLocator</code>), which lets you customize the <code>TypeLocator</code> used during SpEL evaluation.
+You might need to do so running in some environments that use a non-standard <code>ClassLoader</code>.
+In the following example, SpEL expressions always use the bean factory&#8217;s class loader:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="integrationEvaluationContext"
+		class="org.springframework.integration.config.IntegrationEvaluationContextFactoryBean"&gt;
+	&lt;property name="typeLocator"&gt;
+		&lt;bean class="org.springframework.expression.spel.support.StandardTypeLocator"&gt;
+			&lt;constructor-arg value="#{beanFactory.beanClassLoader}"/&gt;
+		&lt;/bean&gt;
+	&lt;/property&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="spel-functions"><a class="anchor" href="#spel-functions"></a>SpEL Functions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration provides namespace support to let you create SpEL custom functions.
+You can specify <code>&lt;spel-function/&gt;</code> components to provide <a href="https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#expressions-ref-functions">custom SpEL functions</a> to the <code>EvaluationContext</code> used throughout the framework.
+Instead of configuring the factory bean shown earlier, you can add one or more of these components, and the framework automatically adds them to the default <code>integrationEvaluationContext</code> factory bean.</p>
+</div>
+<div class="paragraph">
+<p>For example, suppose you have a useful static method to evaluate XPath.
+The following example shows how you can create a custom function to use that method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:spel-function id="xpath"
+	class="com.something.test.XPathUtils" method="evaluate(java.lang.String, java.lang.Object)"/&gt;
+
+&lt;int:transformer input-channel="in" output-channel="out"
+		 expression="#xpath('//things/@mythings', payload)" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Given the preceding example:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The default <code>IntegrationEvaluationContextFactoryBean</code> bean with an ID of <code>integrationEvaluationContext</code> is registered with the application context.</p>
+</li>
+<li>
+<p>The <code>&lt;spel-function/&gt;</code> is parsed and added to the <code>functions</code> <code>Map</code> of <code>integrationEvaluationContext</code> as a map entry with its <code>id</code> as the key and the static <code>Method</code> as the value.</p>
+</li>
+<li>
+<p>The <code>integrationEvaluationContext</code> factory bean creates a new <code>StandardEvaluationContext</code> instance, and it is configured with the default <code>PropertyAccessor</code> instances, a <code>BeanResolver</code>, and the custom functions.</p>
+</li>
+<li>
+<p>That <code>EvaluationContext</code> instance is injected into the <code>ExpressionEvaluatingTransformer</code> bean.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To provide a SpEL Function by using Java configuration, you can declare a <code>SpelFunctionFactoryBean</code> bean for each function.
+The following example shows how to create a custom function:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public SpelFunctionFactoryBean xpath() {
+    return new SpelFunctionFactoryBean(XPathUtils.class, "evaluate");
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+SpEL functions declared in a parent context are also made available in any child contexts.
+Each context has its own instance of the <code>integrationEvaluationContext</code> factory bean, because each needs a different <code>BeanResolver</code>, but the function declarations are inherited and can be overridden by declaring a SpEL function with the same name.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="sect2">
+<h3 id="built-in-spel-functions"><a class="anchor" href="#built-in-spel-functions"></a>Built-in SpEL Functions</h3>
+<div class="paragraph">
+<p>Spring Integration provides the folloiwng  standard functions, which are registered with the application context automatically on start up:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>#jsonPath</code>: Evaluates a 'jsonPath' on a specified object.
+This function invokes <code>JsonPathUtils.evaluate(&#8230;&#8203;)</code>, which delegates to the <a href="https://github.com/json-path/JsonPath">Jayway JsonPath library</a>.
+The following listing shows some usage examples:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;transformer expression="#jsonPath(payload, '$.store.book[0].author')"/&gt;
+
+&lt;filter expression="#jsonPath(payload,'$..book[2].isbn') matches '\d-\d{3}-\d{5}-\d'"/&gt;
+
+&lt;splitter expression="#jsonPath(payload, '$.store.book')"/&gt;
+
+&lt;router expression="#jsonPath(payload, headers.jsonPath)"&gt;
+	&lt;mapping channel="output1" value="reference"/&gt;
+	&lt;mapping channel="output2" value="fiction"/&gt;
+&lt;/router&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>#jsonPath</code> also supports a third (optional) parameter: an array of <a href="https://github.com/json-path/JsonPath#filter-predicates"><code>com.jayway.jsonpath.Filter</code></a>, which can be provided by a reference to a bean or bean method (for example).</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Using this function requires the Jayway JsonPath library (<code>json-path.jar</code>) to be on the classpath.
+Otherwise, the <code>#jsonPath</code> SpEL function is not registered.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>For more information regarding JSON see 'JSON Transformers' in <a href="transformer.html" class="xref page">Transformer</a>.</p>
+</div>
+</li>
+<li>
+<p><code>#xpath</code>: To evaluate an 'xpath' on some provided object.
+For more information regarding XML and XPath, see <a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="spel-property-accessors"><a class="anchor" href="#spel-property-accessors"></a>Property Accessors</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration provides namespace support to let you create SpEL custom <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/expression/PropertyAccessor.html"><code>PropertyAccessor</code></a> implementations.
+You can use the <code>&lt;spel-property-accessors/&gt;</code> component to provide a list of custom <code>PropertyAccessor</code> instances to the <code>EvaluationContext</code> used throughout the framework.
+Instead of configuring the factory bean shown earlier, you can add one or more of these components, and the framework automatically adds the accessors to the default <code>integrationEvaluationContext</code> factory bean.
+The following example shows how to do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:spel-property-accessors&gt;
+	&lt;bean id="jsonPA" class="org.springframework.integration.json.JsonPropertyAccessor"/&gt;
+	&lt;ref bean="fooPropertyAccessor"/&gt;
+&lt;/int:spel-property-accessors&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example, two custom <code>PropertyAccessor</code> instances are injected into the <code>EvaluationContext</code> (in the order in which they are declared).</p>
+</div>
+<div class="paragraph">
+<p>To provide <code>PropertyAccessor</code> instances by using Java Configuration, you should declare a <code>SpelPropertyAccessorRegistrar</code> bean with a name of <code>spelPropertyAccessorRegistrar</code> (dictated by the <code>IntegrationContextUtils.SPEL_PROPERTY_ACCESSOR_REGISTRAR_BEAN_NAME</code> constant).
+The following example shows how to configure two custom <code>PropertyAccessor</code> instances with Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public SpelPropertyAccessorRegistrar spelPropertyAccessorRegistrar() {
+    return new SpelPropertyAccessorRegistrar(new JsonPropertyAccessor())
+                    .add(fooPropertyAccessor());
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Custom <code>PropertyAccessor</code> instances declared in a parent context are also made available in any child contexts.
+They are placed at the end of result list (but before the default <code>org.springframework.context.expression.MapAccessor</code> and <code>o.s.expression.spel.support.ReflectivePropertyAccessor</code>).
+If you declare a <code>PropertyAccessor</code> with the same bean ID in a child context, it overrides the parent accessor.
+Beans declared within a <code>&lt;spel-property-accessors/&gt;</code> must have an 'id' attribute.
+The final order of usage is as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The accessors in the current context, in the order in which they are declared</p>
+</li>
+<li>
+<p>Any accessors from parent contexts, in order</p>
+</li>
+<li>
+<p>The <code>MapAccessor</code></p>
+</li>
+<li>
+<p>The <code>ReflectivePropertyAccessor</code></p>
+</li>
+</ul>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="error-handling.html">Error Handling</a></span>
+  <span class="next"><a href="message-publishing.html">Message Publishing</a></span>
 </nav>
 </article>
 </div>  </div>

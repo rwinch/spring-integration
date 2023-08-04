@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Changes Between 2.2 and 3.0 :: Spring Integration</title>
+    <link rel="prev" href="changes-3.0-4.0.html">
+    <link rel="next" href="changes-2.1-2.2.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1135,7 +1136,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Changes Between 2.2 and 3.0"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/changes-2.2-3.0.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,577 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="history.html">Change History</a></li>
+    <li><a href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Changes Between 2.2 and 3.0</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>See the <a href="https://github.com/spring-projects/spring-integration/wiki/Spring-Integration-2.2-to-3.0-Migration-Guide">Migration Guide</a> for important changes that might affect your applications.
+You can find migration guides for all versions back to 2.1 on the <a href="https://github.com/spring-projects/spring-integration/wiki">wiki</a>.</p>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="x3.0-new-components"><a class="anchor" href="#x3.0-new-components"></a>New Components</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Version 3.0 added a number of new components.</p>
+</div>
+<div class="sect2">
+<h3 id="x3.0-request-mapping"><a class="anchor" href="#x3.0-request-mapping"></a>HTTP Request Mapping</h3>
+<div class="paragraph">
+<p>The HTTP module now provides powerful request mapping support for inbound endpoints.
+We replaced the <code>UriPathHandlerMapping</code> class with <code>IntegrationRequestMappingHandlerMapping</code>, which is registered under the bean name of <code>integrationRequestMappingHandlerMapping</code> in the application context.
+Upon parsing of the HTTP inbound endpoint, either a new <code>IntegrationRequestMappingHandlerMapping</code> bean is registered or an existing bean is reused.
+To achieve flexible request mapping configuration, Spring Integration provides the <code>&lt;request-mapping/&gt;</code> child element for <code>&lt;http:inbound-channel-adapter/&gt;</code> and the <code>&lt;http:inbound-gateway/&gt;</code>.
+Both HTTP inbound endpoints are now fully based on the request mapping infrastructure that was introduced with Spring MVC 3.1.
+For example, multiple paths are supported on a single inbound endpoint.
+For more information see <a href="http/namespace.html" class="xref page">HTTP Namespace Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-spel-customization"><a class="anchor" href="#x3.0-spel-customization"></a>Spring Expression Language (SpEL) Configuration</h3>
+<div class="paragraph">
+<p>We added a new <code>IntegrationEvaluationContextFactoryBean</code> to allow configuration of custom <code>PropertyAccessor</code> implementations and functions for use in SpEL expressions throughout the framework.
+For more information, see <a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-spel-functions"><a class="anchor" href="#x3.0-spel-functions"></a>SpEL Functions Support</h3>
+<div class="paragraph">
+<p>To customize the SpEL <code>EvaluationContext</code> with static <code>Method</code> functions, we introduced the <code>&lt;spel-function/&gt;</code> component.
+We also added two built-in functions: <code>#jsonPath</code> and <code>#xpath</code>.
+For more information, see <a href="spel.html#spel-functions" class="xref page">SpEL Functions</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-spel-property-accessors"><a class="anchor" href="#x3.0-spel-property-accessors"></a>SpEL PropertyAccessors Support</h3>
+<div class="paragraph">
+<p>To customize the SpEL <code>EvaluationContext</code> with <code>PropertyAccessor</code> implementations, we added the <code>&lt;spel-property-accessors/&gt;</code> component.
+For more information, see <a href="spel.html#spel-property-accessors" class="xref page">Property Accessors</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-redis-new-components"><a class="anchor" href="#x3.0-redis-new-components"></a>Redis: New Components</h3>
+<div class="paragraph">
+<p>We added a new Redis-based <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/metadata/MetadataStore.html"><code>MetadataStore</code></a> implementation.
+You can use the <code>RedisMetadataStore</code> to maintain the state of a <code>MetadataStore</code> across application restarts.
+This new <code>MetadataStore</code> implementation can be used with adapters, such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Twitter inbound adapters</p>
+</li>
+<li>
+<p>Feed inbound channel adapter</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We added new queue-based components.
+We added the <code>&lt;int-redis:queue-inbound-channel-adapter/&gt;</code> and <code>&lt;int-redis:queue-outbound-channel-adapter/&gt;</code> components to perform 'right pop' and 'left push' operations, respectively, on a Redis List.</p>
+</div>
+<div class="paragraph">
+<p>For more information, &#8220;see <a href="redis.html" class="xref page">Redis Support</a>&#8221;.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-hcr"><a class="anchor" href="#x3.0-hcr"></a>Header Channel Registry</h3>
+<div class="paragraph">
+<p>You can now instruct the framework to store reply channels and error channels in a registry for later resolution.
+This is useful for cases where the <code>replyChannel</code> or <code>errorChannel</code> might be lost (for example, when serializing a message).
+See <a href="content-enrichment.html#header-enricher" class="xref page">Header Enricher</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-configurable-mongo-MS"><a class="anchor" href="#x3.0-configurable-mongo-MS"></a>MongoDB support: New <code>ConfigurableMongoDbMessageStore</code></h3>
+<div class="paragraph">
+<p>In addition to the existing <code>eMongoDbMessageStore</code>, we introduced a new <code>ConfigurableMongoDbMessageStore</code>.
+This provides a more robust and flexible implementation of <code>MessageStore</code> for MongoDB.
+It does not have backward compatibility with the existing store, but we recommend using it for new applications.
+Existing applications can use it, but messages in the old store are not available.
+See <a href="mongodb.html" class="xref page">MongoDb Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-syslog"><a class="anchor" href="#x3.0-syslog"></a>Syslog Support</h3>
+<div class="paragraph">
+<p>Building on the 2.2 <code>SyslogToMapTransformer</code>, Spring Integration 3.0 introduces <code>UDP</code> and <code>TCP</code> inbound channel adapters especially tailored for receiving SYSLOG messages.
+For more information, see <a href="syslog.html" class="xref page">Syslog Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-tail"><a class="anchor" href="#x3.0-tail"></a><code>tail</code> Support</h3>
+<div class="paragraph">
+<p>We added file inbound channel adapters that use the <code>tail</code> command to generate messages when lines are added to the end of text files.
+See <a href="file/reading.html#file-tailing" class="xref page">'tail&#8217;ing Files</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-jmx"><a class="anchor" href="#x3.0-jmx"></a>JMX Support</h3>
+<div class="paragraph">
+<p>We added <code>&lt;int-jmx:tree-polling-channel-adapter/&gt;</code>.
+This adapter queries the JMX MBean tree and sends a message with a payload that is the graph of objects that match the query.
+By default, the MBeans are mapped to primitives and simple Objects (such as <code>Map</code>, <code>List</code>, and arrays).
+It permits simple transformation to, for example, JSON.</p>
+</div>
+<div class="paragraph">
+<p>The <code>IntegrationMBeanExporter</code> now allows the configuration of a custom <code>ObjectNamingStrategy</code> by using the <code>naming-strategy</code> attribute.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="jmx.html" class="xref page">JMX Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-tcp-events"><a class="anchor" href="#x3.0-tcp-events"></a>TCP/IP Connection Events and Connection Management</h3>
+<div class="paragraph">
+<p><code>TcpConnection</code> instances now emit <code>ApplicationEvent</code> instances (specifically <code>TcpConnectionEvent</code> instances) when connections are opened or closed or when an exception occurs.
+This change lets applications be informed of changes to TCP connections by using the normal Spring <code>ApplicationListener</code> mechanism.</p>
+</div>
+<div class="paragraph">
+<p>We renamed <code>AbstractTcpConnection</code> to <code>TcpConnectionSupport</code>.
+Custom connections that are subclasses of this class can use its methods to publish events.
+Similarly, we renamed <code>AbstractTcpConnectionInterceptor</code> to <code>TcpConnectionInterceptorSupport</code>.</p>
+</div>
+<div class="paragraph">
+<p>In addition, we added <code>&lt;int-ip:tcp-connection-event-inbound-channel-adapter/&gt;</code>.
+By default, this adapter sends all <code>TcpConnectionEvent</code> instances to a <code>Channel</code>.</p>
+</div>
+<div class="paragraph">
+<p>Further, the TCP connection factories now provide a new method called <code>getOpenConnectionIds()</code>, which returns a list of identifiers for all open connections.
+It lets applications broadcast to all open connections, among other uses.</p>
+</div>
+<div class="paragraph">
+<p>Finally, the connection factories also provide a new method called <code>closeConnection(String connectionId)</code>, which lets applications explicitly close a connection by using its ID.</p>
+</div>
+<div class="paragraph">
+<p>For more information see <a href="changes-4.1-4.2.html#x4.2-tcp-events" class="xref page">TCP Connection Events</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-inbound-script"><a class="anchor" href="#x3.0-inbound-script"></a>Inbound Channel Adapter Script Support</h3>
+<div class="paragraph">
+<p>The <code>&lt;int:inbound-channel-adapter/&gt;</code> now supports using <code>&lt;expression/&gt;</code> and <code>&lt;script/&gt;</code> child elements to create a <code>MessageSource</code>.
+See <a href="channel-adapter.html#channel-adapter-expressions-and-scripts" class="xref page">Channel Adapter Expressions and Scripts</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-content-enricher-headers"><a class="anchor" href="#x3.0-content-enricher-headers"></a>Content Enricher: Headers Enrichment Support</h3>
+<div class="paragraph">
+<p>The content enricher now provides configuration for <code>&lt;header/&gt;</code> child elements, to enrich the outbound message with headers based on the reply message from the underlying message flow.
+For more information see <a href="content-enrichment.html#payload-enricher" class="xref page">Payload Enricher</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x3.0-general"><a class="anchor" href="#x3.0-general"></a>General Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section describes general changes from version 2.2 to version 3.0.</p>
+</div>
+<div class="sect2">
+<h3 id="x3.0-message-id"><a class="anchor" href="#x3.0-message-id"></a>Message ID Generation</h3>
+<div class="paragraph">
+<p>Previously, message IDs were generated by using the JDK <code>UUID.randomUUID()</code> method.
+With this release, the default mechanism has been changed to use a more efficient and significantly faster algorithm.
+In addition, we added the ability to change the strategy used to generate message IDs.
+For more information see <a href="message.html#message-id-generation" class="xref page">Message ID Generation</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-gateway"><a class="anchor" href="#x3.0-gateway"></a>&#8220;&lt;gateway&gt;&#8221; Changes</h3>
+<div class="paragraph">
+<p>You can now set common headers across all gateway methods, and we added more options for adding information to the message about which method was invoked.</p>
+</div>
+<div class="paragraph">
+<p>You can now entirely customize the way that gateway method calls are mapped to messages.</p>
+</div>
+<div class="paragraph">
+<p>The <code>GatewayMethodMetadata</code> is now a public class.
+It lets you programmatically configure the <code>GatewayProxyFactoryBean</code> from Java.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="gateway.html" class="xref page">Messaging Gateways</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-http-endpointss"><a class="anchor" href="#x3.0-http-endpointss"></a>HTTP Endpoint Changes</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Outbound Endpoint <code>encode-uri</code></strong>: <code>&lt;http:outbound-gateway/&gt;</code> and <code>&lt;http:outbound-channel-adapter/&gt;</code> now provide an <code>encode-uri</code> attribute to allow disabling the encoding of the URI object before sending the request.</p>
+</li>
+<li>
+<p><strong>Inbound Endpoint <code>merge-with-default-converters</code></strong>: <code>&lt;http:inbound-gateway/&gt;</code> and <code>&lt;http:inbound-channel-adapter/&gt;</code> now have a <code>merge-with-default-converters</code> attribute to include the list of default <code>HttpMessageConverter</code> instances after the custom message converters.</p>
+</li>
+<li>
+<p><strong><code>If-Modified-Since</code> and <code>If-Unmodified-Since</code> HTTP Headers</strong>: Previously, the <code>If-Modified-Since</code> and <code>If-Unmodified-Since</code> HTTP headers were incorrectly processed within from and to HTTP headers mapped in the <code>DefaultHttpHeaderMapper</code>.
+Now, in addition to correcting that issue, <code>DefaultHttpHeaderMapper</code> provides date parsing from formatted strings for any HTTP headers that accept date-time values.</p>
+</li>
+<li>
+<p><strong>Inbound Endpoint Expression Variables</strong>: In addition to the existing <code>#requestParams</code> and <code>#pathVariables</code>, the <code>&lt;http:inbound-gateway/&gt;</code> and <code>&lt;http:inbound-channel-adapter/&gt;</code> now support additional useful variables: <code>#matrixVariables</code>, <code>#requestAttributes</code>, <code>#requestHeaders</code>, and <code>#cookies</code>.
+These variables are available in both payload and header expressions.</p>
+</li>
+<li>
+<p><strong>Outbound Endpoint 'uri-variables-expression'</strong>: HTTP outbound endpoints now support the <code>uri-variables-expression</code> attribute to specify an <code>Expression</code> to evaluate a <code>Map</code> for all URI variable placeholders within URL template.
+This allows selection of a different map of expressions based on the outgoing message.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="http.html" class="xref page">HTTP Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-json-transformers"><a class="anchor" href="#x3.0-json-transformers"></a>Jackson Support (JSON)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A new abstraction for JSON conversion has been introduced.
+Implementations for Jackson 1.x and Jackson 2 are currently provided, with the version being determined by presence on the classpath.
+Previously, only Jackson 1.x was supported.</p>
+</li>
+<li>
+<p>The <code>ObjectToJsonTransformer</code> and <code>JsonToObjectTransformer</code> now emit/consume headers containing type information.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For more information, see &#8220;JSON Transformers&#8221; in <a href="transformer.html" class="xref page">Transformer</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-id-for-chain-sub-components"><a class="anchor" href="#x3.0-id-for-chain-sub-components"></a>Chain Elements <code>id</code> Attribute</h3>
+<div class="paragraph">
+<p>Previously, the <code>id</code> attribute for elements within a <code>&lt;chain&gt;</code> was ignored and, in some cases, disallowed.
+Now, the <code>id</code> attribute is allowed for all elements within a <code>&lt;chain&gt;</code>.
+The bean names of chain elements is a combination of the surrounding chain&#8217;s <code>id</code> and the <code>id</code> of the element itself.
+For example: 'myChain$child.myTransformer.handler'.
+For more information see, <a href="chain.html" class="xref page">Message Handler Chain</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-corr-endpoint-empty-groups"><a class="anchor" href="#x3.0-corr-endpoint-empty-groups"></a>Aggregator 'empty-group-min-timeout' property</h3>
+<div class="paragraph">
+<p>The <code>AbstractCorrelatingMessageHandler</code> provides a new property called <code>empty-group-min-timeout</code> to allow empty group expiry to run on a longer schedule than expiring partial groups.
+Empty groups are not removed from the <code>MessageStore</code> until they have not been modified for at least this number of milliseconds.
+For more information, see <a href="aggregator.html#aggregator-xml" class="xref page">Configuring an Aggregator with XML</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-filelistfilter"><a class="anchor" href="#x3.0-filelistfilter"></a>Persistent File List Filters (file, (S)FTP)</h3>
+<div class="paragraph">
+<p>New <code>FileListFilter</code> implementations that use a persistent <code>MetadataStore</code> are now available.
+You can use these to prevent duplicate files after a system restart.
+See <a href="file/reading.html" class="xref page">Reading Files</a>, <a href="ftp/inbound.html" class="xref page">FTP Inbound Channel Adapter</a>, and <a href="sftp/inbound.html" class="xref page">SFTP Inbound Channel Adapter</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-scripting-variables"><a class="anchor" href="#x3.0-scripting-variables"></a>Scripting Support: Variables Changes</h3>
+<div class="paragraph">
+<p>We introduced a new <code>variables</code> attribute for scripting components.
+In addition, variable bindings are now allowed for inline scripts.
+See <a href="groovy.html" class="xref page">Groovy support</a> and <a href="scripting.html" class="xref page">Scripting Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-direct-channel-lb-ref"><a class="anchor" href="#x3.0-direct-channel-lb-ref"></a>Direct Channel Load Balancing configuration</h3>
+<div class="paragraph">
+<p>Previously, when configuring <code>LoadBalancingStrategy</code> on the channel&#8217;s <code>dispatcher</code> child element, the only available option was to use a pre-defined enumeration of values which did not let developers set a custom implementation of the <code>LoadBalancingStrategy</code>.
+You can now use <code>load-balancer-ref</code> to provide a reference to a custom implementation of the <code>LoadBalancingStrategy</code>.
+For more information, see <a href="channel/implementations.html#channel-implementations-directchannel" class="xref page"><code>DirectChannel</code></a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-pub-sub"><a class="anchor" href="#x3.0-pub-sub"></a>PublishSubscribeChannel Behavior</h3>
+<div class="paragraph">
+<p>Previously, sending to a &lt;publish-subscribe-channel/&gt; that had no subscribers would return a <code>false</code> result.
+If used in conjunction with a <code>MessagingTemplate</code>, this would result in an exception being thrown.
+Now, the <code>PublishSubscribeChannel</code> has a property called <code>minSubscribers</code> (default: <code>0</code>).
+If the message is sent to at least the minimum number of subscribers, the send operation is deemed to be successful (even if the number is zero).
+If an application expects to get an exception under these conditions, set the minimum subscribers to at least 1.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0--s-ftp-changes"><a class="anchor" href="#x3.0--s-ftp-changes"></a>FTP, SFTP and FTPS Changes</h3>
+<div class="paragraph">
+<p>The FTP, SFTP and FTPS endpoints no longer cache sessions by default.</p>
+</div>
+<div class="paragraph">
+<p>We removed the deprecated <code>cached-sessions</code> attribute from all endpoints.
+Previously, the embedded caching mechanism controlled by this attribute&#8217;s value did not provide a way to limit the size of the cache, which could grow indefinitely.
+Release 2.1 introduced <code>CachingConnectionFactory</code>, and it became the preferred (and is now the only) way to cache sessions.</p>
+</div>
+<div class="paragraph">
+<p><code>CachingConnectionFactory</code> now provides a new method: <code>resetCache()</code>.
+This method immediately closes idle sessions and causes in-use sessions to be closed as and when they are returned to the cache.</p>
+</div>
+<div class="paragraph">
+<p>The <code>DefaultSftpSessionFactory</code> (in conjunction with a <code>CachingSessionFactory</code>) now supports multiplexing channels over a single SSH connection (SFTP Only).</p>
+</div>
+<div class="sect3">
+<h4 id="ftp-sftp-and-ftps-inbound-adapters"><a class="anchor" href="#ftp-sftp-and-ftps-inbound-adapters"></a>FTP, SFTP and FTPS Inbound Adapters</h4>
+<div class="paragraph">
+<p>Previously, there was no way to override the default filter used to process files retrieved from a remote server.
+The <code>filter</code> attribute determines which files are retrieved, but the <code>FileReadingMessageSource</code> uses an <code>AcceptOnceFileListFilter</code>.
+This means that, if a new copy of a file is retrieved with the same name as a previously copied file, no message was sent from the adapter.</p>
+</div>
+<div class="paragraph">
+<p>With this release, a new attribute <code>local-filter</code> lets you override the default filter (for example, with an <code>AcceptAllFileListFilter</code> or some other custom filter).</p>
+</div>
+<div class="paragraph">
+<p>If you want the behavior of the <code>AcceptOnceFileListFilter</code> to be maintained across JVM executions, you can now configure a custom filter that retains state, perhaps on the file system.</p>
+</div>
+<div class="paragraph">
+<p>Inbound channel adapters now support the <code>preserve-timestamp</code> attribute, which sets the local file modified timestamp to the timestamp from the server (default: <code>false</code>).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ftp-sftp-and-ftps-gateways"><a class="anchor" href="#ftp-sftp-and-ftps-gateways"></a>FTP, SFTP, and FTPS Gateways</h4>
+<div class="paragraph">
+<p>The gateways now support the <code>mv</code> command, enabling the renaming of remote files.</p>
+</div>
+<div class="paragraph">
+<p>The gateways now support recursive <code>ls</code> and <code>mget</code> commands, enabling the retrieval of a remote file tree.</p>
+</div>
+<div class="paragraph">
+<p>The gateways now support <code>put</code> and <code>mput</code> commands, enabling sending files to the remote server.</p>
+</div>
+<div class="paragraph">
+<p>The <code>local-filename-generator-expression</code> attribute is now supported, enabling the naming of local files during retrieval.
+By default, the same name as the remote file is used.</p>
+</div>
+<div class="paragraph">
+<p>The <code>local-directory-expression</code> attribute is now supported, enabling the naming of local directories during retrieval (based on the remote directory).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="remote-file-template"><a class="anchor" href="#remote-file-template"></a>Remote File Template</h4>
+<div class="paragraph">
+<p>A new higher-level abstraction (<code>RemoteFileTemplate</code>) is provided over the <code>Session</code> implementations used by the FTP and SFTP modules.
+While it is used internally by endpoints, you can also use this abstraction programmatically.
+Like all Spring <code>*Template</code> implementations, it reliably closes the underlying session while allowing low level access to the session.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> and <a href="sftp.html" class="xref page">SFTP Adapters</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-outbound-gateway-requires-reply"><a class="anchor" href="#x3.0-outbound-gateway-requires-reply"></a>'requires-reply' Attribute for Outbound Gateways</h3>
+<div class="paragraph">
+<p>All outbound gateways (such as <code>&lt;jdbc:outbound-gateway/&gt;</code> or <code>&lt;jms:outbound-gateway/&gt;</code>) are designed for 'request-reply' scenarios.
+A response is expected from the external service and is published to the <code>reply-channel</code> or the <code>replyChannel</code> message header.
+However, there are some cases where the external system might not always return a result (for example,
+a <code>&lt;jdbc:outbound-gateway/&gt;</code> when a SELECT ends with an empty <code>ResultSet</code> or perhaps a one-way web service).
+Consequently, developers needed an option to configure whether or not a reply is required.
+For this purpose, we introduced the <code>requires-reply</code> attribute for outbound gateway components.
+In most cases, the default value for <code>requires-reply</code> is <code>true</code>.
+If there is no result, a <code>ReplyRequiredException</code> is thrown.
+Changing the value to <code>false</code> means that, if an external service does not return anything, the message flow ends at that point, similar to an outbound channel adapter.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+The WebService outbound gateway has an additional attribute called <code>ignore-empty-responses</code>.
+It is used to treat an empty <code>String</code> response as if no response were received.
+By default, it is <code>true</code>, but you can set it to <code>false</code> to allow the application to receive an empty <code>String</code> in the reply message payload.
+When the attribute is <code>true</code>, an empty string is treated as no response for the purposes of the <code>requires-reply</code> attribute.
+By default, <code>requires-reply</code> is false for the WebService outbound gateway.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>Note that the <code>requiresReply</code> property was previously present but set to <code>false</code> in the <code>AbstractReplyProducingMessageHandler</code>, and there was no way to configure it on outbound gateways by using the XML namespace.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Previously, a gateway receiving no reply would silently end the flow (with a DEBUG log message).
+By default, with this change, an exception is now thrown by most gateways.
+To revert to the previous behavior, set <code>requires-reply</code> to <code>false</code>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
+<div class="sect2">
+<h3 id="x3.0-amqp-mapping"><a class="anchor" href="#x3.0-amqp-mapping"></a>AMQP Outbound Gateway Header Mapping</h3>
+<div class="paragraph">
+<p>Previously, the &lt;int-amqp:outbound-gateway/&gt; mapped headers before invoking the message converter, and the converter could overwrite headers such as <code>content-type</code>.
+The outbound adapter maps the headers after the conversion, which means headers like <code>content-type</code> from the outbound <code>Message</code> (if present) are used.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>Starting with this release, the gateway now maps the headers after the message conversion, consistent with the adapter.
+If your application relies on the previous behavior (where the converter&#8217;s headers overrode the mapped headers), you either need to filter those headers (before the message reaches the gateway) or set them appropriately.
+The headers affected by the <code>SimpleMessageConverter</code> are <code>content-type</code> and <code>content-encoding</code>.
+Custom message converters may set other headers.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-stored-proc-sql-return-type"><a class="anchor" href="#x3.0-stored-proc-sql-return-type"></a>Stored Procedure Components Improvements</h3>
+<div class="paragraph">
+<p>For more complex database-specific types not supported by the standard <code>CallableStatement.getObject</code> method, we introduced two new additional attributes to the <code>&lt;sql-parameter-definition/&gt;</code> element with OUT-direction:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>type-name</code></p>
+</li>
+<li>
+<p><code>return-type</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <code>row-mapper</code> attribute of the stored procedure inbound channel adapter <code>&lt;returning-resultset/&gt;</code> child element now supports a reference to a <code>RowMapper</code> bean definition.
+Previously, it contained only a class name (which is still supported).</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="jdbc/stored-procedures.html" class="xref page">Stored Procedures</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-ws-outbound-uri-substitution"><a class="anchor" href="#x3.0-ws-outbound-uri-substitution"></a>Web Service Outbound URI Configuration</h3>
+<div class="paragraph">
+<p>The web service outbound gateway 'uri' attribute now supports <code>&lt;uri-variable/&gt;</code> substitution for all URI schemes supported by Spring Web Services.
+For more information, see <a href="ws.html#outbound-uri" class="xref page">Outbound URI Configuration</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-redis"><a class="anchor" href="#x3.0-redis"></a>Redis Adapter Changes</h3>
+<div class="paragraph">
+<p>The Redis inbound channel adapter can now use a <code>null</code> value for the <code>serializer</code> property, with the raw data being the message payload.</p>
+</div>
+<div class="paragraph">
+<p>The Redis outbound channel adapter now has the <code>topic-expression</code> property to determine the Redis topic for the <code>Message</code> at runtime.</p>
+</div>
+<div class="paragraph">
+<p>The Redis inbound channel adapter, in addition to the existing <code>topics</code> attribute, now has the <code>topic-patterns</code> attribute.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="redis.html" class="xref page">Redis Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-advising-filters"><a class="anchor" href="#x3.0-advising-filters"></a>Advising Filters</h3>
+<div class="paragraph">
+<p>Previously, when a <code>&lt;filter/&gt;</code> had a <code>&lt;request-handler-advice-chain/&gt;</code>, the discard action was all performed within the scope of the advice chain (including any downstream flow on the <code>discard-channel</code>).
+The filter element now has an attribute called <code>discard-within-advice</code> (default: <code>true</code>) to allow the discard action to be performed after the advice chain completes.
+See <a href="handler-advice/advising-filters.html" class="xref page">Advising Filters</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-annotation-advice"><a class="anchor" href="#x3.0-annotation-advice"></a>Advising Endpoints using Annotations</h3>
+<div class="paragraph">
+<p>Request handler advice chains can now be configured using annotations.
+See <a href="handler-advice/advising-with-annotations.html" class="xref page">Advising Endpoints Using Annotations</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-o-t-s-t"><a class="anchor" href="#x3.0-o-t-s-t"></a>ObjectToStringTransformer Improvements</h3>
+<div class="paragraph">
+<p>This transformer now correctly transforms <code>byte[]</code> and <code>char[]</code> payloads to <code>String</code>.
+For more information, see <a href="transformer.html" class="xref page">Transformer</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-jpa-changes"><a class="anchor" href="#x3.0-jpa-changes"></a>JPA Support Changes</h3>
+<div class="paragraph">
+<p>Payloads to persist or merge can now be of type <code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html">java.lang.Iterable</a></code>.</p>
+</div>
+<div class="paragraph">
+<p>In that case, each object returned by the <code>Iterable</code> is treated as an entity and persisted or merged by using the underlying <code>EntityManager</code>.
+Null values returned by the iterator are ignored.</p>
+</div>
+<div class="paragraph">
+<p>The JPA adapters now have additional attributes to optionally flush and clear entities from the associated persistence context after performing persistence operations.</p>
+</div>
+<div class="paragraph">
+<p>Retrieving gateways had no mechanism to specify the first record to be retrieved, which is a common use case.
+The retrieving gateways now support specifying this parameter by adding the <code>first-result</code> and <code>first-result-expression</code> attributes to the gateway definition.
+For more information, see <a href="jpa/outbound-gateways.html#jpa-retrieving-outbound-gateway" class="xref page">Retrieving Outbound Gateway</a>.</p>
+</div>
+<div class="paragraph">
+<p>The JPA retrieving gateway and inbound adapter now have an attribute to specify the maximum number of results in a result set as an expression.
+In addition, we introduced the <code>max-results</code> attribute to replace <code>max-number-of-results</code>, which has been deprecated.
+<code>max-results</code> and <code>max-results-expression</code> are used to provide the maximum number of results or an expression to compute the maximum number of results, respectively, in the result set.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="jpa.html" class="xref page">JPA Support</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-dalay-expression"><a class="anchor" href="#x3.0-dalay-expression"></a>Delayer: delay expression</h3>
+<div class="paragraph">
+<p>Previously, the <code>&lt;delayer&gt;</code> provided a <code>delay-header-name</code> attribute to determine the delay value at runtime.
+In complex cases, the <code>&lt;delayer&gt;</code> had to be preceded with a <code>&lt;header-enricher&gt;</code>.
+Spring Integration 3.0 introduced the <code>expression</code> attribute and <code>expression</code> child element for dynamic delay determination.
+The <code>delay-header-name</code> attribute is now deprecated, because you can specify the header evaluation in the <code>expression</code>.
+In addition, we introduced the <code>ignore-expression-failures</code> to control the behavior when an expression evaluation fails.
+For more information, see <a href="delayer.html" class="xref page">Delayer</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-jdbc-mysql-v5_6_4"><a class="anchor" href="#x3.0-jdbc-mysql-v5_6_4"></a>JDBC Message Store Improvements</h3>
+<div class="paragraph">
+<p>Spring Integration 3.0 adds a new set of DDL scripts for MySQL version 5.6.4 and higher.
+Now MySQL supports fractional seconds and is thus improving the FIFO ordering when polling from a MySQL-based message store.
+For more information, see <a href="jdbc/message-store.html#jdbc-message-store-generic" class="xref page">The Generic JDBC Message Store</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-event-for-imap-idle"><a class="anchor" href="#x3.0-event-for-imap-idle"></a>IMAP Idle Connection Exceptions</h3>
+<div class="paragraph">
+<p>Previously, if an IMAP idle connection failed, it was logged, but there was no mechanism to inform an application.
+Such exceptions now generate <code>ApplicationEvent</code> instances.
+Applications can obtain these events by using an <code>&lt;int-event:inbound-channel-adapter&gt;</code> or any <code>ApplicationListener</code> configured to receive an <code>ImapIdleExceptionEvent</code> (or one of its super classes).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-tcp-headers"><a class="anchor" href="#x3.0-tcp-headers"></a>Message Headers and TCP</h3>
+<div class="paragraph">
+<p>The TCP connection factories now enable the configuration of a flexible mechanism to transfer selected headers (as well as the payload) over TCP.
+A new <code>TcpMessageMapper</code> enables the selection of the headers, and you need to configure an appropriate serializer or deserializer to write the resulting <code>Map</code> to the TCP stream.
+We added a <code>MapJsonSerializer</code> as a convenient mechanism to transfer headers and payload over TCP.
+For more information, see <a href="ip/correlation.html#ip-headers" class="xref page">Transferring Headers</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-jms-mdca-te"><a class="anchor" href="#x3.0-jms-mdca-te"></a>JMS Message Driven Channel Adapter</h3>
+<div class="paragraph">
+<p>Previously, when configuring a <code>&lt;message-driven-channel-adapter/&gt;</code>, if you wished to use a specific <code>TaskExecutor</code>, you had to declare a container bean and provide it to the adapter by setting the <code>container</code> attribute.
+We added the <code>task-executor</code>, letting it be set directly on the adapter.
+This is in addition to several other container attributes that were already available.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="x3.0-xslt-transformer"><a class="anchor" href="#x3.0-xslt-transformer"></a><code>XsltPayloadTransformer</code></h3>
+<div class="paragraph">
+<p>You can now specify the transformer factory class name by setting the <code>transformer-factory-class</code> attribute.
+See <code><a href="xml/transformation.html#xml-xslt-payload-transformers" class="xref page">XsltPayloadTransformer</a></code>.</p>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a></span>
+  <span class="next"><a href="changes-2.1-2.2.html">Changes between 2.1 and 2.2</a></span>
 </nav>
 </article>
 </div>  </div>

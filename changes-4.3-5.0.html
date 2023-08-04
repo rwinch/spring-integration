@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Changes between 4.3 and 5.0 :: Spring Integration</title>
+    <link rel="prev" href="changes-5.0-5.1.html">
+    <link rel="next" href="changes-4.2-4.3.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1120,7 +1121,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Changes between 4.3 and 5.0"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/changes-4.3-5.0.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,441 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="history.html">Change History</a></li>
+    <li><a href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Changes between 4.3 and 5.0</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>See the <a href="https://github.com/spring-projects/spring-integration/wiki/Spring-Integration-4.3-to-5.0-Migration-Guide">Migration Guide</a> for important changes that might affect your applications.
+You can find migration guides for all versions back to 2.1 on the <a href="https://github.com/spring-projects/spring-integration/wiki">wiki</a>.</p>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="x5.0-new-components"><a class="anchor" href="#x5.0-new-components"></a>New Components</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Version 5.0 added a number of new components.</p>
+</div>
+<div class="sect2">
+<h3 id="java-dsl"><a class="anchor" href="#java-dsl"></a>Java DSL</h3>
+<div class="paragraph">
+<p>The separate <a href="https://github.com/spring-projects/spring-integration-java-dsl">Spring Integration Java DSL</a> project has now been merged into the core Spring Integration project.
+The <code>IntegrationComponentSpec</code> implementations for channel adapters and gateways are distributed to their specific modules.
+See <a href="dsl.html#java-dsl" class="xref page">Java DSL</a> for more information about Java DSL support.
+See also the <a href="https://github.com/spring-projects/spring-integration/wiki/Spring-Integration-4.3-to-5.0-Migration-Guide#java-dsl">4.3 to 5.0 Migration Guide</a> for the required steps to move to Spring Integration 5.0.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="testing-support"><a class="anchor" href="#testing-support"></a>Testing Support</h3>
+<div class="paragraph">
+<p>We created a new Spring Integration Test Framework to help with testing Spring Integration applications.
+Now, with the <code>@SpringIntegrationTest</code> annotation on test classes and the <code>MockIntegration</code> factory, you can make your JUnit tests for integration flows somewhat easier.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="testing.html" class="xref page">Testing support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mongodb-outbound-gateway"><a class="anchor" href="#mongodb-outbound-gateway"></a>MongoDB Outbound Gateway</h3>
+<div class="paragraph">
+<p>The new <code>MongoDbOutboundGateway</code> lets you make queries to the database on demand by sending a message to its request channel.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="mongodb.html#mongodb-outbound-gateway" class="xref page">MongoDB Outbound Gateway</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="webflux-gateways-and-channel-adapters"><a class="anchor" href="#webflux-gateways-and-channel-adapters"></a>WebFlux Gateways and Channel Adapters</h3>
+<div class="paragraph">
+<p>We introduced the new WebFlux support module for Spring WebFlux Framework gateways and channel adapters.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="webflux.html" class="xref page">WebFlux Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="content-type-conversion"><a class="anchor" href="#content-type-conversion"></a>Content Type Conversion</h3>
+<div class="paragraph">
+<p>Now that we use the new <code>InvocableHandlerMethod</code>-based infrastructure for service method invocations, we can perform <code>contentType</code> conversion from the payload to a target method argument.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="endpoint.html#content-type-conversion" class="xref page">Content Type Conversion</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="errormessagepublisher-and-errormessagestrategy"><a class="anchor" href="#errormessagepublisher-and-errormessagestrategy"></a><code>ErrorMessagePublisher</code> and <code>ErrorMessageStrategy</code></h3>
+<div class="paragraph">
+<p>We added <code>ErrorMessagePublisher</code> and the <code>ErrorMessageStrategy</code> for creating <code>ErrorMessage</code> instances.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="jdbc-metadata-store"><a class="anchor" href="#jdbc-metadata-store"></a>JDBC Metadata Store</h3>
+<div class="paragraph">
+<p>We added a JDBC implementation of the <code>MetadataStore</code> implementation.
+This is useful when you need to ensure transactional boundaries for metadata.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="jdbc.html#jdbc-metadata-store" class="xref page">JDBC Metadata Store</a> for more information.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="x5.0-general"><a class="anchor" href="#x5.0-general"></a>General Changes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration is now fully based on Spring Framework <code>5.0</code> and Project Reactor <code>3.1</code>.
+Previous Project Reactor versions are no longer supported.</p>
+</div>
+<div class="sect2">
+<h3 id="core-changes"><a class="anchor" href="#core-changes"></a>Core Changes</h3>
+<div class="paragraph">
+<p>The <code>@Poller</code> annotation now has the <code>errorChannel</code> attribute for easier configuration of the underlying <code>MessagePublishingErrorHandler</code>.
+See <a href="configuration/annotations.html" class="xref page">Annotation Support</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>All the request-reply endpoints (based on <code>AbstractReplyProducingMessageHandler</code>) can now start transactions and, therefore, make the whole downstream flow transactional.
+See <a href="handler-advice/tx-handle-message.html" class="xref page">Transaction Support</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>The <code>SmartLifecycleRoleController</code> now provides methods to obtain status of endpoints in roles.
+See <a href="endpoint.html#endpoint-roles" class="xref page">Endpoint Roles</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>By default, POJO methods are now invoked by using an <code>InvocableHandlerMethod</code>, but you can configure them to use SpEL, as before.
+See <a href="overview.html#pojo-invocation" class="xref page">POJO Method invocation</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>When targeting POJO methods as message handlers, you can now mark one of the service methods with the <code>@Default</code> annotation to provide a fallback mechanism for non-matched conditions.
+See <a href="service-activator.html#service-activator-namespace" class="xref page">Configuring Service Activator</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>We added a simple <code>PassThroughTransactionSynchronizationFactory</code> to always store a polled message in the current transaction context.
+That message is used as a <code>failedMessage</code> property of the <code>MessagingException</code>, which wraps any raw exception thrown during transaction completion.
+See <a href="transactions.html#transaction-synchronization" class="xref page">Transaction Synchronization</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>The aggregator expression-based <code>ReleaseStrategy</code> now evaluates the expression against the <code>MessageGroup</code> instead of just the collection of <code>Message&lt;?&gt;</code>.
+See <a href="aggregator.html#aggregator-spel" class="xref page">Aggregators and Spring Expression Language (SpEL)</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>You can now supply the <code>ObjectToMapTransformer</code> with a customized <code>JsonObjectMapper</code>.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="aggregator.html#aggregator-spel" class="xref page">Aggregators and Spring Expression Language (SpEL)</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>The <code>@GlobalChannelInterceptor</code> annotation and <code>&lt;int:channel-interceptor&gt;</code> now support negative patterns (via <code>!</code> prepending) for component names matching.
+See <a href="channel/configuration.html#global-channel-configuration-interceptors" class="xref page">Global Channel Interceptor Configuration</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>When a candidate failed to acquire the lock, the <code>LockRegistryLeaderInitiator</code> now emits a new <code>OnFailedToAcquireMutexEvent</code> through <code>DefaultLeaderEventPublisher</code>.
+See <code><a href="endpoint.html#leadership-event-handling" class="xref page">Leadership Event Handling</a></code> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="gateway-changes"><a class="anchor" href="#gateway-changes"></a>Gateway Changes</h3>
+<div class="paragraph">
+<p>When the gateway method has a <code>void</code> return type and an error channel is provided, the gateway now correctly sets the <code>errorChannel</code> header.
+Previously, the header was not populated.
+This caused synchronous downstream flows (running on the calling thread) to send the exception to the configured channel, but an exception on an asynchronous downstream flow would be sent to the default <code>errorChannel</code> instead.</p>
+</div>
+<div class="paragraph">
+<p>The <code>RequestReplyExchanger</code> interface now has a <code>throws MessagingException</code> clause to meet the proposed messages exchange contract.</p>
+</div>
+<div class="paragraph">
+<p>You can now specify the request and reply timeouts with SpEL expressions.
+See <a href="gateway.html" class="xref page">Messaging Gateways</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="aggregator-performance-changes"><a class="anchor" href="#aggregator-performance-changes"></a>Aggregator Performance Changes</h3>
+<div class="paragraph">
+<p>By default, aggregators now use a <code>SimpleSequenceSizeReleaseStrategy</code>, which is more efficient, especially with large groups.
+Empty groups are now scheduled for removal after <code>empty-group-min-timeout</code>.
+See <a href="overview.html#overview-endpoints-aggregator" class="xref page">Aggregator</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="splitter-changes"><a class="anchor" href="#splitter-changes"></a>Splitter Changes</h3>
+<div class="paragraph">
+<p>The splitter component can now handle and split Java <code>Stream</code> and Reactive Streams <code>Publisher</code> objects.
+If the output channel is a <code>ReactiveStreamsSubscribableChannel</code>, the <code>AbstractMessageSplitter</code> builds a <code>Flux</code> for subsequent iteration instead of a regular <code>Iterator</code>, independent of the object being split.
+In addition, <code>AbstractMessageSplitter</code> provides <code>protected obtainSizeIfPossible()</code> methods to allow determination of the size of the <code>Iterable</code> and <code>Iterator</code> objects, if that is possible.
+See <a href="splitter.html" class="xref page">Splitter</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="jms-changes"><a class="anchor" href="#jms-changes"></a>JMS Changes</h3>
+<div class="paragraph">
+<p>Previously, Spring Integration JMS XML configuration used a default bean name of <code>connectionFactory</code> for the JMS connection factory, letting the property be omitted from component definitions.
+We renamed it to <code>jmsConnectionFactory</code>, which is the bean name used by Spring Boot to auto-configure the JMS connection factory bean.</p>
+</div>
+<div class="paragraph">
+<p>If your application relies on the previous behavior, you can rename your <code>connectionFactory</code> bean to <code>jmsConnectionFactory</code> or specifically configure your components to use your bean by using its current name.
+See <a href="jms.html" class="xref page">JMS Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mail-changes"><a class="anchor" href="#mail-changes"></a>Mail Changes</h3>
+<div class="paragraph">
+<p>Some inconsistencies with rendering IMAP mail content have been resolved.
+See <a href="mail.html#imap-format-important" class="xref page">the note in the &#8220;Mail-receiving Channel Adapter&#8221; section</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="feed-changes"><a class="anchor" href="#feed-changes"></a>Feed Changes</h3>
+<div class="paragraph">
+<p>Instead of the <code>com.rometools.fetcher.FeedFetcher</code>, which is deprecated in ROME, we introduced a new <code>Resource</code> property for the <code>FeedEntryMessageSource</code>.
+See <a href="feed.html" class="xref page">Feed Adapter</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="file-changes"><a class="anchor" href="#file-changes"></a>File Changes</h3>
+<div class="paragraph">
+<p>We introduced the new <code>FileHeaders.RELATIVE_PATH</code> message header to represent relative path in <code>FileReadingMessageSource</code>.</p>
+</div>
+<div class="paragraph">
+<p>The tail adapter now supports <code>idleEventInterval</code> to emit events when there is no data in the file during that period.</p>
+</div>
+<div class="paragraph">
+<p>The flush predicates for the <code>FileWritingMessageHandler</code> now have an additional parameter.</p>
+</div>
+<div class="paragraph">
+<p>The file outbound channel adapter and gateway (<code>FileWritingMessageHandler</code>) now support the <code>REPLACE_IF_MODIFIED</code> <code>FileExistsMode</code>.</p>
+</div>
+<div class="paragraph">
+<p>They also now support setting file permissions on the newly written file.</p>
+</div>
+<div class="paragraph">
+<p>A new <code>FileSystemMarkerFilePresentFileListFilter</code> is now available.
+See <a href="file/reading.html#file-incomplete" class="xref page">Dealing With Incomplete Data</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>The <code>FileSplitter</code> now provides a <code>firstLineAsHeader</code> option to carry the first line of content as a header in the messages emitted for the remaining lines.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="file.html" class="xref page">File Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ftp-and-sftp-changes"><a class="anchor" href="#ftp-and-sftp-changes"></a>FTP and SFTP Changes</h3>
+<div class="paragraph">
+<p>The inbound channel adapters now have a property called <code>max-fetch-size</code>, which is used to limit the number of files fetched during a poll when no files are currently in the local directory.
+By default, they also are configured with a <code>FileSystemPersistentAcceptOnceFileListFilter</code> in the <code>local-filter</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can also provide a custom <code>DirectoryScanner</code> implementation to inbound channel adapters by setting the newly introduced <code>scanner</code> attribute.</p>
+</div>
+<div class="paragraph">
+<p>You can now configure the regex and pattern filters to always pass directories.
+This can be useful when you use recursion in the outbound gateways.</p>
+</div>
+<div class="paragraph">
+<p>By default, all the inbound channel adapters (streaming and synchronization-based) now use an appropriate <code>AbstractPersistentAcceptOnceFileListFilter</code> implementation to prevent duplicate downloads of remote files.</p>
+</div>
+<div class="paragraph">
+<p>The FTP and SFTP outbound gateways now support the <code>REPLACE_IF_MODIFIED</code> <code>FileExistsMode</code> when fetching remote files.</p>
+</div>
+<div class="paragraph">
+<p>The FTP and SFTP streaming inbound channel adapters now add remote file information in a message header.</p>
+</div>
+<div class="paragraph">
+<p>The FTP and SFTP outbound channel adapters (as well as the <code>PUT</code> command for outbound gateways) now support <code>InputStream</code> as <code>payload</code>, too.</p>
+</div>
+<div class="paragraph">
+<p>The inbound channel adapters can now build file trees locally by using a newly introduced <code>RecursiveDirectoryScanner</code>.
+See the <code>scanner</code> option in the <a href="ftp/inbound.html" class="xref page">FTP Inbound Channel Adapter</a> section for injection.
+Also, you can now switch these adapters to the <code>WatchService</code> instead.</p>
+</div>
+<div class="paragraph">
+<p>We added The <code>NLST</code> command to the <code>AbstractRemoteFileOutboundGateway</code> to perform the list files names remote command.</p>
+</div>
+<div class="paragraph">
+<p>You can now supply the <code>FtpOutboundGateway</code> with <code>workingDirExpression</code> to change the FTP client working directory for the current request message.</p>
+</div>
+<div class="paragraph">
+<p>The <code>RemoteFileTemplate</code> is supplied now with the <code>invoke(OperationsCallback&lt;F, T&gt; action)</code> to perform several <code>RemoteFileOperations</code> calls in the scope of the same, thread-bounded, <code>Session</code>.</p>
+</div>
+<div class="paragraph">
+<p>We added new filters for detecting incomplete remote files.</p>
+</div>
+<div class="paragraph">
+<p>The <code>FtpOutboundGateway</code> and <code>SftpOutboundGateway</code> now support an option to remove the remote file after a successful transfer by using the <code>GET</code> or <code>MGET</code> commands.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> and <a href="sftp.html" class="xref page">SFTP Adapters</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="integration-properties"><a class="anchor" href="#integration-properties"></a>Integration Properties</h3>
+<div class="paragraph">
+<p>Version 4.3.2 added a new <code>spring.integration.readOnly.headers</code> global property to let you customize the list of headers that should not be copied to a newly created <code>Message</code> by the <code>MessageBuilder</code>.
+See <a href="configuration/global-properties.html" class="xref page">Global Properties</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="stream-changes"><a class="anchor" href="#stream-changes"></a>Stream Changes</h3>
+<div class="paragraph">
+<p>We added a new option on the <code>CharacterStreamReadingMessageSource</code> to let it be used to &#8220;pipe&#8221; stdin and publish an application event when the pipe is closed.
+See <a href="stream.html#stream-reading" class="xref page">Reading from Streams</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="barrier-changes"><a class="anchor" href="#barrier-changes"></a>Barrier Changes</h3>
+<div class="paragraph">
+<p>The <code>BarrierMessageHandler</code> now supports a discard channel to which late-arriving trigger messages are sent.
+See <a href="barrier.html" class="xref page">Thread Barrier</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="amqp-changes"><a class="anchor" href="#amqp-changes"></a>AMQP Changes</h3>
+<div class="paragraph">
+<p>The AMQP outbound endpoints now support setting a delay expression when you use the RabbitMQ Delayed Message Exchange plugin.</p>
+</div>
+<div class="paragraph">
+<p>The inbound endpoints now support the Spring AMQP <code>DirectMessageListenerContainer</code>.</p>
+</div>
+<div class="paragraph">
+<p>Pollable AMQP-backed channels now block the poller thread for the poller&#8217;s configured <code>receiveTimeout</code> (default: one second).</p>
+</div>
+<div class="paragraph">
+<p>Headers, such as <code>contentType</code>, that are added to message properties by the message converter are now used in the final message.
+Previously, it depended on the converter type as to which headers and message properties appeared in the final message.
+To override the headers set by the converter, set the <code>headersMappedLast</code> property to <code>true</code>.
+See <a href="amqp.html" class="xref page">AMQP Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="http-changes"><a class="anchor" href="#http-changes"></a>HTTP Changes</h3>
+<div class="paragraph">
+<p>By default, the <code>DefaultHttpHeaderMapper.userDefinedHeaderPrefix</code> property is now an empty string instead of <code>X-</code>.
+See <a href="http/header-mapping.html" class="xref page">HTTP Header Mappings</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>By default, <code>uriVariablesExpression</code> now uses a <code>SimpleEvaluationContext</code> (since 5.0.4).</p>
+</div>
+<div class="paragraph">
+<p>See <a href="http/namespace.html#mapping-uri-variables" class="xref page">Mapping URI Variables</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mqtt-changes"><a class="anchor" href="#mqtt-changes"></a>MQTT Changes</h3>
+<div class="paragraph">
+<p>Inbound messages are now mapped with the <code>RECEIVED_TOPIC</code>, <code>RECEIVED_QOS</code>, and <code>RECEIVED_RETAINED</code> headers to avoid inadvertent propagation to outbound messages when an application relays messages.</p>
+</div>
+<div class="paragraph">
+<p>The outbound channel adapter now supports expressions for the topic, qos, and retained properties.
+The defaults remain the same.
+See <a href="mqtt.html" class="xref page">MQTT Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="stomp-changes"><a class="anchor" href="#stomp-changes"></a>STOMP Changes</h3>
+<div class="paragraph">
+<p>We changed the STOMP module to use <code>ReactorNettyTcpStompClient</code>, based on the Project Reactor <code>3.1</code> and <code>reactor-netty</code> extension.
+We renamed <code>Reactor2TcpStompSessionManager</code> to <code>ReactorNettyTcpStompSessionManager</code>, according to the <code>ReactorNettyTcpStompClient</code> foundation.
+See <a href="stomp.html" class="xref page">STOMP Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="web-services-changes"><a class="anchor" href="#web-services-changes"></a>Web Services Changes</h3>
+<div class="paragraph">
+<p>You can now supply <code>WebServiceOutboundGateway</code> instances with an externally configured <code>WebServiceTemplate</code> instances.</p>
+</div>
+<div class="paragraph">
+<p><code>DefaultSoapHeaderMapper</code> can now map a <code>javax.xml.transform.Source</code> user-defined header to a SOAP header element.</p>
+</div>
+<div class="paragraph">
+<p>Simple WebService inbound and outbound gateways can now deal with the complete <code>WebServiceMessage</code> as a <code>payload</code>, allowing the manipulation of MTOM attachments.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="ws.html" class="xref page">Web Services Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="redis-changes"><a class="anchor" href="#redis-changes"></a>Redis Changes</h3>
+<div class="paragraph">
+<p>The <code>RedisStoreWritingMessageHandler</code> is supplied now with additional <code>String</code>-based setters for SpEL expressions (for convenience with Java configuration).
+You can now configure the <code>zsetIncrementExpression</code> on the <code>RedisStoreWritingMessageHandler</code> as well.
+In addition, this property has been changed from <code>true</code> to <code>false</code> since the <code>INCR</code> option on <code>ZADD</code> Redis command is optional.</p>
+</div>
+<div class="paragraph">
+<p>You can now supply the <code>RedisInboundChannelAdapter</code> with an <code>Executor</code> for executing Redis listener invokers.
+In addition, the received messages now contain a <code>RedisHeaders.MESSAGE_SOURCE</code> header to indicate the source of the message (topic or pattern).</p>
+</div>
+<div class="paragraph">
+<p>See <a href="redis.html" class="xref page">Redis Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="tcp-changes"><a class="anchor" href="#tcp-changes"></a>TCP Changes</h3>
+<div class="paragraph">
+<p>We added a new <code>ThreadAffinityClientConnectionFactory</code> to bind TCP connections to threads.</p>
+</div>
+<div class="paragraph">
+<p>You can now configure the TCP connection factories to support <code>PushbackInputStream</code> instances, letting deserializers &#8220;unread&#8221; (push back) bytes after &#8220;reading ahead&#8221;.</p>
+</div>
+<div class="paragraph">
+<p>We added a <code>ByteArrayElasticRawDeserializer</code> without <code>maxMessageSize</code> to control and buffer incoming data as needed.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="ip.html" class="xref page">TCP and UDP Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="jdbc-changes"><a class="anchor" href="#jdbc-changes"></a>JDBC Changes</h3>
+<div class="paragraph">
+<p>The <code>JdbcMessageChannelStore</code> now provides a setter for <code>ChannelMessageStorePreparedStatementSetter</code>, letting you customize message insertion in the store.</p>
+</div>
+<div class="paragraph">
+<p>The <code>ExpressionEvaluatingSqlParameterSourceFactory</code> now provides a setter for <code>sqlParameterTypes</code>, letting you customize the SQL types of the parameters.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="jdbc.html" class="xref page">JDBC Support</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="metrics-changes"><a class="anchor" href="#metrics-changes"></a>Metrics Changes</h3>
+<div class="paragraph">
+<p><a href="https://micrometer.io/">Micrometer</a> application monitoring is now supported (since version 5.0.2).
+See <a href="metrics.html#micrometer-integration" class="xref page">Micrometer Integration</a> for more information.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+Changes were made to the Micrometer <code>Meters</code> in version 5.0.3 to make them more suitable for use in dimensional systems.
+Further changes were made in 5.0.4.
+If you use Micrometer, we recommend a minimum of version 5.0.4.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
-</td>
-</tr>
-</table>
+<div class="sect2">
+<h3 id="endpointid-annotations"><a class="anchor" href="#endpointid-annotations"></a><code>@EndpointId</code> Annotations</h3>
+<div class="paragraph">
+<p>Introduced in version 5.0.4, this annotation provides control over bean naming when you use Java configuration.
+See <a href="overview.html#endpoint-bean-names" class="xref page">Endpoint Bean Names</a> for more information.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a></span>
+  <span class="next"><a href="changes-4.2-4.3.html">Changes between 4.2 and 4.3</a></span>
 </nav>
 </article>
 </div>  </div>

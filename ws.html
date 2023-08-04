@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Web Services Support :: Spring Integration</title>
+    <link rel="prev" href="web-sockets.html">
+    <link rel="next" href="xml.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1002,7 +1003,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="web-sockets.html">WebSockets Support</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="ws.html">Web Services Support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Web Services Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/ws.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,606 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="ws.html">Web Services Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Web Services Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>This chapter describes Spring Integration&#8217;s support for web services, including:</p>
 </div>
-<div class="hdlist">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#webservices-outbound">Outbound Web Service Gateways</a></p>
+</li>
+<li>
+<p><a href="#webservices-inbound">Inbound Web Service Gateways</a></p>
+</li>
+<li>
+<p><a href="#webservices-namespace">Web Service Namespace Support</a></p>
+</li>
+<li>
+<p><a href="#outbound-uri">Outbound URI Configuration</a></p>
+</li>
+<li>
+<p><a href="#ws-message-headers">WS Message Headers</a></p>
+</li>
+<li>
+<p><a href="#mtom-support">MTOM Support</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-ws&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-ws:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webservices-outbound"><a class="anchor" href="#webservices-outbound"></a>Outbound Web Service Gateways</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To invoke a web service when you send a message to a channel, you have two options, both of which build upon the <a href="https://projects.spring.io/spring-ws/">Spring Web Services</a> project: <code>SimpleWebServiceOutboundGateway</code> and <code>MarshallingWebServiceOutboundGateway</code>.
+The former accepts either a <code>String</code> or <code>javax.xml.transform.Source</code> as the message payload.
+The latter supports any implementation of the <code>Marshaller</code> and <code>Unmarshaller</code> interfaces.
+Both require a Spring Web Services <code>DestinationProvider</code>, to determine the URI of the web service to be called.
+The following example shows both options for invoking a web service:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"> simpleGateway = new SimpleWebServiceOutboundGateway(destinationProvider);
+
+ marshallingGateway = new MarshallingWebServiceOutboundGateway(destinationProvider, marshaller);</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+When using the namespace support (<a href="#webservices-namespace">described later</a>), you need only set a URI.
+Internally, the parser configures a fixed URI <code>DestinationProvider</code> implementation.
+If you need dynamic resolution of the URI at runtime, however, then the <code>DestinationProvider</code> can provide such behavior as looking up the URI from a registry.
+See the Spring Web Services <a href="https://docs.spring.io/spring-ws/docs/current/api/org/springframework/ws/client/support/destination/DestinationProvider.html"><code>DestinationProvider</code></a> Javadoc for more information about this strategy.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>Starting with version 5.0, you can supply the <code>SimpleWebServiceOutboundGateway</code> and <code>MarshallingWebServiceOutboundGateway</code> with an external <code>WebServiceTemplate</code> instance, which you can configure for any custom properties, including <code>checkConnectionForFault</code> (which allows your application to deal with non-conforming services).</p>
+</div>
+<div class="paragraph">
+<p>For more detail on the inner workings, see the Spring Web Services reference guide&#8217;s chapter covering <a href="https://docs.spring.io/spring-ws/docs/current/reference/#client">client access</a> and the chapter covering <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/data-access.html#oxm">Object/XML mapping</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webservices-inbound"><a class="anchor" href="#webservices-inbound"></a>Inbound Web Service Gateways</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To send a message to a channel upon receiving a web service invocation, you again have two options: <code>SimpleWebServiceInboundGateway</code> and <code>MarshallingWebServiceInboundGateway</code>.
+The former extracts a <code>javax.xml.transform.Source</code> from the <code>WebServiceMessage</code> and sets it as the message payload.
+The latter supports implementation of the <code>Marshaller</code> and <code>Unmarshaller</code> interfaces.
+If the incoming web service message is a SOAP message, the SOAP action header is added to the headers of the <code>Message</code> that is forwarded onto the request channel.
+The following example shows both options:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"> simpleGateway = new SimpleWebServiceInboundGateway();
+ simpleGateway.setRequestChannel(forwardOntoThisChannel);
+ simpleGateway.setReplyChannel(listenForResponseHere); //Optional
+
+ marshallingGateway = new MarshallingWebServiceInboundGateway(marshaller);
+ //set request and optionally reply channel</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Both gateways implement the Spring Web Services <code>MessageEndpoint</code> interface, so they can be configured with a <code>MessageDispatcherServlet</code> as per standard Spring Web Services configuration.</p>
+</div>
+<div class="paragraph">
+<p>For more detail on how to use these components, see the Spring Web Services reference guide&#8217;s chapter covering <a href="https://docs.spring.io/spring-ws/docs/current/reference/#server">creating a web service</a>.
+The chapter covering <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/data-access.html#oxm">Object/XML mapping</a> is also applicable again.</p>
+</div>
+<div class="paragraph">
+<p>To add the <code>SimpleWebServiceInboundGateway</code> and <code>MarshallingWebServiceInboundGateway</code> configurations to the Spring WS infrastructure, you should add the <code>EndpointMapping</code> definition between <code>MessageDispatcherServlet</code> and the target <code>MessageEndpoint</code> implementations, as you would for a normal Spring WS application.
+For this purpose (from the Spring Integration perspective), Spring WS provides the following convenient <code>EndpointMapping</code> implementations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>o.s.ws.server.endpoint.mapping.UriEndpointMapping</code></p>
+</li>
+<li>
+<p><code>o.s.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping</code></p>
+</li>
+<li>
+<p><code>o.s.ws.soap.server.endpoint.mapping.SoapActionEndpointMapping</code></p>
+</li>
+<li>
+<p><code>o.s.ws.server.endpoint.mapping.XPathPayloadEndpointMapping</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You must specify the beans for these classes in the application context and reference the <code>SimpleWebServiceInboundGateway</code> and/or <code>MarshallingWebServiceInboundGateway</code> bean definitions according to the WS mapping algorithm.</p>
+</div>
+<div class="paragraph">
+<p>See the <a href="https://docs.spring.io/spring-ws/docs/current/reference/#server-endpoint-mapping">endpoint mappings</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webservices-namespace"><a class="anchor" href="#webservices-namespace"></a>Web Service Namespace Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To configure an outbound web service gateway, use the <code>outbound-gateway</code> element from the <code>ws</code> namespace, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-ws:outbound-gateway id="simpleGateway"
+                     request-channel="inputChannel"
+                     uri="https://example.org"/&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+This example does not provide a 'reply-channel'.
+If the web service returns a non-empty response, the <code>Message</code> containing that response is sent to the reply channel defined in the request message&#8217;s <code>REPLY_CHANNEL</code> header.
+If that is not available, a channel resolution exception is thrown.
+If you want to send the reply to another channel instead, provide a 'reply-channel' attribute on the 'outbound-gateway' element.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock tip">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+By default, when you invoke a web service that returns an empty response after using a String payload for the request <code>Message</code>, no reply <code>Message</code> is sent.
+Therefore, you need not set a 'reply-channel' or have a <code>REPLY_CHANNEL</code> header in the request <code>Message</code>.
+If you actually do want to receive the empty response as a <code>Message</code>, you can set the 'ignore-empty-responses' attribute to <code>false</code>.
+Doing so works only for <code>String</code> objects, because using a <code>Source</code> or a <code>Document</code> object leads to a null response and consequently never generates a reply <code>Message</code>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>To set up an inbound Web Service Gateway, use the <code>inbound-gateway</code> element, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-ws:inbound-gateway id="simpleGateway"
+                    request-channel="inputChannel"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To use Spring OXM marshallers or unmarshallers, you must provide bean references.
+The following example shows how to provide a bean reference for an outbound marshalling gateway:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-ws:outbound-gateway id="marshallingGateway"
+                     request-channel="requestChannel"
+                     uri="https://example.org"
+                     marshaller="someMarshaller"
+                     unmarshaller="someUnmarshaller"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows how to provide a bean reference for an inbound marshalling gateway:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-ws:inbound-gateway id="marshallingGateway"
+                    request-channel="requestChannel"
+                    marshaller="someMarshaller"
+                    unmarshaller="someUnmarshaller"/&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Most <code>Marshaller</code> implementations also implement the <code>Unmarshaller</code> interface.
+When using such a <code>Marshaller</code>, only the <code>marshaller</code> attribute is necessary.
+Even when using a <code>Marshaller</code>, you may also provide a reference for the <code>request-callback</code> on the outbound gateways.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>For either outbound gateway type, you can specify a <code>destination-provider</code> attribute instead of the <code>uri</code> (exactly one of them is required).
+You can then reference any Spring Web Services <code>DestinationProvider</code> implementation (for example, to lookup the URI from a registry at runtime).</p>
+</div>
+<div class="paragraph">
+<p>For either outbound gateway type, the <code>message-factory</code> attribute can also be configured with a reference to any Spring Web Services <code>WebServiceMessageFactory</code> implementation.</p>
+</div>
+<div class="paragraph">
+<p>For the simple inbound gateway type, you can set the <code>extract-payload</code> attribute to <code>false</code> to forward the entire <code>WebServiceMessage</code> instead of just its payload as a <code>Message</code> to the request channel.
+Doing so might be useful, for example, when a custom transformer works against the <code>WebServiceMessage</code> directly.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, the <code>web-service-template</code> reference attribute lets you inject a <code>WebServiceTemplate</code> with any possible custom properties.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="webservices-dsl"><a class="anchor" href="#webservices-dsl"></a>Web Service Java DSL Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The equivalent configuration for the gateways shown in <a href="#webservices-namespace">Web Service Namespace Support</a> are shown in the following snippets:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+IntegrationFlow inbound() {
+    return IntegrationFlow.from(Ws.simpleInboundGateway()
+                .id("simpleGateway"))
+        ...
+        .get();
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+IntegrationFlow outboundMarshalled() {
+    return f -&gt; f.handle(Ws.marshallingOutboundGateway()
+                    .id("marshallingGateway")
+                    .marshaller(someMarshaller())
+                    .unmarshaller(someUnmarshalller()))
+        ...
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+IntegrationFlow inboundMarshalled() {
+    return IntegrationFlow.from(Ws.marshallingInboundGateway()
+                .marshaller(someMarshaller())
+                .unmarshaller(someUnmarshalller())
+                .id("marshallingGateway"))
+        ...
+        .get();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Other properties can be set on the endpoint specs in a fluent manner (with the properties depending on whether an external <code>WebServiceTemplate</code> has been provided for outbound gateways).
+Examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">.from(Ws.simpleInboundGateway()
+                .extractPayload(false))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">.handle(Ws.simpleOutboundGateway(template)
+            .uri(uri)
+            .sourceExtractor(sourceExtractor)
+            .encodingMode(DefaultUriBuilderFactory.EncodingMode.NONE)
+            .headerMapper(headerMapper)
+            .ignoreEmptyResponses(true)
+            .requestCallback(requestCallback)
+            .uriVariableExpressions(uriVariableExpressions)
+            .extractPayload(false))
+)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">.handle(Ws.marshallingOutboundGateway()
+            .destinationProvider(destinationProvider)
+            .marshaller(marshaller)
+            .unmarshaller(unmarshaller)
+            .messageFactory(messageFactory)
+            .encodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY)
+            .faultMessageResolver(faultMessageResolver)
+            .headerMapper(headerMapper)
+            .ignoreEmptyResponses(true)
+            .interceptors(interceptor)
+            .messageSenders(messageSender)
+            .requestCallback(requestCallback)
+            .uriVariableExpressions(uriVariableExpressions))</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">.handle(Ws.marshallingOutboundGateway(template)
+            .uri(uri)
+            .encodingMode(DefaultUriBuilderFactory.EncodingMode.URI_COMPONENT)
+            .headerMapper(headerMapper)
+            .ignoreEmptyResponses(true)
+            .requestCallback(requestCallback)
+            .uriVariableExpressions(uriVariableExpressions))
+)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="outbound-uri"><a class="anchor" href="#outbound-uri"></a>Outbound URI Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For all URI schemes supported by Spring Web Services (see <a href="https://docs.spring.io/spring-ws/docs/current/reference/#client-transports">URIs and Transports</a>) <code>&lt;uri-variable/&gt;</code> substitution is provided.
+The following example shows how to define it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;ws:outbound-gateway id="gateway" request-channel="input"
+        uri="https://springsource.org/{thing1}-{thing2}"&gt;
+    &lt;ws:uri-variable name="thing1" expression="payload.substring(1,7)"/&gt;
+    &lt;ws:uri-variable name="thing2" expression="headers.x"/&gt;
+&lt;/ws:outbound-gateway&gt;
+
+&lt;ws:outbound-gateway request-channel="inputJms"
+        uri="jms:{destination}?deliveryMode={deliveryMode}&amp;amp;priority={priority}"
+        message-sender="jmsMessageSender"&gt;
+    &lt;ws:uri-variable name="destination" expression="headers.jmsQueue"/&gt;
+    &lt;ws:uri-variable name="deliveryMode" expression="headers.deliveryMode"/&gt;
+    &lt;ws:uri-variable name="priority" expression="headers.jms_priority"/&gt;
+&lt;/ws:outbound-gateway&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you supply a <code>DestinationProvider</code>, variable substitution is not supported and a configuration error occurs if you provide variables.</p>
+</div>
+<div class="sect2">
+<h3 id="controlling-uri-encoding"><a class="anchor" href="#controlling-uri-encoding"></a>Controlling URI Encoding</h3>
+<div class="paragraph">
+<p>By default, the URL string is encoded (see <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/util/UriComponentsBuilder.html"><code>UriComponentsBuilder</code></a>) to the URI object before sending the request.
+In some scenarios with a non-standard URI, it is undesirable to perform the encoding.
+The <code>&lt;ws:outbound-gateway/&gt;</code> element provides an <code>encoding-mode</code> attribute.
+To disable encoding the URL, set this attribute to <code>NONE</code> (by default, it is <code>TEMPLATE_AND_VALUES</code>).
+If you wish to partially encode some of the URL, you can do so by using an <code>expression</code> within a <code>&lt;uri-variable/&gt;</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;ws:outbound-gateway url="https://somehost/%2f/fooApps?bar={param}" encoding-mode="NONE"&gt;
+          &lt;http:uri-variable name="param"
+            expression="T(org.apache.commons.httpclient.util.URIUtil)
+                                             .encodeWithinQuery('Hello World!')"/&gt;
+&lt;/ws:outbound-gateway&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
+<td class="content">
+If you set <code>DestinationProvider</code>, <code>encoding-mode</code> is ignored.
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ws-message-headers"><a class="anchor" href="#ws-message-headers"></a>WS Message Headers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Spring Integration web service gateways automatically map the SOAP action header.
+By default, it is copied to and from Spring Integration <code>MessageHeaders</code> by using the <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/ws/DefaultSoapHeaderMapper.html"><code>DefaultSoapHeaderMapper</code></a>.</p>
+</div>
+<div class="paragraph">
+<p>You can pass in your own implementation of SOAP-specific header mappers, as the gateways have properties to support doing so.</p>
+</div>
+<div class="paragraph">
+<p>Unless explicitly specified by the <code>requestHeaderNames</code> or <code>replyHeaderNames</code> properties of the <code>DefaultSoapHeaderMapper</code>, any user-defined SOAP headers are not copied to or from a SOAP Message.</p>
+</div>
+<div class="paragraph">
+<p>When you use the XML namespace for configuration, you can set these properties by using the <code>mapped-request-headers</code> and <code>mapped-reply-headers</code> attributes, you can provide a custom mapper by setting the <code>header-mapper</code> attribute.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+When mapping user-defined headers, the values can also contain simple wildcard patterns (such <code>myheader*</code> or <code><strong>myheader</code>).
+For example, if you need to copy all user-defined headers, you can use the wildcard character: <code></strong></code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.1, the <code>AbstractHeaderMapper</code> (a <code>DefaultSoapHeaderMapper</code> superclass) lets the <code>NON_STANDARD_HEADERS</code> token be configured for the <code>requestHeaderNames</code> and <code>replyHeaderNames</code> properties (in addition to existing <code>STANDARD_REQUEST_HEADERS</code> and <code>STANDARD_REPLY_HEADERS</code>) to map all user-defined headers.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Rather than using the wildcard (<code>*</code>), we recommend using the following combination : <code>STANDARD_REPLY_HEADERS, NON_STANDARD_HEADERS</code>.
+Doing so avoids mapping <code>request</code> headers to the reply.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.3, you can negate patterns in the header mappings by preceding the pattern with <code>!</code>.
+Negated patterns get priority, so a list such as <code>STANDARD_REQUEST_HEADERS,thing1,thing*,!thing2,!thing3,qux,!thing1</code> does not map <code>thing1</code>, <code>thing2</code>, or <code>thing3</code>.
+It does map the standard headers, <code>thing4</code>, and <code>qux</code>.
+(Note that <code>thing1</code> is included in both non-negated and negated forms.
+Because negated values take precedence, <code>thing1</code> is not mapped.)</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If you have a user-defined header that begins with <code>!</code> that you do wish to map, you can escape it with <code>\</code>, as follows: <code>STANDARD_REQUEST_HEADERS,\!myBangHeader</code>.
+A <code>!myBangHeader</code> is then mapped.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Inbound SOAP headers (request headers for the inbound gateway and reply headers for the outbound gateway) are mapped as <code>SoapHeaderElement</code> objects.
+You can explore the contents by accessing the <code>Source</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+    &lt;soapenv:Header&gt;
+        &lt;auth&gt;
+            &lt;username&gt;user&lt;/username&gt;
+            &lt;password&gt;pass&lt;/password&gt;
+        &lt;/auth&gt;
+        &lt;bar&gt;BAR&lt;/bar&gt;
+        &lt;baz&gt;BAZ&lt;/baz&gt;
+        &lt;qux&gt;qux&lt;/qux&gt;
+    &lt;/soapenv:Header&gt;
+    &lt;soapenv:Body&gt;
+        ...
+    &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If <code>mapped-request-headers</code> is <code>auth, ca*</code>, the <code>auth</code>, <code>cat</code>, and <code>can</code> headers are mapped, but <code>qux</code> is not mapped.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows how to get a value named <code>user</code> from a header named <code>auth</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">...
+SoapHeaderElement header = (SoapHeaderElement) headers.get("auth");
+DOMSource source = (DOMSource) header.getSource();
+NodeList nodeList = source.getNode().getChildNodes();
+assertEquals("username", nodeList.item(0).getNodeName());
+assertEquals("user", nodeList.item(0).getFirstChild().getNodeValue());
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, the <code>DefaultSoapHeaderMapper</code> supports user-defined headers of type <code>javax.xml.transform.Source</code> and populates them as child nodes of the <code>&lt;soapenv:Header&gt;</code>.
+The following example shows how to do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Map&lt;String, Object&gt; headers = new HashMap&lt;&gt;();
+
+String authXml =
+     "&lt;auth xmlns='http://test.auth.org'&gt;"
+           + "&lt;username&gt;user&lt;/username&gt;"
+           + "&lt;password&gt;pass&lt;/password&gt;"
+           + "&lt;/auth&gt;";
+headers.put("auth", new StringSource(authXml));
+...
+DefaultSoapHeaderMapper mapper = new DefaultSoapHeaderMapper();
+mapper.setRequestHeaderNames("auth");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result of the preceding examples is the following SOAP envelope:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+    &lt;soapenv:Header&gt;
+        &lt;auth xmlns="http://test.auth.org"&gt;
+            &lt;username&gt;user&lt;/username&gt;
+            &lt;password&gt;pass&lt;/password&gt;
+        &lt;/auth&gt;
+    &lt;/soapenv:Header&gt;
+    &lt;soapenv:Body&gt;
+        ...
+    &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mtom-support"><a class="anchor" href="#mtom-support"></a>MTOM Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The marshalling inbound and outbound web service gateways support attachments directly through built-in functionality of the marshaller (for example, <code>Jaxb2Marshaller</code> provides the <code>mtomEnabled</code> option).
+Starting with version 5.0, the simple web service gateways can directly operate with inbound and outbound <code>MimeMessage</code> instances, which have an API to manipulate attachments.
+When you need to send web service message with attachments (either a reply from a server or a client request) you should use the <code>WebServiceMessageFactory</code> directly and send a <code>WebServiceMessage</code> with attachments as a <code>payload</code> to the request or reply channel of the gateway.
+The following example shows how to do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">WebServiceMessageFactory messageFactory = new SaajSoapMessageFactory(MessageFactory.newInstance());
+MimeMessage webServiceMessage = (MimeMessage) messageFactory.createWebServiceMessage();
+
+String request = "&lt;test&gt;foo&lt;/test&gt;";
+
+TransformerFactory transformerFactory = TransformerFactory.newInstance();
+Transformer transformer = transformerFactory.newTransformer();
+transformer.transform(new StringSource(request), webServiceMessage.getPayloadResult());
+
+webServiceMessage.addAttachment("myAttachment", new ByteArrayResource("my_data".getBytes()), "plain/text");
+
+this.webServiceChannel.send(new GenericMessage&lt;&gt;(webServiceMessage));</code></pre>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="web-sockets.html">WebSockets Support</a></span>
+  <span class="next"><a href="xml.html">XML Support - Dealing with XML Payloads</a></span>
 </nav>
 </article>
 </div>  </div>

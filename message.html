@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Message :: Spring Integration</title>
+    <link rel="prev" href="bridge.html">
+    <link rel="next" href="message-routing.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -327,7 +328,7 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="message.html">Message</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Message"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/message.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,485 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="message.html">Message</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Message</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>The Spring Integration <code>Message</code> is a generic container for data.
+Any object can be provided as the payload, and each <code>Message</code> instance includes headers containing user-extensible properties as key-value pairs.</p>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="message-interface"><a class="anchor" href="#message-interface"></a>The <code>Message</code> Interface</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following listing shows the definition of the <code>Message</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Message&lt;T&gt; {
+
+    T getPayload();
+
+    MessageHeaders getHeaders();
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Message</code> interface is a core part of the API.
+By encapsulating the data in a generic wrapper, the messaging system can pass it around without any knowledge of the data&#8217;s type.
+As an application evolves to support new types or when the types themselves are modified or extended, the messaging system is not affected.
+On the other hand, when some component in the messaging system does require access to information about the <code>Message</code>, such metadata can typically be stored to and retrieved from the metadata in the message headers.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="message-headers"><a class="anchor" href="#message-headers"></a>Message Headers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Just as Spring Integration lets any <code>Object</code> be used as the payload of a <code>Message</code>, it also supports any <code>Object</code> types as header values.
+In fact, the <code>MessageHeaders</code> class implements the <code>java.util.Map_ interface</code>, as the following class definition shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public final class MessageHeaders implements Map&lt;String, Object&gt;, Serializable {
+  ...
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+Even though the <code>MessageHeaders</code> class implements <code>Map</code>, it is effectively a read-only implementation.
+Any attempt to <code>put</code> a value in the Map results in an <code>UnsupportedOperationException</code>.
+The same applies for <code>remove</code> and <code>clear</code>.
+Since messages may be passed to multiple consumers, the structure of the <code>Map</code> cannot be modified.
+Likewise, the message&#8217;s payload <code>Object</code> can not be <code>set</code> after the initial creation.
+However, the mutability of the header values themselves (or the payload Object) is intentionally left as a decision for the framework user.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>As an implementation of <code>Map</code>, the headers can be retrieved by calling <code>get(..)</code> with the name of the header.
+Alternatively, you can provide the expected <code>Class</code> as an additional parameter.
+Even better, when retrieving one of the pre-defined values, convenient getters are available.
+The following example shows each of these three options:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Object someValue = message.getHeaders().get("someKey");
+
+CustomerId customerId = message.getHeaders().get("customerId", CustomerId.class);
+
+Long timestamp = message.getHeaders().getTimestamp();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following table describes the pre-defined message headers:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Pre-defined Message Headers</caption>
+<colgroup>
+<col style="width: 22.2222%;">
+<col style="width: 22.2222%;">
+<col style="width: 55.5556%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Header Name</th>
+<th class="tableblock halign-left valign-top">Header Type</th>
+<th class="tableblock halign-left valign-top">Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> MessageHeaders.ID</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.util.UUID</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An identifier for this message instance.
+Changes each time a message is mutated.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> MessageHeaders.
+TIMESTAMP</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.lang.Long</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The time the message was created.
+Changes each time a message is mutated.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> MessageHeaders.
+REPLY_CHANNEL</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.lang.Object
+(String or
+MessageChannel)</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A channel to which a reply (if any) is sent when no explicit output channel is configured and there is no <code>ROUTING_SLIP</code> or the <code>ROUTING_SLIP</code> is exhausted.
+If the value is a <code>String</code>, it must represent a bean name or have been generated by a <code>ChannelRegistry.</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> MessageHeaders.
+ERROR_CHANNEL</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.lang.Object
+(String or
+MessageChannel)</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A channel to which errors are sent.
+If the value is a <code>String</code>, it must represent a bean name or have been generated by a <code>ChannelRegistry.</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Many inbound and outbound adapter implementations also provide or expect certain headers, and you can configure additional user-defined headers.
+Constants for these headers can be found in those modules where such headers exist&#8201;&#8212;&#8201;for example.
+<code>AmqpHeaders</code>, <code>JmsHeaders</code>, and so on.</p>
+</div>
+<div class="sect2">
+<h3 id="message-header-accessor"><a class="anchor" href="#message-header-accessor"></a><code>MessageHeaderAccessor</code> API</h3>
+<div class="paragraph">
+<p>Starting with Spring Framework 4.0 and Spring Integration 4.0, the core messaging abstraction has been moved to the <code>spring-messaging</code> module, and the <code>MessageHeaderAccessor</code> API has been introduced to provide additional abstraction over messaging implementations.
+All (core) Spring Integration-specific message headers constants are now declared in the <code>IntegrationMessageHeaderAccessor</code> class.
+The following table describes the pre-defined message headers:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Pre-defined Message Headers</caption>
+<colgroup>
+<col style="width: 38.4615%;">
+<col style="width: 23.0769%;">
+<col style="width: 38.4616%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Header Name</th>
+<th class="tableblock halign-left valign-top">Header Type</th>
+<th class="tableblock halign-left valign-top">Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+CORRELATION_ID</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.lang.Object</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to correlate two or more messages.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+SEQUENCE_NUMBER</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.lang.Integer</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Usually a sequence number with a group of messages with a <code>SEQUENCE_SIZE</code> but can also be used in a <code>&lt;resequencer/&gt;</code> to resequence an unbounded group of messages.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+SEQUENCE_SIZE</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.lang.Integer</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The number of messages within a group of correlated messages.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+EXPIRATION_DATE</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.lang.Long</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates when a message is expired.
+Not used by the framework directly but can be set with a header enricher and used in a <code>&lt;filter/&gt;</code> that is configured with an <code>UnexpiredMessageSelector</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+PRIORITY</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.lang.Integer</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Message priority&#8201;&#8212;&#8201;for example, within a <code>PriorityChannel</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+DUPLICATE_MESSAGE</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.lang.Boolean</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True if a message was detected as a duplicate by an idempotent receiver interceptor.
+See <a href="handler-advice/idempotent-receiver.html" class="xref page">Idempotent Receiver Enterprise Integration Pattern</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+CLOSEABLE_RESOURCE</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.io.Closeable</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This header is present if the message is associated with a <code>Closeable</code> that should be closed when message processing is complete.
+An example is the <code>Session</code> associated with a streamed file transfer using FTP, SFTP, and so on.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+DELIVERY_ATTEMPT</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.lang.
+AtomicInteger</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If a message-driven channel adapter supports the configuration of a <code>RetryTemplate</code>, this header contains the current delivery attempt.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+ACKNOWLEDGMENT_CALLBACK</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> o.s.i.support.
+Acknowledgment
+Callback</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If an inbound endpoint supports it, a call back to accept, reject, or requeue a message.
+See <a href="polling-consumer.html#deferred-acks-message-source" class="xref page">Deferred Acknowledgment Pollable Message Source</a> and <a href="mqtt.html#mqtt-ack-mode" class="xref page">MQTT Manual Acks</a>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Convenient typed getters for some of these headers are provided on the <code>IntegrationMessageHeaderAccessor</code> class, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">IntegrationMessageHeaderAccessor accessor = new IntegrationMessageHeaderAccessor(message);
+int sequenceNumber = accessor.getSequenceNumber();
+Object correlationId = accessor.getCorrelationId();
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following table describes headers that also appear in the <code>IntegrationMessageHeaderAccessor</code> but are generally not used by user code (that is, they are generally used by internal parts of Spring Integration&#8201;&#8212;&#8201;their inclusion here is for completeness):</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Pre-defined Message Headers</caption>
+<colgroup>
+<col style="width: 38.4615%;">
+<col style="width: 23.0769%;">
+<col style="width: 38.4616%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Header Name</th>
+<th class="tableblock halign-left valign-top">Header Type</th>
+<th class="tableblock halign-left valign-top">Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+SEQUENCE_DETAILS</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.util.
+List&lt;List&lt;Object&gt;&gt;</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A stack of correlation data used when nested correlation is needed (for example,
+<code>splitter&#8594;&#8230;&#8203;&#8594;splitter&#8594;&#8230;&#8203;&#8594;aggregator&#8594;&#8230;&#8203;&#8594;aggregator</code>).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> IntegrationMessageHeaderAccessor.
+ROUTING_SLIP</pre></div></td>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre> java.util.
+Map&lt;List&lt;Object&gt;, Integer&gt;</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">See <a href="router/routing-slip.html" class="xref page">Routing Slip</a>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="message-id-generation"><a class="anchor" href="#message-id-generation"></a>Message ID Generation</h3>
+<div class="paragraph">
+<p>When a message transitions through an application, each time it is mutated (for example,
+by a transformer) a new message ID is assigned.
+The message ID is a <code>UUID</code>.
+Beginning with Spring Integration 3.0, the default strategy used for IS generation is more efficient than the previous <code>java.util.UUID.randomUUID()</code> implementation.
+It uses simple random numbers based on a secure random seed instead of creating a secure random number each time.</p>
+</div>
+<div class="paragraph">
+<p>A different UUID generation strategy can be selected by declaring a bean that implements <code>org.springframework.util.IdGenerator</code> in the application context.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Only one UUID generation strategy can be used in a classloader.
+This means that, if two or more application contexts run in the same classloader, they share the same strategy.
+If one of the contexts changes the strategy, it is used by all contexts.
+If two or more contexts in the same classloader declare a bean of type <code>org.springframework.util.IdGenerator</code>, they must all be an instance of the same class.
+Otherwise, the context attempting to replace a custom strategy fails to initialize.
+If the strategy is the same, but parameterized, the strategy in the first context to be initialized is used.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>In addition to the default strategy, two additional <code>IdGenerators</code> are provided.
+<code>org.springframework.util.JdkIdGenerator</code> uses the previous <code>UUID.randomUUID()</code> mechanism.
+You can use <code>o.s.i.support.IdGenerators.SimpleIncrementingIdGenerator</code> when a UUID is not really needed and a simple incrementing value is sufficient.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="read-only-headers"><a class="anchor" href="#read-only-headers"></a>Read-only Headers</h3>
+<div class="paragraph">
+<p>The <code>MessageHeaders.ID</code> and <code>MessageHeaders.TIMESTAMP</code> are read-only headers and cannot be overridden.</p>
+</div>
+<div class="paragraph">
+<p>Since version 4.3.2, the <code>MessageBuilder</code> provides the <code>readOnlyHeaders(String&#8230;&#8203; readOnlyHeaders)</code> API to customize a list of headers that should not be copied from an upstream <code>Message</code>.
+Only the <code>MessageHeaders.ID</code> and <code>MessageHeaders.TIMESTAMP</code> are read only by default.
+The global <code>spring.integration.readOnly.headers</code> property (see <a href="configuration/global-properties.html" class="xref page">Global Properties</a>) is provided to customize <code>DefaultMessageBuilderFactory</code> for framework components.
+This can be useful when you would like do not populate some out-of-the-box headers, such as <code>contentType</code> by the <code>ObjectToJsonTransformer</code> (see <a href="transformer.html#json-transformers" class="xref page">JSON Transformers</a>).</p>
+</div>
+<div class="paragraph">
+<p>When you try to build a new message using <code>MessageBuilder</code>, this kind of header is ignored and a particular <code>INFO</code> message is emitted to logs.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, <a href="gateway.html" class="xref page">Messaging Gateway</a>, <a href="content-enrichment.html#header-enricher" class="xref page">Header Enricher</a>, <a href="content-enrichment.html#payload-enricher" class="xref page">Content Enricher</a> and <a href="transformer.html#header-filter" class="xref page">Header Filter</a> do not let you configure the <code>MessageHeaders.ID</code> and <code>MessageHeaders.TIMESTAMP</code> header names when <code>DefaultMessageBuilderFactory</code> is used, and they throw <code>BeanInitializationException</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="header-propagation"><a class="anchor" href="#header-propagation"></a>Header Propagation</h3>
+<div class="paragraph">
+<p>When messages are processed (and modified) by message-producing endpoints (such as a <a href="service-activator.html" class="xref page">service activator</a>), in general, inbound headers are propagated to the outbound message.
+One exception to this is a <a href="transformer.html" class="xref page">transformer</a>, when a complete message is returned to the framework.
+In that case, the user code is responsible for the entire outbound message.
+When a transformer just returns the payload, the inbound headers are propagated.
+Also, a header is only propagated if it does not already exist in the outbound message, letting you change header values as needed.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.3.10, you can configure message handlers (that modify messages and produce output) to suppress the propagation of specific headers.
+To configure the header(s) you do not want to be copied, call the <code>setNotPropagatedHeaders()</code> or <code>addNotPropagatedHeaders()</code> methods on the <code>MessageProducingMessageHandler</code> abstract class.</p>
+</div>
+<div class="paragraph">
+<p>You can also globally suppress propagation of specific message headers by setting the <code>readOnlyHeaders</code> property in <code>META-INF/spring.integration.properties</code> to a comma-delimited list of headers.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, the <code>setNotPropagatedHeaders()</code> implementation on the <code>AbstractMessageProducingHandler</code> applies simple patterns (<code>xxx*</code>, <code><strong>xxx</code>, <code>*xxx</strong></code>, or <code>xxx*yyy</code>) to allow filtering headers with a common suffix or prefix.
+See <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/util/PatternMatchUtils.html"><code>PatternMatchUtils</code> Javadoc</a> for more information.
+When one of the patterns is <code>*</code> (asterisk), no headers are propagated.
+All other patterns are ignored.
+In that case, the service activator behaves the same way as a transformer and any required headers must be supplied in the <code>Message</code> returned from the service method.
+The <code>notPropagatedHeaders()</code> option is available in the <code>ConsumerEndpointSpec</code> for the Java DSL
+It is also available for XML configuration of the <code>&lt;service-activator&gt;</code> component as a <code>not-propagated-headers</code> attribute.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Header propagation suppression does not apply to those endpoints that do not modify the message, such as <a href="bridge.html" class="xref page">bridges</a> and <a href="router.html" class="xref page">routers</a>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="message-implementations"><a class="anchor" href="#message-implementations"></a>Message Implementations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The base implementation of the <code>Message</code> interface is <code>GenericMessage&lt;T&gt;</code>, and it provides two constructors, shown in the following listing:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">new GenericMessage&lt;T&gt;(T payload);
+
+new GenericMessage&lt;T&gt;(T payload, Map&lt;String, Object&gt; headers)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When a <code>Message</code> is created, a random unique ID is generated.
+The constructor that accepts a <code>Map</code> of headers copies the provided headers to the newly created <code>Message</code>.</p>
+</div>
+<div class="paragraph">
+<p>There is also a convenient implementation of <code>Message</code> designed to communicate error conditions.
+This implementation takes a <code>Throwable</code> object as its payload, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">ErrorMessage message = new ErrorMessage(someThrowable);
+
+Throwable t = message.getPayload();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that this implementation takes advantage of the fact that the <code>GenericMessage</code> base class is parameterized.
+Therefore, as shown in both examples, no casting is necessary when retrieving the <code>Message</code> payload <code>Object</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="message-builder"><a class="anchor" href="#message-builder"></a>The <code>MessageBuilder</code> Helper Class</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You may notice that the <code>Message</code> interface defines retrieval methods for its payload and headers but provides no setters.
+The reason for this is that a <code>Message</code> cannot be modified after its initial creation.
+Therefore, when a <code>Message</code> instance is sent to multiple consumers (for example,
+through a publish-subscribe Channel), if one of those consumers needs to send a reply with a different payload type, it must create a new <code>Message</code>.
+As a result, the other consumers are not affected by those changes.
+Keep in mind that multiple consumers may access the same payload instance or header value, and whether such an instance is itself immutable is a decision left to you.
+In other words, the contract for <code>Message</code> instances is similar to that of an unmodifiable <code>Collection</code>, and the <code>MessageHeaders</code> map further exemplifies that.
+Even though the <code>MessageHeaders</code> class implements <code>java.util.Map</code>, any attempt to invoke a <code>put</code> operation (or 'remove' or 'clear') on a <code>MessageHeaders</code> instance results in an <code>UnsupportedOperationException</code>.</p>
+</div>
+<div class="paragraph">
+<p>Rather than requiring the creation and population of a Map to pass into the GenericMessage constructor, Spring Integration does provide a far more convenient way to construct Messages: <code>MessageBuilder</code>.
+The <code>MessageBuilder</code> provides two factory methods for creating <code>Message</code> instances from either an existing <code>Message</code> or with a payload <code>Object</code>.
+When building from an existing <code>Message</code>, the headers and payload of that <code>Message</code> are copied to the new <code>Message</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Message&lt;String&gt; message1 = MessageBuilder.withPayload("test")
+        .setHeader("foo", "bar")
+        .build();
+
+Message&lt;String&gt; message2 = MessageBuilder.fromMessage(message1).build();
+
+assertEquals("test", message2.getPayload());
+assertEquals("bar", message2.getHeaders().get("foo"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you need to create a <code>Message</code> with a new payload but still want to copy the headers from an existing <code>Message</code>, you can use one of the 'copy' methods, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Message&lt;String&gt; message3 = MessageBuilder.withPayload("test3")
+        .copyHeaders(message1.getHeaders())
+        .build();
+
+Message&lt;String&gt; message4 = MessageBuilder.withPayload("test4")
+        .setHeader("foo", 123)
+        .copyHeadersIfAbsent(message1.getHeaders())
+        .build();
+
+assertEquals("bar", message3.getHeaders().get("foo"));
+assertEquals(123, message4.getHeaders().get("foo"));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the <code>copyHeadersIfAbsent</code> method does not overwrite existing values.
+Also, in the preceding example, you can see how to set any user-defined header with <code>setHeader</code>.
+Finally, there are <code>set</code> methods available for the predefined headers as well as a non-destructive method for setting any header (<code>MessageHeaders</code> also defines constants for the pre-defined header names).</p>
+</div>
+<div class="paragraph">
+<p>You can also use <code>MessageBuilder</code> to set the priority of messages, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Message&lt;Integer&gt; importantMessage = MessageBuilder.withPayload(99)
+        .setPriority(5)
+        .build();
+
+assertEquals(5, importantMessage.getHeaders().getPriority());
+
+Message&lt;Integer&gt; lessImportantMessage = MessageBuilder.fromMessage(importantMessage)
+        .setHeaderIfAbsent(IntegrationMessageHeaderAccessor.PRIORITY, 2)
+        .build();
+
+assertEquals(2, lessImportantMessage.getHeaders().getPriority());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>priority</code> header is considered only when using a <code>PriorityChannel</code> (as described in the next chapter).
+It is defined as a <code>java.lang.Integer</code>.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="bridge.html">Messaging Bridge</a></span>
+  <span class="next"><a href="message-routing.html">Message Routing</a></span>
 </nav>
 </article>
 </div>  </div>

@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>MQTT Support :: Spring Integration</title>
+    <link rel="prev" href="mongodb.html">
+    <link rel="next" href="r2dbc.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -870,7 +871,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="mongodb.html">MongoDb Support</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="mqtt.html">MQTT Support</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="MQTT Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/mqtt.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,812 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="mqtt.html">MQTT Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">MQTT Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>Spring Integration provides inbound and outbound channel adapters to support the Message Queueing Telemetry Transport (MQTT) protocol.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-mqtt&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-mqtt:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The current implementation uses the <a href="https://www.eclipse.org/paho/">Eclipse Paho MQTT Client</a> library.</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+The XML configuration and most of this chapter are about MQTT v3.1 protocol support and respective Paho Client.
+See <a href="#mqtt-v5">MQTT v5 Support</a> paragraph for respective protocol support.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>Configuration of both adapters is achieved using the <code>DefaultMqttPahoClientFactory</code>.
+Refer to the Paho documentation for more information about configuration options.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+We recommend configuring an <code>MqttConnectOptions</code> object and injecting it into the factory, instead of setting the (deprecated) options on the factory itself.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="mqtt-inbound"><a class="anchor" href="#mqtt-inbound"></a>Inbound (Message-driven) Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The inbound channel adapter is implemented by the <code>MqttPahoMessageDrivenChannelAdapter</code>.
+For convenience, you can configure it by using the namespace.
+A minimal configuration might be as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="clientFactory"
+        class="org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory"&gt;
+    &lt;property name="connectionOptions"&gt;
+        &lt;bean class="org.eclipse.paho.client.mqttv3.MqttConnectOptions"&gt;
+            &lt;property name="userName" value="${mqtt.username}"/&gt;
+            &lt;property name="password" value="${mqtt.password}"/&gt;
+        &lt;/bean&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;int-mqtt:message-driven-channel-adapter id="mqttInbound"
+    client-id="${mqtt.default.client.id}.src"
+    url="${mqtt.url}"
+    topics="sometopic"
+    client-factory="clientFactory"
+    channel="output"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following listing shows the available attributes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mqtt:message-driven-channel-adapter id="oneTopicAdapter"
+    client-id="foo"  <i class="conum" data-value="1"></i><b>(1)</b>
+    url="tcp://localhost:1883"  <i class="conum" data-value="2"></i><b>(2)</b>
+    topics="bar,baz"  <i class="conum" data-value="3"></i><b>(3)</b>
+    qos="1,2"  <i class="conum" data-value="4"></i><b>(4)</b>
+    converter="myConverter"  <i class="conum" data-value="5"></i><b>(5)</b>
+    client-factory="clientFactory"  <i class="conum" data-value="6"></i><b>(6)</b>
+    send-timeout="123"  <i class="conum" data-value="7"></i><b>(7)</b>
+    error-channel="errors"  <i class="conum" data-value="8"></i><b>(8)</b>
+    recovery-interval="10000"  <i class="conum" data-value="9"></i><b>(9)</b>
+    manual-acks="false" <i class="conum" data-value="10"></i><b>(10)</b>
+    channel="out" /&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The client ID.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The broker URL.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A comma-separated list of topics from which this adapter receives messages.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>A comma-separated list of QoS values.
+It can be a single value that is applied to all topics or a value for each topic (in which case, the lists must be the same length).</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>An <code>MqttMessageConverter</code> (optional).
+By default, the default <code>DefaultPahoMessageConverter</code> produces a message with a <code>String</code> payload with the following headers:
+<div class="ulist">
+<ul>
+<li>
+<p><code>mqtt_topic</code>: The topic from which the message was received</p>
+</li>
+<li>
+<p><code>mqtt_duplicate</code>: <code>true</code> if the message is a duplicate</p>
+</li>
+<li>
+<p><code>mqtt_qos</code>: The quality of service
+You can configure the <code>DefaultPahoMessageConverter</code> to return the raw <code>byte[]</code> in the payload by declaring it as a <code>&lt;bean/&gt;</code> and setting the <code>payloadAsBytes</code> property to <code>true</code>.</p>
+</li>
+</ul>
+</div></td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The client factory.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The <code>send()</code> timeout.
+It applies only if the channel might block (such as a bounded <code>QueueChannel</code> that is currently full).</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The error channel.
+Downstream exceptions are sent to this channel, if supplied, in an <code>ErrorMessage</code>.
+The payload is a <code>MessagingException</code> that contains the failed message and cause.</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>The recovery interval.
+It controls the interval at which the adapter attempts to reconnect after a failure.
+It defaults to <code>10000ms</code> (ten seconds).</td>
 </tr>
 <tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>The acknowledgment mode; set to true for manual acknowledgment.</td>
 </tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
 <tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="content">
+Starting with version 4.1, you can omit the URL.
+Instead, you can provide the server URIs in the <code>serverURIs</code> property of the <code>DefaultMqttPahoClientFactory</code>.
+Doing so enables, for example, connection to a highly available (HA) cluster.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>Starting with version 4.2.2, an <code>MqttSubscribedEvent</code> is published when the adapter successfully subscribes to the topics.
+<code>MqttConnectionFailedEvent</code> events are published when the connection or subscription fails.
+These events can be received by a bean that implements <code>ApplicationListener</code>.</p>
+</div>
+<div class="paragraph">
+<p>Also, a new property called <code>recoveryInterval</code> controls the interval at which the adapter attempts to reconnect after a failure.
+It defaults to <code>10000ms</code> (ten seconds).</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+<div class="paragraph">
+<p>Prior to version 4.2.3, the client always unsubscribed when the adapter was stopped.
+This was incorrect because, if the client QOS is greater than 0, we need to keep the subscription active so that messages arriving
+while the adapter is stopped are delivered on the next start.
+This also requires setting the <code>cleanSession</code> property on the client factory to <code>false</code>.
+It defaults to <code>true</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.2.3, the adapter does not unsubscribe (by default) if the <code>cleanSession</code> property is <code>false</code>.</p>
+</div>
+<div class="paragraph">
+<p>This behavior can be overridden by setting the <code>consumerCloseAction</code> property on the factory.
+It can have values: <code>UNSUBSCRIBE_ALWAYS</code>, <code>UNSUBSCRIBE_NEVER</code>, and <code>UNSUBSCRIBE_CLEAN</code>.
+The latter (the default) unsubscribes only if the <code>cleanSession</code> property is <code>true</code>.</p>
+</div>
+<div class="paragraph">
+<p>To revert to the pre-4.2.3 behavior, use <code>UNSUBSCRIBE_ALWAYS</code>.</p>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
 </td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
+<td class="content">
+<div class="paragraph">
+<p>Starting with version 5.0, the <code>topic</code>, <code>qos</code>, and <code>retained</code> properties are mapped to <code>.RECEIVED_&#8230;&#8203;</code> headers (<code>MqttHeaders.RECEIVED_TOPIC</code>, <code>MqttHeaders.RECEIVED_QOS</code>, and <code>MqttHeaders.RECEIVED_RETAINED</code>), to avoid inadvertent propagation to an outbound message that (by default) uses the <code>MqttHeaders.TOPIC</code>, <code>MqttHeaders.QOS</code>, and <code>MqttHeaders.RETAINED</code> headers.</p>
+</div>
 </td>
 </tr>
 </table>
+</div>
+<div class="sect2">
+<h3 id="adding-and-removing-topics-at-runtime"><a class="anchor" href="#adding-and-removing-topics-at-runtime"></a>Adding and Removing Topics at Runtime</h3>
+<div class="paragraph">
+<p>Starting with version 4.1, you can programmatically change the topics to which the adapter is subscribed.
+Spring Integration provides the  <code>addTopic()</code> and <code>removeTopic()</code> methods.
+When adding topics, you can optionally specify the <code>QoS</code> (default: 1).
+You can also modify the topics by sending an appropriate message to a <code>&lt;control-bus/&gt;</code> with an appropriate payload&#8201;&#8212;&#8201;for example: <code>"myMqttAdapter.addTopic('foo', 1)"</code>.</p>
+</div>
+<div class="paragraph">
+<p>Stopping and starting the adapter has no effect on the topic list (it does not revert to the original settings in the configuration).
+The changes are not retained beyond the life cycle of the application context.
+A new application context reverts to the configured settings.</p>
+</div>
+<div class="paragraph">
+<p>Changing the topics while the adapter is stopped (or disconnected from the broker) takes effect the next time a connection is established.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mqtt-ack-mode"><a class="anchor" href="#mqtt-ack-mode"></a>Manual Acks</h3>
+<div class="paragraph">
+<p>Starting with version 5.3, you can set the <code>manualAcks</code> property to true.
+Often used to asynchronously acknowledge delivery.
+When set to <code>true</code>, header (<code>IntegrationMessageHeaderAccessor.ACKNOWLEDGMENT_CALLBACK</code>) is added to the message with the value being a <code>SimpleAcknowledgment</code>.
+You must invoke the <code>acknowledge()</code> method to complete the delivery.
+See the Javadocs for <code>IMqttClient</code> <code>setManualAcks()</code> and <code>messageArrivedComplete()</code> for more information.
+For convenience a header accessor is provided:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">StaticMessageHeaderAccessor.acknowledgment(someMessage).acknowledge();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting with version <code>5.2.11</code>, when the message converter throws an exception or returns <code>null</code> from the <code>MqttMessage</code> conversion, the <code>MqttPahoMessageDrivenChannelAdapter</code> sends an <code>ErrorMessage</code> into the <code>errorChannel</code>, if provided.
+Re-throws this conversion error otherwise into an MQTT client callback.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mqtt-ack-mode-java-configuration"><a class="anchor" href="#mqtt-ack-mode-java-configuration"></a>Configuring with Java Configuration</h3>
+<div class="paragraph">
+<p>The following Spring Boot application shows an example of how to configure the inbound adapter with Java configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SpringBootApplication
+public class MqttJavaApplication {
+
+    public static void main(String[] args) {
+        new SpringApplicationBuilder(MqttJavaApplication.class)
+                .web(false)
+                .run(args);
+    }
+
+    @Bean
+    public MessageChannel mqttInputChannel() {
+        return new DirectChannel();
+    }
+
+    @Bean
+    public MessageProducer inbound() {
+        MqttPahoMessageDrivenChannelAdapter adapter =
+                new MqttPahoMessageDrivenChannelAdapter("tcp://localhost:1883", "testClient",
+                                                 "topic1", "topic2");
+        adapter.setCompletionTimeout(5000);
+        adapter.setConverter(new DefaultPahoMessageConverter());
+        adapter.setQos(1);
+        adapter.setOutputChannel(mqttInputChannel());
+        return adapter;
+    }
+
+    @Bean
+    @ServiceActivator(inputChannel = "mqttInputChannel")
+    public MessageHandler handler() {
+        return new MessageHandler() {
+
+            @Override
+            public void handleMessage(Message&lt;?&gt; message) throws MessagingException {
+                System.out.println(message.getPayload());
+            }
+
+        };
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mqtt-ack-mode-java-dsl"><a class="anchor" href="#mqtt-ack-mode-java-dsl"></a>Configuring with the Java DSL</h3>
+<div class="paragraph">
+<p>The following Spring Boot application provides an example of configuring the inbound adapter with the Java DSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SpringBootApplication
+public class MqttJavaApplication {
+
+    public static void main(String[] args) {
+        new SpringApplicationBuilder(MqttJavaApplication.class)
+            .web(false)
+            .run(args);
+    }
+
+    @Bean
+    public IntegrationFlow mqttInbound() {
+        return IntegrationFlow.from(
+                         new MqttPahoMessageDrivenChannelAdapter("tcp://localhost:1883",
+                                        "testClient", "topic1", "topic2");)
+                .handle(m -&gt; System.out.println(m.getPayload()))
+                .get();
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mqtt-outbound"><a class="anchor" href="#mqtt-outbound"></a>Outbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The outbound channel adapter is implemented by the <code>MqttPahoMessageHandler</code>, which is wrapped in a <code>ConsumerEndpoint</code>.
+For convenience, you can configure it by using the namespace.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.1, the adapter supports asynchronous send operations, avoiding blocking until the delivery is confirmed.
+You can emit application events to enable applications to confirm delivery if desired.</p>
+</div>
+<div class="paragraph">
+<p>The following listing shows the attributes available for an outbound channel adapter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mqtt:outbound-channel-adapter id="withConverter"
+    client-id="foo"  <i class="conum" data-value="1"></i><b>(1)</b>
+    url="tcp://localhost:1883"  <i class="conum" data-value="2"></i><b>(2)</b>
+    converter="myConverter"  <i class="conum" data-value="3"></i><b>(3)</b>
+    client-factory="clientFactory"  <i class="conum" data-value="4"></i><b>(4)</b>
+    default-qos="1"  <i class="conum" data-value="5"></i><b>(5)</b>
+    qos-expression="" <i class="conum" data-value="6"></i><b>(6)</b>
+    default-retained="true"  <i class="conum" data-value="7"></i><b>(7)</b>
+    retained-expression="" <i class="conum" data-value="8"></i><b>(8)</b>
+    default-topic="bar"  <i class="conum" data-value="9"></i><b>(9)</b>
+    topic-expression="" <i class="conum" data-value="10"></i><b>(10)</b>
+    async="false"  <i class="conum" data-value="11"></i><b>(11)</b>
+    async-events="false"  <i class="conum" data-value="12"></i><b>(12)</b>
+    channel="target" /&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The client ID.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The broker URL.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>An <code>MqttMessageConverter</code> (optional).
+The default <code>DefaultPahoMessageConverter</code> recognizes the following headers:
+<div class="ulist">
+<ul>
+<li>
+<p><code>mqtt_topic</code>: The topic to which the message will be sent</p>
+</li>
+<li>
+<p><code>mqtt_retained</code>: <code>true</code> if the message is to be retained</p>
+</li>
+<li>
+<p><code>mqtt_qos</code>: The quality of service</p>
+</li>
+</ul>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The client factory.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The default quality of service.
+It is used if no <code>mqtt_qos</code> header is found or the <code>qos-expression</code> returns <code>null</code>.
+It is not used if you supply a custom <code>converter</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>An expression to evaluate to determine the qos.
+The default is <code>headers[mqtt_qos]</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The default value of the retained flag.
+It is used if no <code>mqtt_retained</code> header is found.
+It is not used if a custom <code>converter</code> is supplied.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>An expression to evaluate to determine the retained boolean.
+The default is <code>headers[mqtt_retained]</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>The default topic to which the message is sent (used if no <code>mqtt_topic</code> header is found).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>An expression to evaluate to determine the destination topic.
+The default is <code>headers['mqtt_topic']</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>When <code>true</code>, the caller does not block.
+Rather, it waits for delivery confirmation when a message is sent.
+The default is <code>false</code> (the send blocks until delivery is confirmed).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>When <code>async</code> and <code>async-events</code> are both <code>true</code>, an <code>MqttMessageSentEvent</code> is emitted (See <a href="#mqtt-events">Events</a>).
+It contains the message, the topic, the <code>messageId</code> generated by the client library, the <code>clientId</code>, and the <code>clientInstance</code> (incremented each time the client is connected).
+When the delivery is confirmed by the client library, an <code>MqttMessageDeliveredEvent</code> is emitted.
+It contains the <code>messageId</code>, the <code>clientId</code>, and the <code>clientInstance</code>, enabling delivery to be correlated with the <code>send()</code>.
+Any <code>ApplicationListener</code> or an event inbound channel adapter can received these events.
+Note that it is possible for the <code>MqttMessageDeliveredEvent</code> to be received before the <code>MqttMessageSentEvent</code>.
+The default is <code>false</code>.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Starting with version 4.1, the URL can be omitted.
+Instead, the server URIs can be provided in the <code>serverURIs</code> property of the <code>DefaultMqttPahoClientFactory</code>.
+This enables, for example, connection to a highly available (HA) cluster.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="mqtt-outbound-java-configuration"><a class="anchor" href="#mqtt-outbound-java-configuration"></a>Configuring with Java Configuration</h3>
+<div class="paragraph">
+<p>The following Spring Boot application show an example of how to configure the outbound adapter with Java configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SpringBootApplication
+@IntegrationComponentScan
+public class MqttJavaApplication {
+
+    public static void main(String[] args) {
+        ConfigurableApplicationContext context =
+                new SpringApplicationBuilder(MqttJavaApplication.class)
+                        .web(false)
+                        .run(args);
+        MyGateway gateway = context.getBean(MyGateway.class);
+        gateway.sendToMqtt("foo");
+    }
+
+    @Bean
+    public MqttPahoClientFactory mqttClientFactory() {
+        DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
+        MqttConnectOptions options = new MqttConnectOptions();
+        options.setServerURIs(new String[] { "tcp://host1:1883", "tcp://host2:1883" });
+        options.setUserName("username");
+        options.setPassword("password".toCharArray());
+        factory.setConnectionOptions(options);
+        return factory;
+    }
+
+    @Bean
+    @ServiceActivator(inputChannel = "mqttOutboundChannel")
+    public MessageHandler mqttOutbound() {
+        MqttPahoMessageHandler messageHandler =
+                       new MqttPahoMessageHandler("testClient", mqttClientFactory());
+        messageHandler.setAsync(true);
+        messageHandler.setDefaultTopic("testTopic");
+        return messageHandler;
+    }
+
+    @Bean
+    public MessageChannel mqttOutboundChannel() {
+        return new DirectChannel();
+    }
+
+    @MessagingGateway(defaultRequestChannel = "mqttOutboundChannel")
+    public interface MyGateway {
+
+        void sendToMqtt(String data);
+
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="mqtt-outbound-java-dsl"><a class="anchor" href="#mqtt-outbound-java-dsl"></a>Configuring with the Java DSL</h3>
+<div class="paragraph">
+<p>The following Spring Boot application provides an example of configuring the outbound adapter with the Java DSL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SpringBootApplication
+public class MqttJavaApplication {
+
+    public static void main(String[] args) {
+        new SpringApplicationBuilder(MqttJavaApplication.class)
+            .web(false)
+            .run(args);
+    }
+
+   	@Bean
+   	public IntegrationFlow mqttOutboundFlow() {
+   	    return f -&gt; f.handle(new MqttPahoMessageHandler("tcp://host1:1883", "someMqttClient"));
+    }
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mqtt-events"><a class="anchor" href="#mqtt-events"></a>Events</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Certain application events are published by the adapters.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>MqttConnectionFailedEvent</code> - published by both adapters if we fail to connect or a connection is subsequently lost.
+For the MQTT v5 Paho client, this event is also emitted when the server performs a normal disconnection, in which case the <code>cause</code> of the lost connection is <code>null</code>.</p>
+</li>
+<li>
+<p><code>MqttMessageSentEvent</code> - published by the outbound adapter when a message has been sent, if running in asynchronous mode.</p>
+</li>
+<li>
+<p><code>MqttMessageDeliveredEvent</code> - published by the outbound adapter when the client indicates that a message has been delivered, if running in asynchronous mode.</p>
+</li>
+<li>
+<p><code>MqttSubscribedEvent</code> - published by the inbound adapter after subscribing to the topics.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These events can be received by an <code>ApplicationListener&lt;MqttIntegrationEvent&gt;</code> or with an <code>@EventListener</code> method.</p>
+</div>
+<div class="paragraph">
+<p>To determine the source of an event, use the following; you can check the bean name and/or the connect options (to access the server URIs etc).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">MqttPahoComponent source = event.getSourceAsType();
+String beanName = source.getBeanName();
+MqttConnectOptions options = source.getConnectionInfo();</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mqtt-v5"><a class="anchor" href="#mqtt-v5"></a>MQTT v5 Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 5.5.5, the <code>spring-integration-mqtt</code> module provides channel adapter implementations for the MQTT v5 protocol.
+The <code>org.eclipse.paho:org.eclipse.paho.mqttv5.client</code> is an <code>optional</code> dependency, so has to be included explicitly in the target project.</p>
+</div>
+<div class="paragraph">
+<p>Since the MQTT v5 protocol supports extra arbitrary properties in an MQTT message, the <code>MqttHeaderMapper</code> implementation has been introduced to map to/from headers on publish and receive operations.
+By default, (via the <code>*</code> pattern) it maps all the received <code>PUBLISH</code> frame properties (including user properties).
+On the outbound side it maps this subset of headers for <code>PUBLISH</code> frame: <code>contentType</code>, <code>mqtt_messageExpiryInterval</code>, <code>mqtt_responseTopic</code>, <code>mqtt_correlationData</code>.</p>
+</div>
+<div class="paragraph">
+<p>The outbound channel adapter for the MQTT v5 protocol is present as an <code>Mqttv5PahoMessageHandler</code>.
+It requires a <code>clientId</code> and MQTT broker URL or <code>MqttConnectionOptions</code> reference.
+It supports a <code>MqttClientPersistence</code> option, can be <code>async</code> and can emit <code>MqttIntegrationEvent</code> objects in that case (see <code>asyncEvents</code> option).
+If a request message payload is an <code>org.eclipse.paho.mqttv5.common.MqttMessage</code>, it is published as is via the internal <code>IMqttAsyncClient</code>.
+If the payload is <code>byte[]</code> it is used as is for the target <code>MqttMessage</code> payload to publish.
+If the payload is a <code>String</code> it is converted to <code>byte[]</code> to publish.
+The remaining use-cases are delegated to the provided <code>MessageConverter</code> which is a <code>IntegrationContextUtils.ARGUMENT_RESOLVER_MESSAGE_CONVERTER_BEAN_NAME</code> <code>ConfigurableCompositeMessageConverter</code> bean from the application context.
+Note: the provided <code>HeaderMapper&lt;MqttProperties&gt;</code> is not used when the requested message payload is already an <code>MqttMessage</code>.
+The following Java DSL configuration sample demonstrates how to use this channel adapter in the integration flow:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow mqttOutFlow() {
+    Mqttv5PahoMessageHandler messageHandler = new Mqttv5PahoMessageHandler(MQTT_URL, "mqttv5SIout");
+    MqttHeaderMapper mqttHeaderMapper = new MqttHeaderMapper();
+    mqttHeaderMapper.setOutboundHeaderNames("some_user_header", MessageHeaders.CONTENT_TYPE);
+    messageHandler.setHeaderMapper(mqttHeaderMapper);
+    messageHandler.setAsync(true);
+    messageHandler.setAsyncEvents(true);
+    messageHandler.setConverter(mqttStringToBytesConverter());
+
+    return f -&gt; f.handle(messageHandler);
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The <code>org.springframework.integration.mqtt.support.MqttMessageConverter</code> cannot be used with the <code>Mqttv5PahoMessageHandler</code> since its contract is aimed only for the MQTT v3 protocol.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If connection fails on start up or at runtime, the <code>Mqttv5PahoMessageHandler</code> tries to reconnect on the next message produced to this handler.
+If this manual reconnection fails, the connection is exception is thrown back to the caller.
+In this case the standard Spring Integration error handling procedure is applied, including request handler advices, e.g. retry or circuit breaker.</p>
+</div>
+<div class="paragraph">
+<p>See more information in the <code>Mqttv5PahoMessageHandler</code> javadocs and its superclass.</p>
+</div>
+<div class="paragraph">
+<p>The inbound channel adapter for the MQTT v5 protocol is present as an <code>Mqttv5PahoMessageDrivenChannelAdapter</code>.
+It requires a <code>clientId</code> and MQTT broker URL or <code>MqttConnectionOptions</code> reference, plus topics to which to subscribe and consume from.
+It supports a <code>MqttClientPersistence</code> option, which is in-memory by default.
+The expected <code>payloadType</code> (<code>byte[]</code> by default) can be configured and it is propagated to the provided <code>SmartMessageConverter</code> for conversion from <code>byte[]</code> of the received <code>MqttMessage</code>.
+If the <code>manualAck</code> option is set, then an <code>IntegrationMessageHeaderAccessor.ACKNOWLEDGMENT_CALLBACK</code> header is added to the message to produce as an instance of <code>SimpleAcknowledgment</code>.
+The <code>HeaderMapper&lt;MqttProperties&gt;</code> is used to map <code>PUBLISH</code> frame properties (including user properties) into the target message headers.
+Standard <code>MqttMessage</code> properties, such as <code>qos</code>, <code>id</code>, <code>dup</code>, <code>retained</code>, plus received topic are always mapped to headers.
+See <code>MqttHeaders</code> for more information.</p>
+</div>
+<div class="paragraph">
+<p>The following Java DSL configuration sample demonstrates how to use this channel adapter in the integration flow:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow mqttInFlow() {
+    Mqttv5PahoMessageDrivenChannelAdapter messageProducer =
+        new Mqttv5PahoMessageDrivenChannelAdapter(MQTT_URL, "mqttv5SIin", "siTest");
+    messageProducer.setPayloadType(String.class);
+    messageProducer.setMessageConverter(mqttStringToBytesConverter());
+    messageProducer.setManualAcks(true);
+
+    return IntegrationFlow.from(messageProducer)
+            .channel(c -&gt; c.queue("fromMqttChannel"))
+            .get();
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The <code>org.springframework.integration.mqtt.support.MqttMessageConverter</code> cannot be used with the <code>Mqttv5PahoMessageDrivenChannelAdapter</code> since its contract is aimed only for the MQTT v3 protocol.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>See more information in the <code>Mqttv5PahoMessageDrivenChannelAdapter</code> javadocs and its superclass.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+It is recommended to have the <code>MqttConnectionOptions#setAutomaticReconnect(boolean)</code> set to true to let an internal <code>IMqttAsyncClient</code> instance to handle reconnects.
+Otherwise, only the manual restart of <code>Mqttv5PahoMessageDrivenChannelAdapter</code> can handle reconnects, e.g. via <code>MqttConnectionFailedEvent</code> handling on disconnection.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mqtt-shared-client"><a class="anchor" href="#mqtt-shared-client"></a>Shared MQTT Client Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If a single MQTT ClientID is required for several integrations, multiple MQTT client instances cannot be used because MQTT brokers may have a limitation on a number of connections per ClientID (typically, a single connection is allowed).
+For having a single client reused for different channel adapters, a <code>org.springframework.integration.mqtt.core.ClientManager</code> component may be used and passed to any channel adapter needed.
+It will manage MQTT connection lifecycle and do automatic reconnects if needed.
+Also, a custom connection options and <code>MqttClientPersistence</code> may be provided to the client manager just as currently it can be done for channel adapter components.</p>
+</div>
+<div class="paragraph">
+<p>Note that both MQTT v5 and v3 channel adapters are supported.</p>
+</div>
+<div class="paragraph">
+<p>The following Java DSL configuration sample demonstrates how to use this client manager in the integration flow:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public ClientManager&lt;IMqttAsyncClient, MqttConnectionOptions&gt; clientManager() {
+    MqttConnectionOptions connectionOptions = new MqttConnectionOptions();
+    connectionOptions.setServerURIs(new String[]{ "tcp://localhost:1883" });
+    connectionOptions.setConnectionTimeout(30000);
+    connectionOptions.setMaxReconnectDelay(1000);
+    connectionOptions.setAutomaticReconnect(true);
+    Mqttv5ClientManager clientManager = new Mqttv5ClientManager(connectionOptions, "client-manager-client-id-v5");
+    clientManager.setPersistence(new MqttDefaultFilePersistence());
+    return clientManager;
+}
+
+@Bean
+public IntegrationFlow mqttInFlowTopic1(
+        ClientManager&lt;IMqttAsyncClient, MqttConnectionOptions&gt; clientManager) {
+
+    Mqttv5PahoMessageDrivenChannelAdapter messageProducer =
+        new Mqttv5PahoMessageDrivenChannelAdapter(clientManager, "topic1");
+    return IntegrationFlow.from(messageProducer)
+            .channel(c -&gt; c.queue("fromMqttChannel"))
+            .get();
+}
+
+@Bean
+public IntegrationFlow mqttInFlowTopic2(
+        ClientManager&lt;IMqttAsyncClient, MqttConnectionOptions&gt; clientManager) {
+
+    Mqttv5PahoMessageDrivenChannelAdapter messageProducer =
+        new Mqttv5PahoMessageDrivenChannelAdapter(clientManager, "topic2");
+    return IntegrationFlow.from(messageProducer)
+            .channel(c -&gt; c.queue("fromMqttChannel"))
+            .get();
+}
+
+@Bean
+public IntegrationFlow mqttOutFlow(
+        ClientManager&lt;IMqttAsyncClient, MqttConnectionOptions&gt; clientManager) {
+
+    return f -&gt; f.handle(new Mqttv5PahoMessageHandler(clientManager));
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="mongodb.html">MongoDb Support</a></span>
+  <span class="next"><a href="r2dbc.html">R2DBC Support</a></span>
 </nav>
 </article>
 </div>  </div>

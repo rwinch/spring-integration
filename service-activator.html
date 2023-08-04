@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Service Activator :: Spring Integration</title>
+    <link rel="prev" href="gateway.html">
+    <link rel="next" href="delayer.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -424,7 +425,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="gateway.html">Messaging Gateways</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="service-activator.html">Service Activator</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Service Activator"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/service-activator.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,354 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="messaging-endpoints.html">Messaging Endpoints</a></li>
+    <li><a href="service-activator.html">Service Activator</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Service Activator</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>The service activator is the endpoint type for connecting any Spring-managed object to an input channel so that it may play the role of a service.
+If the service produces output, it may also be connected to an output channel.
+Alternatively, an output-producing service may be located at the end of a processing pipeline or message flow, in which case the inbound message&#8217;s <code>replyChannel</code> header can be used.
+This is the default behavior if no output channel is defined.
+As with most of the configuration options described here, the same behavior actually applies for most of the other components.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>The service activator is essentially a generic endpoint for calling a method on some object with an input message (payload and headers).
+Its internal logic is based on a <code>MessageHandler</code> which can be any possible implementation for a specific use-case, for example <code>DefaultMessageSplitter</code>, <code>AggregatingMessageHandler</code>, <code>SftpMessageHandler</code>, <code>JpaOutboundGateway</code> etc.
+Therefore, any outbound gateway and outbound channel adapter mentioned in this reference manual should be treated as a specific extension of this service activator endpoint; they all, in the end, call some object&#8217;s method.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="service-activator-namespace"><a class="anchor" href="#service-activator-namespace"></a>Configuring Service Activator</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With Java &amp; Annotation configuration, it is sufficient to mark the respective service method with the <code>@ServiceActivator</code> annotation - and the framework calls it when messages are consumed from an input channel:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class SomeService {
+
+    @ServiceActivator(inputChannel = "exampleChannel")
+    public void exampleHandler(SomeData payload) {
+        ...
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See more information in the <a href="configuration/annotations.html" class="xref page">Annotation Support</a>.</p>
+</div>
+<div class="paragraph">
+<p>For Java, Groovy or Kotlin DSLs, the <code>.handle()</code> operator of an <code>IntegrationFlow</code> represents a service activator:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_1_kotlin_dsl" class="tab">
+<p>Kotlin DSL</p>
+</li>
+<li id="_tabs_1_groovy_dsl" class="tab">
+<p>Groovy DSL</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow someFlow() {
+    return IntegrationFlow
+             .from("exampleChannel")
+             .handle(someService, "exampleHandler")
+             .get();
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_kotlin_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_kotlin_dsl">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Bean
+fun someFlow() =
+    integrationFlow("exampleChannel") {
+        handle(someService, "exampleHandler")
+    }</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_groovy_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_groovy_dsl">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@Bean
+someFlow() {
+    integrationFlow 'exampleChannel',
+            {
+                handle someService, 'exampleHandler'
+            }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>See more information about the DSLs in the respective chapters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="dsl.html#java-dsl" class="xref page">Java DSL</a></p>
+</li>
+<li>
+<p><a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a></p>
+</li>
+<li>
+<p><a href="groovy-dsl.html" class="xref page">Groovy DSL</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To create a service activator when using XML configuration, use the 'service-activator' element with the 'input-channel' and 'ref' attributes, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:service-activator input-channel="exampleChannel" ref="exampleHandler"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding configuration selects all the methods from the <code>exampleHandler</code> that meet one of the messaging requirements, which are as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>annotated with <code>@ServiceActivator</code></p>
+</li>
+<li>
+<p>is <code>public</code></p>
+</li>
+<li>
+<p>not return <code>void</code> if <code>requiresReply == true</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The target method for invocation at runtime is selected for each request message by their <code>payload</code> type or as a fallback to the <code>Message&lt;?&gt;</code> type if such a method is present on target class.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, one service method can be marked with the <code>@org.springframework.integration.annotation.Default</code> as a fallback for all non-matching cases.
+This can be useful when using <a href="endpoint.html#content-type-conversion" class="xref page">content-type conversion</a> with the target method being invoked after conversion.</p>
+</div>
+<div class="paragraph">
+<p>To delegate to an explicitly defined method of any object, you can add the <code>method</code> attribute, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:service-activator input-channel="exampleChannel" ref="somePojo" method="someMethod"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In either case, when the service method returns a non-null value, the endpoint tries to send the reply message to an appropriate reply channel.
+To determine the reply channel, it first checks whether an <code>output-channel</code> was provided in the endpoint configuration, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:service-activator input-channel="exampleChannel" output-channel="replyChannel"
+                       ref="somePojo" method="someMethod"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the method returns a result and no <code>output-channel</code> is defined, the framework then checks the request message&#8217;s <code>replyChannel</code> header value.
+If that value is available, it then checks its type.
+If it is a <code>MessageChannel</code>, the reply message is sent to that channel.
+If it is a <code>String</code>, the endpoint tries to resolve the channel name to a channel instance.
+If the channel cannot be resolved, a <code>DestinationResolutionException</code> is thrown.
+If it can be resolved, the message is sent there.
+If the request message does not have a <code>replyChannel</code> header and the <code>reply</code> object is a <code>Message</code>, its <code>replyChannel</code> header is consulted for a target destination.
+This is the technique used for request-reply messaging in Spring Integration, and it is also an example of the return address pattern.</p>
+</div>
+<div class="paragraph">
+<p>If your method returns a result, and you want to discard it and end the flow, you should configure the <code>output-channel</code> to send to a <code>NullChannel</code>.
+For convenience, the framework registers one with the name, <code>nullChannel</code>.
+See <a href="channel/special-channels.html" class="xref page">Special Channels</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>The service activator is one of those components that is not required to produce a reply message.
+If your method returns <code>null</code> or has a <code>void</code> return type, the service activator exits after the method invocation, without any signals.
+This behavior can be controlled by the <code>AbstractReplyProducingMessageHandler.requiresReply</code> option, which is also exposed as <code>requires-reply</code> when configuring with the XML namespace.
+If the flag is set to <code>true</code> and the method returns null, a <code>ReplyRequiredException</code> is thrown.</p>
+</div>
+<div class="paragraph">
+<p>The argument in the service method could be either a message or an arbitrary type.
+If the latter, then it is assumed to be a message payload, which is extracted from the message and injected into the service method.
+We generally recommend this approach, as it follows and promotes a POJO model when working with Spring Integration.
+Arguments may also have <code>@Header</code> or <code>@Headers</code> annotations, as described in <a href="configuration/annotations.html" class="xref page">Annotation Support</a>.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+The service method is not required to have any arguments, which means you can implement event-style service activators (where all you care about is an invocation of the service method) and not worry about the contents of the message.
+Think of it as a null JMS message.
+An example use case for such an implementation is a simple counter or monitor of messages deposited on the input channel.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>Starting with version 4.1, the framework correctly converts message properties (<code>payload</code> and <code>headers</code>) to the Java 8 <code>Optional</code> POJO method parameters, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyBean {
+    public String computeValue(Optional&lt;String&gt; payload,
+               @Header(value="foo", required=false) String foo1,
+               @Header(value="foo") Optional&lt;String&gt; foo2) {
+        if (payload.isPresent()) {
+            String value = payload.get();
+            ...
+        }
+        else {
+           ...
+       }
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We generally recommend using a <code>ref</code> attribute if the custom service activator handler implementation can be reused in other <code>&lt;service-activator&gt;</code> definitions.
+However, if the custom service activator handler implementation is only used within a single definition of the <code>&lt;service-activator&gt;</code>, you can provide an inner bean definition, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:service-activator id="exampleServiceActivator" input-channel="inChannel"
+            output-channel = "outChannel" method="someMethod"&gt;
+    &lt;beans:bean class="org.something.ExampleServiceActivator"/&gt;
+&lt;/int:service-activator&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+Using both the <code>ref</code> attribute and an inner handler definition in the same <code>&lt;service-activator&gt;</code> configuration is not allowed, as it creates an ambiguous condition and results in an exception being thrown.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If the <code>ref</code> attribute references a bean that extends <code>AbstractMessageProducingHandler</code> (such as handlers provided by the framework itself), the configuration is optimized by injecting the output channel into the handler directly.
+In this case, each <code>ref</code> must be to a separate bean instance (or a <code>prototype</code>-scoped bean) or use the inner <code>&lt;bean/&gt;</code> configuration type.
+If you inadvertently reference the same message handler from multiple beans, you get a configuration exception.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
+<div class="sect2">
+<h3 id="service-activators-and-the-spring-expression-language-spel"><a class="anchor" href="#service-activators-and-the-spring-expression-language-spel"></a>Service Activators and the Spring Expression Language (SpEL)</h3>
+<div class="paragraph">
+<p>Since Spring Integration 2.0, service activators can also benefit from <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">SpEL</a>.</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>For example, you can invoke any bean method without pointing to the bean in a <code>ref</code> attribute or including it as an inner bean definition, as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:service-activator input-channel="in" output-channel="out"
+	expression="@accountService.processAccount(payload, headers.accountId)"/&gt;
+
+	&lt;bean id="accountService" class="thing1.thing2.Account"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding configuration, instead of injecting 'accountService' by using a <code>ref</code> or as an inner bean, we use SpEL&#8217;s <code>@beanId</code> notation and invoke a method that takes a type compatible with the message payload.
+We also pass a header value.
+Any valid SpEL expression can be evaluated against any content in the message.
+For simple scenarios, your service activators need not reference a bean if all logic can be encapsulated in such an expression, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:service-activator input-channel="in" output-channel="out" expression="payload * 2"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding configuration, our service logic is to multiply the payload value by two.
+SpEL lets us handle it relatively easily.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="dsl/java-handle.html" class="xref page">Service Activators and the <code>.handle()</code> method</a> in the Java DSL chapter for more information about configuring service activator.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="async-service-activator"><a class="anchor" href="#async-service-activator"></a>Asynchronous Service Activator</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The service activator is invoked by the calling thread.
+This is an upstream thread if the input channel is a <code>SubscribableChannel</code> or a poller thread for a <code>PollableChannel</code>.
+If the service returns a <code>CompletableFuture&lt;?&gt;</code>, the default action is to send that as the payload of the message sent to the output (or reply) channel.
+Starting with version 4.3, you can now set the <code>async</code> attribute to <code>true</code> (by using <code>setAsync(true)</code> when using Java configuration).
+If the service returns a <code>CompletableFuture&lt;?&gt;</code> when this the <code>async</code> attribute is set to <code>true</code>, the calling thread is released immediately and the reply message is sent on the thread (from within your service) that completes the future.
+This is particularly advantageous for long-running services that use a <code>PollableChannel</code>, because the poller thread is released to perform other services within the framework.</p>
+</div>
+<div class="paragraph">
+<p>If the service completes the future with an <code>Exception</code>, normal error processing occurs.
+An <code>ErrorMessage</code> is sent to the <code>errorChannel</code> message header, if present.
+Otherwise, an <code>ErrorMessage</code> is sent to the default <code>errorChannel</code> (if available).</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 6.1, if the output channel of the <code>AbstractMessageProducingHandler</code> is configured to a <code>ReactiveStreamsSubscribableChannel</code>, the async mode is turned on by default.
+If the handler result is not a reactive type or <code>CompletableFuture&lt;?&gt;</code>, then regular reply producing process happens despite the output channel type.</p>
+</div>
+<div class="paragraph">
+<p>See also <a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="service-activator-return-type"><a class="anchor" href="#service-activator-return-type"></a>Service Activator and Method Return Type</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The service method can return any type which becomes reply message payload.
+In this case a new <code>Message&lt;?&gt;</code> object is created and all the headers from a request message are copied.
+This works the same way for most Spring Integration <code>MessageHandler</code> implementations, when interaction is based on a POJO method invocation.</p>
+</div>
+<div class="paragraph">
+<p>A complete <code>Message&lt;?&gt;</code> object can also be returned from the method.
+However, keep in mind that, unlike <a href="transformer.html" class="xref page">transformers</a>, for a Service Activator this message will be modified by copying the headers from the request message if they are not already present in the returned message.
+So, if your method parameter is a <code>Message&lt;?&gt;</code> and you copy some, but not all, existing headers in your service method, they will reappear in the reply message.
+It is not a Service Activator responsibility to remove headers from a reply message and, pursuing the loosely-coupled principle, it is better to add a <code>HeaderFilter</code> in the integration flow.
+Alternatively, a Transformer can be used instead of a Service Activator but, in that case, when returning a full <code>Message&lt;?&gt;</code> the method is completely responsible for the message, including copying request message headers (if needed).
+You must ensure that important framework headers (e.g. <code>replyChannel</code>, <code>errorChannel</code>), if present, have to be preserved.</p>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="gateway.html">Messaging Gateways</a></span>
+  <span class="next"><a href="delayer.html">Delayer</a></span>
 </nav>
 </article>
 </div>  </div>

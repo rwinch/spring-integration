@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Spring Integration :: Spring Integration</title>
-    <link rel="next" href="preface.html">
+    <title>Groovy Support :: Spring Integration</title>
+    <link rel="prev" href="scripting.html">
+    <link rel="next" href="handler-advice.html">
     <meta name="generator" content="Antora 3.2.0-alpha.2">
     <script>
 !function (theme, navWidth) {
@@ -276,7 +277,7 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="index.html">Overview</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -433,7 +434,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="scripting.html">Scripting Support</a>
   </li>
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="groovy.html">Groovy Support</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -1191,13 +1192,13 @@
   <div class="content">
     <div
       class="toc"
-      data-title="Spring Integration"
+      data-title="Groovy Support"
       data-levels="2"
     >
       <div class="toc-menu"></div>
     </div>
     <div class="sidebar-links">
-        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/index.adoc">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/modules/ROOT/pages/groovy.adoc">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -1235,538 +1236,261 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Spring Integration</a></li>
-    <li><a href="index.html">Overview</a></li>
+    <li><a href="messaging-endpoints.html">Messaging Endpoints</a></li>
+    <li><a href="groovy.html">Groovy Support</a></li>
   </ul>
 </nav>
 <article>
-<h1 id="page-title" class="page">Spring Integration</h1>
+<h1 id="page-title" class="page">Groovy Support</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p>Welcome to the Spring Integration reference documentation!</p>
+<p>In Spring Integration 2.0, we added Groovy support, letting you use the Groovy scripting language to provide the logic for various integration components&#8201;&#8212;&#8201;similar to the way the Spring Expression Language (SpEL) is supported for routing, transformation, and other integration concerns.
+For more information about Groovy, see the Groovy documentation, which you can find on the <a href="https://groovy-lang.org/">project website</a>.</p>
 </div>
-<div class="hdlist">
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-groovy&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-groovy:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition, starting with version 6.0, a <a href="groovy-dsl.html" class="xref page">Groovy DSL</a> for integration flow configurations is provided.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="groovy-config"><a class="anchor" href="#groovy-config"></a>Groovy Configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With Spring Integration 2.1, the configuration namespace for the Groovy support is an extension of Spring Integration&#8217;s scripting support and shares the core configuration and behavior described in detail in the <a href="scripting.html" class="xref page">Scripting Support</a> section.
+Even though Groovy scripts are well-supported by generic scripting support, the Groovy support provides the <code>Groovy</code> configuration namespace, which is backed by the Spring Framework&#8217;s <code>org.springframework.scripting.groovy.GroovyScriptFactory</code> and related components, offering extended capabilities for using Groovy.
+The following listing shows two sample configurations:</p>
+</div>
+<div class="listingblock">
+<div class="title">Filter</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:filter input-channel="referencedScriptInput"&gt;
+   &lt;int-groovy:script location="some/path/to/groovy/file/GroovyFilterTests.groovy"/&gt;
+&lt;/int:filter&gt;
+
+&lt;int:filter input-channel="inlineScriptInput"&gt;
+     &lt;int-groovy:script&gt;&lt;![CDATA[
+     return payload == 'good'
+   ]]&gt;&lt;/int-groovy:script&gt;
+&lt;/int:filter&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As the preceding examples show, the configuration looks identical to the general scripting support configuration.
+The only difference is the use of the Groovy namespace, as indicated by the <code>int-groovy</code> namespace prefix.
+Also note that the <code>lang</code> attribute on the <code>&lt;script&gt;</code> tag is not valid in this namespace.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="groovy-object-customization"><a class="anchor" href="#groovy-object-customization"></a>Groovy Object Customization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you need to customize the Groovy object itself (beyond setting variables) you can reference a bean that implements <code>GroovyObjectCustomizer</code> by using the <code>customizer</code> attribute.
+For example, this might be useful if you want to implement a domain-specific language (DSL) by modifying the <code>MetaClass</code> and registering functions to be available within the script.
+The following example shows how to do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:service-activator input-channel="groovyChannel"&gt;
+    &lt;int-groovy:script location="somewhere/SomeScript.groovy" customizer="groovyCustomizer"/&gt;
+&lt;/int:service-activator&gt;
+
+&lt;beans:bean id="groovyCustomizer" class="org.something.MyGroovyObjectCustomizer"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Setting a custom <code>GroovyObjectCustomizer</code> is not mutually exclusive with <code>&lt;variable&gt;</code> elements or the <code>script-variable-generator</code> attribute.
+It can also be provided when defining an inline script.</p>
+</div>
+<div class="paragraph">
+<p>Spring Integration 3.0 introduced the <code>variables</code> attribute, which works in conjunction with the <code>variable</code> element.
+Also, groovy scripts have the ability to resolve a variable to a bean in the <code>BeanFactory</code>, if a binding variable was not provided with the name.
+The following example shows how to use a variable (<code>entityManager</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-groovy:script&gt;
+    &lt;![CDATA[
+        entityManager.persist(payload)
+        payload
+    ]]&gt;
+&lt;/int-groovy:script&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>entityManager</code> must be an appropriate bean in the application context.</p>
+</div>
+<div class="paragraph">
+<p>For more information regarding the <code>&lt;variable&gt;</code> element, the <code>variables</code> attribute, and the <code>script-variable-generator</code> attribute, see  <a href="scripting.html#scripting-script-variable-bindings" class="xref page">Script Variable Bindings</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="groovy-script-compiler-customization"><a class="anchor" href="#groovy-script-compiler-customization"></a>Groovy Script Compiler Customization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>@CompileStatic</code> hint is the most popular Groovy compiler customization option.
+It can be used on the class or method level.
+For more information, see the Groovy <a href="https://groovy-lang.org/metaprogramming.html#section-typechecked">Reference Manual</a> and, specifically, <a href="https://groovy-lang.org/metaprogramming.html#xform-CompileStatic">@CompileStatic</a>.
+To utilize this feature for short scripts (in integration scenarios), we are forced to change simple scripts to more Java-like code.
+Consider the following <code>&lt;filter&gt;</code> script:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">headers.type == 'good'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding script becomes the following method in Spring Integration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@groovy.transform.CompileStatic
+String filter(Map headers) {
+	headers.type == 'good'
+}
+
+filter(headers)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With that, the <code>filter()</code> method is transformed and compiled to static Java code, bypassing the Groovy
+dynamic phases of invocation, such as <code>getProperty()</code> factories and <code>CallSite</code> proxies.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.3, you can configure the Spring Integration Groovy components with the <code>compile-static</code> <code>boolean</code> option, specifying that <code>ASTTransformationCustomizer</code> for <code>@CompileStatic</code> should be added to the internal <code>CompilerConfiguration</code>.
+With that in place, you can omit the method declaration with <code>@CompileStatic</code> in our script code and still get compiled plain Java code.
+In this case, the preceding script can be short but still needs to be a little more verbose than interpreted script, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">binding.variables.headers.type == 'good'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You must access the <code>headers</code> and <code>payload</code> (or any other) variables through the <code>groovy.lang.Script</code> <code>binding</code> property because, with <code>@CompileStatic</code>, we do not have the  dynamic <code>GroovyObject.getProperty()</code> capability.</p>
+</div>
+<div class="paragraph">
+<p>In addition, we introduced the <code>compiler-configuration</code> bean reference.
+With this attribute, you can provide any other required Groovy compiler customizations, such as <code>ImportCustomizer</code>.
+For more information about this feature, see the Groovy Documentation for <a href="https://melix.github.io/blog/2011/05/12/customizing_groovy_compilation_process.html">advanced compiler configuration</a>.</p>
+</div>
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="preface.html#preface" class="xref page">Preface</a> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
-<p>General project info, conventions</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="whats-new.html#whats-new" class="xref page">What&#8217;s New</a> 
-</td>
-<td class="hdlist2">
-<p>Features and changes made in the current version</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html" class="xref page">Overview</a> 
-</td>
-<td class="hdlist2">
-<p>Introduction to EIP and its implementation in the project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="core.html" class="xref page">Core Messaging</a> 
-</td>
-<td class="hdlist2">
-<p>Main project abstractions and components</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="overview.html#overview-components-message" class="xref page">Message</a> 
-</td>
-<td class="hdlist2">
-<p>Details about the message abstraction implementations</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-routing.html" class="xref page">Message Routing</a> 
-</td>
-<td class="hdlist2">
-<p>main EIP components: router, splitter, aggregator, filter etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-transformation.html" class="xref page">Message Transformation</a> 
-</td>
-<td class="hdlist2">
-<p>Transformer, content enricher, claim check, codec</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="messaging-endpoints.html" class="xref page">Messaging Endpoints</a> 
-</td>
-<td class="hdlist2">
-<p>Consumer endpoints, service activator, gateway, scripting, AOP aspects etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="dsl.html#java-dsl" class="xref page">Java DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Java DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="groovy-dsl.html" class="xref page">Groovy DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Groovy DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kotlin-dsl.html" class="xref page">Kotlin DSL</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Kotlin DSL for EIP</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="system-management.html" class="xref page">System Management</a> 
-</td>
-<td class="hdlist2">
-<p>Message store, control bus, integration graph, metrics, JMX</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="reactive-streams.html" class="xref page">Reactive Streams Support</a> 
-</td>
-<td class="hdlist2">
-<p>Details about Reactive Streams support: message channels, channel adapters etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="native-aot.html" class="xref page">Native Images Support</a> 
-</td>
-<td class="hdlist2">
-<p>GraalVM native images and Spring AOT support</p>
+<td class="content">
+Using <code>compilerConfiguration</code> does not automatically add an <code>ASTTransformationCustomizer</code> for the <code>@CompileStatic</code> annotation, and it overrides the <code>compileStatic</code> option.
+If you still need <code>CompileStatic</code>, you should manually add a <code>new ASTTransformationCustomizer(CompileStatic.class)</code> into the <code>CompilationCustomizers</code> of that custom <code>compilerConfiguration</code>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+<div class="admonitionblock note">
 <table>
 <tr>
-<td class="hdlist1">
-<strong>Integration Endpoints</strong> 
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
 </td>
-<td class="hdlist2">
+<td class="content">
+The Groovy compiler customization does not have any effect on the <code>refresh-check-delay</code> option, and reloadable scripts can be statically compiled, too.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
+</div>
+</div>
+<div class="sect1">
+<h2 id="groovy-control-bus"><a class="anchor" href="#groovy-control-bus"></a>Control Bus</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As described in (<a href="https://www.enterpriseintegrationpatterns.com/ControlBus.html">Enterprise Integration Patterns</a>), the idea behind the control bus is that you can use the same messaging system for monitoring and managing the components within the framework as is used for &#8220;application-level&#8221; messaging.
+In Spring Integration, we build upon the adapters described earlier so that you can send Messages as a means of invoking exposed operations.
+One option for those operations is Groovy scripts.
+The following example configures a Groovy script for the control bus:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-groovy:control-bus input-channel="operationChannel"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The control bus has an input channel that can be accessed to invoke operations on the beans in the application context.</p>
+</div>
+<div class="paragraph">
+<p>The Groovy control bus runs messages on the input channel as Groovy scripts.
+It takes a message, compiles the body to a script, customizes it with a <code>GroovyObjectCustomizer</code>, and runs it.
+The control bus' <code>MessageProcessor</code> exposes all beans in the application context that are annotated with <code>@ManagedResource</code> and implement Spring&#8217;s <code>Lifecycle</code> interface or extend Spring&#8217;s <code>CustomizableThreadCreator</code> base class (for example, several of the <code>TaskExecutor</code> and <code>TaskScheduler</code> implementations).</p>
+</div>
+<div class="admonitionblock important">
 <table>
 <tr>
-<td class="hdlist1">
-<a href="endpoint-summary.html" class="xref page">Integration Endpoint Summary</a> 
-</td>
-<td class="hdlist2">
-<p>Protocol-specific channel adapters and gateways summary</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="amqp.html" class="xref page">AMQP Support</a> 
-</td>
-<td class="hdlist2">
-<p>AMQP channels, adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="camel.html" class="xref page">Apache Camel Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Camel channel adapters and gateways</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="cassandra.html" class="xref page">Apache Cassandra Support</a> 
-</td>
-<td class="hdlist2">
-<p>Apache Cassandra channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="debezium.html" class="xref page">Debezium CDC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Debezium channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="event.html" class="xref page">Spring <code>ApplicationEvent</code> Support</a> 
-</td>
-<td class="hdlist2">
-<p>Handling and consuming Spring application events with channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="feed.html" class="xref page">Feed Adapter</a> 
-</td>
-<td class="hdlist2">
-<p>RSS and Atom channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="file.html" class="xref page">File Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for file system support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ftp.html" class="xref page">FTP/FTPS Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="graphql.html" class="xref page">GraphQL Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for GraphQL</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="hazelcast.html" class="xref page">Hazelcast Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters, gateways and utilities for Hazelcast</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="http.html" class="xref page">HTTP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for HTTP communication</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jdbc.html" class="xref page">JDBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JDBC, message and metadata stores</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jpa.html" class="xref page">JPA Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JPA API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html" class="xref page">JMS Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for JMS API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jmx.html" class="xref page">JMX Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for JMX interaction, integration-specific MBean exporter</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html" class="xref page">Apache Kafka Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters and gateways for Apache Kafka</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mail.html" class="xref page">Mail Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java Mail API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mongodb.html" class="xref page">MongoDb Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for MongoDb</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="mqtt.html" class="xref page">MQTT Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for MQTT protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="r2dbc.html" class="xref page">R2DBC Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for R2DBC API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="redis.html" class="xref page">Redis Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels, adapters, gateways and message store for Redis</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resource.html" class="xref page">Resource Support</a> 
-</td>
-<td class="hdlist2">
-<p>Spring resource channel adapters</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="rsocket.html" class="xref page">RSocket Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for RSocket protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="sftp.html" class="xref page">SFTP Adapters</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for FTP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="smb.html" class="xref page">SMB Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for SMB protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stomp.html" class="xref page">STOMP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for STOMP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="stream.html" class="xref page">Stream Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Java IO stream API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="syslog.html" class="xref page">Syslog Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Syslog protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ip.html" class="xref page">TCP and UDP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for TCP and UDP protocols</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="webflux.html" class="xref page">WebFlux Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and gateways for WebFlux API</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="web-sockets.html" class="xref page">WebSockets Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for WebSockets protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="ws.html" class="xref page">Web Services Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for SOAP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xml.html" class="xref page">XML Support - Dealing with XML Payloads</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters and transformers for XML API, xPath</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="xmpp.html" class="xref page">XMPP Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for XMPP protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zeromq.html" class="xref page">ZeroMQ Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channels and adapters for ZeroMQ protocol</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="zookeeper.html" class="xref page">Zookeeper Support</a> 
-</td>
-<td class="hdlist2">
-<p>Channel adapters for Zookeeper and Curator API</p>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Be careful about using managed beans with custom scopes (such as 'request') in the Control Bus' command scripts, especially inside an asynchronous message flow.
+If <code>MessageProcessor</code> of the control bus cannot expose a bean from the application context, you may end up with some <code>BeansException</code> during the command script&#8217;s run.
+For example, if a custom scope&#8217;s context is not established, the attempt to get a bean within that scope triggers a <code>BeanCreationException</code>.
 </td>
 </tr>
 </table>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<strong>Appendices</strong> 
-</td>
-<td class="hdlist2">
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>If you need to further customize the Groovy objects, you can also provide a reference to a bean that implements <code>GroovyObjectCustomizer</code> through the <code>customizer</code> attribute, as the following example shows:</p>
 </div>
-<div class="hdlist">
-<table>
-<tr>
-<td class="hdlist1">
-<a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of error handling approaches in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a> 
-</td>
-<td class="hdlist2">
-<p>Details about SpEL support</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="message-publishing.html" class="xref page">Message Publishing</a> 
-</td>
-<td class="hdlist2">
-<p>The Publisher annotation etc.</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="jms.html#jms-ob-transactions" class="xref page">Transaction Support</a> 
-</td>
-<td class="hdlist2">
-<p>Overview of transactions support in Spring Integration</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="security.html" class="xref page">Security in Spring Integration</a> 
-</td>
-<td class="hdlist2">
-<p>Securing Spring Integration flows</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="kafka.html#kafka-inbound-gateway-configurartion" class="xref page">Configuration</a> 
-</td>
-<td class="hdlist2">
-<p>Messaging annotations, task scheduler, global properties, message mapping</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="testing.html" class="xref page">Testing support</a> 
-</td>
-<td class="hdlist2">
-<p>Test utilities, Integration mocks and testing framework</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a> 
-</td>
-<td class="hdlist2">
-<p>The samples dedicated project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="resources.html" class="xref page">Additional Resources</a> 
-</td>
-<td class="hdlist2">
-<p>Other resources related to project</p>
-</td>
-</tr>
-<tr>
-<td class="hdlist1">
-<a href="history.html" class="xref page">Change History</a> 
-</td>
-<td class="hdlist2">
-<p>The changes made in the project over time</p>
-</td>
-</tr>
-</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-groovy:control-bus input-channel="input"
+        output-channel="output"
+        customizer="groovyCustomizer"/&gt;
+
+&lt;beans:bean id="groovyCustomizer" class="org.foo.MyGroovyObjectCustomizer"/&gt;</code></pre>
+</div>
+</div>
+</div>
 </div>
 <nav class="pagination">
-  <span class="next"><a href="preface.html">Preface</a></span>
+  <span class="prev"><a href="scripting.html">Scripting Support</a></span>
+  <span class="next"><a href="handler-advice.html">Adding Behavior to Endpoints</a></span>
 </nav>
 </article>
 </div>  </div>
