@@ -1,6 +1,6 @@
 {
   "$id": "https://schemas.antora.org/site-manifest/1-0-0/draft-01",
-  "generated": "2023-08-04T20:40:35.392Z",
+  "generated": "2023-08-04T21:58:56.371Z",
   "url": "https://rwinch.github.io/spring-integration",
   "components": {
     "integration": {
