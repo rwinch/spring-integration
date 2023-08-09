@@ -1,0 +1,2206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Mail Support :: Spring Integration</title>
+    <link rel="prev" href="kafka.html">
+    <link rel="next" href="mongodb.html">
+    <meta name="generator" content="Antora 3.2.0-alpha.2">
+    <script>
+!function (theme, navWidth) {
+  if (theme === 'dark') document.documentElement.classList.add('dark-theme')
+  if (navWidth) document.documentElement.style.setProperty('--nav-width', `${navWidth}px`)
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'),
+  localStorage && localStorage.getItem('nav-width'))
+    </script>
+    <link rel="stylesheet" href="../_/css/site.css">
+    <link rel="stylesheet" href="../_/css/vendor/search.css">
+    <link rel="stylesheet" href="../_/css/vendor/asciidoctor-tabs.css">
+
+    <meta name="version" content="6.2.0">
+    <meta name="component" content="spring-integration">
+    <link rel="icon" href="../_/img/favicon.ico" type="image/vnd.microsoft.icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://spring.io">
+        <img
+          id="springlogo"
+          class="block"
+          src="../_/img/spring-logo.svg"
+          alt="Spring"
+        />
+      </a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Why Spring</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/why-spring"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/microservices"
+            >Microservices</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/reactive"
+            >Reactive</a>
+            <a class="navbar-item" href="https://spring.io/event-driven">Event
+              Driven</a>
+            <a class="navbar-item" href="https://spring.io/cloud">Cloud</a>
+            <a class="navbar-item" href="https://spring.io/web-applications">Web
+              Applications</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/serverless"
+            >Serverless</a>
+            <a class="navbar-item" href="https://spring.io/batch">Batch</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Learn</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/learn">Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/quickstart"
+            >Quickstart</a>
+            <a class="navbar-item" href="https://spring.io/guides">Guides</a>
+            <a class="navbar-item" href="https://spring.io/blog">Blog</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Projects</a>
+          <div class="navbar-dropdown" style="min-width: 280px">
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-boot"
+            >Spring Boot</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-framework"
+            >Spring Framework</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud"
+            >Spring Cloud</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud-dataflow"
+            >Spring Cloud Data Flow</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-data"
+            >Spring Data</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-integration"
+            >Spring Integration</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-batch"
+            >Spring Batch</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-security"
+            >Spring Security</a>
+            <a
+              class="navbar-item navbar-item-special"
+              href="https://spring.io/projects"
+            >View all projects</a>
+            <a class="navbar-item" href="https://spring.io/tools">Spring Tools 4</a>
+            <a
+              class="navbar-item navbar-item-special-2"
+              href="https://start.spring.io"
+            >Spring Initializr
+              <svg
+                class="external-link-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+              ><polyline
+                  points="15 10.94 15 15 1 15 1 1 5.06 1"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><polyline
+                  points="8.93 1 15 1 15 7.07"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><line
+                  x1="15"
+                  y1="1"
+                  x2="8"
+                  y2="8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></line></svg></a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Academy</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.academy/courses"
+            >Courses</a>
+            <a
+              class="navbar-item"
+              href="https://spring.academy/learning-path"
+            >Get Certified</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Support</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/support">Overview</a>
+            <a class="navbar-item" href="https://spring.io/security">Security
+              Advisories</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable is-community">
+          <a class="navbar-link" href="#">Community</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/community"
+            >Overview</a>
+            <a class="navbar-item" href="https://spring.io/events">Events</a>
+            <a class="navbar-item" href="https://spring.io/team">Team</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <label class="theme-toggler">
+      <input
+        type="checkbox"
+        type="checkbox"
+        id="switch-theme-checkbox"
+        name="switch-theme-checkbox"
+      />
+      <span class="icon"><svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="moon"
+          class="svg-inline--fa fa-moon moon"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+        ><path
+            fill="currentColor"
+            d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"
+          ></path>
+        </svg>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="sun"
+          class="svg-inline--fa fa-sun sun"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        ><path
+            fill="currentColor"
+            d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"
+          ></path>
+        </svg></span>
+      <span class="text">light</span>
+    </label>
+  </nav>
+</header>
+<script>
+!function (theme) {
+  if (theme === 'dark') {
+    document.getElementById('switch-theme-checkbox').parentElement.classList.add('active')
+  }
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'))
+</script><div class="body">
+<div class="nav-container" data-component="spring-integration" data-version="6.2.0">
+  <aside class="nav">
+    <div class="panels">
+      <div class="nav-panel-menu is-active" data-panel="menu">
+        <nav class="nav-menu">
+<div class="context">
+  <span class="title">Spring Integration</span>
+  <span class="version">6.2.0-SNAPSHOT</span>
+  <button class="browse-version" id="browse-version">
+    <svg
+      height="24px"
+      id="Layer_1"
+      style="enable-background:new 0 0 512 512;"
+      version="1.1"
+      viewBox="0 0 512 512"
+      width="24px"
+      xml:space="preserve"
+    ><g><path
+          d="M256,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S273.7,224,256,224L256,224z"
+        ></path><path
+          d="M128.4,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S146,224,128.4,224L128.4,224z"
+        ></path><path
+          d="M384,224c-17.7,0-32,14.3-32,32s14.3,32,32,32s32-14.3,32-32S401.7,224,384,224L384,224z"
+        ></path></g></svg>
+  </button>
+</div><div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="preface.html">Preface</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New?</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="core.html">Core Messaging</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="channel.html">Message Channels</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interfaces.html">The MessageChannel Interface</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/implementations.html">Message Channel Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interceptors.html">Channel Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/template.html"><code>MessagingTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/configuration.html">Configuring Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/special-channels.html">Special Channels</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="polling-consumer.html">Poller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="channel-adapter.html">Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="bridge.html">Messaging Bridge</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message.html">Message</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-routing.html">Message Routing</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="router.html">Routers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/common-parameters.html">Common Router Parameters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/implementations.html">Router Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/namespace.html">Configuring a Generic Router</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/spel.html">Routers and the Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/annotation.html">Configuring a Router with Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/dynamic-routers.html">Dynamic Routers</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/routing-slip.html">Routing Slip</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/process-manager.html">Process Manager Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="filter.html">Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="splitter.html">Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="aggregator.html">Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="resequencer.html">Resequencer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="chain.html">Message Handler Chain</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scatter-gather.html">Scatter-Gather</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="barrier.html">Thread Barrier</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-transformation.html">Message Transformation</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="transformer.html">Transformer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="content-enrichment.html">Content Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="claim-check.html">Claim Check</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="codec.html">Codec</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="messaging-endpoints.html">Messaging Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint.html">Message Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint-roles.html">Endpoint Roles</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="leadership-event-handling.html">Leadership Event Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gateway.html">Messaging Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="service-activator.html">Service Activator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="delayer.html">Delayer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scripting.html">Scripting Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="groovy.html">Groovy Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="handler-advice.html">Adding Behavior to Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/classes.html">Provided Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/reactive.html">Reactive Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/context-holder.html">Context Holder Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/custom.html">Custom Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/other.html">Other Advice Chain Elements</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/handle-message.html">Handling Message Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/tx-handle-message.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-filters.html">Advising Filters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-with-annotations.html">Advising Endpoints Using Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/order.html">Ordering Advices within Advice Chain</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advised-properties.html">Advised Handler Properties</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/idempotent-receiver.html">Idempotent Receiver Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="logging-adapter.html">Logging Channel Adapter</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="functions-support.html"><code>java.util.function</code> Interfaces Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kotlin-functions.html">Kotlin Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="dsl.html">Java DSL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-basics.html">DSL Basics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-channels.html">Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-pollers.html">Pollers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-reactive.html">The <code>reactive()</code> Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-endpoints.html">DSL and Endpoint Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-transformers.html">Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-inbound-adapters.html">Inbound Channel Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-routers.html">Message Routers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-splitters.html">Splitters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-aggregators.html">Aggregators and Resequencers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-handle.html">Service Activators and the <code>.handle()</code> method</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-gateway.html">Operator gateway()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-log.html">Operator log()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-intercept.html">Operator intercept()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-wiretap.html"><code>MessageChannelSpec.wireTap()</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flows.html">Working With Message Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-function-expression.html"><code>FunctionExpression</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-subflows.html">Sub-flows support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-protocol-adapters.html">Using Protocol Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flow-adapter.html"><code>IntegrationFlowAdapter</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-runtime-flows.html">Dynamic and Runtime Integration Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flow-as-gateway.html"><code>IntegrationFlow</code> as a Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-extensions.html">DSL Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flows-composition.html">Integration Flows Composition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="groovy-dsl.html">Groovy DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kotlin-dsl.html">Kotlin DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="system-management.html">System Management</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="metrics.html">Metrics and Management</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-history.html">Message History</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-store.html">Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="meta-data-store.html">Metadata Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="control-bus.html">Control Bus</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="shutdown.html">Orderly Shutdown</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="graph.html">Integration Graph</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="integration-graph-controller.html">Integration Graph Controller</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reactive-streams.html">Reactive Streams Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="native-aot.html">Native Images Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="endpoint-summary.html">Integration Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="amqp.html">AMQP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/polled-inbound-channel-adapter.html">Polled Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-gateway.html">Inbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-ack.html">Inbound Endpoint Acknowledge Mode</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-endpoints.html">Outbound Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/async-outbound-gateway.html">Asynchronous Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/alternative-confirms-returns.html">Alternative Mechanism for Publisher Confirms and Returns</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/conversion-inbound.html">Inbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/content-type-conversion-outbound.html">Outbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/user-id.html">Outbound User ID</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/delay.html">Delayed Message Exchange</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/channels.html">AMQP-backed Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/message-headers.html">AMQP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/strict-ordering.html">Strict Message Ordering</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/samples.html">AMQP Samples</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/rmq-streams.html">RabbitMQ Stream Queue Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="camel.html">Apache Camel Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cassandra.html">Apache Cassandra Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="debezium.html">Debezium Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="event.html">Spring <code>ApplicationEvent</code> Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="feed.html">Feed Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="file.html">File Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/reading.html">Reading Files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/writing.html">Writing files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/transforming.html">File Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/splitter.html">File Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/aggregator.html">File Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/remote-persistent-flf.html">Remote Persistent File List Filters</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ftp.html">FTP/FTPS Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-factory.html">FTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/advanced-configuration.html">Advanced Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/inbound.html">FTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/streaming.html">FTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound.html">FTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound-gateway.html">FTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-caching.html">FTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-callback.html">Using <code>MessageSessionCallback</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/server-events.html">Apache Mina FTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="graphql.html">GraphQL Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="hazelcast.html">Hazelcast Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="http.html">HTTP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/inbound.html">Http Inbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/outbound.html">HTTP Outbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/namespace.html">HTTP Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/java-config.html">Configuring HTTP Endpoints with Java</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/timeout.html">Timeout Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/proxy.html">HTTP Proxy configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/header-mapping.html">HTTP Header Mappings</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/int-graph-controller.html">Integration Graph Controller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/samples.html">HTTP Samples</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jdbc.html">JDBC Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/message-store.html">JDBC Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/stored-procedures.html">Stored Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/lock-registry.html">JDBC Lock Registry</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/metadata-store.html">JDBC Metadata Store</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jpa.html">JPA Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/functionality.html">Functionality</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/supported-persistence-providers.html">Supported Persistence Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/java-implementation.html">Java Implementation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-gateways.html">Outbound Gateways</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jms.html">JMS Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jmx.html">JMX Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kafka.html">Apache Kafka Support</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="mail.html">Mail Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mongodb.html">MongoDb Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mqtt.html">MQTT Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="r2dbc.html">R2DBC Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="redis.html">Redis Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resource.html">Resource Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="rsocket.html">RSocket Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="sftp.html">SFTP Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-factory.html">SFTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-caching.html">SFTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/inbound.html">SFTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/streaming.html">SFTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound.html">SFTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound-gateway.html">SFTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-callback.html">MessageSessionCallback</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/server-events.html">Apache Mina SFTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="smb.html">SMB Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stomp.html">STOMP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stream.html">Stream Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="syslog.html">Syslog Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ip.html">TCP and UDP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/intro.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/udp-adapters.html">UDP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-connection-factories.html">TCP Connection Factories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/testing-connections.html">Testing Connections</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/interceptors.html">TCP Connection Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-events.html">TCP Connection Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-adapters.html">TCP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-gateways.html">TCP Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/correlation.html">TCP Message Correlation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/note-nio.html">About Non-blocking I/O (NIO)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/ssl-tls.html">SSL/TLS Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-advanced-techniques.html">Advanced Techniques</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/endpoint-reference.html">IP Configuration Attributes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/msg-headers.html">IP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/annotation.html">Annotation-Based Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/dsl.html">Using the Java DSL for TCP Components</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="webflux.html">WebFlux Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="web-sockets.html">WebSockets Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="ws.html">Web Services Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="xml.html">XML Support - Dealing with XML Payloads</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/transformation.html">Transforming XML Payloads</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-transformer.html">Transforming XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-splitting.html">Splitting XML Messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-routing.html">Routing XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-header-enricher.html">XPath Header Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-filter.html">Using the XPath Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-spel-function.html">#xpath SpEL Function</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/validating-filter.html">XML Validating Filter</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="xmpp.html">XMPP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zeromq.html">ZeroMQ Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zookeeper.html">Zookeeper Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="error-handling.html">Error Handling</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="spel.html">Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message-publishing.html">Message Publishing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="transactions.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="security.html">Security in Spring Integration</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="configuration.html">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace-taskscheduler.html">Configuring the Task Scheduler</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/global-properties.html">Global Properties</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/annotations.html">Annotation Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/meta-annotations.html">Messaging Meta-Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/message-mapping-rules.html">Message Mapping Rules and Conventions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="testing.html">Testing support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="samples.html">Spring Integration Samples</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resources.html">Additional Resources</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="history.html">Change History</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-6.0-6.1.html">Changes between 6.0 and 6.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.5-6.0.html">Changes between 5.5 and 6.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.4-5.5.html">Changes between 5.4 and 5.5</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.3-5.4.html">Changes between 5.3 and 5.4</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.2-5.3.html">Changes between 5.2 and 5.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.1-5.2.html">Changes between 5.1 and 5.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.2-4.3.html">Changes between 4.2 and 4.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.1-4.2.html">Changes between 4.1 and 4.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.0-4.1.html">Changes between 4.0 and 4.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.1-2.2.html">Changes between 2.1 and 2.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.0-2.1.html">Changes between 2.0 and 2.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-1.0-2.0.html">Changes between Versions 1.0 and 2.0</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zip.html">Zip Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+          <div class="toggle-sm">
+            <button id="nav-toggle-2" class="nav-toggle"></button>
+          </div>
+        </nav>
+      </div>
+      <div class="nav-collapse">
+        <button id="nav-collapse-toggle"><span></span></button>        
+      </div>
+    </div>
+    <div class="nav-resize"></div>
+  </aside>
+</div>
+<script>
+!function (sidebar) {
+  if (sidebar) {
+    document.body.classList.add('nav-sm')
+  }
+}(localStorage && localStorage.getItem('sidebar') === 'close')
+</script><main class="article">
+<div class="toolbar" role="navigation">
+  <button id="nav-toggle-1" class="nav-toggle"></button>
+<div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+</div>
+  <div class="content">
+<aside class="sidebar">
+  <div class="content">
+    <div
+      class="toc"
+      data-title="Mail Support"
+      data-levels="2"
+    >
+      <div class="toc-menu"></div>
+    </div>
+    <div class="sidebar-links">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/src/reference/antora/modules/ROOT/pages/mail.adoc">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+          ><path
+              d="m16 2.012 3 3L16.713 7.3l-3-3zM4 14v3h3l8.299-8.287-3-3zm0 6h16v2H4z"
+            ></path></svg>
+          Edit this Page
+        </a>
+              <a href="https://github.com/rwinch/spring-integration" title="Github">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="512px"
+            id="Layer_1"
+            version="1.1"
+            viewBox="0 0 512 512"
+            width="512px"
+          ><style type="text/css"><![CDATA[
+              .st0{fill-rule:evenodd;clip-rule:evenodd;} ]]></style><g><path
+                class="st0"
+                d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"
+              ></path></g></svg>
+          Github Project
+        </a>
+        <a href="https://stackoverflow.com/tags/spring-integration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path
+              d="M290.7 311L95 269.7 86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8 153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"
+            ></path></svg>
+          Stack Overflow
+        </a>
+    </div>
+  </div>
+</aside><div class="doc">
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Spring Integration</a></li>
+    <li><a href="mail.html">Mail Support</a></li>
+  </ul>
+</nav>
+<article>
+<h1 id="page-title" class="page">Mail Support</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section describes how to work with mail messages in Spring Integration.</p>
+</div>
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-mail&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-mail:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>jakarta.mail:jakarta.mail-api</code> must be included via vendor-specific implementation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-outbound"><a class="anchor" href="#mail-outbound"></a>Mail-sending Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration provides support for outbound email with the <code>MailSendingMessageHandler</code>.
+It delegates to a configured instance of Spring&#8217;s <code>JavaMailSender</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"> JavaMailSender mailSender = context.getBean("mailSender", JavaMailSender.class);
+
+ MailSendingMessageHandler mailSendingHandler = new MailSendingMessageHandler(mailSender);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>MailSendingMessageHandler</code> has various mapping strategies that use Spring&#8217;s <code>MailMessage</code> abstraction.
+If the received message&#8217;s payload is already a <code>MailMessage</code> instance, it is sent directly.
+Therefore, we generally recommend that you precede this consumer with a transformer for non-trivial <code>MailMessage</code> construction requirements.
+However, Spring Integration supports a few simple message mapping strategies.
+For example, if the message payload is a byte array, that is mapped to an attachment.
+For simple text-based emails, you can provide a string-based message payload.
+In that case, a <code>MailMessage</code> is created with that <code>String</code> as the text content.
+If you work with a message payload type whose <code>toString()</code> method returns appropriate mail text content, consider adding Spring Integration&#8217;s <code>ObjectToStringTransformer</code> prior to the outbound mail adapter (see the example in <a href="transformer.html#transformer-namespace" class="xref page">Configuring a Transformer with XML</a> for more detail).</p>
+</div>
+<div class="paragraph">
+<p>You can also configure the outbound <code>MailMessage</code> with certain values from <code>MessageHeaders</code>.
+If available, values are mapped to the outbound mail&#8217;s properties, such as the recipients (To, Cc, and BCc), the <code>from</code>, the <code>reply-to</code>, and the <code>subject</code>.
+The header names are defined by the following constants:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"> MailHeaders.SUBJECT
+ MailHeaders.TO
+ MailHeaders.CC
+ MailHeaders.BCC
+ MailHeaders.FROM
+ MailHeaders.REPLY_TO</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>MailHeaders</code> also lets you override corresponding <code>MailMessage</code> values.
+For example, if <code>MailMessage.to</code> is set to '<a href="mailto:thing1@things.com">thing1@things.com</a>' and the <code>MailHeaders.TO</code> message header is provided, it takes precedence and overrides the corresponding value in <code>MailMessage</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-inbound"><a class="anchor" href="#mail-inbound"></a>Mail-receiving Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration also provides support for inbound email with the <code>MailReceivingMessageSource</code>.
+It delegates to a configured instance of Spring Integration&#8217;s own <code>MailReceiver</code> interface.
+There are two implementations: <code>Pop3MailReceiver</code> and <code>ImapMailReceiver</code>.
+The easiest way to instantiate either of these is bypassing the 'uri' for a mail store to the receiver&#8217;s constructor, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">MailReceiver receiver = new Pop3MailReceiver("pop3://usr:pwd@localhost/INBOX");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another option for receiving mail is the IMAP <code>idle</code> command (if supported by your mail server).
+Spring Integration provides the <code>ImapIdleChannelAdapter</code>, which is itself a message-producing endpoint.
+It delegates to an instance of the <code>ImapMailReceiver</code>.
+The next section has examples of configuring both types of inbound channel adapter with Spring Integration&#8217;s namespace support in the 'mail' schema.</p>
+</div>
+<div id="imap-format-important" class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Normally, when the <code>IMAPMessage.getContent()</code> method is called, certain headers as well as the body are rendered (for a simple text email), as the following example shows:</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">To: thing1@things.com
+From: thing2@morethings.com
+Subject: Test Email
+
+something</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With a simple <code>MimeMessage</code>, <code>getContent()</code> returns the mail body (<code>something</code> in the preceding example).</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 2.2, the framework eagerly fetches IMAP messages and exposes them as an internal subclass of <code>MimeMessage</code>.
+This had the undesired side effect of changing the <code>getContent()</code> behavior.
+This inconsistency was further exacerbated by the <a href="#mail-mapping">Mail Mapping</a> enhancement introduced in version 4.3, because, when a header mapper was provided, the payload was rendered by the <code>IMAPMessage.getContent()</code> method.
+This meant that the IMAP content differed, depending on whether a header mapper was provided.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, messages originating from an IMAP source render the content in accordance with <code>IMAPMessage.getContent()</code> behavior, regardless of whether a header mapper is provided.
+If you do not use a header mapper, and you wish to revert to the previous behavior of rendering only the body, set the <code>simpleContent</code> boolean property on the mail receiver to <code>true</code>.
+This property now controls the rendering regardless of whether a header mapper is used.
+It now allows body-only rendering when a header mapper is provided.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.2, the <code>autoCloseFolder</code> option is provided on the mail receiver.
+Setting it to <code>false</code> doesn&#8217;t close the folder automatically after a fetch, but instead an <code>IntegrationMessageHeaderAccessor.CLOSEABLE_RESOURCE</code> header (see <a href="message.html#message-header-accessor" class="xref page"><code>MessageHeaderAccessor</code> API</a> for more information) is populated into every message to producer from the channel adapter.
+This does not work with <code>Pop3MailReceiver</code> as it relies on opening and closing the folder to get new messages.
+It is the target application&#8217;s responsibility to call the <code>close()</code> on this header whenever it is necessary in the downstream flow:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Closeable closeableResource = StaticMessageHeaderAccessor.getCloseableResource(mailMessage);
+if (closeableResource != null) {
+    closeableResource.close();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Keeping the folder open is useful in cases where communication with the server is needed during parsing multipart content of the email with attachments.
+The <code>close()</code> on the <code>IntegrationMessageHeaderAccessor.CLOSEABLE_RESOURCE</code> header delegates to the <code>AbstractMailReceiver</code> to close the folder with <code>expunge</code> option if <code>shouldDeleteMessages</code> is configured respectively on the <code>AbstractMailReceiver</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.4, it is possible now to return a <code>MimeMessage</code> as is without any conversion or eager content loading.
+This functionality is enabled with this combination of options: no <code>headerMapper</code> provided, the <code>simpleContent</code> property is <code>false</code> and the <code>autoCloseFolder</code> property is <code>false</code>.
+The <code>MimeMessage</code> is present as the payload of the Spring message produced.
+In this case, the only header populated is the mentioned above <code>IntegrationMessageHeaderAccessor.CLOSEABLE_RESOURCE</code> for the folder which must be closed when processing of the <code>MimeMessage</code> is complete.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.5.11, the folder is closed automatically after <code>AbstractMailReceiver.receive()</code> if no messages received or all of them are filtered out independently of the <code>autoCloseFolder</code> flag.
+In this case there is nothing to produce downstream for possible logic around <code>IntegrationMessageHeaderAccessor.CLOSEABLE_RESOURCE</code> header.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 6.0.5, the <code>ImapIdleChannelAdapter</code> no longer performs asynchronous message publishing.
+This is necessary to block the idle listener loop for message processing downstream (e.g. with big attachments) because the mail folder must remain open.
+If an async hand-off is required, an <code>ExecutorChannel</code> can be used as the output channel of this channel adapter.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-mapping"><a class="anchor" href="#mail-mapping"></a>Inbound Mail Message Mapping</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, the payload of messages produced by the inbound adapters is the raw <code>MimeMessage</code>.
+You can use that object to interrogate the headers and content.
+Starting with version 4.3, you can provide a <code>HeaderMapper&lt;MimeMessage&gt;</code> to map the headers to <code>MessageHeaders</code>.
+For convenience, Spring Integration provides a <code>DefaultMailHeaderMapper</code> for this purpose.
+It maps the following headers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>mail_from</code>: A <code>String</code> representation of the <code>from</code> address.</p>
+</li>
+<li>
+<p><code>mail_bcc</code>: A <code>String</code> array containing the <code>bcc</code> addresses.</p>
+</li>
+<li>
+<p><code>mail_cc</code>: A <code>String</code> array containing the <code>cc</code> addresses.</p>
+</li>
+<li>
+<p><code>mail_to</code>: A <code>String</code> array containing the <code>to</code> addresses.</p>
+</li>
+<li>
+<p><code>mail_replyTo</code>: A <code>String</code> representation of the <code>replyTo</code> address.</p>
+</li>
+<li>
+<p><code>mail_subject</code>: The mail subject.</p>
+</li>
+<li>
+<p><code>mail_lineCount</code>: A line count (if available).</p>
+</li>
+<li>
+<p><code>mail_receivedDate</code>: The received date (if available).</p>
+</li>
+<li>
+<p><code>mail_size</code>: The mail size (if available).</p>
+</li>
+<li>
+<p><code>mail_expunged</code>: A boolean indicating if the message is expunged.</p>
+</li>
+<li>
+<p><code>mail_raw</code>: A <code>MultiValueMap</code> containing all the mail headers and their values.</p>
+</li>
+<li>
+<p><code>mail_contentType</code>: The content type of the original mail message.</p>
+</li>
+<li>
+<p><code>contentType</code>: The payload content type (see below).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When message mapping is enabled, the payload depends on the mail message and its implementation.
+Email contents are usually rendered by a <code>DataHandler</code> within the <code>MimeMessage</code>.</p>
+</div>
+<div class="paragraph">
+<p>For a <code>text/*</code> email, the payload is a <code>String</code> and the <code>contentType</code> header is the same as <code>mail_contentType</code>.</p>
+</div>
+<div class="paragraph">
+<p>For a messages with embedded <code>jakarta.mail.Part</code> instances, the <code>DataHandler</code> usually renders a <code>Part</code> object.
+These objects are not <code>Serializable</code> and are not suitable for serialization with alternative technologies such as <code>Kryo</code>.
+For this reason, by default, when mapping is enabled, such payloads are rendered as a raw <code>byte[]</code> containing the <code>Part</code> data.
+Examples of <code>Part</code> are <code>Message</code> and <code>Multipart</code>.
+The <code>contentType</code> header is <code>application/octet-stream</code> in this case.
+To change this behavior and receive a <code>Multipart</code> object payload, set <code>embeddedPartsAsBytes</code> to <code>false</code> on <code>MailReceiver</code>.
+For content types that are unknown to the <code>DataHandler</code>, the contents are rendered as a <code>byte[]</code> with a <code>contentType</code> header of <code>application/octet-stream</code>.</p>
+</div>
+<div class="paragraph">
+<p>When you do not provide a header mapper, the message payload is the <code>MimeMessage</code> presented by <code>jakarta.mail</code>.
+The framework provides a <code>MailToStringTransformer</code> that you can use to convert the message by using a strategy to convert the mail contents to a <code>String</code>:</p>
+</div>
+<div id="_tabs_2" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_2_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_2_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_2_kotlin" class="tab">
+<p>Kotlin</p>
+</li>
+<li id="_tabs_2_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_2_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_2_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">   ...
+   .transform(Mail.toStringTransformer())
+   ...</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@Transformer(inputChannel="...", outputChannel="...")
+public Transformer transformer() {
+    return new MailToStringTransformer();
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_kotlin--panel" class="tabpanel" aria-labelledby="_tabs_2_kotlin">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">   ...
+   transform(Mail.toStringTransformer())
+   ...</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:mail-to-string-transformer ... &gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.3, the transformer handles embedded <code>Part</code> instances (as well as <code>Multipart</code> instances, which were handled previously).
+The transformer is a subclass of <code>AbstractMailTransformer</code> that maps the address and subject headers from the preceding list.
+If you wish to perform some other transformation on the message, consider subclassing <code>AbstractMailTransformer</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.4, when no <code>headerMapper</code> is provided, <code>autoCloseFolder</code> is <code>false</code> and <code>simpleContent</code> is <code>false</code>, the <code>MimeMessage</code> is returned as-is in the payload of the Spring message produced.
+This way, the content of the <code>MimeMessage</code> is loaded on demand when referenced, later in the flow.
+All the mentioned above transformations are still valid.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-namespace"><a class="anchor" href="#mail-namespace"></a>Mail Namespace Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration provides a namespace for mail-related configuration.
+To use it, configure the following schema locations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:int-mail="http://www.springframework.org/schema/integration/mail"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    https://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/integration/mail
+    https://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd"&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To configure an outbound channel adapter, provide the channel from which to receive and the MailSender, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:outbound-channel-adapter channel="outboundMail"
+    mail-sender="mailSender"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can provide the host, username, and password, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:outbound-channel-adapter channel="outboundMail"
+    host="somehost" username="someuser" password="somepassword"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.1.3, the <code>host</code>, <code>username</code> ane <code>mail-sender</code> can be omitted, if <code>java-mail-properties</code> is provided.
+However, the <code>host</code> and <code>username</code> has to be configured with appropriate Java mail properties, e.g. for SMTP:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">mail.user=someuser@gmail.com
+mail.smtp.host=smtp.gmail.com
+mail.smtp.port=587</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+As with any outbound Channel Adapter, if the referenced channel is a <code>PollableChannel</code>, you should provide a <code>&lt;poller&gt;</code> element (see <a href="endpoint.html#endpoint-namespace" class="xref page">Endpoint Namespace Support</a>).
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When you use the namespace support, you can also use a <code>header-enricher</code> message transformer.
+Doing so simplifies the application of the headers mentioned earlier to any message prior to sending to the mail outbound channel adapter.</p>
+</div>
+<div class="paragraph">
+<p>The following example assumes the payload is a Java bean with appropriate getters for the specified properties, but you can use any SpEL expression:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:header-enricher input-channel="expressionsInput" default-overwrite="false"&gt;
+	&lt;int-mail:to expression="payload.to"/&gt;
+	&lt;int-mail:cc expression="payload.cc"/&gt;
+	&lt;int-mail:bcc expression="payload.bcc"/&gt;
+	&lt;int-mail:from expression="payload.from"/&gt;
+	&lt;int-mail:reply-to expression="payload.replyTo"/&gt;
+	&lt;int-mail:subject expression="payload.subject" overwrite="true"/&gt;
+&lt;/int-mail:header-enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can use the <code>value</code> attribute to specify a literal.
+You also can specify <code>default-overwrite</code> and individual <code>overwrite</code> attributes to control the behavior with existing headers.</p>
+</div>
+<div class="paragraph">
+<p>To configure an inbound channel adapter, you have the choice between polling or event-driven (assuming your mail server supports IMAP <code>idle</code>&#8201;&#8212;&#8201;if not, then polling is the only option).
+A polling channel adapter requires the store URI and the channel to which to send inbound messages.
+The URI may begin with <code>pop3</code> or <code>imap</code>.
+The following example uses an <code>imap</code> URI:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:inbound-channel-adapter id="imapAdapter"
+      store-uri="imaps://[username]:[password]@imap.gmail.com/INBOX"
+      java-mail-properties="javaMailProperties"
+      channel="receiveChannel"
+      should-delete-messages="true"
+      should-mark-messages-as-read="true"
+      auto-startup="true"&gt;
+      &lt;int:poller max-messages-per-poll="1" fixed-rate="5000"/&gt;
+&lt;/int-mail:inbound-channel-adapter&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you do have IMAP <code>idle</code> support, you may want to configure the <code>imap-idle-channel-adapter</code> element instead.
+Since the <code>idle</code> command enables event-driven notifications, no poller is necessary for this adapter.
+It sends a message to the specified channel as soon as it receives the notification that new mail is available.
+The following example configures an IMAP <code>idle</code> mail channel:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:imap-idle-channel-adapter id="customAdapter"
+      store-uri="imaps://[username]:[password]@imap.gmail.com/INBOX"
+      channel="receiveChannel"
+      auto-startup="true"
+      should-delete-messages="false"
+      should-mark-messages-as-read="true"
+      java-mail-properties="javaMailProperties"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can provide <code>javaMailProperties</code> by creating and populating a regular <code>java.utils.Properties</code> object&#8201;&#8212;&#8201;for example, by using the <code>util</code> namespace provided by Spring.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If your username contains the '@' character, use '%40' instead of '@' to avoid parsing errors from the underlying JavaMail API.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The following example shows how to configure a <code>java.util.Properties</code> object:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;util:properties id="javaMailProperties"&gt;
+  &lt;prop key="mail.imap.socketFactory.class"&gt;javax.net.ssl.SSLSocketFactory&lt;/prop&gt;
+  &lt;prop key="mail.imap.socketFactory.fallback"&gt;false&lt;/prop&gt;
+  &lt;prop key="mail.store.protocol"&gt;imaps&lt;/prop&gt;
+  &lt;prop key="mail.debug"&gt;false&lt;/prop&gt;
+&lt;/util:properties&gt;</code></pre>
+</div>
+</div>
+<div id="search-term" class="paragraph">
+<p>By default, the <code>ImapMailReceiver</code> searches for messages based on the default <code>SearchTerm</code>, which is all mail messages that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Are RECENT (if supported)</p>
+</li>
+<li>
+<p>Are NOT ANSWERED</p>
+</li>
+<li>
+<p>Are NOT DELETED</p>
+</li>
+<li>
+<p>Are NOT SEEN</p>
+</li>
+<li>
+<p>hHave not been processed by this mail receiver (enabled by the use of the custom USER flag or simply NOT FLAGGED if not supported)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The custom user flag is <code>spring-integration-mail-adapter</code>, but you can configure it.
+Since version 2.2, the <code>SearchTerm</code> used by the <code>ImapMailReceiver</code> is fully configurable with <code>SearchTermStrategy</code>, which you can inject by using the <code>search-term-strategy</code> attribute.
+A <code>SearchTermStrategy</code> is a strategy interface with a single method that lets you create an instance of the <code>SearchTerm</code> used by the <code>ImapMailReceiver</code>.
+The following listing shows the <code>SearchTermStrategy</code> interface:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface SearchTermStrategy {
+
+    SearchTerm generateSearchTerm(Flags supportedFlags, Folder folder);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example relies on <code>TestSearchTermStrategy</code> rather than the default <code>SearchTermStrategy</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;mail:imap-idle-channel-adapter id="customAdapter"
+			store-uri="imap:something"
+			…
+			search-term-strategy="searchTermStrategy"/&gt;
+
+&lt;bean id="searchTermStrategy"
+  class="o.s.i.mail.config.ImapIdleChannelAdapterParserTests.TestSearchTermStrategy"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <a href="#imap-seen">Marking IMAP Messages When <code>Recent</code> Is Not Supported</a> for information about message flagging.</p>
+</div>
+<div id="imap-peek" class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="title">Important: IMAP PEEK</div>
+<div class="paragraph">
+<p>Starting with version 4.1.1, the IMAP mail receiver uses the <code>mail.imap.peek</code> or <code>mail.imaps.peek</code> JavaMail property, if specified.
+Previously, the receiver ignored the property and always set the <code>PEEK</code> flag.
+Now, if you explicitly set this property to <code>false</code>, the message ise marked as <code>\Seen</code> regardless of the setting of <code>shouldMarkMessagesRead</code>.
+If not specified, the previous behavior is retained (peek is <code>true</code>).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="imap-idle-and-lost-connections"><a class="anchor" href="#imap-idle-and-lost-connections"></a>IMAP <code>idle</code> and Lost Connections</h3>
+<div class="paragraph">
+<p>When using an IMAP <code>idle</code> channel adapter, connections to the server may be lost (for example, through network failure) and, since the JavaMail documentation explicitly states that the actual IMAP API is experimental, it is important to understand the differences in the API and how to deal with them when configuring IMAP <code>idle</code> adapters.
+Currently, Spring Integration mail adapters were tested with JavaMail 1.4.1 and JavaMail 1.4.3.
+Depending on which one is used, you must pay special attention to some JavaMail properties that need to be set with regard to auto-reconnect.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The following behavior was observed with Gmail but should provide you with some tips on how to solve re-connect issue with other providers.
+However, feedback is always welcome.
+Again, the following notes are based on Gmail.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>With JavaMail 1.4.1, if you set the <code>mail.imaps.timeout</code> property to a relatively short period of time (approximately 5 min in our testing), <code>IMAPFolder.idle()</code> throws <code>FolderClosedException</code> after this timeout.
+However, if this property is not set (it should be indefinite) the  <code>IMAPFolder.idle()</code> method never returns and never throws an exception.
+It does, however, reconnect automatically if the connection was lost for a short period of time (under 10 min in our testing).
+However, if the connection was lost for a long period of time (over 10 min), <code>IMAPFolder.idle()</code>, does not throw <code>FolderClosedException</code> and does not re-establish the connection, and remains in the blocked state indefinitely, thus leaving you no possibility to reconnect without restarting the adapter.
+Consequently, the only way to make re-connecting work with JavaMail 1.4.1 is to set the <code>mail.imaps.timeout</code> property explicitly to some value, but it also means that such value should be relatively short (under 10 min) and the connection should be re-established relatively quickly.
+Again, it may be different with providers other than Gmail.
+With JavaMail 1.4.3 introduced significant improvements to the API, ensuring that there is always a condition that forces the <code>IMAPFolder.idle()</code> method to return  <code>StoreClosedException</code> or <code>FolderClosedException</code> or to simply return, thus letting you proceed with auto-reconnecting.
+Currently, auto-reconnecting runs infinitely making attempts to reconnect every ten seconds.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+In both configurations, <code>channel</code> and <code>should-delete-messages</code> are required attributes.
+You should understand why <code>should-delete-messages</code> is required.
+The issue is with the POP3 protocol, which does not have any knowledge of messages that were read.
+It can only know what has been read within a single session.
+This means that, when your POP3 mail adapter runs, emails are successfully consumed as they become available during each poll and no single email message is delivered more then once.
+However, as soon as you restart your adapter and begin a new session, all the email messages that might have been retrieved in the previous session are retrieved again.
+That is the nature of POP3.
+Some might argue that <code>should-delete-messages</code> should be <code>true</code> by default.
+In other words, there are two valid and mutually exclusive use that make it very hard to pick a single best default.
+You may want to configure your adapter as the only email receiver, in which case you want to be able to restart your adapter without fear that previously delivered messages are not delivered again.
+In this case, setting <code>should-delete-messages</code> to <code>true</code> would make the most sense.
+However, you may have another use case where you may want to have multiple adapters monitor email servers and their content.
+In other words, you want to 'peek but not touch'.
+Then setting <code>should-delete-messages</code> to <code>false</code> is much more appropriate.
+So since it is hard to choose what should be the right default value for the <code>should-delete-messages</code> attribute, we made it a required attribute to be set by you.
+Leaving it up to you also means that you are less likely to end up with unintended behavior.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+When configuring a polling email adapter&#8217;s <code>should-mark-messages-as-read</code> attribute, you should be aware of the protocol you are configuring to retrieve messages.
+For example, POP3 does not support this flag, which means setting it to either value has no effect, as messages are not marked as read.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the case of a silently dropped connection, an idle cancel task is run in the background periodically (a new IDLE will usually immediately be processed).
+To control this interval, a <code>cancelIdleInterval</code> option is provided; default 120 (2 minutes).
+RFC 2177 recommends an interval no larger than 29 minutes.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You should understand that these actions (marking messages read and deleting messages) are performed after the messages are received but before they are processed.
+This can cause messages to be lost.</p>
+</div>
+<div class="paragraph">
+<p>You may wish to consider using transaction synchronization instead.
+See <a href="#mail-tx-sync">Transaction Synchronization</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;imap-idle-channel-adapter/&gt;</code> also accepts the 'error-channel' attribute.
+If a downstream exception is thrown and an 'error-channel' is specified, a <code>MessagingException</code> message containing the failed message and the original exception is sent to this channel.
+Otherwise, if the downstream channels are synchronous, any such exception is logged as a warning by the channel adapter.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Beginning with the 3.0 release, the IMAP <code>idle</code> adapter emits application events (specifically <code>ImapIdleExceptionEvent</code> instances) when exceptions occur.
+This allows applications to detect and act on those exceptions.
+You can obtain the events by using an <code>&lt;int-event:inbound-channel-adapter&gt;</code> or any <code>ApplicationListener</code> configured to receive an <code>ImapIdleExceptionEvent</code> or one of its super classes.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="imap-seen"><a class="anchor" href="#imap-seen"></a>Marking IMAP Messages When <code>\Recent</code> Is Not Supported</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If <code>shouldMarkMessagesAsRead</code> is true, the IMAP adapters set the <code>\Seen</code> flag.</p>
+</div>
+<div class="paragraph">
+<p>In addition, when an email server does not support the <code>\Recent</code> flag, the IMAP adapters mark messages with a user flag (by default, <code>spring-integration-mail-adapter</code>), as long as the server supports user flags.
+If not, <code>Flag.FLAGGED</code> is set to <code>true</code>.
+These flags are applied regardless of the <code>shouldMarkMessagesRead</code> setting.</p>
+</div>
+<div class="paragraph">
+<p>As discussed in <a href="#search-term">null</a>, the default <code>SearchTermStrategy</code> ignore messages that are so flagged.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.2.2, you can set the name of the user flag by using <code>setUserFlag</code> on the <code>MailReceiver</code>.
+Doing so lets multiple receivers use a different flag (as long as the mail server supports user flags).
+The <code>user-flag</code> attribute is available when configuring the adapter with the namespace.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-filtering"><a class="anchor" href="#mail-filtering"></a>Email Message Filtering</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Very often, you may encounter a requirement to filter incoming messages (for example, you want to read only emails that have 'Spring Integration' in the <code>Subject</code> line).
+You can accomplish this by connecting an inbound mail adapter with an expression-based <code>Filter</code>.
+Although it would work, there is a downside to this approach.
+Since messages would be filtered after going through the inbound mail adapter, all such messages would be marked as read (<code>SEEN</code>) or unread (depending on the value of <code>should-mark-messages-as-read</code> attribute).
+However, in reality, it be more useful to mark messages as <code>SEEN</code> only if they pass the filtering criteria.
+This is similar to looking at your email client while scrolling through all the messages in the preview pane, but only flagging messages that were actually opened and read as <code>SEEN</code>.</p>
+</div>
+<div class="paragraph">
+<p>Spring Integration 2.0.4 introduced the <code>mail-filter-expression</code> attribute on <code>inbound-channel-adapter</code> and <code>imap-idle-channel-adapter</code>.
+This attribute lets you provide an expression that is a combination of SpEL and a regular expression.
+For example if you would like to read only emails that contain 'Spring Integration' in the subject line, you would configure the <code>mail-filter-expression</code> attribute like as follows: <code>mail-filter-expression="subject matches '(?i).<strong>Spring Integration.</strong>"</code>.</p>
+</div>
+<div class="paragraph">
+<p>Since <code>jakarta.mail.internet.MimeMessage</code> is the root context of the SpEL evaluation context, you can filter on any value available through <code>MimeMessage</code>, including the actual body of the message.
+This one is particularly important, since reading the body of the message typically results in such messages being marked as <code>SEEN</code> by default.
+However, since we now set the <code>PEEK</code> flag of every incoming message to 'true', only messages that were explicitly marked as <code>SEEN</code> are marked as read.</p>
+</div>
+<div class="paragraph">
+<p>So, in the following example, only messages that match the filter expression are output by this adapter and only those messages are marked as read:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:imap-idle-channel-adapter id="customAdapter"
+	store-uri="imaps://some_google_address:${password}@imap.gmail.com/INBOX"
+	channel="receiveChannel"
+	should-mark-messages-as-read="true"
+	java-mail-properties="javaMailProperties"
+	mail-filter-expression="subject matches '(?i).*Spring Integration.*'"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example, thanks to the <code>mail-filter-expression</code> attribute, only messages that contain 'Spring Integration' in the subject line are produced by this adapter.</p>
+</div>
+<div class="paragraph">
+<p>Another reasonable question is what happens on the next poll or idle event or what happens when such an adapter is restarted.
+Can there be duplication of massages to be filtered? In other words, if, on the last retrieval where you had five new messages and only one passed the filter, what would happen with the other four?
+Would they go through the filtering logic again on the next poll or idle?
+After all, they were not marked as <code>SEEN</code>.
+The answer is no.
+They would not be subject to duplicate processing due to another flag (<code>RECENT</code>) that is set by the email server and is used by the Spring Integration mail search filter.
+Folder implementations set this flag to indicate that this message is new to this folder.
+That is, it has arrived since the last time this folder was opened.
+In other words, while our adapter may peek at the email, it also lets the email server know that such email was touched and should therefore be marked as <code>RECENT</code> by the email server.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-tx-sync"><a class="anchor" href="#mail-tx-sync"></a>Transaction Synchronization</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Transaction synchronization for inbound adapters lets you take different actions after a transaction commits or rolls back.
+You can enable transaction synchronization by adding a <code>&lt;transactional/&gt;</code> element to the poller for the polled <code>&lt;inbound-adapter/&gt;</code> or to the <code>&lt;imap-idle-inbound-adapter/&gt;</code>.
+Even if there is no 'real' transaction involved, you can still enable this feature by using a <code>PseudoTransactionManager</code> with the <code>&lt;transactional/&gt;</code> element.
+For more information, see <a href="transactions.html#transaction-synchronization" class="xref page">Transaction Synchronization</a>.</p>
+</div>
+<div class="paragraph">
+<p>Because of the different mail servers and specifically the limitations that some have, at this time we provide only a strategy for these transaction synchronizations.
+You can send the messages to some other Spring Integration components or invoke a custom bean to perform some action.
+For example, to move an IMAP message to a different folder after the transaction commits, you might use something similar to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-mail:imap-idle-channel-adapter id="customAdapter"
+    store-uri="imaps://something.com:password@imap.something.com/INBOX"
+    channel="receiveChannel"
+    auto-startup="true"
+    should-delete-messages="false"
+    java-mail-properties="javaMailProperties"&gt;
+    &lt;int:transactional synchronization-factory="syncFactory"/&gt;
+&lt;/int-mail:imap-idle-channel-adapter&gt;
+
+&lt;int:transaction-synchronization-factory id="syncFactory"&gt;
+    &lt;int:after-commit expression="@syncProcessor.process(payload)"/&gt;
+&lt;/int:transaction-synchronization-factory&gt;
+
+&lt;bean id="syncProcessor" class="thing1.thing2.Mover"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows what the <code>Mover</code> class might look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class Mover {
+
+    public void process(MimeMessage message) throws Exception {
+        Folder folder = message.getFolder();
+        folder.open(Folder.READ_WRITE);
+        String messageId = message.getMessageID();
+        Message[] messages = folder.getMessages();
+        FetchProfile contentsProfile = new FetchProfile();
+        contentsProfile.add(FetchProfile.Item.ENVELOPE);
+        contentsProfile.add(FetchProfile.Item.CONTENT_INFO);
+        contentsProfile.add(FetchProfile.Item.FLAGS);
+        folder.fetch(messages, contentsProfile);
+        // find this message and mark for deletion
+        for (int i = 0; i &lt; messages.length; i++) {
+            if (((MimeMessage) messages[i]).getMessageID().equals(messageId)) {
+                messages[i].setFlag(Flags.Flag.DELETED, true);
+                break;
+            }
+        }
+
+        Folder somethingFolder = store.getFolder("SOMETHING");
+        somethingFolder.appendMessages(new MimeMessage[]{message});
+        folder.expunge();
+        folder.close(true);
+        somethingFolder.close(false);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+For the message to be still available for manipulation after the transaction, <em>should-delete-messages</em> must be set to 'false'.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mail-java-dsl-configuration"><a class="anchor" href="#mail-java-dsl-configuration"></a>Configuring channel adapters with the Java DSL</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To configure mail component in Java DSL, the framework provides a <code>o.s.i.mail.dsl.Mail</code> factory, which can be used like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SpringBootApplication
+public class MailApplication {
+
+    public static void main(String[] args) {
+        new SpringApplicationBuilder(MailApplication.class)
+            .web(false)
+            .run(args);
+    }
+
+    @Bean
+    public IntegrationFlow imapMailFlow() {
+        return IntegrationFlow
+                .from(Mail.imapInboundAdapter("imap://user:pw@host:port/INBOX")
+                            .searchTermStrategy(this::fromAndNotSeenTerm)
+                            .userFlag("testSIUserFlag")
+                            .simpleContent(true)
+                            .javaMailProperties(p -&gt; p.put("mail.debug", "false")),
+                    e -&gt; e.autoStartup(true)
+                            .poller(p -&gt; p.fixedDelay(1000)))
+                .channel(MessageChannels.queue("imapChannel"))
+                .get();
+    }
+
+    @Bean
+    public IntegrationFlow sendMailFlow() {
+        return IntegrationFlow.from("sendMailChannel")
+                .enrichHeaders(Mail.headers()
+                        .subjectFunction(m -&gt; "foo")
+                        .from("foo@bar")
+                        .toFunction(m -&gt; new String[] { "bar@baz" }))
+                .handle(Mail.outboundAdapter("gmail")
+                            .port(smtpServer.getPort())
+                            .credentials("user", "pw")
+                            .protocol("smtp"),
+                    e -&gt; e.id("sendMailEndpoint"))
+                .get();
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="kafka.html">Apache Kafka Support</a></span>
+  <span class="next"><a href="mongodb.html">MongoDb Support</a></span>
+</nav>
+</article>
+</div>  </div>
+</main>
+<div class="modal micromodal-slide" id="modal-versions" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true">
+            <main class="modal__content" id="modal-versions-content">
+              <button data-micromodal-close class="modal-versions-close">
+                <svg width="28px" height="28px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><title/><g id="cross"><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>
+              </button>
+              <div class="colset">
+                <div class="col-left">
+                  <ul class="nav-versions">
+                    <li class="component is-current">
+                      <a class="title" href="index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-current is-latest">
+                          <a href="index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-right">
+                  <ul>
+                    <li>
+                      Related Spring Documentation
+                      <ul>
+                        <li><a href="https://docs.spring.io/spring-framework/reference/">Spring Framework</a></li>
+                        <li><a href="https://docs.spring.io/spring-security/reference/">Spring Security</a></li>
+                        <li><a href="https://docs.spring.io/spring-ldap/reference/">Spring LDAP</a></li>
+                        <li><a href="https://docs.spring.io/spring-session/reference/">Spring Session</a></li>
+                        <li><a href="https://docs.spring.io/spring-authorization-server/reference/">Spring Authorization Server</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+</div>
+<footer class="footer flex">
+    <div id="spring-links flex">
+        <img id="springlogo" src="../_/img/spring-logo.svg" alt="Spring">
+        <p class="smallest antialiased">© <script>var d = new Date();
+        document.write(d.getFullYear());</script> <a href="https://www.vmware.com/">VMware</a>, Inc. or its affiliates. <a href="https://www.vmware.com/help/legal.html">Terms of Use</a> • <a href="https://www.vmware.com/help/privacy.html" rel="noopener noreferrer">Privacy</a> • <a href="https://spring.io/trademarks">Trademark Guidelines</a> <span id="thank-you-mobile">• <a href="https://spring.io/thank-you">Thank you</a></span> • <a href="https://www.vmware.com/help/privacy/california-privacy-rights.html">Your California Privacy Rights</a> • <a class="ot-sdk-show-settings">Cookie Settings</a> <span id="teconsent"></span></p>
+        <p class="smallest antialiased has-gray-text">Apache®, Apache Tomcat®, Apache Kafka®, Apache Cassandra&trade;, and Apache Geode&trade; are trademarks or registered trademarks of the Apache Software Foundation in the United States and/or other countries. Java&trade;, Java&trade; SE, Java&trade; EE, and OpenJDK&trade; are trademarks of Oracle and/or its affiliates. Kubernetes® is a registered trademark of the Linux Foundation in the United States and other countries. Linux® is the registered trademark of Linus Torvalds in the United States and other countries. Windows® and Microsoft® Azure are registered trademarks of Microsoft Corporation. “AWS” and “Amazon Web Services” are trademarks or registered trademarks of Amazon.com Inc. or its affiliates. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes. Other names may be trademarks of their respective owners.</p>
+    </div>
+    <div id="social-icons" class="flex jc-between">
+        <a href="https://www.youtube.com/user/SpringSourceDev" title="Youtube"><svg id="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle class="cls-1" cx="20" cy="20" r="20"/><path class="cls-2" d="M30.91,14.53a2.89,2.89,0,0,0-2-2C27.12,12,20,12,20,12s-7.12,0-8.9.47a2.9,2.9,0,0,0-2,2A30.56,30.56,0,0,0,8.63,20a30.44,30.44,0,0,0,.46,5.47,2.89,2.89,0,0,0,2,2C12.9,28,20,28,20,28s7.12,0,8.9-.47a2.87,2.87,0,0,0,2-2A30.56,30.56,0,0,0,31.37,20,28.88,28.88,0,0,0,30.91,14.53ZM17.73,23.41V16.59L23.65,20Z"/></svg></a>
+        <a href="https://github.com/spring-projects" title="Github"><svg id="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><path class="cls-1" d="M38,0a38,38,0,1,0,38,38A38,38,0,0,0,38,0Z"/></g><path class="cls-2" d="M38,15.59A22.95,22.95,0,0,0,30.71,60.3c1.15.21,1.57-.5,1.57-1.11s0-2,0-3.9c-6.38,1.39-7.73-3.07-7.73-3.07A6.09,6.09,0,0,0,22,48.86c-2.09-1.42.15-1.39.15-1.39a4.81,4.81,0,0,1,3.52,2.36c2,3.5,5.37,2.49,6.67,1.91a4.87,4.87,0,0,1,1.46-3.07c-5.09-.58-10.45-2.55-10.45-11.34a8.84,8.84,0,0,1,2.36-6.15,8.29,8.29,0,0,1,.23-6.07s1.92-.62,6.3,2.35a21.82,21.82,0,0,1,11.49,0c4.38-3,6.3-2.35,6.3-2.35a8.29,8.29,0,0,1,.23,6.07,8.84,8.84,0,0,1,2.36,6.15c0,8.81-5.37,10.75-10.48,11.32a5.46,5.46,0,0,1,1.56,4.25c0,3.07,0,5.54,0,6.29s.42,1.33,1.58,1.1A22.94,22.94,0,0,0,38,15.59Z"/></svg></a>
+        <a href="https://twitter.com/springcentral" title="Twitter"><svg id="twitter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><circle class="cls-1" cx="37.97" cy="37.97" r="37.97"/><path id="Twitter-2" data-name="Twitter" class="cls-2" d="M55.2,22.73a15.43,15.43,0,0,1-4.88,1.91,7.56,7.56,0,0,0-5.61-2.49A7.78,7.78,0,0,0,37,30a7.56,7.56,0,0,0,.2,1.79,21.63,21.63,0,0,1-15.84-8.23,8,8,0,0,0,2.37,10.52,7.66,7.66,0,0,1-3.48-1v.09A7.84,7.84,0,0,0,26.45,41a7.54,7.54,0,0,1-2,.28A7.64,7.64,0,0,1,23,41.09a7.71,7.71,0,0,0,7.18,5.47,15.21,15.21,0,0,1-9.55,3.37,15.78,15.78,0,0,1-1.83-.11,21.41,21.41,0,0,0,11.78,3.54c14.13,0,21.86-12,21.86-22.42,0-.34,0-.68,0-1a15.67,15.67,0,0,0,3.83-4.08,14.9,14.9,0,0,1-4.41,1.24A7.8,7.8,0,0,0,55.2,22.73Z"/></svg></a>
+    </div>
+</footer>
+<script src="../_/js/vendor/import.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script async src="../_/js/vendor/asciidoctor-tabs.js" data-sync-storage-key="docs:preferred-tab"></script>
+
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <main class="modal__content" id="modal-1-content">
+                <div id="searchbox"></div>
+                <div id="counter"></div>
+                <div class="search-by">
+                    <a target="_blank" rel="noopener noreferrer" href="https://www.algolia.com/" aria-label="Search by Algolia">
+                        <img class="light" width="140" src="../_/img/algolia-light.svg" />
+                        <img class="dark" width="140" src="../_/img/algolia-dark.svg" />
+                    </a>
+                </div>
+                <div id="hits"></div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.17.0/dist/algoliasearch-lite.umd.js" integrity="sha256-Lf9DrpGmcRip6OQzbcL6lnvNmoZNSKpyQX5pMlwatWE=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.54.1/dist/instantsearch.production.min.js" integrity="sha256-xYsZPDeNjYNTBWLvqD2Lxe98hOxcDgOHyMPfz4tVAbk=" crossorigin="anonymous"></script>
+<script async id="search-script" src="../_/js/vendor/search.js" data-app-id="WB1FQYI187" data-api-key="9d489079e5ec46dbb238909fee5c9c29" data-index-name="springintegration" data-stylesheet="../_/css/vendor/search.css" data-page-version="6.2.0"></script>
+
+  </body>
+</html>

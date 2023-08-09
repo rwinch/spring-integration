@@ -1,0 +1,2718 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Aggregator :: Spring Integration</title>
+    <link rel="prev" href="splitter.html">
+    <link rel="next" href="resequencer.html">
+    <meta name="generator" content="Antora 3.2.0-alpha.2">
+    <script>
+!function (theme, navWidth) {
+  if (theme === 'dark') document.documentElement.classList.add('dark-theme')
+  if (navWidth) document.documentElement.style.setProperty('--nav-width', `${navWidth}px`)
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'),
+  localStorage && localStorage.getItem('nav-width'))
+    </script>
+    <link rel="stylesheet" href="../_/css/site.css">
+    <link rel="stylesheet" href="../_/css/vendor/search.css">
+    <link rel="stylesheet" href="../_/css/vendor/asciidoctor-tabs.css">
+
+    <meta name="version" content="6.2.0">
+    <meta name="component" content="spring-integration">
+    <link rel="icon" href="../_/img/favicon.ico" type="image/vnd.microsoft.icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://spring.io">
+        <img
+          id="springlogo"
+          class="block"
+          src="../_/img/spring-logo.svg"
+          alt="Spring"
+        />
+      </a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Why Spring</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/why-spring"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/microservices"
+            >Microservices</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/reactive"
+            >Reactive</a>
+            <a class="navbar-item" href="https://spring.io/event-driven">Event
+              Driven</a>
+            <a class="navbar-item" href="https://spring.io/cloud">Cloud</a>
+            <a class="navbar-item" href="https://spring.io/web-applications">Web
+              Applications</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/serverless"
+            >Serverless</a>
+            <a class="navbar-item" href="https://spring.io/batch">Batch</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Learn</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/learn">Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/quickstart"
+            >Quickstart</a>
+            <a class="navbar-item" href="https://spring.io/guides">Guides</a>
+            <a class="navbar-item" href="https://spring.io/blog">Blog</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Projects</a>
+          <div class="navbar-dropdown" style="min-width: 280px">
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-boot"
+            >Spring Boot</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-framework"
+            >Spring Framework</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud"
+            >Spring Cloud</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud-dataflow"
+            >Spring Cloud Data Flow</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-data"
+            >Spring Data</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-integration"
+            >Spring Integration</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-batch"
+            >Spring Batch</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-security"
+            >Spring Security</a>
+            <a
+              class="navbar-item navbar-item-special"
+              href="https://spring.io/projects"
+            >View all projects</a>
+            <a class="navbar-item" href="https://spring.io/tools">Spring Tools 4</a>
+            <a
+              class="navbar-item navbar-item-special-2"
+              href="https://start.spring.io"
+            >Spring Initializr
+              <svg
+                class="external-link-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+              ><polyline
+                  points="15 10.94 15 15 1 15 1 1 5.06 1"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><polyline
+                  points="8.93 1 15 1 15 7.07"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><line
+                  x1="15"
+                  y1="1"
+                  x2="8"
+                  y2="8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></line></svg></a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Academy</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.academy/courses"
+            >Courses</a>
+            <a
+              class="navbar-item"
+              href="https://spring.academy/learning-path"
+            >Get Certified</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Support</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/support">Overview</a>
+            <a class="navbar-item" href="https://spring.io/security">Security
+              Advisories</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable is-community">
+          <a class="navbar-link" href="#">Community</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/community"
+            >Overview</a>
+            <a class="navbar-item" href="https://spring.io/events">Events</a>
+            <a class="navbar-item" href="https://spring.io/team">Team</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <label class="theme-toggler">
+      <input
+        type="checkbox"
+        type="checkbox"
+        id="switch-theme-checkbox"
+        name="switch-theme-checkbox"
+      />
+      <span class="icon"><svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="moon"
+          class="svg-inline--fa fa-moon moon"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+        ><path
+            fill="currentColor"
+            d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"
+          ></path>
+        </svg>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="sun"
+          class="svg-inline--fa fa-sun sun"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        ><path
+            fill="currentColor"
+            d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"
+          ></path>
+        </svg></span>
+      <span class="text">light</span>
+    </label>
+  </nav>
+</header>
+<script>
+!function (theme) {
+  if (theme === 'dark') {
+    document.getElementById('switch-theme-checkbox').parentElement.classList.add('active')
+  }
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'))
+</script><div class="body">
+<div class="nav-container" data-component="spring-integration" data-version="6.2.0">
+  <aside class="nav">
+    <div class="panels">
+      <div class="nav-panel-menu is-active" data-panel="menu">
+        <nav class="nav-menu">
+<div class="context">
+  <span class="title">Spring Integration</span>
+  <span class="version">6.2.0-SNAPSHOT</span>
+  <button class="browse-version" id="browse-version">
+    <svg
+      height="24px"
+      id="Layer_1"
+      style="enable-background:new 0 0 512 512;"
+      version="1.1"
+      viewBox="0 0 512 512"
+      width="24px"
+      xml:space="preserve"
+    ><g><path
+          d="M256,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S273.7,224,256,224L256,224z"
+        ></path><path
+          d="M128.4,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S146,224,128.4,224L128.4,224z"
+        ></path><path
+          d="M384,224c-17.7,0-32,14.3-32,32s14.3,32,32,32s32-14.3,32-32S401.7,224,384,224L384,224z"
+        ></path></g></svg>
+  </button>
+</div><div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="preface.html">Preface</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New?</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="core.html">Core Messaging</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="channel.html">Message Channels</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interfaces.html">The MessageChannel Interface</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/implementations.html">Message Channel Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interceptors.html">Channel Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/template.html"><code>MessagingTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/configuration.html">Configuring Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/special-channels.html">Special Channels</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="polling-consumer.html">Poller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="channel-adapter.html">Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="bridge.html">Messaging Bridge</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message.html">Message</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-routing.html">Message Routing</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="router.html">Routers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/common-parameters.html">Common Router Parameters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/implementations.html">Router Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/namespace.html">Configuring a Generic Router</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/spel.html">Routers and the Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/annotation.html">Configuring a Router with Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/dynamic-routers.html">Dynamic Routers</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/routing-slip.html">Routing Slip</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/process-manager.html">Process Manager Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="filter.html">Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="splitter.html">Splitter</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="aggregator.html">Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="resequencer.html">Resequencer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="chain.html">Message Handler Chain</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scatter-gather.html">Scatter-Gather</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="barrier.html">Thread Barrier</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-transformation.html">Message Transformation</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="transformer.html">Transformer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="content-enrichment.html">Content Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="claim-check.html">Claim Check</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="codec.html">Codec</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="messaging-endpoints.html">Messaging Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint.html">Message Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint-roles.html">Endpoint Roles</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="leadership-event-handling.html">Leadership Event Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gateway.html">Messaging Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="service-activator.html">Service Activator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="delayer.html">Delayer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scripting.html">Scripting Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="groovy.html">Groovy Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="handler-advice.html">Adding Behavior to Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/classes.html">Provided Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/reactive.html">Reactive Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/context-holder.html">Context Holder Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/custom.html">Custom Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/other.html">Other Advice Chain Elements</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/handle-message.html">Handling Message Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/tx-handle-message.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-filters.html">Advising Filters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-with-annotations.html">Advising Endpoints Using Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/order.html">Ordering Advices within Advice Chain</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advised-properties.html">Advised Handler Properties</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/idempotent-receiver.html">Idempotent Receiver Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="logging-adapter.html">Logging Channel Adapter</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="functions-support.html"><code>java.util.function</code> Interfaces Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kotlin-functions.html">Kotlin Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="dsl.html">Java DSL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-basics.html">DSL Basics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-channels.html">Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-pollers.html">Pollers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-reactive.html">The <code>reactive()</code> Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-endpoints.html">DSL and Endpoint Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-transformers.html">Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-inbound-adapters.html">Inbound Channel Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-routers.html">Message Routers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-splitters.html">Splitters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-aggregators.html">Aggregators and Resequencers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-handle.html">Service Activators and the <code>.handle()</code> method</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-gateway.html">Operator gateway()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-log.html">Operator log()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-intercept.html">Operator intercept()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-wiretap.html"><code>MessageChannelSpec.wireTap()</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flows.html">Working With Message Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-function-expression.html"><code>FunctionExpression</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-subflows.html">Sub-flows support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-protocol-adapters.html">Using Protocol Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flow-adapter.html"><code>IntegrationFlowAdapter</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-runtime-flows.html">Dynamic and Runtime Integration Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flow-as-gateway.html"><code>IntegrationFlow</code> as a Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-extensions.html">DSL Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flows-composition.html">Integration Flows Composition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="groovy-dsl.html">Groovy DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kotlin-dsl.html">Kotlin DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="system-management.html">System Management</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="metrics.html">Metrics and Management</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-history.html">Message History</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-store.html">Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="meta-data-store.html">Metadata Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="control-bus.html">Control Bus</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="shutdown.html">Orderly Shutdown</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="graph.html">Integration Graph</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="integration-graph-controller.html">Integration Graph Controller</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reactive-streams.html">Reactive Streams Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="native-aot.html">Native Images Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="endpoint-summary.html">Integration Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="amqp.html">AMQP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/polled-inbound-channel-adapter.html">Polled Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-gateway.html">Inbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-ack.html">Inbound Endpoint Acknowledge Mode</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-endpoints.html">Outbound Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/async-outbound-gateway.html">Asynchronous Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/alternative-confirms-returns.html">Alternative Mechanism for Publisher Confirms and Returns</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/conversion-inbound.html">Inbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/content-type-conversion-outbound.html">Outbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/user-id.html">Outbound User ID</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/delay.html">Delayed Message Exchange</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/channels.html">AMQP-backed Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/message-headers.html">AMQP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/strict-ordering.html">Strict Message Ordering</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/samples.html">AMQP Samples</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/rmq-streams.html">RabbitMQ Stream Queue Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="camel.html">Apache Camel Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cassandra.html">Apache Cassandra Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="debezium.html">Debezium Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="event.html">Spring <code>ApplicationEvent</code> Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="feed.html">Feed Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="file.html">File Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/reading.html">Reading Files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/writing.html">Writing files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/transforming.html">File Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/splitter.html">File Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/aggregator.html">File Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/remote-persistent-flf.html">Remote Persistent File List Filters</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ftp.html">FTP/FTPS Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-factory.html">FTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/advanced-configuration.html">Advanced Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/inbound.html">FTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/streaming.html">FTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound.html">FTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound-gateway.html">FTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-caching.html">FTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-callback.html">Using <code>MessageSessionCallback</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/server-events.html">Apache Mina FTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="graphql.html">GraphQL Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="hazelcast.html">Hazelcast Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="http.html">HTTP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/inbound.html">Http Inbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/outbound.html">HTTP Outbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/namespace.html">HTTP Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/java-config.html">Configuring HTTP Endpoints with Java</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/timeout.html">Timeout Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/proxy.html">HTTP Proxy configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/header-mapping.html">HTTP Header Mappings</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/int-graph-controller.html">Integration Graph Controller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/samples.html">HTTP Samples</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jdbc.html">JDBC Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/message-store.html">JDBC Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/stored-procedures.html">Stored Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/lock-registry.html">JDBC Lock Registry</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/metadata-store.html">JDBC Metadata Store</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jpa.html">JPA Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/functionality.html">Functionality</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/supported-persistence-providers.html">Supported Persistence Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/java-implementation.html">Java Implementation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-gateways.html">Outbound Gateways</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jms.html">JMS Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jmx.html">JMX Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kafka.html">Apache Kafka Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mail.html">Mail Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mongodb.html">MongoDb Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mqtt.html">MQTT Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="r2dbc.html">R2DBC Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="redis.html">Redis Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resource.html">Resource Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="rsocket.html">RSocket Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="sftp.html">SFTP Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-factory.html">SFTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-caching.html">SFTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/inbound.html">SFTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/streaming.html">SFTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound.html">SFTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound-gateway.html">SFTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-callback.html">MessageSessionCallback</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/server-events.html">Apache Mina SFTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="smb.html">SMB Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stomp.html">STOMP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stream.html">Stream Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="syslog.html">Syslog Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ip.html">TCP and UDP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/intro.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/udp-adapters.html">UDP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-connection-factories.html">TCP Connection Factories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/testing-connections.html">Testing Connections</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/interceptors.html">TCP Connection Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-events.html">TCP Connection Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-adapters.html">TCP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-gateways.html">TCP Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/correlation.html">TCP Message Correlation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/note-nio.html">About Non-blocking I/O (NIO)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/ssl-tls.html">SSL/TLS Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-advanced-techniques.html">Advanced Techniques</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/endpoint-reference.html">IP Configuration Attributes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/msg-headers.html">IP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/annotation.html">Annotation-Based Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/dsl.html">Using the Java DSL for TCP Components</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="webflux.html">WebFlux Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="web-sockets.html">WebSockets Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="ws.html">Web Services Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="xml.html">XML Support - Dealing with XML Payloads</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/transformation.html">Transforming XML Payloads</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-transformer.html">Transforming XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-splitting.html">Splitting XML Messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-routing.html">Routing XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-header-enricher.html">XPath Header Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-filter.html">Using the XPath Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-spel-function.html">#xpath SpEL Function</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/validating-filter.html">XML Validating Filter</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="xmpp.html">XMPP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zeromq.html">ZeroMQ Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zookeeper.html">Zookeeper Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="error-handling.html">Error Handling</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="spel.html">Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message-publishing.html">Message Publishing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="transactions.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="security.html">Security in Spring Integration</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="configuration.html">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace-taskscheduler.html">Configuring the Task Scheduler</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/global-properties.html">Global Properties</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/annotations.html">Annotation Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/meta-annotations.html">Messaging Meta-Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/message-mapping-rules.html">Message Mapping Rules and Conventions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="testing.html">Testing support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="samples.html">Spring Integration Samples</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resources.html">Additional Resources</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="history.html">Change History</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-6.0-6.1.html">Changes between 6.0 and 6.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.5-6.0.html">Changes between 5.5 and 6.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.4-5.5.html">Changes between 5.4 and 5.5</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.3-5.4.html">Changes between 5.3 and 5.4</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.2-5.3.html">Changes between 5.2 and 5.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.1-5.2.html">Changes between 5.1 and 5.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.2-4.3.html">Changes between 4.2 and 4.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.1-4.2.html">Changes between 4.1 and 4.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.0-4.1.html">Changes between 4.0 and 4.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.1-2.2.html">Changes between 2.1 and 2.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.0-2.1.html">Changes between 2.0 and 2.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-1.0-2.0.html">Changes between Versions 1.0 and 2.0</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zip.html">Zip Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+          <div class="toggle-sm">
+            <button id="nav-toggle-2" class="nav-toggle"></button>
+          </div>
+        </nav>
+      </div>
+      <div class="nav-collapse">
+        <button id="nav-collapse-toggle"><span></span></button>        
+      </div>
+    </div>
+    <div class="nav-resize"></div>
+  </aside>
+</div>
+<script>
+!function (sidebar) {
+  if (sidebar) {
+    document.body.classList.add('nav-sm')
+  }
+}(localStorage && localStorage.getItem('sidebar') === 'close')
+</script><main class="article">
+<div class="toolbar" role="navigation">
+  <button id="nav-toggle-1" class="nav-toggle"></button>
+<div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+</div>
+  <div class="content">
+<aside class="sidebar">
+  <div class="content">
+    <div
+      class="toc"
+      data-title="Aggregator"
+      data-levels="2"
+    >
+      <div class="toc-menu"></div>
+    </div>
+    <div class="sidebar-links">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/src/reference/antora/modules/ROOT/pages/aggregator.adoc">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+          ><path
+              d="m16 2.012 3 3L16.713 7.3l-3-3zM4 14v3h3l8.299-8.287-3-3zm0 6h16v2H4z"
+            ></path></svg>
+          Edit this Page
+        </a>
+              <a href="https://github.com/rwinch/spring-integration" title="Github">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="512px"
+            id="Layer_1"
+            version="1.1"
+            viewBox="0 0 512 512"
+            width="512px"
+          ><style type="text/css"><![CDATA[
+              .st0{fill-rule:evenodd;clip-rule:evenodd;} ]]></style><g><path
+                class="st0"
+                d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"
+              ></path></g></svg>
+          Github Project
+        </a>
+        <a href="https://stackoverflow.com/tags/spring-integration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path
+              d="M290.7 311L95 269.7 86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8 153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"
+            ></path></svg>
+          Stack Overflow
+        </a>
+    </div>
+  </div>
+</aside><div class="doc">
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Spring Integration</a></li>
+    <li><a href="message-routing.html">Message Routing</a></li>
+    <li><a href="aggregator.html">Aggregator</a></li>
+  </ul>
+</nav>
+<article>
+<h1 id="page-title" class="page">Aggregator</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Basically a mirror-image of the splitter, the aggregator is a type of message handler that receives multiple messages and combines them into a single message.
+In fact, an aggregator is often a downstream consumer in a pipeline that includes a splitter.</p>
+</div>
+<div class="paragraph">
+<p>Technically, the aggregator is more complex than a splitter, because it is stateful.
+It must hold the messages to be aggregated and determine when the complete group of messages is ready to be aggregated.
+In order to do so, it requires a <code>MessageStore</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="aggregator-functionality"><a class="anchor" href="#aggregator-functionality"></a>Functionality</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Aggregator combines a group of related messages, by correlating and storing them, until the group is deemed to be complete.
+At that point, the aggregator creates a single message by processing the whole group and sends the aggregated message as output.</p>
+</div>
+<div class="paragraph">
+<p>Implementing an aggregator requires providing the logic to perform the aggregation (that is, the creation of a single message from many).
+Two related concepts are correlation and release.</p>
+</div>
+<div class="paragraph">
+<p>Correlation determines how messages are grouped for aggregation.
+In Spring Integration, correlation is done by default, based on the <code>IntegrationMessageHeaderAccessor.CORRELATION_ID</code> message header.
+Messages with the same <code>IntegrationMessageHeaderAccessor.CORRELATION_ID</code> are grouped together.
+However, you can customize the correlation strategy to allow other ways of specifying how the messages should be grouped together.
+To do so, you can implement a <code>CorrelationStrategy</code> (covered later in this chapter).</p>
+</div>
+<div class="paragraph">
+<p>To determine the point at which a group of messages is ready to be processed, a <code>ReleaseStrategy</code> is consulted.
+The default release strategy for the aggregator releases a group when all messages included in a sequence are present, based on the <code>IntegrationMessageHeaderAccessor.SEQUENCE_SIZE</code> header.
+You can override this default strategy by providing a reference to a custom <code>ReleaseStrategy</code> implementation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="aggregator-api"><a class="anchor" href="#aggregator-api"></a>Programming Model</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Aggregation API consists of a number of classes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The interface <code>MessageGroupProcessor</code>, and its subclasses: <code>MethodInvokingAggregatingMessageGroupProcessor</code> and <code>ExpressionEvaluatingMessageGroupProcessor</code></p>
+</li>
+<li>
+<p>The <code>ReleaseStrategy</code> interface and its default implementation: <code>SimpleSequenceSizeReleaseStrategy</code></p>
+</li>
+<li>
+<p>The <code>CorrelationStrategy</code> interface and its default implementation: <code>HeaderAttributeCorrelationStrategy</code></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="aggregatingmessagehandler"><a class="anchor" href="#aggregatingmessagehandler"></a><code>AggregatingMessageHandler</code></h3>
+<div class="paragraph">
+<p>The <code>AggregatingMessageHandler</code> (a subclass of <code>AbstractCorrelatingMessageHandler</code>) is a <code>MessageHandler</code> implementation, encapsulating the common functionality of an aggregator (and other correlating use cases), which are as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Correlating messages into a group to be aggregated</p>
+</li>
+<li>
+<p>Maintaining those messages in a <code>MessageStore</code> until the group can be released</p>
+</li>
+<li>
+<p>Deciding when the group can be released</p>
+</li>
+<li>
+<p>Aggregating the released group into a single message</p>
+</li>
+<li>
+<p>Recognizing and responding to an expired group</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The responsibility for deciding how the messages should be grouped together is delegated to a <code>CorrelationStrategy</code> instance.
+The responsibility for deciding whether the message group can be released is delegated to a <code>ReleaseStrategy</code> instance.</p>
+</div>
+<div class="paragraph">
+<p>The following listing shows a brief highlight of the base <code>AbstractAggregatingMessageGroupProcessor</code> (the responsibility for implementing the <code>aggregatePayloads</code> method is left to the developer):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public abstract class AbstractAggregatingMessageGroupProcessor
+              implements MessageGroupProcessor {
+
+    protected Map&lt;String, Object&gt; aggregateHeaders(MessageGroup group) {
+        // default implementation exists
+    }
+
+    protected abstract Object aggregatePayloads(MessageGroup group, Map&lt;String, Object&gt; defaultHeaders);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <code>DefaultAggregatingMessageGroupProcessor</code>, <code>ExpressionEvaluatingMessageGroupProcessor</code> and <code>MethodInvokingMessageGroupProcessor</code> as out-of-the-box implementations of the <code>AbstractAggregatingMessageGroupProcessor</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.2, a <code>Function&lt;MessageGroup, Map&lt;String, Object&gt;&gt;</code> strategy is available for the <code>AbstractAggregatingMessageGroupProcessor</code> to merge and compute (aggregate) headers for an output message.
+The <code>DefaultAggregateHeadersFunction</code> implementation is available with logic that returns all headers that have no conflicts among the group; an absent header on one or more messages within the group is not considered a conflict.
+Conflicting headers are omitted.
+Along with the newly introduced <code>DelegatingMessageGroupProcessor</code>, this function is used for any arbitrary (non-<code>AbstractAggregatingMessageGroupProcessor</code>) <code>MessageGroupProcessor</code> implementation.
+Essentially, the framework injects a provided function into an <code>AbstractAggregatingMessageGroupProcessor</code> instance and wraps all other implementations into a <code>DelegatingMessageGroupProcessor</code>.
+The difference in logic between the <code>AbstractAggregatingMessageGroupProcessor</code> and the <code>DelegatingMessageGroupProcessor</code> that the latter doesn&#8217;t compute headers in advance, before calling the delegate strategy, and doesn&#8217;t invoke the function if the delegate returns a <code>Message</code> or <code>AbstractIntegrationMessageBuilder</code>.
+In that case, the framework assumes that the target implementation has taken care of producing a proper set of headers populated into the returned result.
+The <code>Function&lt;MessageGroup, Map&lt;String, Object&gt;&gt;</code> strategy is available as the <code>headers-function</code> reference attribute for XML configuration, as the <code>AggregatorSpec.headersFunction()</code> option for the Java DSL and as <code>AggregatorFactoryBean.setHeadersFunction()</code> for plain Java configuration.</p>
+</div>
+<div class="paragraph">
+<p>The <code>CorrelationStrategy</code> is owned by the <code>AbstractCorrelatingMessageHandler</code> and  has a default value based on the <code>IntegrationMessageHeaderAccessor.CORRELATION_ID</code> message header, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public AbstractCorrelatingMessageHandler(MessageGroupProcessor processor, MessageGroupStore store,
+        CorrelationStrategy correlationStrategy, ReleaseStrategy releaseStrategy) {
+    ...
+    this.correlationStrategy = correlationStrategy == null ?
+        new HeaderAttributeCorrelationStrategy(IntegrationMessageHeaderAccessor.CORRELATION_ID) : correlationStrategy;
+    this.releaseStrategy = releaseStrategy == null ? new SimpleSequenceSizeReleaseStrategy() : releaseStrategy;
+    ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As for the actual processing of the message group, the default implementation is the <code>DefaultAggregatingMessageGroupProcessor</code>.
+It creates a single <code>Message</code> whose payload is a <code>List</code> of the payloads received for a given group.
+This works well for simple scatter-gather implementations with a splitter, a publish-subscribe channel, or a recipient list router upstream.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+When using a publish-subscribe channel or a recipient list router in this type of scenario, be sure to enable the <code>apply-sequence</code> flag.
+Doing so adds the necessary headers: <code>CORRELATION_ID</code>, <code>SEQUENCE_NUMBER</code>, and <code>SEQUENCE_SIZE</code>.
+That behavior is enabled by default for splitters in Spring Integration, but it is not enabled for publish-subscribe channels or for recipient list routers because those components may be used in a variety of contexts in which these headers are not necessary.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When implementing a specific aggregator strategy for an application, you can extend <code>AbstractAggregatingMessageGroupProcessor</code> and implement the <code>aggregatePayloads</code> method.
+However, there are better solutions, less coupled to the API, for implementing the aggregation logic, which can be configured either through XML or through annotations.</p>
+</div>
+<div class="paragraph">
+<p>In general, any POJO can implement the aggregation algorithm if it provides a method that accepts a single <code>java.util.List</code> as an argument (parameterized lists are supported as well).
+This method is invoked for aggregating messages as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If the argument is a <code>java.util.Collection&lt;T&gt;</code> and the parameter type T is assignable to <code>Message</code>, the whole list of messages accumulated for aggregation is sent to the aggregator.</p>
+</li>
+<li>
+<p>If the argument is a non-parameterized <code>java.util.Collection</code> or the parameter type is not assignable to <code>Message</code>, the method receives the payloads of the accumulated messages.</p>
+</li>
+<li>
+<p>If the return type is not assignable to <code>Message</code>, it is treated as the payload for a <code>Message</code> that is automatically created by the framework.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In the interest of code simplicity and promoting best practices such as low coupling, testability, and others, the preferred way of implementing the aggregation logic is through a POJO and using the XML or annotation support for configuring it in the application.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.3, after processing message group, an <code>AbstractCorrelatingMessageHandler</code> performs a <code>MessageBuilder.popSequenceDetails()</code> message headers modification for the proper splitter-aggregator scenario with several nested levels.
+It is done only if the message group release result is not a collection of messages.
+In that case a target <code>MessageGroupProcessor</code> is responsible for the <code>MessageBuilder.popSequenceDetails()</code> call while building those messages.</p>
+</div>
+<div class="paragraph">
+<p>If the <code>MessageGroupProcessor</code> returns a <code>Message</code>, a <code>MessageBuilder.popSequenceDetails()</code> will be performed on the output message only if the <code>sequenceDetails</code> matches with first message in group.
+(Previously this has been done only if a plain payload or an <code>AbstractIntegrationMessageBuilder</code> has been returned from the <code>MessageGroupProcessor</code>.)</p>
+</div>
+<div class="paragraph">
+<p>This functionality can be controlled by a new <code>popSequence</code> <code>boolean</code> property, so the <code>MessageBuilder.popSequenceDetails()</code> can be disabled in some scenarios when correlation details have not been populated by the standard splitter.
+This property, essentially, undoes what has been done by the nearest upstream <code>applySequence = true</code> in the <code>AbstractMessageSplitter</code>.
+See <a href="splitter.html" class="xref page">Splitter</a> for more information.</p>
+</div>
+<div id="agg-message-collection" class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The <code>SimpleMessageGroup.getMessages()</code> method returns an <code>unmodifiableCollection</code>.
+Therefore, if an aggregating POJO method has a <code>Collection&lt;Message&gt;</code> parameter, the argument passed in is exactly that <code>Collection</code> instance and, when you use a <code>SimpleMessageStore</code> for the aggregator, that original <code>Collection&lt;Message&gt;</code> is cleared after releasing the group.
+Consequently, the <code>Collection&lt;Message&gt;</code> variable in the POJO is cleared too, if it is passed out of the aggregator.
+If you wish to simply release that collection as-is for further processing, you must build a new <code>Collection</code> (for example, <code>new ArrayList&lt;Message&gt;(messages)</code>).
+Starting with version 4.3, the framework no longer copies the messages to a new collection, to avoid undesired extra object creation.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Prior to version 4.2, it was not possible to provide a <code>MessageGroupProcessor</code> by using XML configuration.
+Only POJO methods could be used for aggregation.
+Now, if the framework detects that the referenced (or inner) bean implements <code>MessageProcessor</code>, it is used as the aggregator&#8217;s output processor.</p>
+</div>
+<div class="paragraph">
+<p>If you wish to release a collection of objects from a custom <code>MessageGroupProcessor</code> as the payload of a message, your class should extend <code>AbstractAggregatingMessageGroupProcessor</code> and implement <code>aggregatePayloads()</code>.</p>
+</div>
+<div class="paragraph">
+<p>Also, since version 4.2, a <code>SimpleMessageGroupProcessor</code> is provided.
+It returns the collection of messages from the group, which, as indicated earlier, causes the released messages to be sent individually.</p>
+</div>
+<div class="paragraph">
+<p>This lets the aggregator work as a message barrier, where arriving messages are held until the release strategy fires and the group is released as a sequence of individual messages.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 6.0, the splitting behaviour, described above, works only if the group processor is a <code>SimpleMessageGroupProcessor</code>.
+Otherwise, with any other <code>MessageGroupProcessor</code> implementation that returns a <code>Collection&lt;Message&gt;</code>, only a single reply message is emitted with the whole collection of messages as its payload.
+Such logic is dictated by the canonical purpose of an aggregator - collect request messages by some key and produce a single grouped message.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="releasestrategy"><a class="anchor" href="#releasestrategy"></a><code>ReleaseStrategy</code></h3>
+<div class="paragraph">
+<p>The <code>ReleaseStrategy</code> interface is defined as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface ReleaseStrategy {
+
+  boolean canRelease(MessageGroup group);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In general, any POJO can implement the completion decision logic if it provides a method that accepts a single <code>java.util.List</code> as an argument (parameterized lists are supported as well) and returns a boolean value.
+This method is invoked after the arrival of each new message, to decide whether the group is complete or not, as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If the argument is a <code>java.util.List&lt;T&gt;</code> and the parameter type <code>T</code> is assignable to <code>Message</code>, the whole list of messages accumulated in the group is sent to the method.</p>
+</li>
+<li>
+<p>If the argument is a non-parametrized <code>java.util.List</code> or the parameter type is not assignable to <code>Message</code>, the method receives the payloads of the accumulated messages.</p>
+</li>
+<li>
+<p>The method must return <code>true</code> if the message group is ready for aggregation or false otherwise.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following example shows how to use the <code>@ReleaseStrategy</code> annotation for a <code>List</code> of type <code>Message</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyReleaseStrategy {
+
+    @ReleaseStrategy
+    public boolean canMessagesBeReleased(List&lt;Message&lt;?&gt;&gt;) {...}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows how to use the <code>@ReleaseStrategy</code> annotation for a <code>List</code> of type <code>String</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyReleaseStrategy {
+
+    @ReleaseStrategy
+    public boolean canMessagesBeReleased(List&lt;String&gt;) {...}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Based on the signatures in the preceding two examples, the POJO-based release strategy is passed a <code>Collection</code> of not-yet-released messages (if you need access to the whole <code>Message</code>) or a <code>Collection</code> of payload objects (if the type parameter is anything other than <code>Message</code>).
+This satisfies the majority of use cases.
+However, if, for some reason, you need to access the full <code>MessageGroup</code>, you should provide an implementation of the <code>ReleaseStrategy</code> interface.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When handling potentially large groups, you should understand how these methods are invoked, because the release strategy may be invoked multiple times before the group is released.
+The most efficient is an implementation of <code>ReleaseStrategy</code>, because the aggregator can invoke it directly.
+The second most efficient is a POJO method with a <code>Collection&lt;Message&lt;?&gt;&gt;</code> parameter type.
+The least efficient is a POJO method with a <code>Collection&lt;Something&gt;</code> type.
+The framework has to copy the payloads from the messages in the group into a new collection (and possibly attempt conversion on the payloads to <code>Something</code>) every time the release strategy is called.
+Using <code>Collection&lt;?&gt;</code> avoids the conversion but still requires creating the new <code>Collection</code>.</p>
+</div>
+<div class="paragraph">
+<p>For these reasons, for large groups, we recommended that you implement <code>ReleaseStrategy</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When the group is released for aggregation, all its not-yet-released messages are processed and removed from the group.
+If the group is also complete (that is, if all messages from a sequence have arrived or if there is no sequence defined), then the group is marked as complete.
+Any new messages for this group are sent to the discard channel (if defined).
+Setting <code>expire-groups-upon-completion</code> to <code>true</code> (the default is <code>false</code>) removes the entire group, and any new messages (with the same correlation ID as the removed group) form a new group.
+You can release partial sequences by using a <code>MessageGroupStoreReaper</code> together with <code>send-partial-result-on-expiry</code> being set to <code>true</code>.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+To facilitate discarding of late-arriving messages, the aggregator must maintain state about the group after it has been released.
+This can eventually cause out-of-memory conditions.
+To avoid such situations, you should consider configuring a <code>MessageGroupStoreReaper</code> to remove the group metadata.
+The expiry parameters should be set to expire groups once a point has been reach after which late messages are not expected to arrive.
+For information about configuring a reaper, see <a href="#reaper">Managing State in an Aggregator: <code>MessageGroupStore</code></a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Spring Integration provides an implementation for <code>ReleaseStrategy</code>: <code>SimpleSequenceSizeReleaseStrategy</code>.
+This implementation consults the <code>SEQUENCE_NUMBER</code> and <code>SEQUENCE_SIZE</code> headers of each arriving message to decide when a message group is complete and ready to be aggregated.
+As shown earlier, it is also the default strategy.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Before version 5.0, the default release strategy was <code>SequenceSizeReleaseStrategy</code>, which does not perform well with large groups.
+With that strategy, duplicate sequence numbers are detected and rejected.
+This operation can be expensive.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you are aggregating large groups, you don&#8217;t need to release partial groups, and you don&#8217;t need to detect/reject duplicate sequences, consider using the <code>SimpleSequenceSizeReleaseStrategy</code> instead - it is much more efficient for these use cases, and is the default since <em>version 5.0</em> when partial group release is not specified.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="aggregating-large-groups"><a class="anchor" href="#aggregating-large-groups"></a>Aggregating Large Groups</h3>
+<div class="paragraph">
+<p>The 4.3 release changed the default <code>Collection</code> for messages in a <code>SimpleMessageGroup</code> to <code>HashSet</code> (it was previously a <code>BlockingQueue</code>).
+This was expensive when removing individual messages from large groups (an O(n) linear scan was required).
+Although the hash set is generally much faster to remove, it can be expensive for large messages, because the hash has to be calculated on both inserts and removes.
+If you have messages that are expensive to hash, consider using some other collection type.
+As discussed in <a href="message-store.html#message-group-factory" class="xref page">Using <code>MessageGroupFactory</code></a>, a <code>SimpleMessageGroupFactory</code> is provided so that you can select the <code>Collection</code> that best suits your needs.
+You can also provide your own factory implementation to create some other <code>Collection&lt;Message&lt;?&gt;&gt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows how to configure an aggregator with the previous implementation and a <code>SimpleSequenceSizeReleaseStrategy</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:aggregator input-channel="aggregate"
+    output-channel="out" message-store="store" release-strategy="releaser" /&gt;
+
+&lt;bean id="store" class="org.springframework.integration.store.SimpleMessageStore"&gt;
+    &lt;property name="messageGroupFactory"&gt;
+        &lt;bean class="org.springframework.integration.store.SimpleMessageGroupFactory"&gt;
+            &lt;constructor-arg value="BLOCKING_QUEUE"/&gt;
+        &lt;/bean&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean id="releaser" class="SimpleSequenceSizeReleaseStrategy" /&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If the filter endpoint is involved in the flow upstream of an aggregator, the sequence size release strategy (fixed or based on the <code>sequenceSize</code> header) is not going to serve its purpose because some messages from a sequence may be discarded by the filter.
+In this case it is recommended to choose another <code>ReleaseStrategy</code>, or use compensation messages sent from a discard sub-flow carrying some information in their content to be skipped in a custom complete group function.
+See <a href="filter.html" class="xref page">Filter</a> for more information.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="correlation-strategy"><a class="anchor" href="#correlation-strategy"></a>Correlation Strategy</h3>
+<div class="paragraph">
+<p>The <code>CorrelationStrategy</code> interface is defined as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface CorrelationStrategy {
+
+  Object getCorrelationKey(Message&lt;?&gt; message);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The method returns an <code>Object</code> that represents the correlation key used for associating the message with a message group.
+The key must satisfy the criteria used for a key in a <code>Map</code> with respect to the implementation of <code>equals()</code> and <code>hashCode()</code>.</p>
+</div>
+<div class="paragraph">
+<p>In general, any POJO can implement the correlation logic, and the rules for mapping a message to a method&#8217;s argument (or arguments) are the same as for a <code>ServiceActivator</code> (including support for <code>@Header</code> annotations).
+The method must return a value, and the value must not be <code>null</code>.</p>
+</div>
+<div class="paragraph">
+<p>Spring Integration provides an implementation for <code>CorrelationStrategy</code>: <code>HeaderAttributeCorrelationStrategy</code>.
+This implementation returns the value of one of the message headers (whose name is specified by a constructor argument) as the correlation key.
+By default, the correlation strategy is a <code>HeaderAttributeCorrelationStrategy</code> that returns the value of the <code>CORRELATION_ID</code> header attribute.
+If you have a custom header name you would like to use for correlation, you can configure it on an instance of <code>HeaderAttributeCorrelationStrategy</code> and provide that as a reference for the aggregator&#8217;s correlation strategy.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="lock-registry"><a class="anchor" href="#lock-registry"></a>Lock Registry</h3>
+<div class="paragraph">
+<p>Changes to groups are thread safe.
+So, when you send messages for the same correlation ID concurrently, only one of them will be processed in the aggregator, making it effectively as a <strong>single-threaded per message group</strong>.
+A <code>LockRegistry</code> is used to obtain a lock for the resolved correlation ID.
+A <code>DefaultLockRegistry</code> is used by default (in-memory).
+For synchronizing updates across servers where a shared <code>MessageGroupStore</code> is being used, you must configure a shared lock registry.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="aggregator-deadlocks"><a class="anchor" href="#aggregator-deadlocks"></a>Avoiding Deadlocks</h3>
+<div class="paragraph">
+<p>As discussed above, when message groups are mutated (messages added or released) a lock is held.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following flow:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">...-&gt;aggregator1-&gt; ... -&gt;aggregator2-&gt; ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If there are multiple threads, <strong>and the aggregators share a common lock registry</strong>, it is possible to get a deadlock.
+This will cause hung threads and <code>jstack &lt;pid&gt;</code> might present a result such as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Found one Java-level deadlock:
+=============================
+"t2":
+  waiting for ownable synchronizer 0x000000076c1cbfa0, (a java.util.concurrent.locks.ReentrantLock$NonfairSync),
+  which is held by "t1"
+"t1":
+  waiting for ownable synchronizer 0x000000076c1ccc00, (a java.util.concurrent.locks.ReentrantLock$NonfairSync),
+  which is held by "t2"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are several ways to avoid this problem:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ensure each aggregator has its own lock registry (this can be a shared registry across application instances but two or more aggregators in the flow must each have a distinct registry)</p>
+</li>
+<li>
+<p>use an <code>ExecutorChannel</code> or <code>QueueChannel</code> as the output channel of the aggregator so that the downstream flow runs on a new thread</p>
+</li>
+<li>
+<p>starting with version 5.1.1, set the <code>releaseLockBeforeSend</code> aggregator property to <code>true</code></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This problem can also be caused if, for some reason, the output of a single aggregator is eventually routed back to the same aggregator.
+Of course, the first solution above does not apply in this case.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="aggregator-java-dsl"><a class="anchor" href="#aggregator-java-dsl"></a>Configuring an Aggregator in Java DSL</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>See <a href="dsl/java-aggregators.html" class="xref page">Aggregators and Resequencers</a> for how to configure an aggregator in Java DSL.</p>
+</div>
+<div class="sect2">
+<h3 id="aggregator-xml"><a class="anchor" href="#aggregator-xml"></a>Configuring an Aggregator with XML</h3>
+<div class="paragraph">
+<p>Spring Integration supports the configuration of an aggregator with XML through the <code>&lt;aggregator/&gt;</code> element.
+The following example shows an example of an aggregator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;channel id="inputChannel"/&gt;
+
+&lt;int:aggregator id="myAggregator"                          <i class="conum" data-value="1"></i><b>(1)</b>
+        auto-startup="true"                                <i class="conum" data-value="2"></i><b>(2)</b>
+        input-channel="inputChannel"                       <i class="conum" data-value="3"></i><b>(3)</b>
+        output-channel="outputChannel"                     <i class="conum" data-value="4"></i><b>(4)</b>
+        discard-channel="throwAwayChannel"                 <i class="conum" data-value="5"></i><b>(5)</b>
+        message-store="persistentMessageStore"             <i class="conum" data-value="6"></i><b>(6)</b>
+        order="1"                                          <i class="conum" data-value="7"></i><b>(7)</b>
+        send-partial-result-on-expiry="false"              <i class="conum" data-value="8"></i><b>(8)</b>
+        send-timeout="1000"                                <i class="conum" data-value="9"></i><b>(9)</b>
+
+        correlation-strategy="correlationStrategyBean"     <i class="conum" data-value="10"></i><b>(10)</b>
+        correlation-strategy-method="correlate"            <i class="conum" data-value="11"></i><b>(11)</b>
+        correlation-strategy-expression="headers['foo']"   <i class="conum" data-value="12"></i><b>(12)</b>
+
+        ref="aggregatorBean"                               <i class="conum" data-value="13"></i><b>(13)</b>
+        method="aggregate"                                 <i class="conum" data-value="14"></i><b>(14)</b>
+
+        release-strategy="releaseStrategyBean"             <i class="conum" data-value="15"></i><b>(15)</b>
+        release-strategy-method="release"                  <i class="conum" data-value="16"></i><b>(16)</b>
+        release-strategy-expression="size() == 5"          <i class="conum" data-value="17"></i><b>(17)</b>
+
+        expire-groups-upon-completion="false"              <i class="conum" data-value="18"></i><b>(18)</b>
+        empty-group-min-timeout="60000"                    <i class="conum" data-value="19"></i><b>(19)</b>
+
+        lock-registry="lockRegistry"                       <i class="conum" data-value="20"></i><b>(20)</b>
+
+        group-timeout="60000"                              <i class="conum" data-value="21"></i><b>(21)</b>
+        group-timeout-expression="size() ge 2 ? 100 : -1"  <i class="conum" data-value="22"></i><b>(22)</b>
+        expire-groups-upon-timeout="true"                  <i class="conum" data-value="23"></i><b>(23)</b>
+
+        scheduler="taskScheduler" &gt;                        <i class="conum" data-value="24"></i><b>(24)</b>
+            &lt;expire-transactional/&gt;                        <i class="conum" data-value="25"></i><b>(25)</b>
+            &lt;expire-advice-chain/&gt;                         <i class="conum" data-value="26"></i><b>(26)</b>
+&lt;/aggregator&gt;
+
+&lt;int:channel id="outputChannel"/&gt;
+
+&lt;int:channel id="throwAwayChannel"/&gt;
+
+&lt;bean id="persistentMessageStore" class="org.springframework.integration.jdbc.store.JdbcMessageStore"&gt;
+    &lt;constructor-arg ref="dataSource"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="aggregatorBean" class="sample.PojoAggregator"/&gt;
+
+&lt;bean id="releaseStrategyBean" class="sample.PojoReleaseStrategy"/&gt;
+
+&lt;bean id="correlationStrategyBean" class="sample.PojoCorrelationStrategy"/&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The id of the aggregator is optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Lifecycle attribute signaling whether the aggregator should be started during application context startup.
+Optional (the default is 'true').</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The channel from which where aggregator receives messages.
+Required.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The channel to which the aggregator sends the aggregation results.
+Optional (because incoming messages can themselves specify a reply channel in the 'replyChannel' message header).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The channel to which the aggregator sends the messages that timed out (if <code>send-partial-result-on-expiry</code> is <code>false</code>).
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>A reference to a <code>MessageGroupStore</code> used to store groups of messages under their correlation key until they are complete.
+Optional.
+By default, it is a volatile in-memory store.
+See <a href="message-store.html" class="xref page">Message Store</a> for more information.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The order of this aggregator when more than one handle is subscribed to the same <code>DirectChannel</code> (use for load-balancing purposes).
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>Indicates that expired messages should be aggregated and sent to the 'output-channel' or 'replyChannel' once their containing <code>MessageGroup</code> is expired (see <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/store/MessageGroupStore.html#expireMessageGroups-long"><code>MessageGroupStore.expireMessageGroups(long)</code></a>).
+One way of expiring a <code>MessageGroup</code> is by configuring a <code>MessageGroupStoreReaper</code>.
+However, you can alternatively expire <code>MessageGroup</code> by calling <code>MessageGroupStore.expireMessageGroups(timeout)</code>.
+You can accomplish that through a Control Bus operation or, if you have a reference to the <code>MessageGroupStore</code> instance, by invoking <code>expireMessageGroups(timeout)</code>.
+Otherwise, by itself, this attribute does nothing.
+It serves only as an indicator of whether to discard or send to the output or reply channel any messages that are still in the <code>MessageGroup</code> that is about to be expired.
+Optional (the default is <code>false</code>).
+NOTE: This attribute might more properly be called <code>send-partial-result-on-timeout</code>, because the group may not actually expire if <code>expire-groups-upon-timeout</code> is set to <code>false</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>The timeout interval to wait when sending a reply <code>Message</code> to the <code>output-channel</code> or <code>discard-channel</code>.
+Defaults to <code>30</code> seconds.
+It is applied only if the output channel has some 'sending' limitations, such as a <code>QueueChannel</code> with a fixed 'capacity'.
+In this case, a <code>MessageDeliveryException</code> is thrown.
+For <code>AbstractSubscribableChannel</code> implementations, the <code>send-timeout</code> is ignored .
+For <code>group-timeout(-expression)</code>, the <code>MessageDeliveryException</code> from the scheduled expiring task leads this task to be rescheduled.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>A reference to a bean that implements the message correlation (grouping) algorithm.
+The bean can be an implementation of the <code>CorrelationStrategy</code> interface or a POJO.
+In the latter case, the <code>correlation-strategy-method</code> attribute must be defined as well.
+Optional (by default, the aggregator uses the <code>IntegrationMessageHeaderAccessor.CORRELATION_ID</code> header).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>A method defined on the bean referenced by <code>correlation-strategy</code>.
+It implements the correlation decision algorithm.
+Optional, with restrictions (<code>correlation-strategy</code> must be present).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>A SpEL expression representing the correlation strategy.
+Example: <code>"headers['something']"</code>.
+Only one of <code>correlation-strategy</code> or <code>correlation-strategy-expression</code> is allowed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>A reference to a bean defined in the application context.
+The bean must implement the aggregation logic, as described earlier.
+Optional (by default, the list of aggregated messages becomes a payload of the output message).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="14"></i><b>14</b></td>
+<td>A method defined on the bean referenced by the <code>ref</code> attribute.
+It implements the message aggregation algorithm.
+Optional (it depends on <code>ref</code> attribute being defined).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="15"></i><b>15</b></td>
+<td>A reference to a bean that implements the release strategy.
+The bean can be an implementation of the <code>ReleaseStrategy</code> interface or a POJO.
+In the latter case, the <code>release-strategy-method</code> attribute must be defined as well.
+Optional (by default, the aggregator uses the <code>IntegrationMessageHeaderAccessor.SEQUENCE_SIZE</code> header attribute).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="16"></i><b>16</b></td>
+<td>A method defined on the bean referenced by the <code>release-strategy</code> attribute.
+It implements the completion decision algorithm.
+Optional, with restrictions (<code>release-strategy</code> must be present).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="17"></i><b>17</b></td>
+<td>A SpEL expression representing the release strategy.
+The root object for the expression is a <code>MessageGroup</code>.
+Example: <code>"size() == 5"</code>.
+Only one of <code>release-strategy</code> or <code>release-strategy-expression</code> is allowed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="18"></i><b>18</b></td>
+<td>When set to <code>true</code> (the default is <code>false</code>), completed groups are removed from the message store, letting subsequent messages with the same correlation form a new group.
+The default behavior is to send messages with the same correlation as a completed group to the <code>discard-channel</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="19"></i><b>19</b></td>
+<td>Applies only if a <code>MessageGroupStoreReaper</code> is configured for the <code>MessageStore</code> of the <code>&lt;aggregator&gt;</code>.
+By default, when a <code>MessageGroupStoreReaper</code> is configured to expire partial groups, empty groups are also removed.
+Empty groups exist after a group is normally released.
+The empty groups enable the detection and discarding of late-arriving messages.
+If you wish to expire empty groups on a longer schedule than expiring partial groups, set this property.
+Empty groups are then not removed from the <code>MessageStore</code> until they have not been modified for at least this number of milliseconds.
+Note that the actual time to expire an empty group is also affected by the reaper&#8217;s <code>timeout</code> property, and it could be as much as this value plus the timeout.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="20"></i><b>20</b></td>
+<td>A reference to a <code>org.springframework.integration.util.LockRegistry</code> bean.
+It used to obtain a <code>Lock</code> based on the <code>groupId</code> for concurrent operations on the <code>MessageGroup</code>.
+By default, an internal <code>DefaultLockRegistry</code> is used.
+Use of a distributed <code>LockRegistry</code>, such as the <code>ZookeeperLockRegistry</code>, ensures only one instance of the aggregator can operate on a group concurrently.
+See <a href="redis.html#redis-lock-registry" class="xref page">Redis Lock Registry</a> or <a href="zookeeper.html#zk-lock-registry" class="xref page">Zookeeper Lock Registry</a> for more information.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="21"></i><b>21</b></td>
+<td>A timeout (in milliseconds) to force the <code>MessageGroup</code> complete when the <code>ReleaseStrategy</code> does not release the group when the current message arrives.
+This attribute provides a built-in time-based release strategy for the aggregator when there is a need to emit a partial result (or discard the group) if a new message does not arrive for the <code>MessageGroup</code> within the timeout which counts from the time the last message arrived.
+To set up a timeout which counts from the time the <code>MessageGroup</code> was created see <code>group-timeout-expression</code> information.
+When a new message arrives at the aggregator, any existing <code>ScheduledFuture&lt;?&gt;</code> for its <code>MessageGroup</code> is canceled.
+If the <code>ReleaseStrategy</code> returns <code>false</code> (meaning do not release) and <code>groupTimeout &gt; 0</code>, a new task is scheduled to expire the group.
+We do not advise setting this attribute to zero (or a negative value).
+Doing so effectively disables the aggregator, because every message group is immediately completed.
+You can, however, conditionally set it to zero (or a negative value) by using an expression.
+See <code>group-timeout-expression</code> for information.
+The action taken during the completion depends on the <code>ReleaseStrategy</code> and the <code>send-partial-group-on-expiry</code> attribute.
+See <a href="#agg-and-group-to">Aggregator and Group Timeout</a> for more information.
+It is mutually exclusive with 'group-timeout-expression' attribute.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="22"></i><b>22</b></td>
+<td>The SpEL expression that evaluates to a <code>groupTimeout</code> with the <code>MessageGroup</code> as the <code>#root</code> evaluation context object.
+Used for scheduling the <code>MessageGroup</code> to be forced complete.
+If the expression evaluates to <code>null</code>, the completion is not scheduled.
+If it evaluates to zero, the group is completed immediately on the current thread.
+In effect, this provides a dynamic <code>group-timeout</code> property.
+As an example, if you wish to forcibly complete a <code>MessageGroup</code> after 10 seconds have elapsed since the time the group was created you might consider using the following SpEL expression: <code>timestamp + 10000 - T(System).currentTimeMillis()</code> where <code>timestamp</code> is provided by <code>MessageGroup.getTimestamp()</code> as the <code>MessageGroup</code> here is the <code>#root</code> evaluation context object.
+Bear in mind however that the group creation time might differ from the time of the first arrived message depending on other group expiration properties' configuration.
+See <code>group-timeout</code> for more information.
+Mutually exclusive with 'group-timeout' attribute.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="23"></i><b>23</b></td>
+<td>When a group is completed due to a timeout (or by a <code>MessageGroupStoreReaper</code>), the group is expired (completely removed) by default.
+Late arriving messages start a new group.
+You can set this to <code>false</code> to complete the group but have its metadata remain so that late arriving messages are discarded.
+Empty groups can be expired later using a <code>MessageGroupStoreReaper</code> together with the <code>empty-group-min-timeout</code> attribute.
+It defaults to 'true'.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="24"></i><b>24</b></td>
+<td>A <code>TaskScheduler</code> bean reference to schedule the <code>MessageGroup</code> to be forced complete if no new message arrives for the <code>MessageGroup</code> within the <code>groupTimeout</code>.
+If not provided, the default scheduler (<code>taskScheduler</code>) registered in the <code>ApplicationContext</code> (<code>ThreadPoolTaskScheduler</code>) is used.
+This attribute does not apply if <code>group-timeout</code> or <code>group-timeout-expression</code> is not specified.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="25"></i><b>25</b></td>
+<td>Since version 4.1.
+It lets a transaction be started for the <code>forceComplete</code> operation.
+It is initiated from a <code>group-timeout(-expression)</code> or by a <code>MessageGroupStoreReaper</code> and is not applied to the normal <code>add</code>, <code>release</code>, and <code>discard</code> operations.
+Only this sub-element or <code>&lt;expire-advice-chain/&gt;</code> is allowed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="26"></i><b>26</b></td>
+<td>Since <em>version 4.1</em>.
+It allows the configuration of any <code>Advice</code> for the <code>forceComplete</code> operation.
+It is initiated from a <code>group-timeout(-expression)</code> or by a <code>MessageGroupStoreReaper</code> and is not applied to the normal <code>add</code>, <code>release</code>, and <code>discard</code> operations.
+Only this sub-element or <code>&lt;expire-transactional/&gt;</code> is allowed.
+A transaction <code>Advice</code> can also be configured here by using the Spring <code>tx</code> namespace.</td>
+</tr>
+</table>
+</div>
+<div id="aggregator-expiring-groups" class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="title">Expiring Groups</div>
+<div class="paragraph">
+<p>There are two attributes related to expiring (completely removing) groups.
+When a group is expired, there is no record of it, and, if a new message arrives with the same correlation, a new group is started.
+When a group is completed (without expiry), the empty group remains and late-arriving messages are discarded.
+Empty groups can be removed later by using a <code>MessageGroupStoreReaper</code> in combination with the <code>empty-group-min-timeout</code> attribute.</p>
+</div>
+<div class="paragraph">
+<p><code>expire-groups-upon-completion</code> relates to &#8220;normal&#8221; completion when the <code>ReleaseStrategy</code> releases the group.
+This defaults to <code>false</code>.</p>
+</div>
+<div class="paragraph">
+<p>If a group is not completed normally but is released or discarded because of a timeout, the group is normally expired.
+Since version 4.1, you can control this behavior by using <code>expire-groups-upon-timeout</code>.
+It defaults to <code>true</code> for backwards compatibility.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+When a group is timed out, the <code>ReleaseStrategy</code> is given one more opportunity to release the group.
+If it does so and <code>expire-groups-upon-timeout</code> is false, expiration is controlled by <code>expire-groups-upon-completion</code>.
+If the group is not released by the release strategy during timeout, then the expiration is controlled by the <code>expire-groups-upon-timeout</code>.
+Timed-out groups are either discarded or a partial release occurs (based on <code>send-partial-result-on-expiry</code>).
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Since version 5.0, empty groups are also scheduled for removal after <code>empty-group-min-timeout</code>.
+If <code>expireGroupsUponCompletion == false</code> and <code>minimumTimeoutForEmptyGroups &gt; 0</code>, the task to remove the group is scheduled when normal or partial sequences release happens.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.4, the aggregator (and resequencer) can be configured to expire orphaned groups (groups in a persistent message store that might not otherwise be released).
+The <code>expireTimeout</code> (if greater than <code>0</code>) indicates that groups older than this value in the store should be purged.
+The <code>purgeOrphanedGroups()</code> method is called on start up and, together with the provided <code>expireDuration</code>, periodically within a scheduled task.
+This method is also can be called externally at any time.
+The expiration logic is fully delegated to the <code>forceComplete(MessageGroup)</code> functionality according to the provided expiration options mentioned above.
+Such a periodic purge functionality is useful when a message store is needed to be cleaned up from those old groups which are not going to be released any more with regular message arrival logic.
+In most cases this happens after an application restart, when using a persistent message group store.
+The functionality is similar to the <code>MessageGroupStoreReaper</code> with a scheduled task, but provides a convenient way to deal with old groups within specific components, when using group timeout instead of a reaper.
+The <code>MessageGroupStore</code> must be provided exclusively for the current correlation endpoint.
+Otherwise, one aggregator may purge groups from another.
+With the aggregator, groups expired using this technique will either be discarded or released as a partial group, depending on the <code>expireGroupsUponCompletion</code> property.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We generally recommend using a <code>ref</code> attribute if a custom aggregator handler implementation may be referenced in other <code>&lt;aggregator&gt;</code> definitions.
+However, if a custom aggregator implementation is only being used by a single definition of the <code>&lt;aggregator&gt;</code>, you can use an inner bean definition (starting with version 1.0.3) to configure the aggregation POJO within the <code>&lt;aggregator&gt;</code> element, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;aggregator input-channel="input" method="sum" output-channel="output"&gt;
+    &lt;beans:bean class="org.foo.PojoAggregator"/&gt;
+&lt;/aggregator&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Using both a <code>ref</code> attribute and an inner bean definition in the same <code>&lt;aggregator&gt;</code> configuration is not allowed, as it creates an ambiguous condition.
+In such cases, an Exception is thrown.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The following example shows an implementation of the aggregator bean:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class PojoAggregator {
+
+  public Long add(List&lt;Long&gt; results) {
+    long total = 0l;
+    for (long partialResult: results) {
+      total += partialResult;
+    }
+    return total;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An implementation of the completion strategy bean for the preceding example might be as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class PojoReleaseStrategy {
+...
+  public boolean canRelease(List&lt;Long&gt; numbers) {
+    int sum = 0;
+    for (long number: numbers) {
+      sum += number;
+    }
+    return sum &gt;= maxValue;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Wherever it makes sense to do so, the release strategy method and the aggregator method can be combined into a single bean.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>An implementation of the correlation strategy bean for the example above might be as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class PojoCorrelationStrategy {
+...
+  public Long groupNumbersByLastDigit(Long number) {
+    return number % 10;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The aggregator in the preceding example would group numbers by some criterion (in this case, the remainder after dividing by ten) and hold the group until the sum of the numbers provided by the payloads exceeds a certain value.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Wherever it makes sense to do so, the release strategy method, the correlation strategy method, and the aggregator method can be combined in a single bean.
+(Actually, all of them or any two of them can be combined.)
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="aggregator-spel"><a class="anchor" href="#aggregator-spel"></a>Aggregators and Spring Expression Language (SpEL)</h4>
+<div class="paragraph">
+<p>Since Spring Integration 2.0, you can handle the various strategies (correlation, release, and aggregation) with <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">SpEL</a>, which we recommend if the logic behind such a release strategy is relatively simple.
+Suppose you have a legacy component that was designed to receive an array of objects.
+We know that the default release strategy assembles all aggregated messages in the <code>List</code>.
+Now we have two problems.
+First, we need to extract individual messages from the list.
+Second, we need to extract the payload of each message and assemble the array of objects.
+The following example solves both problems:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public String[] processRelease(List&lt;Message&lt;String&gt;&gt; messages){
+    List&lt;String&gt; stringList = new ArrayList&lt;String&gt;();
+    for (Message&lt;String&gt; message : messages) {
+        stringList.add(message.getPayload());
+    }
+    return stringList.toArray(new String[]{});
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, with SpEL, such a requirement could actually be handled relatively easily with a one-line expression, thus sparing you from writing a custom class and configuring it as a bean.
+The following example shows how to do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:aggregator input-channel="aggChannel"
+    output-channel="replyChannel"
+    expression="#this.![payload].toArray()"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding configuration, we use a <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">collection projection</a> expression to assemble a new collection from the payloads of all the messages in the list and then transform it to an array, thus achieving the same result as the earlier Java code.</p>
+</div>
+<div class="paragraph">
+<p>You can apply the same expression-based approach when dealing with custom release and correlation strategies.</p>
+</div>
+<div class="paragraph">
+<p>Instead of defining a bean for a custom <code>CorrelationStrategy</code> in the <code>correlation-strategy</code> attribute, you can implement your simple correlation logic as a SpEL expression and configure it in the <code>correlation-strategy-expression</code> attribute, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">correlation-strategy-expression="payload.person.id"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example, we assume that the payload has a <code>person</code> attribute with an <code>id</code>, which is going to be used to correlate messages.</p>
+</div>
+<div class="paragraph">
+<p>Likewise, for the <code>ReleaseStrategy</code>, you can implement your release logic as a SpEL expression and configure it in the <code>release-strategy-expression</code> attribute.
+The root object for evaluation context is the <code>MessageGroup</code> itself.
+The <code>List</code> of messages can be referenced by using the <code>message</code> property of the group within the expression.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In releases prior to version 5.0, the root object was the collection of <code>Message&lt;?&gt;</code>, as the previous example shows:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">release-strategy-expression="!messages.?[payload==5].empty"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example, the root object of the SpEL evaluation context is the <code>MessageGroup</code> itself, and you are stating that, as soon as there is a message with payload of <code>5</code> in this group, the group should be released.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="agg-and-group-to"><a class="anchor" href="#agg-and-group-to"></a>Aggregator and Group Timeout</h4>
+<div class="paragraph">
+<p>Starting with version 4.0, two new mutually exclusive attributes have been introduced: <code>group-timeout</code> and <code>group-timeout-expression</code>.
+See <a href="#aggregator-xml">Configuring an Aggregator with XML</a>.
+In some cases, you may need to emit the aggregator result (or discard the group) after a timeout if the <code>ReleaseStrategy</code> does not release when the current message arrives.
+For this purpose, the <code>groupTimeout</code> option lets scheduling the <code>MessageGroup</code> be forced to complete, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;aggregator input-channel="input" output-channel="output"
+        send-partial-result-on-expiry="true"
+        group-timeout-expression="size() ge 2 ? 10000 : -1"
+        release-strategy-expression="messages[0].headers.sequenceNumber == messages[0].headers.sequenceSize"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With this example, the normal release is possible if the aggregator receives the last message in sequence as defined by the <code>release-strategy-expression</code>.
+If that specific message does not arrive, the <code>groupTimeout</code> forces the group to complete after ten seconds, as long as the group contains at least two Messages.</p>
+</div>
+<div class="paragraph">
+<p>The results of forcing the group to complete depends on the <code>ReleaseStrategy</code> and the <code>send-partial-result-on-expiry</code>.
+First, the release strategy is again consulted to see if a normal release is to be made.
+While the group has not changed, the <code>ReleaseStrategy</code> can decide to release the group at this time.
+If the release strategy still does not release the group, it is expired.
+If <code>send-partial-result-on-expiry</code> is <code>true</code>, existing messages in the (partial) <code>MessageGroup</code> are released as a normal aggregator reply message to the <code>output-channel</code>.
+Otherwise, it is discarded.</p>
+</div>
+<div class="paragraph">
+<p>There is a difference between <code>groupTimeout</code> behavior and <code>MessageGroupStoreReaper</code> (see <a href="#aggregator-xml">Configuring an Aggregator with XML</a>).
+The reaper initiates forced completion for all <code>MessageGroup</code> s in the <code>MessageGroupStore</code> periodically.
+The <code>groupTimeout</code> does it for each <code>MessageGroup</code> individually if a new message does not arrive during the <code>groupTimeout</code>.
+Also, the reaper can be used to remove empty groups (empty groups are retained in order to discard late messages if <code>expire-groups-upon-completion</code> is false).</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.5, the <code>groupTimeoutExpression</code> can be evaluated to a <code>java.util.Date</code> instance.
+This can be useful in cases like determining a scheduled task moment based on the group creation time (<code>MessageGroup.getTimestamp()</code>) instead of a current message arrival as it is calculated when <code>groupTimeoutExpression</code> is evaluated to <code>long</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">group-timeout-expression="size() ge 2 ? new java.util.Date(timestamp + 200) : null"</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="aggregator-annotations"><a class="anchor" href="#aggregator-annotations"></a>Configuring an Aggregator with Annotations</h3>
+<div class="paragraph">
+<p>The following example shows an aggregator configured with annotations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class Waiter {
+  ...
+
+  @Aggregator  <i class="conum" data-value="1"></i><b>(1)</b>
+  public Delivery aggregatingMethod(List&lt;OrderItem&gt; items) {
+    ...
+  }
+
+  @ReleaseStrategy  <i class="conum" data-value="2"></i><b>(2)</b>
+  public boolean releaseChecker(List&lt;Message&lt;?&gt;&gt; messages) {
+    ...
+  }
+
+  @CorrelationStrategy  <i class="conum" data-value="3"></i><b>(3)</b>
+  public String correlateBy(OrderItem item) {
+    ...
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>An annotation indicating that this method should be used as an aggregator.
+It must be specified if this class is used as an aggregator.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>An annotation indicating that this method is used as the release strategy of an aggregator.
+If not present on any method, the aggregator uses the <code>SimpleSequenceSizeReleaseStrategy</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>An annotation indicating that this method should be used as the correlation strategy of an aggregator.
+If no correlation strategy is indicated, the aggregator uses the <code>HeaderAttributeCorrelationStrategy</code> based on <code>CORRELATION_ID</code>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All of the configuration options provided by the XML element are also available for the <code>@Aggregator</code> annotation.</p>
+</div>
+<div class="paragraph">
+<p>The aggregator can be either referenced explicitly from XML or, if the <code>@MessageEndpoint</code> is defined on the class, detected automatically through classpath scanning.</p>
+</div>
+<div class="paragraph">
+<p>Annotation configuration (<code>@Aggregator</code> and others) for the Aggregator component covers only simple use cases, where most default options are sufficient.
+If you need more control over those options when using annotation configuration, consider using a <code>@Bean</code> definition for the <code>AggregatingMessageHandler</code> and mark its <code>@Bean</code> method with <code>@ServiceActivator</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ServiceActivator(inputChannel = "aggregatorChannel")
+@Bean
+public MessageHandler aggregator(MessageGroupStore jdbcMessageGroupStore) {
+     AggregatingMessageHandler aggregator =
+                       new AggregatingMessageHandler(new DefaultAggregatingMessageGroupProcessor(),
+                                                 jdbcMessageGroupStore);
+     aggregator.setOutputChannel(resultsChannel());
+     aggregator.setGroupTimeoutExpression(new ValueExpression&lt;&gt;(500L));
+     aggregator.setTaskScheduler(this.taskScheduler);
+     return aggregator;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <a href="#aggregator-api">Programming Model</a> and <a href="configuration/meta-annotations.html#annotations_on_beans" class="xref page">Annotations on <code>@Bean</code> Methods</a> for more information.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Starting with version 4.2, the <code>AggregatorFactoryBean</code> is available to simplify Java configuration for the <code>AggregatingMessageHandler</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="reaper"><a class="anchor" href="#reaper"></a>Managing State in an Aggregator: <code>MessageGroupStore</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Aggregator (and some other patterns in Spring Integration) is a stateful pattern that requires decisions to be made based on a group of messages that have arrived over a period of time, all with the same correlation key.
+The design of the interfaces in the stateful patterns (such as <code>ReleaseStrategy</code>) is driven by the principle that the components (whether defined by the framework or by a user) should be able to remain stateless.
+All state is carried by the <code>MessageGroup</code> and its management is delegated to the <code>MessageGroupStore</code>.
+The <code>MessageGroupStore</code> interface is defined as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface MessageGroupStore {
+
+    int getMessageCountForAllMessageGroups();
+
+    int getMarkedMessageCountForAllMessageGroups();
+
+    int getMessageGroupCount();
+
+    MessageGroup getMessageGroup(Object groupId);
+
+    MessageGroup addMessageToGroup(Object groupId, Message&lt;?&gt; message);
+
+    MessageGroup markMessageGroup(MessageGroup group);
+
+    MessageGroup removeMessageFromGroup(Object key, Message&lt;?&gt; messageToRemove);
+
+    MessageGroup markMessageFromGroup(Object key, Message&lt;?&gt; messageToMark);
+
+    void removeMessageGroup(Object groupId);
+
+    void registerMessageGroupExpiryCallback(MessageGroupCallback callback);
+
+    int expireMessageGroups(long timeout);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more information, see the <a href="https://docs.spring.io/spring-integration/api/org/springframework/integration/store/MessageGroupStore.html">Javadoc</a>.</p>
+</div>
+<div class="paragraph">
+<p>The <code>MessageGroupStore</code> accumulates state information in <code>MessageGroups</code> while waiting for a release strategy to be triggered, and that event might not ever happen.
+So, to prevent stale messages from lingering, and for volatile stores to provide a hook for cleaning up when the application shuts down, the <code>MessageGroupStore</code> lets you register callbacks to apply to its <code>MessageGroups</code> when they expire.
+The interface is very straightforward, as the following listing shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface MessageGroupCallback {
+
+    void execute(MessageGroupStore messageGroupStore, MessageGroup group);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The callback has direct access to the store and the message group so that it can manage the persistent state (for example, by entirely removing the group from the store).</p>
+</div>
+<div class="paragraph">
+<p>The <code>MessageGroupStore</code> maintains a list of these callbacks, which it applies, on demand, to all messages whose timestamps are earlier than a time supplied as a parameter (see the <code>registerMessageGroupExpiryCallback(..)</code> and <code>expireMessageGroups(..)</code> methods, described earlier).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+It is important not to use the same <code>MessageGroupStore</code> instance in different aggregator components, when you intend to rely on the <code>expireMessageGroups</code> functionality.
+Every <code>AbstractCorrelatingMessageHandler</code> registers its own <code>MessageGroupCallback</code> based on the <code>forceComplete()</code> callback.
+This way each group for expiration may be completed or discarded by the wrong aggregator.
+Starting with version 5.0.10, a <code>UniqueExpiryCallback</code> is used from the <code>AbstractCorrelatingMessageHandler</code> for the registration callback in the <code>MessageGroupStore</code>.
+The <code>MessageGroupStore</code>, in turn, checks for presence an instance of this class and logs an error with an appropriate message if one is already present in the callbacks set.
+This way the Framework disallows usage of the <code>MessageGroupStore</code> instance in different aggregators/resequencers to avoid the mentioned side effect of expiration the groups not created by the particular correlation handler.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can call the <code>expireMessageGroups</code> method with a timeout value.
+Any message older than the current time minus this value is expired and has the callbacks applied.
+Thus, it is the user of the store that defines what is meant by message group &#8220;expiry&#8221;.</p>
+</div>
+<div class="paragraph">
+<p>As a convenience for users, Spring Integration provides a wrapper for the message expiry in the form of a <code>MessageGroupStoreReaper</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="reaper" class="org...MessageGroupStoreReaper"&gt;
+    &lt;property name="messageGroupStore" ref="messageStore"/&gt;
+    &lt;property name="timeout" value="30000"/&gt;
+&lt;/bean&gt;
+
+&lt;task:scheduled-tasks scheduler="scheduler"&gt;
+    &lt;task:scheduled ref="reaper" method="run" fixed-rate="10000"/&gt;
+&lt;/task:scheduled-tasks&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The reaper is a <code>Runnable</code>.
+In the preceding example, the message group store&#8217;s expire method is called every ten seconds.
+The timeout itself is 30 seconds.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It is important to understand that the 'timeout' property of <code>MessageGroupStoreReaper</code> is an approximate value and is impacted by the rate of the task scheduler, since this property is only checked on the next scheduled execution of the <code>MessageGroupStoreReaper</code> task.
+For example, if the timeout is set for ten minutes but the <code>MessageGroupStoreReaper</code> task is scheduled to run every hour and the last execution of the <code>MessageGroupStoreReaper</code> task happened one minute before the timeout, the <code>MessageGroup</code> does not expire for the next 59 minutes.
+Consequently, we recommend setting the rate to be at least equal to the value of the timeout or shorter.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In addition to the reaper, the expiry callbacks are invoked when the application shuts down through a lifecycle callback in the <code>AbstractCorrelatingMessageHandler</code>.</p>
+</div>
+<div class="paragraph">
+<p>The <code>AbstractCorrelatingMessageHandler</code> registers its own expiry callback, and this is the link with the boolean flag <code>send-partial-result-on-expiry</code> in the XML configuration of the aggregator.
+If the flag is set to <code>true</code>, then, when the expiry callback is invoked, any unmarked messages in groups that are not yet released can be sent on to the output channel.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Since the <code>MessageGroupStoreReaper</code> is called from a scheduled task, and may result in the production of a message (depending on the <code>sendPartialResultOnExpiry</code> option) to a downstream integration flow, it is recommended to supply a custom <code>TaskScheduler</code> with a <code>MessagePublishingErrorHandler</code> to handler exceptions via an <code>errorChannel</code>, as it might be expected by the regular aggregator release functionality.
+The same logic applies for group timeout functionality which also relies on a <code>TaskScheduler</code>.
+See <a href="scatter-gather.html#scatter-gather-error-handling" class="xref page">Error Handling</a> for more information.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When a shared <code>MessageStore</code> is used for different correlation endpoints, you must configure a proper <code>CorrelationStrategy</code> to ensure uniqueness for group IDs.
+Otherwise, unexpected behavior may happen when one correlation endpoint releases or expire messages from others.
+Messages with the same correlation key are stored in the same message group.</p>
+</div>
+<div class="paragraph">
+<p>Some <code>MessageStore</code> implementations allow using the same physical resources, by partitioning the data.
+For example, the <code>JdbcMessageStore</code> has a <code>region</code> property, and the <code>MongoDbMessageStore</code> has a <code>collectionName</code> property.</p>
+</div>
+<div class="paragraph">
+<p>For more information about the <code>MessageStore</code> interface and its implementations, see <a href="message-store.html" class="xref page">Message Store</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="flux-aggregator"><a class="anchor" href="#flux-aggregator"></a>Flux Aggregator</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In version 5.2, the <code>FluxAggregatorMessageHandler</code> component has been introduced.
+It is based on the Project Reactor <code>Flux.groupBy()</code> and <code>Flux.window()</code> operators.
+The incoming messages are emitted into the <code>FluxSink</code> initiated by the <code>Flux.create()</code> in the constructor of this component.
+If the <code>outputChannel</code> is not provided or it is not an instance of <code>ReactiveStreamsSubscribableChannel</code>, the subscription to the main <code>Flux</code> is done from the <code>Lifecycle.start()</code> implementation.
+Otherwise, it is postponed to the subscription done by the <code>ReactiveStreamsSubscribableChannel</code> implementation.
+The messages are grouped by the <code>Flux.groupBy()</code> using a <code>CorrelationStrategy</code> for the group key.
+By default, the <code>IntegrationMessageHeaderAccessor.CORRELATION_ID</code> header of the message is consulted.</p>
+</div>
+<div class="paragraph">
+<p>By default, every closed window is released as a <code>Flux</code> in payload of a message to produce.
+This message contains all the headers from the first message in the window.
+This <code>Flux</code> in the output message payload must be subscribed and processed downstream.
+Such a logic can be customized (or superseded) by the <code>setCombineFunction(Function&lt;Flux&lt;Message&lt;?&gt;&gt;, Mono&lt;Message&lt;?&gt;&gt;&gt;)</code> configuration option of the <code>FluxAggregatorMessageHandler</code>.
+For example, if we would like to have a <code>List</code> of payloads in the final message, we can configure a <code>Flux.collectList()</code> like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">fluxAggregatorMessageHandler.setCombineFunction(
+                (messageFlux) -&gt;
+                        messageFlux
+                                .map(Message::getPayload)
+                                .collectList()
+                                .map(GenericMessage::new));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are several options in the <code>FluxAggregatorMessageHandler</code> to select an appropriate window strategy:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>setBoundaryTrigger(Predicate&lt;Message&lt;?&gt;&gt;)</code> - is propagated to the <code>Flux.windowUntil()</code> operator.
+See its JavaDocs for more information.
+Has a precedence over all other window options.</p>
+</li>
+<li>
+<p><code>setWindowSize(int)</code> and <code>setWindowSizeFunction(Function&lt;Message&lt;?&gt;, Integer&gt;)</code> - is propagated to the <code>Flux.window(int)</code> or <code>windowTimeout(int, Duration)</code>.
+By default, a window size is calculated from the first message in group and its <code>IntegrationMessageHeaderAccessor.SEQUENCE_SIZE</code> header.</p>
+</li>
+<li>
+<p><code>setWindowTimespan(Duration)</code> - is propagated to the <code>Flux.window(Duration)</code> or <code>windowTimeout(int, Duration)</code> depending on the window size configuration.</p>
+</li>
+<li>
+<p><code>setWindowConfigurer(Function&lt;Flux&lt;Message&lt;?&gt;&gt;, Flux&lt;Flux&lt;Message&lt;?&gt;&gt;&gt;&gt;)</code> - a function to apply a transformation into the grouped fluxes for any custom window operation not covered by the exposed options.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Since this component is a <code>MessageHandler</code> implementation it can simply be used as a <code>@Bean</code> definition together with a <code>@ServiceActivator</code> messaging annotation.
+With Java DSL it can be used from the <code>.handle()</code> EIP-method.
+The sample below demonstrates how we can register an <code>IntegrationFlow</code> at runtime and how a <code>FluxAggregatorMessageHandler</code> can be correlated with a splitter upstream:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">IntegrationFlow fluxFlow =
+        (flow) -&gt; flow
+                .split()
+                .channel(MessageChannels.flux())
+                .handle(new FluxAggregatorMessageHandler());
+
+IntegrationFlowContext.IntegrationFlowRegistration registration =
+        this.integrationFlowContext.registration(fluxFlow)
+                .register();
+
+Flux&lt;Message&lt;?&gt;&gt; window =
+        registration.getMessagingTemplate()
+                .convertSendAndReceive(new Integer[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, Flux.class);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="agg-message-group-condition"><a class="anchor" href="#agg-message-group-condition"></a>Condition on the Message Group</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 5.5, an <code>AbstractCorrelatingMessageHandler</code> (including its Java &amp; XML DSLs) exposes a <code>groupConditionSupplier</code> option of the <code>BiFunction&lt;Message&lt;?&gt;, String, String&gt;</code> implementation.
+This function is used on each message added to the group and a result condition sentence is stored into the group for future consideration.
+The <code>ReleaseStrategy</code> may consult this condition instead of iterating over all the messages in the group.
+See <code>GroupConditionProvider</code> JavaDocs and <a href="message-store.html#message-group-condition" class="xref page">Message Group Condition</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>See also <a href="file/aggregator.html" class="xref page">File Aggregator</a>.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="splitter.html">Splitter</a></span>
+  <span class="next"><a href="resequencer.html">Resequencer</a></span>
+</nav>
+</article>
+</div>  </div>
+</main>
+<div class="modal micromodal-slide" id="modal-versions" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true">
+            <main class="modal__content" id="modal-versions-content">
+              <button data-micromodal-close class="modal-versions-close">
+                <svg width="28px" height="28px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><title/><g id="cross"><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>
+              </button>
+              <div class="colset">
+                <div class="col-left">
+                  <ul class="nav-versions">
+                    <li class="component is-current">
+                      <a class="title" href="index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-current is-latest">
+                          <a href="index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-right">
+                  <ul>
+                    <li>
+                      Related Spring Documentation
+                      <ul>
+                        <li><a href="https://docs.spring.io/spring-framework/reference/">Spring Framework</a></li>
+                        <li><a href="https://docs.spring.io/spring-security/reference/">Spring Security</a></li>
+                        <li><a href="https://docs.spring.io/spring-ldap/reference/">Spring LDAP</a></li>
+                        <li><a href="https://docs.spring.io/spring-session/reference/">Spring Session</a></li>
+                        <li><a href="https://docs.spring.io/spring-authorization-server/reference/">Spring Authorization Server</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+</div>
+<footer class="footer flex">
+    <div id="spring-links flex">
+        <img id="springlogo" src="../_/img/spring-logo.svg" alt="Spring">
+        <p class="smallest antialiased">© <script>var d = new Date();
+        document.write(d.getFullYear());</script> <a href="https://www.vmware.com/">VMware</a>, Inc. or its affiliates. <a href="https://www.vmware.com/help/legal.html">Terms of Use</a> • <a href="https://www.vmware.com/help/privacy.html" rel="noopener noreferrer">Privacy</a> • <a href="https://spring.io/trademarks">Trademark Guidelines</a> <span id="thank-you-mobile">• <a href="https://spring.io/thank-you">Thank you</a></span> • <a href="https://www.vmware.com/help/privacy/california-privacy-rights.html">Your California Privacy Rights</a> • <a class="ot-sdk-show-settings">Cookie Settings</a> <span id="teconsent"></span></p>
+        <p class="smallest antialiased has-gray-text">Apache®, Apache Tomcat®, Apache Kafka®, Apache Cassandra&trade;, and Apache Geode&trade; are trademarks or registered trademarks of the Apache Software Foundation in the United States and/or other countries. Java&trade;, Java&trade; SE, Java&trade; EE, and OpenJDK&trade; are trademarks of Oracle and/or its affiliates. Kubernetes® is a registered trademark of the Linux Foundation in the United States and other countries. Linux® is the registered trademark of Linus Torvalds in the United States and other countries. Windows® and Microsoft® Azure are registered trademarks of Microsoft Corporation. “AWS” and “Amazon Web Services” are trademarks or registered trademarks of Amazon.com Inc. or its affiliates. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes. Other names may be trademarks of their respective owners.</p>
+    </div>
+    <div id="social-icons" class="flex jc-between">
+        <a href="https://www.youtube.com/user/SpringSourceDev" title="Youtube"><svg id="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle class="cls-1" cx="20" cy="20" r="20"/><path class="cls-2" d="M30.91,14.53a2.89,2.89,0,0,0-2-2C27.12,12,20,12,20,12s-7.12,0-8.9.47a2.9,2.9,0,0,0-2,2A30.56,30.56,0,0,0,8.63,20a30.44,30.44,0,0,0,.46,5.47,2.89,2.89,0,0,0,2,2C12.9,28,20,28,20,28s7.12,0,8.9-.47a2.87,2.87,0,0,0,2-2A30.56,30.56,0,0,0,31.37,20,28.88,28.88,0,0,0,30.91,14.53ZM17.73,23.41V16.59L23.65,20Z"/></svg></a>
+        <a href="https://github.com/spring-projects" title="Github"><svg id="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><path class="cls-1" d="M38,0a38,38,0,1,0,38,38A38,38,0,0,0,38,0Z"/></g><path class="cls-2" d="M38,15.59A22.95,22.95,0,0,0,30.71,60.3c1.15.21,1.57-.5,1.57-1.11s0-2,0-3.9c-6.38,1.39-7.73-3.07-7.73-3.07A6.09,6.09,0,0,0,22,48.86c-2.09-1.42.15-1.39.15-1.39a4.81,4.81,0,0,1,3.52,2.36c2,3.5,5.37,2.49,6.67,1.91a4.87,4.87,0,0,1,1.46-3.07c-5.09-.58-10.45-2.55-10.45-11.34a8.84,8.84,0,0,1,2.36-6.15,8.29,8.29,0,0,1,.23-6.07s1.92-.62,6.3,2.35a21.82,21.82,0,0,1,11.49,0c4.38-3,6.3-2.35,6.3-2.35a8.29,8.29,0,0,1,.23,6.07,8.84,8.84,0,0,1,2.36,6.15c0,8.81-5.37,10.75-10.48,11.32a5.46,5.46,0,0,1,1.56,4.25c0,3.07,0,5.54,0,6.29s.42,1.33,1.58,1.1A22.94,22.94,0,0,0,38,15.59Z"/></svg></a>
+        <a href="https://twitter.com/springcentral" title="Twitter"><svg id="twitter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><circle class="cls-1" cx="37.97" cy="37.97" r="37.97"/><path id="Twitter-2" data-name="Twitter" class="cls-2" d="M55.2,22.73a15.43,15.43,0,0,1-4.88,1.91,7.56,7.56,0,0,0-5.61-2.49A7.78,7.78,0,0,0,37,30a7.56,7.56,0,0,0,.2,1.79,21.63,21.63,0,0,1-15.84-8.23,8,8,0,0,0,2.37,10.52,7.66,7.66,0,0,1-3.48-1v.09A7.84,7.84,0,0,0,26.45,41a7.54,7.54,0,0,1-2,.28A7.64,7.64,0,0,1,23,41.09a7.71,7.71,0,0,0,7.18,5.47,15.21,15.21,0,0,1-9.55,3.37,15.78,15.78,0,0,1-1.83-.11,21.41,21.41,0,0,0,11.78,3.54c14.13,0,21.86-12,21.86-22.42,0-.34,0-.68,0-1a15.67,15.67,0,0,0,3.83-4.08,14.9,14.9,0,0,1-4.41,1.24A7.8,7.8,0,0,0,55.2,22.73Z"/></svg></a>
+    </div>
+</footer>
+<script src="../_/js/vendor/import.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script async src="../_/js/vendor/asciidoctor-tabs.js" data-sync-storage-key="docs:preferred-tab"></script>
+
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <main class="modal__content" id="modal-1-content">
+                <div id="searchbox"></div>
+                <div id="counter"></div>
+                <div class="search-by">
+                    <a target="_blank" rel="noopener noreferrer" href="https://www.algolia.com/" aria-label="Search by Algolia">
+                        <img class="light" width="140" src="../_/img/algolia-light.svg" />
+                        <img class="dark" width="140" src="../_/img/algolia-dark.svg" />
+                    </a>
+                </div>
+                <div id="hits"></div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.17.0/dist/algoliasearch-lite.umd.js" integrity="sha256-Lf9DrpGmcRip6OQzbcL6lnvNmoZNSKpyQX5pMlwatWE=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.54.1/dist/instantsearch.production.min.js" integrity="sha256-xYsZPDeNjYNTBWLvqD2Lxe98hOxcDgOHyMPfz4tVAbk=" crossorigin="anonymous"></script>
+<script async id="search-script" src="../_/js/vendor/search.js" data-app-id="WB1FQYI187" data-api-key="9d489079e5ec46dbb238909fee5c9c29" data-index-name="springintegration" data-stylesheet="../_/css/vendor/search.css" data-page-version="6.2.0"></script>
+
+  </body>
+</html>

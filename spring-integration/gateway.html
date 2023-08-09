@@ -1,0 +1,2491 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Messaging Gateways :: Spring Integration</title>
+    <link rel="prev" href="leadership-event-handling.html">
+    <link rel="next" href="service-activator.html">
+    <meta name="generator" content="Antora 3.2.0-alpha.2">
+    <script>
+!function (theme, navWidth) {
+  if (theme === 'dark') document.documentElement.classList.add('dark-theme')
+  if (navWidth) document.documentElement.style.setProperty('--nav-width', `${navWidth}px`)
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'),
+  localStorage && localStorage.getItem('nav-width'))
+    </script>
+    <link rel="stylesheet" href="../_/css/site.css">
+    <link rel="stylesheet" href="../_/css/vendor/search.css">
+    <link rel="stylesheet" href="../_/css/vendor/asciidoctor-tabs.css">
+
+    <meta name="version" content="6.2.0">
+    <meta name="component" content="spring-integration">
+    <link rel="icon" href="../_/img/favicon.ico" type="image/vnd.microsoft.icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://spring.io">
+        <img
+          id="springlogo"
+          class="block"
+          src="../_/img/spring-logo.svg"
+          alt="Spring"
+        />
+      </a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Why Spring</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/why-spring"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/microservices"
+            >Microservices</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/reactive"
+            >Reactive</a>
+            <a class="navbar-item" href="https://spring.io/event-driven">Event
+              Driven</a>
+            <a class="navbar-item" href="https://spring.io/cloud">Cloud</a>
+            <a class="navbar-item" href="https://spring.io/web-applications">Web
+              Applications</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/serverless"
+            >Serverless</a>
+            <a class="navbar-item" href="https://spring.io/batch">Batch</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Learn</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/learn">Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/quickstart"
+            >Quickstart</a>
+            <a class="navbar-item" href="https://spring.io/guides">Guides</a>
+            <a class="navbar-item" href="https://spring.io/blog">Blog</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Projects</a>
+          <div class="navbar-dropdown" style="min-width: 280px">
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-boot"
+            >Spring Boot</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-framework"
+            >Spring Framework</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud"
+            >Spring Cloud</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud-dataflow"
+            >Spring Cloud Data Flow</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-data"
+            >Spring Data</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-integration"
+            >Spring Integration</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-batch"
+            >Spring Batch</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-security"
+            >Spring Security</a>
+            <a
+              class="navbar-item navbar-item-special"
+              href="https://spring.io/projects"
+            >View all projects</a>
+            <a class="navbar-item" href="https://spring.io/tools">Spring Tools 4</a>
+            <a
+              class="navbar-item navbar-item-special-2"
+              href="https://start.spring.io"
+            >Spring Initializr
+              <svg
+                class="external-link-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+              ><polyline
+                  points="15 10.94 15 15 1 15 1 1 5.06 1"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><polyline
+                  points="8.93 1 15 1 15 7.07"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><line
+                  x1="15"
+                  y1="1"
+                  x2="8"
+                  y2="8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></line></svg></a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Academy</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.academy/courses"
+            >Courses</a>
+            <a
+              class="navbar-item"
+              href="https://spring.academy/learning-path"
+            >Get Certified</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Support</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/support">Overview</a>
+            <a class="navbar-item" href="https://spring.io/security">Security
+              Advisories</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable is-community">
+          <a class="navbar-link" href="#">Community</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/community"
+            >Overview</a>
+            <a class="navbar-item" href="https://spring.io/events">Events</a>
+            <a class="navbar-item" href="https://spring.io/team">Team</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <label class="theme-toggler">
+      <input
+        type="checkbox"
+        type="checkbox"
+        id="switch-theme-checkbox"
+        name="switch-theme-checkbox"
+      />
+      <span class="icon"><svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="moon"
+          class="svg-inline--fa fa-moon moon"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+        ><path
+            fill="currentColor"
+            d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"
+          ></path>
+        </svg>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="sun"
+          class="svg-inline--fa fa-sun sun"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        ><path
+            fill="currentColor"
+            d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"
+          ></path>
+        </svg></span>
+      <span class="text">light</span>
+    </label>
+  </nav>
+</header>
+<script>
+!function (theme) {
+  if (theme === 'dark') {
+    document.getElementById('switch-theme-checkbox').parentElement.classList.add('active')
+  }
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'))
+</script><div class="body">
+<div class="nav-container" data-component="spring-integration" data-version="6.2.0">
+  <aside class="nav">
+    <div class="panels">
+      <div class="nav-panel-menu is-active" data-panel="menu">
+        <nav class="nav-menu">
+<div class="context">
+  <span class="title">Spring Integration</span>
+  <span class="version">6.2.0-SNAPSHOT</span>
+  <button class="browse-version" id="browse-version">
+    <svg
+      height="24px"
+      id="Layer_1"
+      style="enable-background:new 0 0 512 512;"
+      version="1.1"
+      viewBox="0 0 512 512"
+      width="24px"
+      xml:space="preserve"
+    ><g><path
+          d="M256,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S273.7,224,256,224L256,224z"
+        ></path><path
+          d="M128.4,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S146,224,128.4,224L128.4,224z"
+        ></path><path
+          d="M384,224c-17.7,0-32,14.3-32,32s14.3,32,32,32s32-14.3,32-32S401.7,224,384,224L384,224z"
+        ></path></g></svg>
+  </button>
+</div><div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="preface.html">Preface</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New?</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="core.html">Core Messaging</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="channel.html">Message Channels</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interfaces.html">The MessageChannel Interface</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/implementations.html">Message Channel Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interceptors.html">Channel Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/template.html"><code>MessagingTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/configuration.html">Configuring Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/special-channels.html">Special Channels</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="polling-consumer.html">Poller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="channel-adapter.html">Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="bridge.html">Messaging Bridge</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message.html">Message</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-routing.html">Message Routing</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="router.html">Routers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/common-parameters.html">Common Router Parameters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/implementations.html">Router Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/namespace.html">Configuring a Generic Router</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/spel.html">Routers and the Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/annotation.html">Configuring a Router with Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/dynamic-routers.html">Dynamic Routers</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/routing-slip.html">Routing Slip</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/process-manager.html">Process Manager Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="filter.html">Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="splitter.html">Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="aggregator.html">Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="resequencer.html">Resequencer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="chain.html">Message Handler Chain</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scatter-gather.html">Scatter-Gather</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="barrier.html">Thread Barrier</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-transformation.html">Message Transformation</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="transformer.html">Transformer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="content-enrichment.html">Content Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="claim-check.html">Claim Check</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="codec.html">Codec</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="messaging-endpoints.html">Messaging Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint.html">Message Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint-roles.html">Endpoint Roles</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="leadership-event-handling.html">Leadership Event Handling</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="gateway.html">Messaging Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="service-activator.html">Service Activator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="delayer.html">Delayer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scripting.html">Scripting Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="groovy.html">Groovy Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="handler-advice.html">Adding Behavior to Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/classes.html">Provided Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/reactive.html">Reactive Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/context-holder.html">Context Holder Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/custom.html">Custom Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/other.html">Other Advice Chain Elements</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/handle-message.html">Handling Message Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/tx-handle-message.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-filters.html">Advising Filters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-with-annotations.html">Advising Endpoints Using Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/order.html">Ordering Advices within Advice Chain</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advised-properties.html">Advised Handler Properties</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/idempotent-receiver.html">Idempotent Receiver Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="logging-adapter.html">Logging Channel Adapter</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="functions-support.html"><code>java.util.function</code> Interfaces Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kotlin-functions.html">Kotlin Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="dsl.html">Java DSL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-basics.html">DSL Basics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-channels.html">Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-pollers.html">Pollers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-reactive.html">The <code>reactive()</code> Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-endpoints.html">DSL and Endpoint Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-transformers.html">Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-inbound-adapters.html">Inbound Channel Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-routers.html">Message Routers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-splitters.html">Splitters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-aggregators.html">Aggregators and Resequencers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-handle.html">Service Activators and the <code>.handle()</code> method</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-gateway.html">Operator gateway()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-log.html">Operator log()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-intercept.html">Operator intercept()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-wiretap.html"><code>MessageChannelSpec.wireTap()</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flows.html">Working With Message Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-function-expression.html"><code>FunctionExpression</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-subflows.html">Sub-flows support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-protocol-adapters.html">Using Protocol Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flow-adapter.html"><code>IntegrationFlowAdapter</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-runtime-flows.html">Dynamic and Runtime Integration Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flow-as-gateway.html"><code>IntegrationFlow</code> as a Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-extensions.html">DSL Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flows-composition.html">Integration Flows Composition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="groovy-dsl.html">Groovy DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kotlin-dsl.html">Kotlin DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="system-management.html">System Management</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="metrics.html">Metrics and Management</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-history.html">Message History</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-store.html">Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="meta-data-store.html">Metadata Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="control-bus.html">Control Bus</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="shutdown.html">Orderly Shutdown</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="graph.html">Integration Graph</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="integration-graph-controller.html">Integration Graph Controller</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reactive-streams.html">Reactive Streams Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="native-aot.html">Native Images Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="endpoint-summary.html">Integration Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="amqp.html">AMQP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/polled-inbound-channel-adapter.html">Polled Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-gateway.html">Inbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-ack.html">Inbound Endpoint Acknowledge Mode</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-endpoints.html">Outbound Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/async-outbound-gateway.html">Asynchronous Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/alternative-confirms-returns.html">Alternative Mechanism for Publisher Confirms and Returns</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/conversion-inbound.html">Inbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/content-type-conversion-outbound.html">Outbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/user-id.html">Outbound User ID</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/delay.html">Delayed Message Exchange</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/channels.html">AMQP-backed Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/message-headers.html">AMQP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/strict-ordering.html">Strict Message Ordering</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/samples.html">AMQP Samples</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/rmq-streams.html">RabbitMQ Stream Queue Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="camel.html">Apache Camel Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cassandra.html">Apache Cassandra Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="debezium.html">Debezium Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="event.html">Spring <code>ApplicationEvent</code> Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="feed.html">Feed Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="file.html">File Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/reading.html">Reading Files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/writing.html">Writing files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/transforming.html">File Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/splitter.html">File Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/aggregator.html">File Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/remote-persistent-flf.html">Remote Persistent File List Filters</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ftp.html">FTP/FTPS Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-factory.html">FTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/advanced-configuration.html">Advanced Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/inbound.html">FTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/streaming.html">FTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound.html">FTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound-gateway.html">FTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-caching.html">FTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-callback.html">Using <code>MessageSessionCallback</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/server-events.html">Apache Mina FTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="graphql.html">GraphQL Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="hazelcast.html">Hazelcast Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="http.html">HTTP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/inbound.html">Http Inbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/outbound.html">HTTP Outbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/namespace.html">HTTP Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/java-config.html">Configuring HTTP Endpoints with Java</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/timeout.html">Timeout Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/proxy.html">HTTP Proxy configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/header-mapping.html">HTTP Header Mappings</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/int-graph-controller.html">Integration Graph Controller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/samples.html">HTTP Samples</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jdbc.html">JDBC Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/message-store.html">JDBC Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/stored-procedures.html">Stored Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/lock-registry.html">JDBC Lock Registry</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/metadata-store.html">JDBC Metadata Store</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jpa.html">JPA Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/functionality.html">Functionality</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/supported-persistence-providers.html">Supported Persistence Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/java-implementation.html">Java Implementation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-gateways.html">Outbound Gateways</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jms.html">JMS Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jmx.html">JMX Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kafka.html">Apache Kafka Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mail.html">Mail Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mongodb.html">MongoDb Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mqtt.html">MQTT Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="r2dbc.html">R2DBC Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="redis.html">Redis Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resource.html">Resource Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="rsocket.html">RSocket Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="sftp.html">SFTP Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-factory.html">SFTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-caching.html">SFTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/inbound.html">SFTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/streaming.html">SFTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound.html">SFTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound-gateway.html">SFTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-callback.html">MessageSessionCallback</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/server-events.html">Apache Mina SFTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="smb.html">SMB Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stomp.html">STOMP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stream.html">Stream Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="syslog.html">Syslog Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ip.html">TCP and UDP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/intro.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/udp-adapters.html">UDP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-connection-factories.html">TCP Connection Factories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/testing-connections.html">Testing Connections</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/interceptors.html">TCP Connection Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-events.html">TCP Connection Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-adapters.html">TCP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-gateways.html">TCP Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/correlation.html">TCP Message Correlation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/note-nio.html">About Non-blocking I/O (NIO)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/ssl-tls.html">SSL/TLS Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-advanced-techniques.html">Advanced Techniques</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/endpoint-reference.html">IP Configuration Attributes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/msg-headers.html">IP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/annotation.html">Annotation-Based Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/dsl.html">Using the Java DSL for TCP Components</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="webflux.html">WebFlux Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="web-sockets.html">WebSockets Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="ws.html">Web Services Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="xml.html">XML Support - Dealing with XML Payloads</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/transformation.html">Transforming XML Payloads</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-transformer.html">Transforming XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-splitting.html">Splitting XML Messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-routing.html">Routing XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-header-enricher.html">XPath Header Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-filter.html">Using the XPath Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-spel-function.html">#xpath SpEL Function</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/validating-filter.html">XML Validating Filter</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="xmpp.html">XMPP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zeromq.html">ZeroMQ Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zookeeper.html">Zookeeper Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="error-handling.html">Error Handling</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="spel.html">Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message-publishing.html">Message Publishing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="transactions.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="security.html">Security in Spring Integration</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="configuration.html">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace-taskscheduler.html">Configuring the Task Scheduler</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/global-properties.html">Global Properties</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/annotations.html">Annotation Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/meta-annotations.html">Messaging Meta-Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/message-mapping-rules.html">Message Mapping Rules and Conventions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="testing.html">Testing support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="samples.html">Spring Integration Samples</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resources.html">Additional Resources</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="history.html">Change History</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-6.0-6.1.html">Changes between 6.0 and 6.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.5-6.0.html">Changes between 5.5 and 6.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.4-5.5.html">Changes between 5.4 and 5.5</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.3-5.4.html">Changes between 5.3 and 5.4</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.2-5.3.html">Changes between 5.2 and 5.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.1-5.2.html">Changes between 5.1 and 5.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.2-4.3.html">Changes between 4.2 and 4.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.1-4.2.html">Changes between 4.1 and 4.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.0-4.1.html">Changes between 4.0 and 4.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.1-2.2.html">Changes between 2.1 and 2.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.0-2.1.html">Changes between 2.0 and 2.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-1.0-2.0.html">Changes between Versions 1.0 and 2.0</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zip.html">Zip Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+          <div class="toggle-sm">
+            <button id="nav-toggle-2" class="nav-toggle"></button>
+          </div>
+        </nav>
+      </div>
+      <div class="nav-collapse">
+        <button id="nav-collapse-toggle"><span></span></button>        
+      </div>
+    </div>
+    <div class="nav-resize"></div>
+  </aside>
+</div>
+<script>
+!function (sidebar) {
+  if (sidebar) {
+    document.body.classList.add('nav-sm')
+  }
+}(localStorage && localStorage.getItem('sidebar') === 'close')
+</script><main class="article">
+<div class="toolbar" role="navigation">
+  <button id="nav-toggle-1" class="nav-toggle"></button>
+<div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+</div>
+  <div class="content">
+<aside class="sidebar">
+  <div class="content">
+    <div
+      class="toc"
+      data-title="Messaging Gateways"
+      data-levels="2"
+    >
+      <div class="toc-menu"></div>
+    </div>
+    <div class="sidebar-links">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/src/reference/antora/modules/ROOT/pages/gateway.adoc">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+          ><path
+              d="m16 2.012 3 3L16.713 7.3l-3-3zM4 14v3h3l8.299-8.287-3-3zm0 6h16v2H4z"
+            ></path></svg>
+          Edit this Page
+        </a>
+              <a href="https://github.com/rwinch/spring-integration" title="Github">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="512px"
+            id="Layer_1"
+            version="1.1"
+            viewBox="0 0 512 512"
+            width="512px"
+          ><style type="text/css"><![CDATA[
+              .st0{fill-rule:evenodd;clip-rule:evenodd;} ]]></style><g><path
+                class="st0"
+                d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"
+              ></path></g></svg>
+          Github Project
+        </a>
+        <a href="https://stackoverflow.com/tags/spring-integration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path
+              d="M290.7 311L95 269.7 86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8 153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"
+            ></path></svg>
+          Stack Overflow
+        </a>
+    </div>
+  </div>
+</aside><div class="doc">
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Spring Integration</a></li>
+    <li><a href="messaging-endpoints.html">Messaging Endpoints</a></li>
+    <li><a href="gateway.html">Messaging Gateways</a></li>
+  </ul>
+</nav>
+<article>
+<h1 id="page-title" class="page">Messaging Gateways</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>A gateway hides the messaging API provided by Spring Integration.
+It lets your application&#8217;s business logic be unaware of the Spring Integration API.
+By using a generic Gateway, your code interacts with only a simple interface.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gateway-proxy"><a class="anchor" href="#gateway-proxy"></a>Enter the <code>GatewayProxyFactoryBean</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As mentioned earlier, it would be great to have no dependency on the Spring Integration API&#8201;&#8212;&#8201;including the gateway class.
+For that reason, Spring Integration provides the <code>GatewayProxyFactoryBean</code>, which generates a proxy for any interface and internally invokes the gateway methods shown below.
+By using dependency injection, you can then expose the interface to your business methods.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows an interface that can be used to interact with Spring Integration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package org.cafeteria;
+
+public interface Cafe {
+
+    void placeOrder(Order order);
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gateway-namespace"><a class="anchor" href="#gateway-namespace"></a>Gateway XML Namespace Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Namespace support is also provided.
+It lets you configure an interface as a service, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:gateway id="cafeService"
+         service-interface="org.cafeteria.Cafe"
+         default-request-channel="requestChannel"
+         default-reply-timeout="10000"
+         default-reply-channel="replyChannel"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With this configuration defined, the <code>cafeService</code> can now be injected into other beans, and the code that invokes the methods on that proxied instance of the <code>Cafe</code> interface has no awareness of the Spring Integration API.
+See the <a href="samples.html#samples-impl" class="xref page">&#8220;Samples&#8221;</a> Appendix for an example that uses the <code>gateway</code> element (in the Cafe demo).</p>
+</div>
+<div class="paragraph">
+<p>The defaults in the preceding configuration are applied to all methods on the gateway interface.
+If a reply timeout is not specified, the calling thread waits for a reply for 30 seconds.
+See <a href="#gateway-no-response">Gateway Behavior When No response Arrives</a>.</p>
+</div>
+<div class="paragraph">
+<p>The defaults can be overridden for individual methods.
+See <a href="#gateway-configuration-annotations">Gateway Configuration with Annotations and XML</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gateway-default-reply-channel"><a class="anchor" href="#gateway-default-reply-channel"></a>Setting the Default Reply Channel</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Typically, you need not specify the <code>default-reply-channel</code>, since a Gateway auto-creates a temporary, anonymous reply channel, where it listens for the reply.
+However, some cases may prompt you to define a <code>default-reply-channel</code> (or <code>reply-channel</code> with adapter gateways, such as HTTP, JMS, and others).</p>
+</div>
+<div class="paragraph">
+<p>For some background, we briefly discuss some inner workings of the gateway.
+A gateway creates a temporary point-to-point reply channel.
+It is anonymous and is added to the message headers with the name, <code>replyChannel</code>.
+When providing an explicit <code>default-reply-channel</code> (<code>reply-channel</code> with remote adapter gateways), you can point to a publish-subscribe channel, which is so named because you can add more than one subscriber to it.
+Internally, Spring Integration creates a bridge between the temporary <code>replyChannel</code> and the explicitly defined <code>default-reply-channel</code>.</p>
+</div>
+<div class="paragraph">
+<p>Suppose you want your reply to go not only to the gateway but also to some other consumer.
+In this case, you want two things:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A named channel to which you can subscribe</p>
+</li>
+<li>
+<p>That channel to be a publish-subscribe-channel</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The default strategy used by the gateway does not satisfy those needs, because the reply channel added to the header is anonymous and point-to-point.
+This means that no other subscriber can get a handle to it and, even if it could, the channel has point-to-point behavior such that only one subscriber would get the message.
+By defining a <code>default-reply-channel</code> you can point to a channel of your choosing.
+In this case, that is a <code>publish-subscribe-channel</code>.
+The gateway creates a bridge from it to the temporary, anonymous reply channel that is stored in the header.</p>
+</div>
+<div class="paragraph">
+<p>You might also want to explicitly provide a reply channel for monitoring or auditing through an interceptor (for example, <a href="channel/configuration.html#channel-wiretap" class="xref page">wiretap</a>).
+To configure a channel interceptor, you need a named channel.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Starting with version 5.4, when gateway method return type is <code>void</code>, the framework populates a <code>replyChannel</code> header as a <code>nullChannel</code> bean reference if such a header is not provided explicitly.
+This allows any possible reply from the downstream flow to be discarded, meeting the one-way gateway contract.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gateway-configuration-annotations"><a class="anchor" href="#gateway-configuration-annotations"></a>Gateway Configuration with Annotations and XML</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Consider the following example, which expands on the previous <code>Cafe</code> interface example by adding a <code>@Gateway</code> annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface Cafe {
+
+    @Gateway(requestChannel="orders")
+    void placeOrder(Order order);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>@Header</code> annotation lets you add values that are interpreted as message headers, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface FileWriter {
+
+    @Gateway(requestChannel="filesOut")
+    void write(byte[] content, @Header(FileHeaders.FILENAME) String filename);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you prefer the XML approach to configuring gateway methods, you can add <code>method</code> elements to the gateway configuration, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:gateway id="myGateway" service-interface="org.foo.bar.TestGateway"
+      default-request-channel="inputC"&gt;
+  &lt;int:default-header name="calledMethod" expression="#gatewayMethod.name"/&gt;
+  &lt;int:method name="echo" request-channel="inputA" reply-timeout="2" request-timeout="200"/&gt;
+  &lt;int:method name="echoUpperCase" request-channel="inputB"/&gt;
+  &lt;int:method name="echoViaDefault"/&gt;
+&lt;/int:gateway&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use XML to provide individual headers for each method invocation.
+This could be useful if the headers you want to set are static in nature, and you do not want to embed them in the gateway&#8217;s method signature by using <code>@Header</code> annotations.
+For example, in the loan broker example, we want to influence how aggregation of the loan quotes is done, based on what type of request was initiated (single quote or all quotes).
+Determining the type of the request by evaluating which gateway method was invoked, although possible, would violate the separation of concerns paradigm (the method is a Java artifact).
+However, expressing your intention (meta information) in message headers is natural in a messaging architecture.
+The following example shows how to add a different message header for each of two methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:gateway id="loanBrokerGateway"
+         service-interface="org.springframework.integration.loanbroker.LoanBrokerGateway"&gt;
+  &lt;int:method name="getLoanQuote" request-channel="loanBrokerPreProcessingChannel"&gt;
+    &lt;int:header name="RESPONSE_TYPE" value="BEST"/&gt;
+  &lt;/int:method&gt;
+  &lt;int:method name="getAllLoanQuotes" request-channel="loanBrokerPreProcessingChannel"&gt;
+    &lt;int:header name="RESPONSE_TYPE" value="ALL"/&gt;
+  &lt;/int:method&gt;
+&lt;/int:gateway&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the preceding example a different value is set for the 'RESPONSE_TYPE' header, based on the gateway&#8217;s method.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If you specify, for example, the <code>requestChannel</code> in <code>&lt;int:method/&gt;</code> as well as in a <code>@Gateway</code> annotation, the annotation value wins.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If a no-argument gateway is specified in XML, and the interface method has both a <code>@Payload</code> and <code>@Gateway</code> annotation (with a <code>payloadExpression</code> or a <code>payload-expression</code> in an <code>&lt;int:method/&gt;</code> element), the <code>@Payload</code> value is ignored.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="gateway-expressions"><a class="anchor" href="#gateway-expressions"></a>Expressions and &#8220;Global&#8221; Headers</h3>
+<div class="paragraph">
+<p>The <code>&lt;header/&gt;</code> element supports <code>expression</code> as an alternative to <code>value</code>.
+The SpEL expression is evaluated to determine the value of the header.
+Starting with version 5.2, the <code>#root</code> object of the evaluation context is a <code>MethodArgsHolder</code> with <code>getMethod()</code> and <code>getArgs()</code> accessors.
+For example, if you wish to route on the simple method name, you might add a header with the following expression: <code>method.name</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>java.reflect.Method</code> is not serializable.
+A header with an expression of <code>method</code> is lost if you later serialize the message.
+Consequently, you may wish to use <code>method.name</code> or <code>method.toString()</code> in those cases.
+The <code>toString()</code> method provides a <code>String</code> representation of the method, including parameter and return types.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Since version 3.0, <code>&lt;default-header/&gt;</code> elements can be defined to add headers to all the messages produced by the gateway, regardless of the method invoked.
+Specific headers defined for a method take precedence over default headers.
+Specific headers defined for a method here override any <code>@Header</code> annotations in the service interface.
+However, default headers do NOT override any <code>@Header</code> annotations in the service interface.</p>
+</div>
+<div class="paragraph">
+<p>The gateway now also supports a <code>default-payload-expression</code>, which is applied for all methods (unless overridden).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gateway-mapping"><a class="anchor" href="#gateway-mapping"></a>Mapping Method Arguments to a Message</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Using the configuration techniques in the previous section allows control of how method arguments are mapped to message elements (payload and headers).
+When no explicit configuration is used, certain conventions are used to perform the mapping.
+In some cases, these conventions cannot determine which argument is the payload and which should be mapped to headers.
+Consider the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public String send1(Object thing1, Map thing2);
+
+public String send2(Map thing1, Map thing2);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the first case, the convention is to map the first argument to the payload (as long as it is not a <code>Map</code>) and the contents of the second argument become headers.</p>
+</div>
+<div class="paragraph">
+<p>In the second case (or the first when the argument for parameter <code>thing1</code> is a <code>Map</code>), the framework cannot determine which argument should be the payload.
+Consequently, mapping fails.
+This can generally be resolved using a <code>payload-expression</code>, a <code>@Payload</code> annotation, or a <code>@Headers</code> annotation.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively (and whenever the conventions break down), you can take the entire responsibility for mapping the method calls to messages.
+To do so, implement an <code>MethodArgsMessageMapper</code> and provide it to the <code>&lt;gateway/&gt;</code> by using the <code>mapper</code> attribute.
+The mapper maps a <code>MethodArgsHolder</code>, which is a simple class that wraps the <code>java.reflect.Method</code> instance and an <code>Object[]</code> containing the arguments.
+When providing a custom mapper, the <code>default-payload-expression</code> attribute and <code>&lt;default-header/&gt;</code> elements are not allowed on the gateway.
+Similarly, the <code>payload-expression</code> attribute and <code>&lt;header/&gt;</code> elements are not allowed on any <code>&lt;method/&gt;</code> elements.</p>
+</div>
+<div class="sect2">
+<h3 id="mapping-method-arguments"><a class="anchor" href="#mapping-method-arguments"></a>Mapping Method Arguments</h3>
+<div class="paragraph">
+<p>The following examples show how method arguments can be mapped to the message and shows some examples of invalid configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface MyGateway {
+
+    void payloadAndHeaderMapWithoutAnnotations(String s, Map&lt;String, Object&gt; map);
+
+    void payloadAndHeaderMapWithAnnotations(@Payload String s, @Headers Map&lt;String, Object&gt; map);
+
+    void headerValuesAndPayloadWithAnnotations(@Header("k1") String x, @Payload String s, @Header("k2") String y);
+
+    void mapOnly(Map&lt;String, Object&gt; map); // the payload is the map and no custom headers are added
+
+    void twoMapsAndOneAnnotatedWithPayload(@Payload Map&lt;String, Object&gt; payload, Map&lt;String, Object&gt; headers);
+
+    @Payload("args[0] + args[1] + '!'")
+    void payloadAnnotationAtMethodLevel(String a, String b);
+
+    @Payload("@someBean.exclaim(args[0])")
+    void payloadAnnotationAtMethodLevelUsingBeanResolver(String s);
+
+    void payloadAnnotationWithExpression(@Payload("toUpperCase()") String s);
+
+    void payloadAnnotationWithExpressionUsingBeanResolver(@Payload("@someBean.sum(#this)") String s); //  <i class="conum" data-value="1"></i><b>(1)</b>
+
+    // invalid
+    void twoMapsWithoutAnnotations(Map&lt;String, Object&gt; m1, Map&lt;String, Object&gt; m2);
+
+    // invalid
+    void twoPayloads(@Payload String s1, @Payload String s2);
+
+    // invalid
+    void payloadAndHeaderAnnotationsOnSameParameter(@Payload @Header("x") String s);
+
+    // invalid
+    void payloadAndHeadersAnnotationsOnSameParameter(@Payload @Headers Map&lt;String, Object&gt; map);
+
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Note that, in this example, the SpEL variable, <code>#this</code>, refers to the argument&#8201;&#8212;&#8201;in this case, the value of <code>s</code>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The XML equivalent looks a little different, since there is no <code>#this</code> context for the method argument.
+However, expressions can refer to method arguments by using the <code>args</code> property for the <code>MethodArgsHolder</code> root object (see <a href="#gateway-expressions">Expressions and &#8220;Global&#8221; Headers</a> for more information), as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:gateway id="myGateway" service-interface="org.something.MyGateway"&gt;
+  &lt;int:method name="send1" payload-expression="args[0] + 'thing2'"/&gt;
+  &lt;int:method name="send2" payload-expression="@someBean.sum(args[0])"/&gt;
+  &lt;int:method name="send3" payload-expression="method"/&gt;
+  &lt;int:method name="send4"&gt;
+    &lt;int:header name="thing1" expression="args[2].toUpperCase()"/&gt;
+  &lt;/int:method&gt;
+&lt;/int:gateway&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="messaging-gateway-annotation"><a class="anchor" href="#messaging-gateway-annotation"></a><code>@MessagingGateway</code> Annotation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 4.0, gateway service interfaces can be marked with a <code>@MessagingGateway</code> annotation instead of requiring the definition of a <code>&lt;gateway /&gt;</code> xml element for configuration.
+The following pair of examples compares the two approaches for configuring the same gateway:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:gateway id="myGateway" service-interface="org.something.TestGateway"
+      default-request-channel="inputC"&gt;
+  &lt;int:default-header name="calledMethod" expression="#gatewayMethod.name"/&gt;
+  &lt;int:method name="echo" request-channel="inputA" reply-timeout="2" request-timeout="200"/&gt;
+  &lt;int:method name="echoUpperCase" request-channel="inputB"&gt;
+    &lt;int:header name="thing1" value="thing2"/&gt;
+  &lt;/int:method&gt;
+  &lt;int:method name="echoViaDefault"/&gt;
+&lt;/int:gateway&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MessagingGateway(name = "myGateway", defaultRequestChannel = "inputC",
+		  defaultHeaders = @GatewayHeader(name = "calledMethod",
+		                           expression="#gatewayMethod.name"))
+public interface TestGateway {
+
+   @Gateway(requestChannel = "inputA", replyTimeout = 2, requestTimeout = 200)
+   String echo(String payload);
+
+   @Gateway(requestChannel = "inputB", headers = @GatewayHeader(name = "thing1", value="thing2"))
+   String echoUpperCase(String payload);
+
+   String echoViaDefault(String payload);
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Similarly to the XML version, when Spring Integration discovers these annotations during a component scan, it creates the <code>proxy</code> implementation with its messaging infrastructure.
+To perform this scan and register the <code>BeanDefinition</code> in the application context, add the <code>@IntegrationComponentScan</code> annotation to a <code>@Configuration</code> class.
+The standard <code>@ComponentScan</code> infrastructure does not deal with interfaces.
+Consequently, we introduced the custom <code>@IntegrationComponentScan</code> logic to find the <code>@MessagingGateway</code> annotation on the interfaces and register <code>GatewayProxyFactoryBean</code> instances for them.
+See also <a href="configuration/annotations.html" class="xref page">Annotation Support</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Along with the <code>@MessagingGateway</code> annotation you can mark a service interface with the <code>@Profile</code> annotation to avoid the bean creation, if such a profile is not active.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 6.0, an interface with the <code>@MessagingGateway</code> can also be marked with a <code>@Primary</code> annotation for respective configuration logic as its possible with any Spring <code>@Component</code> definition.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 6.0, <code>@MessagingGateway</code> interfaces can be used in the standard Spring <code>@Import</code> configuration.
+This may be used as an alternative to the  <code>@IntegrationComponentScan</code> or manual <code>AnnotationGatewayProxyFactoryBean</code> bean definitions.</p>
+</div>
+<div class="paragraph">
+<p>The <code>@MessagingGateway</code> is meta-annotated with a <code>@MessageEndpoint</code> since version <code>6.0</code> and the <code>name()</code> attribute is, essentially, aliased to the <code>@Compnent.value()</code>.
+This way the bean names generating strategy for gateway proxies is realigned with the standard Spring annotation configuration for scanned and imported components.
+The default <code>AnnotationBeanNameGenerator</code> can be overridden globally via an <code>AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR</code> or as a <code>@IntegrationComponentScan.nameGenerator()</code> attribute.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you have no XML configuration, the <code>@EnableIntegration</code> annotation is required on at least one <code>@Configuration</code> class.
+See <a href="overview.html#configuration-enable-integration" class="xref page">Configuration and <code>@EnableIntegration</code></a> for more information.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gateway-calling-no-argument-methods"><a class="anchor" href="#gateway-calling-no-argument-methods"></a>Invoking No-Argument Methods</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When invoking methods on a Gateway interface that do not have any arguments, the default behavior is to receive a <code>Message</code> from a <code>PollableChannel</code>.</p>
+</div>
+<div class="paragraph">
+<p>Sometimes, however, you may want to trigger no-argument methods so that you can interact with other components downstream that do not require user-provided parameters, such as triggering no-argument SQL calls or stored procedures.</p>
+</div>
+<div class="paragraph">
+<p>To achieve send-and-receive semantics, you must provide a payload.
+To generate a payload, method parameters on the interface are not necessary.
+You can either use the <code>@Payload</code> annotation or the <code>payload-expression</code> attribute in XML on the <code>method</code> element.
+The following list includes a few examples of what the payloads could be:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a literal string</p>
+</li>
+<li>
+<p>#gatewayMethod.name</p>
+</li>
+<li>
+<p>new java.util.Date()</p>
+</li>
+<li>
+<p>@someBean.someMethod()'s return value</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following example shows how to use the <code>@Payload</code> annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">public interface Cafe {
+
+    @Payload("new java.util.Date()")
+    List&lt;Order&gt; retrieveOpenOrders();
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use the <code>@Gateway</code> annotation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">public interface Cafe {
+
+    @Gateway(payloadExpression = "new java.util.Date()")
+    List&lt;Order&gt; retrieveOpenOrders();
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If both annotations are present (and the <code>payloadExpression</code> is provided), <code>@Gateway</code> wins.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Also see <a href="#gateway-configuration-annotations">Gateway Configuration with Annotations and XML</a>.</p>
+</div>
+<div class="paragraph">
+<p>If a method has no argument and no return value but does contain a payload expression, it is treated as a send-only operation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gateway-calling-default-methods"><a class="anchor" href="#gateway-calling-default-methods"></a>Invoking <code>default</code> Methods</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An interface for gateway proxy may have <code>default</code> methods as well and starting with version 5.3, the framework injects a <code>DefaultMethodInvokingMethodInterceptor</code> into a proxy for calling <code>default</code> methods using a <code>java.lang.invoke.MethodHandle</code> approach instead of proxying.
+The interfaces from JDK, such as <code>java.util.function.Function</code>, still can be used for gateway proxy, but their <code>default</code> methods cannot be called because of internal Java security reasons for a <code>MethodHandles.Lookup</code> instantiation against JDK classes.
+These methods also can be proxied (losing their implementation logic and, at the same time, restoring previous gateway proxy behavior) using an explicit <code>@Gateway</code> annotation on the method, or <code>proxyDefaultMethods</code> on the <code>@MessagingGateway</code> annotation or <code>&lt;gateway&gt;</code> XML component.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gateway-error-handling"><a class="anchor" href="#gateway-error-handling"></a>Error Handling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The gateway invocation can result in errors.
+By default, any error that occurs downstream is re-thrown &#8220;as is&#8221; upon the gateway&#8217;s method invocation.
+For example, consider the following simple flow:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">gateway -&gt; service-activator</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the service invoked by the service activator throws a <code>MyException</code> (for example), the framework wraps it in a <code>MessagingException</code> and attaches the message passed to the service activator in the <code>failedMessage</code> property.
+Consequently, any logging performed by the framework has full the context of the failure.
+By default, when the exception is caught by the gateway, the <code>MyException</code> is unwrapped and thrown to the caller.
+You can configure a <code>throws</code> clause on the gateway method declaration to match the particular exception type in the cause chain.
+For example, if you want to catch a whole <code>MessagingException</code> with all the messaging information of the reason of downstream error, you should have a gateway method similar to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface MyGateway {
+
+    void performProcess() throws MessagingException;
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since we encourage POJO programming, you may not want to expose the caller to messaging infrastructure.</p>
+</div>
+<div class="paragraph">
+<p>If your gateway method does not have a <code>throws</code> clause, the gateway traverses the cause tree, looking for a <code>RuntimeException</code> that is not a <code>MessagingException</code>.
+If none is found, the framework throws the <code>MessagingException</code>.
+If the <code>MyException</code> in the preceding discussion has a cause of <code>SomeOtherException</code> and your method <code>throws SomeOtherException</code>, the gateway further unwraps that and throws it to the caller.</p>
+</div>
+<div class="paragraph">
+<p>When a gateway is declared with no <code>service-interface</code>, an internal framework interface <code>RequestReplyExchanger</code> is used.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface RequestReplyExchanger {
+
+	Message&lt;?&gt; exchange(Message&lt;?&gt; request) throws MessagingException;
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before version 5.0, this <code>exchange</code> method did not have a <code>throws</code> clause and, as a result, the exception was unwrapped.
+If you use this interface and want to restore the previous unwrap behavior, use a custom <code>service-interface</code> instead or access the <code>cause</code> of the  <code>MessagingException</code> yourself.</p>
+</div>
+<div class="paragraph">
+<p>However, you may want to log the error rather than propagating it, or you may want to treat an exception as a valid reply (by mapping it to a message that conforms to some "error message" contract that the caller understands).
+To accomplish this, the gateway provides support for a message channel dedicated to the errors by including support for the <code>error-channel</code> attribute.
+In the following example, a 'transformer' creates a reply <code>Message</code> from the <code>Exception</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:gateway id="sampleGateway"
+    default-request-channel="gatewayChannel"
+    service-interface="foo.bar.SimpleGateway"
+    error-channel="exceptionTransformationChannel"/&gt;
+
+&lt;int:transformer input-channel="exceptionTransformationChannel"
+        ref="exceptionTransformer" method="createErrorResponse"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>exceptionTransformer</code> could be a simple POJO that knows how to create the expected error response objects.
+That becomes the payload that is sent back to the caller.
+You could do many more elaborate things in such an &#8220;error flow&#8221;, if necessary.
+It might involve routers (including Spring Integration&#8217;s <code>ErrorMessageExceptionTypeRouter</code>), filters, and so on.
+Most of the time, a simple 'transformer' should be sufficient, however.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, you might want to only log the exception (or send it somewhere asynchronously).
+If you provide a one-way flow, nothing would be sent back to the caller.
+If you want to completely suppress exceptions, you can provide a reference to the global <code>nullChannel</code> (essentially a <code>/dev/null</code> approach).
+Finally, as mentioned above, if no <code>error-channel</code> is defined, then the exceptions propagate as usual.</p>
+</div>
+<div class="paragraph">
+<p>When you use the <code>@MessagingGateway</code> annotation (see <code><a href="#messaging-gateway-annotation"></code>@MessagingGateway` Annotation</a><code>), you can use an `errorChannel</code> attribute.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, when you use a gateway method with a <code>void</code> return type (one-way flow), the <code>error-channel</code> reference (if provided) is populated in the standard <code>errorChannel</code> header of each sent message.
+This feature allows a downstream asynchronous flow, based on the standard <code>ExecutorChannel</code> configuration (or a <code>QueueChannel</code>), to override a default global <code>errorChannel</code> exceptions sending behavior.
+Previously you had to manually specify an <code>errorChannel</code> header with the <code>@GatewayHeader</code> annotation or the <code>&lt;header&gt;</code> element.
+The <code>error-channel</code> property was ignored for <code>void</code> methods with an asynchronous flow.
+Instead, error messages were sent to the default <code>errorChannel</code>.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Exposing the messaging system through simple POJI Gateways provides benefits, but &#8220;hiding&#8221; the reality of the underlying messaging system does come at a price, so there are certain things you should consider.
+We want our Java method to return as quickly as possible and not hang for an indefinite amount of time while the caller is waiting on it to return (whether void, a return value, or a thrown Exception).
+When regular methods are used as a proxies in front of the messaging system, we have to take into account the potentially asynchronous nature of the underlying messaging.
+This means that there might be a chance that a message that was initiated by a gateway could be dropped by a filter and never reach a component that is responsible for producing a reply.
+Some service activator method might result in an exception, thus providing no reply (as we do not generate null messages).
+In other words, multiple scenarios can cause a reply message to never come.
+That is perfectly natural in messaging systems.
+However, think about the implication on the gateway method.
+The gateway&#8217;s method input arguments were incorporated into a message and sent downstream.
+The reply message would be converted to a return value of the gateway&#8217;s method.
+So you might want to ensure that, for each gateway call, there is always a reply message.
+Otherwise, your gateway method might never return and hang indefinitely if <code>reply-timeout</code> is set to negative value.
+One way to handle this situation is by using an asynchronous gateway (explained later in this section).
+Another way of handling it is to rely on a default <code>reply-timeout</code> as a <code>30</code> seconds.
+That way, the gateway does not hang any longer than the time specified by the <code>reply-timeout</code> and returns 'null' if that timeout does elapse.
+Finally, you might want to consider setting downstream flags, such as 'requires-reply', on a service-activator or 'throw-exceptions-on-rejection' on a filter.
+These options are discussed in more detail in the final section of this chapter.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If the downstream flow returns an <code>ErrorMessage</code>, its <code>payload</code> (a <code>Throwable</code>) is treated as a regular downstream error.
+If there is an <code>error-channel</code> configured, it is sent to the error flow.
+Otherwise, the payload is thrown to the caller of the gateway.
+Similarly, if the error flow on the <code>error-channel</code> returns an <code>ErrorMessage</code>, its payload is thrown to the caller.
+The same applies to any message with a <code>Throwable</code> payload.
+This can be useful in asynchronous situations when you need to propagate an <code>Exception</code> directly to the caller.
+To do so, you can either return an <code>Exception</code> (as the <code>reply</code> from some service) or throw it.
+Generally, even with an asynchronous flow, the framework takes care of propagating an exception thrown by the downstream flow back to the gateway.
+The <a href="https://github.com/spring-projects/spring-integration-samples/tree/main/intermediate/tcp-client-server-multiplex">TCP Client-Server Multiplex</a> sample demonstrates both techniques to return the exception to the caller.
+It emulates a socket IO error to the waiting thread by using an <code>aggregator</code> with <code>group-timeout</code> (see <a href="aggregator.html#agg-and-group-to" class="xref page">Aggregator and Group Timeout</a>) and a <code>MessagingTimeoutException</code> reply on the discard flow.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gateway-timeouts"><a class="anchor" href="#gateway-timeouts"></a>Gateway Timeouts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Gateways have two timeout properties: <code>requestTimeout</code> and <code>replyTimeout</code>.
+The request timeout applies only if the channel can block (for example, a bounded <code>QueueChannel</code> that is full).
+The <code>replyTimeout</code> value is how long the gateway waits for a reply or returns <code>null</code>.
+It defaults to infinity.</p>
+</div>
+<div class="paragraph">
+<p>The timeouts can be set as defaults for all methods on the gateway (<code>defaultRequestTimeout</code> and <code>defaultReplyTimeout</code>) or on the <code>MessagingGateway</code> interface annotation.
+Individual methods can override these defaults (in <code>&lt;method/&gt;</code> child elements) or on the <code>@Gateway</code> annotation.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, the timeouts can be defined as expressions, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Gateway(payloadExpression = "args[0]", requestChannel = "someChannel",
+        requestTimeoutExpression = "args[1]", replyTimeoutExpression = "args[2]")
+String lateReply(String payload, long requestTimeout, long replyTimeout);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The evaluation context has a <code>BeanResolver</code> (use <code>@someBean</code> to reference other beans), and the <code>args</code> array property from the <code>#root</code> object is available.
+See <a href="#gateway-expressions">Expressions and &#8220;Global&#8221; Headers</a> for more information about this root object.
+When configuring with XML, the timeout attributes can be a long value or a SpEL expression, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;method name="someMethod" request-channel="someRequestChannel"
+                      payload-expression="args[0]"
+                      request-timeout="1000"
+                      reply-timeout="args[1]"&gt;
+&lt;/method&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="async-gateway"><a class="anchor" href="#async-gateway"></a>Asynchronous Gateway</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As a pattern, the messaging gateway offers a nice way to hide messaging-specific code while still exposing the full capabilities of the messaging system.
+As <a href="#gateway-proxy">described earlier</a>, the <code>GatewayProxyFactoryBean</code> provides a convenient way to expose a proxy over a service-interface giving you POJO-based access to a messaging system (based on objects in your own domain, primitives/Strings, or other objects).
+However, when a gateway is exposed through simple POJO methods that return values, it implies that, for each request message (generated when the method is invoked), there must be a reply message (generated when the method has returned).
+Since messaging systems are naturally asynchronous, you may not always be able to guarantee the contract where &#8220;for each request, there will always be a reply&#8221;. Spring Integration 2.0 introduced support for an asynchronous gateway, which offers a convenient way to initiate flows when you may not know if a reply is expected or how long it takes for replies to arrive.</p>
+</div>
+<div class="paragraph">
+<p>To handle these types of scenarios, Spring Integration uses <code>java.util.concurrent.Future</code> instances to support an asynchronous gateway.</p>
+</div>
+<div class="paragraph">
+<p>From the XML configuration, nothing changes, and you still define asynchronous gateway the same way as you define a regular gateway, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:gateway id="mathService"
+     service-interface="org.springframework.integration.sample.gateway.futures.MathServiceGateway"
+     default-request-channel="requestChannel"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>However, the gateway interface (a service interface) is a little different, as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface MathServiceGateway {
+
+  Future&lt;Integer&gt; multiplyByTwo(int i);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As the preceding example shows, the return type for the gateway method is a <code>Future</code>.
+When <code>GatewayProxyFactoryBean</code> sees that the return type of the gateway method is a <code>Future</code>, it immediately switches to the asynchronous mode by using an <code>AsyncTaskExecutor</code>.
+That is the extent of the differences.
+The call to such a method always returns immediately with a <code>Future</code> instance.
+Then you can interact with the <code>Future</code> at your own pace to get the result, cancel, and so on.
+Also, as with any other use of <code>Future</code> instances, calling <code>get()</code> may reveal a timeout, an execution exception, and so on.
+The following example shows how to use a <code>Future</code> that returns from an asynchronous gateway:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">MathServiceGateway mathService = ac.getBean("mathService", MathServiceGateway.class);
+Future&lt;Integer&gt; result = mathService.multiplyByTwo(number);
+// do something else here since the reply might take a moment
+int finalResult =  result.get(1000, TimeUnit.SECONDS);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For a more detailed example, see the <a href="https://github.com/spring-projects/spring-integration-samples/tree/main/intermediate/async-gateway">async-gateway</a> sample in the Spring Integration samples.</p>
+</div>
+<div class="sect2">
+<h3 id="gateway-asynctaskexecutor"><a class="anchor" href="#gateway-asynctaskexecutor"></a><code>AsyncTaskExecutor</code></h3>
+<div class="paragraph">
+<p>By default, the <code>GatewayProxyFactoryBean</code> uses <code>org.springframework.core.task.SimpleAsyncTaskExecutor</code> when submitting internal <code>AsyncInvocationTask</code> instances for any gateway method whose return type is a <code>Future</code>.
+However, the <code>async-executor</code> attribute in the <code>&lt;gateway/&gt;</code> element&#8217;s configuration lets you provide a reference to any implementation of <code>java.util.concurrent.Executor</code> available within the Spring application context.</p>
+</div>
+<div class="paragraph">
+<p>The (default) <code>SimpleAsyncTaskExecutor</code> supports both <code>Future</code> and <code>CompletableFuture</code> return types.
+See <a href="#gw-completable-future"><code>CompletableFuture</code></a>.
+Even though there is a default executor, it is often useful to provide an external one so that you can identify its threads in logs (when using XML, the thread name is based on the executor&#8217;s bean name), as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public AsyncTaskExecutor exec() {
+    SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
+    simpleAsyncTaskExecutor.setThreadNamePrefix("exec-");
+    return simpleAsyncTaskExecutor;
+}
+
+@MessagingGateway(asyncExecutor = "exec")
+public interface ExecGateway {
+
+    @Gateway(requestChannel = "gatewayChannel")
+    Future&lt;?&gt; doAsync(String foo);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you wish to return a different <code>Future</code> implementation, you can provide a custom executor or disable the executor altogether and return the <code>Future</code> in the reply message payload from the downstream flow.
+To disable the executor, set it to <code>null</code> in the <code>GatewayProxyFactoryBean</code> (by using <code>setAsyncTaskExecutor(null)</code>).
+When configuring the gateway with XML, use <code>async-executor=""</code>.
+When configuring by using the <code>@MessagingGateway</code> annotation, use code similar to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MessagingGateway(asyncExecutor = AnnotationConstants.NULL)
+public interface NoExecGateway {
+
+    @Gateway(requestChannel = "gatewayChannel")
+    Future&lt;?&gt; doAsync(String foo);
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If the return type is a specific concrete <code>Future</code> implementation or some other sub-interface that is not supported by the configured executor, the flow runs on the caller&#8217;s thread and the flow must return the required type in the reply message payload.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="gw-completable-future"><a class="anchor" href="#gw-completable-future"></a><code>CompletableFuture</code></h3>
+<div class="paragraph">
+<p>Starting with version 4.2, gateway methods can now return <code>CompletableFuture&lt;?&gt;</code>.
+There are two modes of operation when returning this type:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>When an async executor is provided and the return type is exactly <code>CompletableFuture</code> (not a subclass), the framework runs the task on the executor and immediately returns a <code>CompletableFuture</code> to the caller.
+<code>CompletableFuture.supplyAsync(Supplier&lt;U&gt; supplier, Executor executor)</code> is used to create the future.</p>
+</li>
+<li>
+<p>When the async executor is explicitly set to <code>null</code> and the return type is <code>CompletableFuture</code> or the return type is a subclass of <code>CompletableFuture</code>, the flow is invoked on the caller&#8217;s thread.
+In this scenario, the downstream flow is expected to return a <code>CompletableFuture</code> of the appropriate type.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>org.springframework.util.concurrent.ListenableFuture</code> has been deprecated starting with Spring Framework <code>6.0</code>.
+It is recommended now to migrate to the <code>CompletableFuture</code> which provides similar processing functionality.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="usage-scenarios"><a class="anchor" href="#usage-scenarios"></a>Usage Scenarios</h4>
+<div class="paragraph">
+<p>In the following scenario, the caller thread returns immediately with a <code>CompletableFuture&lt;Invoice&gt;</code>, which is completed when the downstream flow replies to the gateway (with an <code>Invoice</code> object).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CompletableFuture&lt;Invoice&gt; order(Order order);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:gateway service-interface="something.Service" default-request-channel="orders" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the following  scenario, the caller thread returns with a <code>CompletableFuture&lt;Invoice&gt;</code> when the downstream flow provides it as the payload of the reply to the gateway.
+Some other process must complete the future when the invoice is ready.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CompletableFuture&lt;Invoice&gt; order(Order order);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:gateway service-interface="foo.Service" default-request-channel="orders"
+    async-executor="" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the following scenario, the caller thread returns with a <code>CompletableFuture&lt;Invoice&gt;</code> when the downstream flow provides it as the payload of the reply to the gateway.
+Some other process must complete the future when the invoice is ready.
+If <code>DEBUG</code> logging is enabled, a log entry is emitted, indicating that the async executor cannot be used for this scenario.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">MyCompletableFuture&lt;Invoice&gt; order(Order order);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:gateway service-interface="foo.Service" default-request-channel="orders" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>CompletableFuture</code> instances can be used to perform additional manipulation on the reply, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CompletableFuture&lt;String&gt; process(String data);
+
+...
+
+CompletableFuture result = process("foo")
+    .thenApply(t -&gt; t.toUpperCase());
+
+...
+
+String out = result.get(10, TimeUnit.SECONDS);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="reactor-mono"><a class="anchor" href="#reactor-mono"></a>Reactor <code>Mono</code></h3>
+<div class="paragraph">
+<p>Starting with version 5.0, the <code>GatewayProxyFactoryBean</code> allows the use of <a href="https://projectreactor.io/">Project Reactor</a> with gateway interface methods, using a <a href="https://github.com/reactor/reactor-core"><code>Mono&lt;T&gt;</code></a> return type.
+The internal <code>AsyncInvocationTask</code> is wrapped in a <code>Mono.fromCallable()</code>.</p>
+</div>
+<div class="paragraph">
+<p>A <code>Mono</code> can be used to retrieve the result later (similar to a <code>Future&lt;?&gt;</code>), or you can consume from it with the dispatcher by invoking your <code>Consumer</code> when the result is returned to the gateway.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The <code>Mono</code> is not immediately flushed by the framework.
+Consequently, the underlying message flow is not started before the gateway method returns (as it is with a <code>Future&lt;?&gt;</code> <code>Executor</code> task).
+The flow starts when the <code>Mono</code> is subscribed to.
+Alternatively, the <code>Mono</code> (being a &#8220;Composable&#8221;) might be a part of Reactor stream, when the <code>subscribe()</code> is related to the entire <code>Flux</code>.
+The following example shows how to create a gateway with Project Reactor:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MessagingGateway
+public interface TestGateway {
+
+    @Gateway(requestChannel = "multiplyChannel")
+    Mono&lt;Integer&gt; multiply(Integer value);
+
+}
+
+@ServiceActivator(inputChannel = "multiplyChannel")
+public Integer multiply(Integer value) {
+    return value * 2;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where such a gateway can be used in some service which deals with the <code>Flux</code> of data:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Autowired
+TestGateway testGateway;
+
+public void hadnleFlux() {
+    Flux.just("1", "2", "3", "4", "5")
+            .map(Integer::parseInt)
+            .flatMap(this.testGateway::multiply)
+            .collectList()
+            .subscribe(System.out::println);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Another example that uses Project Reactor is a simple callback scenario, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Mono&lt;Invoice&gt; mono = service.process(myOrder);
+
+mono.subscribe(invoice -&gt; handleInvoice(invoice));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The calling thread continues, with <code>handleInvoice()</code> being called when the flow completes.</p>
+</div>
+<div class="paragraph">
+<p>Also see <a href="kotlin-functions.html#kotlin-coroutines" class="xref page">Kotlin Coroutines</a> for more information.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="downstream-flows-returning-an-asynchronous-type"><a class="anchor" href="#downstream-flows-returning-an-asynchronous-type"></a>Downstream Flows Returning an Asynchronous Type</h3>
+<div class="paragraph">
+<p>As mentioned in the <a href="#gateway-asynctaskexecutor"><code>AsyncTaskExecutor</code></a> section above, if you wish some downstream component to return a message with an async payload (<code>Future</code>, <code>Mono</code>, and others), you must explicitly set the async executor to <code>null</code> (or <code>""</code> when using XML configuration).
+The flow is then invoked on the caller thread and the result can be retrieved later.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="asynchronous-void-return-type"><a class="anchor" href="#asynchronous-void-return-type"></a>Asynchronous <code>void</code> Return Type</h3>
+<div class="paragraph">
+<p>The messaging gateway method can be declared like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MessagingGateway
+public interface MyGateway {
+
+    @Gateway(requestChannel = "sendAsyncChannel")
+    @Async
+    void sendAsync(String payload);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But downstream exceptions are not going to be propagated back to the caller.
+To ensure asynchronous behavior for downstream flow invocation and exception propagation to the caller, starting with version 6.0, the framework provides support for the <code>Future&lt;Void&gt;</code> and <code>Mono&lt;Void&gt;</code> return types.
+The use-case is similar to send-and-forget behavior described before for plain <code>void</code> return type, but with a difference that flow execution happens asynchronously and returned <code>Future</code> (or <code>Mono</code>) is complete with a <code>null</code> or exceptionally according to the <code>send</code> operation result.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If the <code>Future&lt;Void&gt;</code> is exact downstream flow reply, then an <code>asyncExecutor</code> option of the gateway must be set to null (<code>AnnotationConstants.NULL</code> for a <code>@MessagingGateway</code> configuration) and the <code>send</code> part is performed on a producer thread.
+The reply one depends on the downstream flow configuration.
+This way it is up target application to produce a <code>Future&lt;Void&gt;</code> reply correctly.
+The <code>Mono</code> use-case is already out of the framework threading control, so setting <code>asyncExecutor</code> to null won&#8217;t make sense.
+There <code>Mono&lt;Void&gt;</code> as a result of the request-reply gateway operation must be configured as a <code>Mono&lt;?&gt;</code> return type of the gateway method.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="gateway-no-response"><a class="anchor" href="#gateway-no-response"></a>Gateway Behavior When No response Arrives</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As <a href="#gateway-proxy">explained earlier</a>, the gateway provides a convenient way of interacting with a messaging system through POJO method invocations.
+However, a typical method invocation, which is generally expected to always return (even with an Exception), might not always map one-to-one to message exchanges (for example, a reply message might not arrive&#8201;&#8212;&#8201;the equivalent to a method not returning).</p>
+</div>
+<div class="paragraph">
+<p>The rest of this section covers various scenarios and how to make the gateway behave more predictably.
+Certain attributes can be configured to make synchronous gateway behavior more predictable, but some of them might not always work as you might expect.
+One of them is <code>reply-timeout</code> (at the method level or <code>default-reply-timeout</code> at the gateway level).
+We examine the <code>reply-timeout</code> attribute to see how it can and cannot influence the behavior of the synchronous gateway in various scenarios.
+We examine a single-threaded scenario (all components downstream are connected through a direct channel) and multi-threaded scenarios (for example, somewhere downstream you may have a pollable or executor channel that breaks the single-thread boundary).</p>
+</div>
+<div class="sect2">
+<h3 id="long-running-process-downstream"><a class="anchor" href="#long-running-process-downstream"></a>Long-running Process Downstream</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Sync Gateway, single-threaded</dt>
+<dd>
+<p>If a component downstream is still running (perhaps because of an infinite loop or a slow service), setting a <code>reply-timeout</code> has no effect, and the gateway method call does not return until the downstream service exits (by returning or throwing an exception).</p>
+</dd>
+<dt class="hdlist1">Sync Gateway, multi-threaded</dt>
+<dd>
+<p>If a component downstream is still running (perhaps because of an infinite loop or a slow service) in a multi-threaded message flow, setting the <code>reply-timeout</code> has an effect by allowing gateway method invocation to return once the timeout has been reached, because the <code>GatewayProxyFactoryBean</code>  polls on the reply channel, waiting for a message until the timeout expires.
+However, if the timeout has been reached before the actual reply was produced, it could result in a 'null' return from the gateway method.
+You should understand that the reply message (if produced) is sent to a reply channel after the gateway method invocation might have returned, so you must be aware of that and design your flow with it in mind.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="downstream-component-returns-null-"><a class="anchor" href="#downstream-component-returns-null-"></a>Downstream Component Returns 'null'</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Sync Gateway&#8201;&#8212;&#8201;single-threaded</dt>
+<dd>
+<p>If a component downstream returns 'null' and the <code>reply-timeout</code> has been configured to negative value, the gateway method call hangs indefinitely, unless the <code>requires-reply</code> attribute has been set on the downstream component (for example, a service activator) that might return 'null'.
+In this case, an exception would be thrown and propagated to the gateway.</p>
+</dd>
+<dt class="hdlist1">Sync Gateway&#8201;&#8212;&#8201;multi-threaded</dt>
+<dd>
+<p>The behavior is the same as the previous case.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="downstream-component-return-signature-is-void-while-gateway-method-signature-is-non-void"><a class="anchor" href="#downstream-component-return-signature-is-void-while-gateway-method-signature-is-non-void"></a>Downstream Component Return Signature is 'void' While Gateway Method Signature Is Non-void</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Sync Gateway&#8201;&#8212;&#8201;single-threaded</dt>
+<dd>
+<p>If a component downstream returns 'void' and the <code>reply-timeout</code> has been configured to negative value, the gateway method call hangs indefinitely.</p>
+</dd>
+<dt class="hdlist1">Sync Gateway&#8201;&#8212;&#8201;multi-threaded</dt>
+<dd>
+<p>The behavior is the same as the previous case.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="downstream-component-results-in-runtime-exception"><a class="anchor" href="#downstream-component-results-in-runtime-exception"></a>Downstream Component Results in Runtime Exception</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Sync Gateway&#8201;&#8212;&#8201;single-threaded</dt>
+<dd>
+<p>If a component downstream throws a runtime exception, the exception is propagated through an error message back to the gateway and re-thrown.</p>
+</dd>
+<dt class="hdlist1">Sync Gateway&#8201;&#8212;&#8201;multi-threaded</dt>
+<dd>
+<p>The behavior is the same as the previous case.</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+You should understand that, by default, <code>reply-timeout</code> is unbounded.
+Consequently, if you set the <code>reply-timeout</code> to negative value, your gateway method invocation might hang indefinitely.
+So, to make sure you analyze your flow and if there is even a remote possibility of one of these scenarios to occur, you should set the <code>reply-timeout</code> attribute to a "'safe'" value.
+It is <code>30</code> seconds by default.
+Even better, you can set the <code>requires-reply</code> attribute of the downstream component to 'true' to ensure a timely response, as produced by the throwing of an exception as soon as that downstream component returns null internally.
+However, you should also realize that there are some scenarios (see <a href="#long-running-process-downstream">the first one</a>) where <code>reply-timeout</code> does not help.
+That means it is also important to analyze your message flow and decide when to use a synchronous gateway rather than an asynchronous gateway.
+As <a href="jms.html#jms-async-gateway" class="xref page">described earlier</a>, the latter case is a matter of defining gateway methods that return <code>Future</code> instances.
+Then you are guaranteed to receive that return value, and you have more granular control over the results of the invocation.
+Also, when dealing with a router, you should remember that setting the <code>resolution-required</code> attribute to 'true' results in an exception thrown by the router if it can not resolve a particular channel.
+Likewise, when dealing with a Filter, you can set the <code>throw-exception-on-rejection</code> attribute.
+In both of these cases, the resulting flow behaves like it contain a service activator with the 'requires-reply' attribute.
+In other words, it helps to ensure a timely response from the gateway method invocation.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+You should understand that the timer starts when the thread returns to the gateway&#8201;&#8212;&#8201;that is, when the flow completes or a message is handed off to another thread.
+At that time, the calling thread starts waiting for the reply.
+If the flow was completely synchronous, the reply is immediately available.
+For asynchronous flows, the thread waits for up to this time.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>See <a href="dsl/integration-flow-as-gateway.html" class="xref page"><code>IntegrationFlow</code> as Gateway</a> in the Java DSL chapter for options to define gateways through <code>IntegrationFlow</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="leadership-event-handling.html">Leadership Event Handling</a></span>
+  <span class="next"><a href="service-activator.html">Service Activator</a></span>
+</nav>
+</article>
+</div>  </div>
+</main>
+<div class="modal micromodal-slide" id="modal-versions" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true">
+            <main class="modal__content" id="modal-versions-content">
+              <button data-micromodal-close class="modal-versions-close">
+                <svg width="28px" height="28px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><title/><g id="cross"><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>
+              </button>
+              <div class="colset">
+                <div class="col-left">
+                  <ul class="nav-versions">
+                    <li class="component is-current">
+                      <a class="title" href="index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-current is-latest">
+                          <a href="index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-right">
+                  <ul>
+                    <li>
+                      Related Spring Documentation
+                      <ul>
+                        <li><a href="https://docs.spring.io/spring-framework/reference/">Spring Framework</a></li>
+                        <li><a href="https://docs.spring.io/spring-security/reference/">Spring Security</a></li>
+                        <li><a href="https://docs.spring.io/spring-ldap/reference/">Spring LDAP</a></li>
+                        <li><a href="https://docs.spring.io/spring-session/reference/">Spring Session</a></li>
+                        <li><a href="https://docs.spring.io/spring-authorization-server/reference/">Spring Authorization Server</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+</div>
+<footer class="footer flex">
+    <div id="spring-links flex">
+        <img id="springlogo" src="../_/img/spring-logo.svg" alt="Spring">
+        <p class="smallest antialiased">© <script>var d = new Date();
+        document.write(d.getFullYear());</script> <a href="https://www.vmware.com/">VMware</a>, Inc. or its affiliates. <a href="https://www.vmware.com/help/legal.html">Terms of Use</a> • <a href="https://www.vmware.com/help/privacy.html" rel="noopener noreferrer">Privacy</a> • <a href="https://spring.io/trademarks">Trademark Guidelines</a> <span id="thank-you-mobile">• <a href="https://spring.io/thank-you">Thank you</a></span> • <a href="https://www.vmware.com/help/privacy/california-privacy-rights.html">Your California Privacy Rights</a> • <a class="ot-sdk-show-settings">Cookie Settings</a> <span id="teconsent"></span></p>
+        <p class="smallest antialiased has-gray-text">Apache®, Apache Tomcat®, Apache Kafka®, Apache Cassandra&trade;, and Apache Geode&trade; are trademarks or registered trademarks of the Apache Software Foundation in the United States and/or other countries. Java&trade;, Java&trade; SE, Java&trade; EE, and OpenJDK&trade; are trademarks of Oracle and/or its affiliates. Kubernetes® is a registered trademark of the Linux Foundation in the United States and other countries. Linux® is the registered trademark of Linus Torvalds in the United States and other countries. Windows® and Microsoft® Azure are registered trademarks of Microsoft Corporation. “AWS” and “Amazon Web Services” are trademarks or registered trademarks of Amazon.com Inc. or its affiliates. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes. Other names may be trademarks of their respective owners.</p>
+    </div>
+    <div id="social-icons" class="flex jc-between">
+        <a href="https://www.youtube.com/user/SpringSourceDev" title="Youtube"><svg id="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle class="cls-1" cx="20" cy="20" r="20"/><path class="cls-2" d="M30.91,14.53a2.89,2.89,0,0,0-2-2C27.12,12,20,12,20,12s-7.12,0-8.9.47a2.9,2.9,0,0,0-2,2A30.56,30.56,0,0,0,8.63,20a30.44,30.44,0,0,0,.46,5.47,2.89,2.89,0,0,0,2,2C12.9,28,20,28,20,28s7.12,0,8.9-.47a2.87,2.87,0,0,0,2-2A30.56,30.56,0,0,0,31.37,20,28.88,28.88,0,0,0,30.91,14.53ZM17.73,23.41V16.59L23.65,20Z"/></svg></a>
+        <a href="https://github.com/spring-projects" title="Github"><svg id="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><path class="cls-1" d="M38,0a38,38,0,1,0,38,38A38,38,0,0,0,38,0Z"/></g><path class="cls-2" d="M38,15.59A22.95,22.95,0,0,0,30.71,60.3c1.15.21,1.57-.5,1.57-1.11s0-2,0-3.9c-6.38,1.39-7.73-3.07-7.73-3.07A6.09,6.09,0,0,0,22,48.86c-2.09-1.42.15-1.39.15-1.39a4.81,4.81,0,0,1,3.52,2.36c2,3.5,5.37,2.49,6.67,1.91a4.87,4.87,0,0,1,1.46-3.07c-5.09-.58-10.45-2.55-10.45-11.34a8.84,8.84,0,0,1,2.36-6.15,8.29,8.29,0,0,1,.23-6.07s1.92-.62,6.3,2.35a21.82,21.82,0,0,1,11.49,0c4.38-3,6.3-2.35,6.3-2.35a8.29,8.29,0,0,1,.23,6.07,8.84,8.84,0,0,1,2.36,6.15c0,8.81-5.37,10.75-10.48,11.32a5.46,5.46,0,0,1,1.56,4.25c0,3.07,0,5.54,0,6.29s.42,1.33,1.58,1.1A22.94,22.94,0,0,0,38,15.59Z"/></svg></a>
+        <a href="https://twitter.com/springcentral" title="Twitter"><svg id="twitter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><circle class="cls-1" cx="37.97" cy="37.97" r="37.97"/><path id="Twitter-2" data-name="Twitter" class="cls-2" d="M55.2,22.73a15.43,15.43,0,0,1-4.88,1.91,7.56,7.56,0,0,0-5.61-2.49A7.78,7.78,0,0,0,37,30a7.56,7.56,0,0,0,.2,1.79,21.63,21.63,0,0,1-15.84-8.23,8,8,0,0,0,2.37,10.52,7.66,7.66,0,0,1-3.48-1v.09A7.84,7.84,0,0,0,26.45,41a7.54,7.54,0,0,1-2,.28A7.64,7.64,0,0,1,23,41.09a7.71,7.71,0,0,0,7.18,5.47,15.21,15.21,0,0,1-9.55,3.37,15.78,15.78,0,0,1-1.83-.11,21.41,21.41,0,0,0,11.78,3.54c14.13,0,21.86-12,21.86-22.42,0-.34,0-.68,0-1a15.67,15.67,0,0,0,3.83-4.08,14.9,14.9,0,0,1-4.41,1.24A7.8,7.8,0,0,0,55.2,22.73Z"/></svg></a>
+    </div>
+</footer>
+<script src="../_/js/vendor/import.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+<script async src="../_/js/vendor/asciidoctor-tabs.js" data-sync-storage-key="docs:preferred-tab"></script>
+
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <main class="modal__content" id="modal-1-content">
+                <div id="searchbox"></div>
+                <div id="counter"></div>
+                <div class="search-by">
+                    <a target="_blank" rel="noopener noreferrer" href="https://www.algolia.com/" aria-label="Search by Algolia">
+                        <img class="light" width="140" src="../_/img/algolia-light.svg" />
+                        <img class="dark" width="140" src="../_/img/algolia-dark.svg" />
+                    </a>
+                </div>
+                <div id="hits"></div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.17.0/dist/algoliasearch-lite.umd.js" integrity="sha256-Lf9DrpGmcRip6OQzbcL6lnvNmoZNSKpyQX5pMlwatWE=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.54.1/dist/instantsearch.production.min.js" integrity="sha256-xYsZPDeNjYNTBWLvqD2Lxe98hOxcDgOHyMPfz4tVAbk=" crossorigin="anonymous"></script>
+<script async id="search-script" src="../_/js/vendor/search.js" data-app-id="WB1FQYI187" data-api-key="9d489079e5ec46dbb238909fee5c9c29" data-index-name="springintegration" data-stylesheet="../_/css/vendor/search.css" data-page-version="6.2.0"></script>
+
+  </body>
+</html>
