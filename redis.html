@@ -1,0 +1,2677 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Redis Support :: Spring Integration</title>
+    <link rel="prev" href="r2dbc.html">
+    <link rel="next" href="resource.html">
+    <meta name="generator" content="Antora 3.2.0-alpha.2">
+    <script>
+!function (theme, navWidth) {
+  if (theme === 'dark') document.documentElement.classList.add('dark-theme')
+  if (navWidth) document.documentElement.style.setProperty('--nav-width', `${navWidth}px`)
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'),
+  localStorage && localStorage.getItem('nav-width'))
+    </script>
+    <link rel="stylesheet" href="./_/css/site.css">
+    <link rel="stylesheet" href="./_/css/vendor/search.css">
+    <link rel="stylesheet" href="./_/css/vendor/asciidoctor-tabs.css">
+
+    <meta name="version" content="6.2.0">
+    <meta name="component" content="integration">
+    <link rel="icon" href="./_/img/favicon.ico" type="image/vnd.microsoft.icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://spring.io">
+        <img
+          id="springlogo"
+          class="block"
+          src="./_/img/spring-logo.svg"
+          alt="Spring"
+        />
+      </a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Why Spring</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/why-spring"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/microservices"
+            >Microservices</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/reactive"
+            >Reactive</a>
+            <a class="navbar-item" href="https://spring.io/event-driven">Event
+              Driven</a>
+            <a class="navbar-item" href="https://spring.io/cloud">Cloud</a>
+            <a class="navbar-item" href="https://spring.io/web-applications">Web
+              Applications</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/serverless"
+            >Serverless</a>
+            <a class="navbar-item" href="https://spring.io/batch">Batch</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Learn</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/learn">Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/quickstart"
+            >Quickstart</a>
+            <a class="navbar-item" href="https://spring.io/guides">Guides</a>
+            <a class="navbar-item" href="https://spring.io/blog">Blog</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Projects</a>
+          <div class="navbar-dropdown" style="min-width: 280px">
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-boot"
+            >Spring Boot</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-framework"
+            >Spring Framework</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud"
+            >Spring Cloud</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud-dataflow"
+            >Spring Cloud Data Flow</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-data"
+            >Spring Data</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-integration"
+            >Spring Integration</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-batch"
+            >Spring Batch</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-security"
+            >Spring Security</a>
+            <a
+              class="navbar-item navbar-item-special"
+              href="https://spring.io/projects"
+            >View all projects</a>
+            <a class="navbar-item" href="https://spring.io/tools">Spring Tools 4</a>
+            <a
+              class="navbar-item navbar-item-special-2"
+              href="https://start.spring.io"
+            >Spring Initializr
+              <svg
+                class="external-link-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+              ><polyline
+                  points="15 10.94 15 15 1 15 1 1 5.06 1"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><polyline
+                  points="8.93 1 15 1 15 7.07"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><line
+                  x1="15"
+                  y1="1"
+                  x2="8"
+                  y2="8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></line></svg></a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Academy</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.academy/courses"
+            >Courses</a>
+            <a
+              class="navbar-item"
+              href="https://spring.academy/learning-path"
+            >Get Certified</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Support</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/support">Overview</a>
+            <a class="navbar-item" href="https://spring.io/security">Security
+              Advisories</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable is-community">
+          <a class="navbar-link" href="#">Community</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/community"
+            >Overview</a>
+            <a class="navbar-item" href="https://spring.io/events">Events</a>
+            <a class="navbar-item" href="https://spring.io/team">Team</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <label class="theme-toggler">
+      <input
+        type="checkbox"
+        type="checkbox"
+        id="switch-theme-checkbox"
+        name="switch-theme-checkbox"
+      />
+      <span class="icon"><svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="moon"
+          class="svg-inline--fa fa-moon moon"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+        ><path
+            fill="currentColor"
+            d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"
+          ></path>
+        </svg>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="sun"
+          class="svg-inline--fa fa-sun sun"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        ><path
+            fill="currentColor"
+            d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"
+          ></path>
+        </svg></span>
+      <span class="text">light</span>
+    </label>
+  </nav>
+</header>
+<script>
+!function (theme) {
+  if (theme === 'dark') {
+    document.getElementById('switch-theme-checkbox').parentElement.classList.add('active')
+  }
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'))
+</script><div class="body">
+<div class="nav-container" data-component="integration" data-version="6.2.0">
+  <aside class="nav">
+    <div class="panels">
+      <div class="nav-panel-menu is-active" data-panel="menu">
+        <nav class="nav-menu">
+<div class="context">
+  <span class="title">Spring Integration</span>
+  <span class="version">6.2.0-SNAPSHOT</span>
+  <button class="browse-version" id="browse-version">
+    <svg
+      height="24px"
+      id="Layer_1"
+      style="enable-background:new 0 0 512 512;"
+      version="1.1"
+      viewBox="0 0 512 512"
+      width="24px"
+      xml:space="preserve"
+    ><g><path
+          d="M256,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S273.7,224,256,224L256,224z"
+        ></path><path
+          d="M128.4,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S146,224,128.4,224L128.4,224z"
+        ></path><path
+          d="M384,224c-17.7,0-32,14.3-32,32s14.3,32,32,32s32-14.3,32-32S401.7,224,384,224L384,224z"
+        ></path></g></svg>
+  </button>
+</div><div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="preface.html">Preface</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New?</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="core.html">Core Messaging</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="channel.html">Message Channels</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interfaces.html">The MessageChannel Interface</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/implementations.html">Message Channel Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interceptors.html">Channel Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/template.html"><code>MessagingTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/configuration.html">Configuring Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/special-channels.html">Special Channels</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="polling-consumer.html">Poller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="channel-adapter.html">Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="bridge.html">Messaging Bridge</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message.html">Message</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-routing.html">Message Routing</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="router.html">Routers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/common-parameters.html">Common Router Parameters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/implementations.html">Router Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/namespace.html">Configuring a Generic Router</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/spel.html">Routers and the Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/annotation.html">Configuring a Router with Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/dynamic-routers.html">Dynamic Routers</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/routing-slip.html">Routing Slip</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/process-manager.html">Process Manager Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="filter.html">Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="splitter.html">Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="aggregator.html">Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="resequencer.html">Resequencer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="chain.html">Message Handler Chain</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scatter-gather.html">Scatter-Gather</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="barrier.html">Thread Barrier</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-transformation.html">Message Transformation</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="transformer.html">Transformer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="content-enrichment.html">Content Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="claim-check.html">Claim Check</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="codec.html">Codec</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="messaging-endpoints.html">Messaging Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint.html">Message Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint-roles.html">Endpoint Roles</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="leadership-event-handling.html">Leadership Event Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gateway.html">Messaging Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="service-activator.html">Service Activator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="delayer.html">Delayer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scripting.html">Scripting Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="groovy.html">Groovy Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="handler-advice.html">Adding Behavior to Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/classes.html">Provided Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/reactive.html">Reactive Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/context-holder.html">Context Holder Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/custom.html">Custom Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/other.html">Other Advice Chain Elements</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/handle-message.html">Handling Message Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/tx-handle-message.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-filters.html">Advising Filters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-with-annotations.html">Advising Endpoints Using Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/order.html">Ordering Advices within Advice Chain</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advised-properties.html">Advised Handler Properties</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/idempotent-receiver.html">Idempotent Receiver Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="logging-adapter.html">Logging Channel Adapter</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="functions-support.html"><code>java.util.function</code> Interfaces Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kotlin-functions.html">Kotlin Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="dsl.html">Java DSL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-basics.html">DSL Basics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-channels.html">Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-pollers.html">Pollers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-reactive.html">The <code>reactive()</code> Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-endpoints.html">DSL and Endpoint Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-transformers.html">Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-inbound-adapters.html">Inbound Channel Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-routers.html">Message Routers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-splitters.html">Splitters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-aggregators.html">Aggregators and Resequencers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-handle.html">Service Activators and the <code>.handle()</code> method</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-gateway.html">Operator gateway()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-log.html">Operator log()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-intercept.html">Operator intercept()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-wiretap.html"><code>MessageChannelSpec.wireTap()</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flows.html">Working With Message Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-function-expression.html"><code>FunctionExpression</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-subflows.html">Sub-flows support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-protocol-adapters.html">Using Protocol Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flow-adapter.html"><code>IntegrationFlowAdapter</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-runtime-flows.html">Dynamic and Runtime Integration Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flow-as-gateway.html"><code>IntegrationFlow</code> as a Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-extensions.html">DSL Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flows-composition.html">Integration Flows Composition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="groovy-dsl.html">Groovy DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kotlin-dsl.html">Kotlin DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="system-management.html">System Management</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="metrics.html">Metrics and Management</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-history.html">Message History</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-store.html">Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="meta-data-store.html">Metadata Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="control-bus.html">Control Bus</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="shutdown.html">Orderly Shutdown</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="graph.html">Integration Graph</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="integration-graph-controller.html">Integration Graph Controller</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reactive-streams.html">Reactive Streams Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="native-aot.html">Native Images Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="endpoint-summary.html">Integration Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="amqp.html">AMQP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/polled-inbound-channel-adapter.html">Polled Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-gateway.html">Inbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-ack.html">Inbound Endpoint Acknowledge Mode</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-endpoints.html">Outbound Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/async-outbound-gateway.html">Asynchronous Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/alternative-confirms-returns.html">Alternative Mechanism for Publisher Confirms and Returns</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/conversion-inbound.html">Inbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/content-type-conversion-outbound.html">Outbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/user-id.html">Outbound User ID</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/delay.html">Delayed Message Exchange</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/channels.html">AMQP-backed Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/message-headers.html">AMQP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/strict-ordering.html">Strict Message Ordering</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/samples.html">AMQP Samples</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/rmq-streams.html">RabbitMQ Stream Queue Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="camel.html">Apache Camel Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cassandra.html">Apache Cassandra Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="debezium.html">Debezium Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="event.html">Spring <code>ApplicationEvent</code> Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="feed.html">Feed Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="file.html">File Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/reading.html">Reading Files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/writing.html">Writing files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/transforming.html">File Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/splitter.html">File Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/aggregator.html">File Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/remote-persistent-flf.html">Remote Persistent File List Filters</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ftp.html">FTP/FTPS Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-factory.html">FTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/advanced-configuration.html">Advanced Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/inbound.html">FTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/streaming.html">FTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound.html">FTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound-gateway.html">FTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-caching.html">FTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-callback.html">Using <code>MessageSessionCallback</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/server-events.html">Apache Mina FTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="graphql.html">GraphQL Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="hazelcast.html">Hazelcast Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="http.html">HTTP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/inbound.html">Http Inbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/outbound.html">HTTP Outbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/namespace.html">HTTP Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/java-config.html">Configuring HTTP Endpoints with Java</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/timeout.html">Timeout Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/proxy.html">HTTP Proxy configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/header-mapping.html">HTTP Header Mappings</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/int-graph-controller.html">Integration Graph Controller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/samples.html">HTTP Samples</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jdbc.html">JDBC Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/message-store.html">JDBC Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/stored-procedures.html">Stored Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/lock-registry.html">JDBC Lock Registry</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/metadata-store.html">JDBC Metadata Store</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jpa.html">JPA Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/functionality.html">Functionality</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/supported-persistence-providers.html">Supported Persistence Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/java-implementation.html">Java Implementation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-gateways.html">Outbound Gateways</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jms.html">JMS Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jmx.html">JMX Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kafka.html">Apache Kafka Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mail.html">Mail Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mongodb.html">MongoDb Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mqtt.html">MQTT Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="r2dbc.html">R2DBC Support</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="redis.html">Redis Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resource.html">Resource Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="rsocket.html">RSocket Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="sftp.html">SFTP Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-factory.html">SFTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-caching.html">SFTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/inbound.html">SFTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/streaming.html">SFTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound.html">SFTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound-gateway.html">SFTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-callback.html">MessageSessionCallback</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/server-events.html">Apache Mina SFTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="smb.html">SMB Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stomp.html">STOMP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stream.html">Stream Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="syslog.html">Syslog Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ip.html">TCP and UDP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/intro.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/udp-adapters.html">UDP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-connection-factories.html">TCP Connection Factories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/testing-connections.html">Testing Connections</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/interceptors.html">TCP Connection Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-events.html">TCP Connection Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-adapters.html">TCP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-gateways.html">TCP Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/correlation.html">TCP Message Correlation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/note-nio.html">About Non-blocking I/O (NIO)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/ssl-tls.html">SSL/TLS Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-advanced-techniques.html">Advanced Techniques</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/endpoint-reference.html">IP Configuration Attributes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/msg-headers.html">IP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/annotation.html">Annotation-Based Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/dsl.html">Using the Java DSL for TCP Components</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="webflux.html">WebFlux Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="web-sockets.html">WebSockets Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="ws.html">Web Services Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="xml.html">XML Support - Dealing with XML Payloads</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/transformation.html">Transforming XML Payloads</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-transformer.html">Transforming XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-splitting.html">Splitting XML Messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-routing.html">Routing XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-header-enricher.html">XPath Header Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-filter.html">Using the XPath Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-spel-function.html">#xpath SpEL Function</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/validating-filter.html">XML Validating Filter</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="xmpp.html">XMPP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zeromq.html">ZeroMQ Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zookeeper.html">Zookeeper Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="error-handling.html">Error Handling</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="spel.html">Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message-publishing.html">Message Publishing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="transactions.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="security.html">Security in Spring Integration</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="configuration.html">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace-taskscheduler.html">Configuring the Task Scheduler</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/global-properties.html">Global Properties</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/annotations.html">Annotation Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/meta-annotations.html">Messaging Meta-Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/message-mapping-rules.html">Message Mapping Rules and Conventions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="testing.html">Testing support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="samples.html">Spring Integration Samples</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resources.html">Additional Resources</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="history.html">Change History</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-6.0-6.1.html">Changes between 6.0 and 6.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.5-6.0.html">Changes between 5.5 and 6.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.4-5.5.html">Changes between 5.4 and 5.5</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.3-5.4.html">Changes between 5.3 and 5.4</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.2-5.3.html">Changes between 5.2 and 5.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.1-5.2.html">Changes between 5.1 and 5.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.2-4.3.html">Changes between 4.2 and 4.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.1-4.2.html">Changes between 4.1 and 4.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.0-4.1.html">Changes between 4.0 and 4.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.1-2.2.html">Changes between 2.1 and 2.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.0-2.1.html">Changes between 2.0 and 2.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-1.0-2.0.html">Changes between Versions 1.0 and 2.0</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zip.html">Zip Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+          <div class="toggle-sm">
+            <button id="nav-toggle-2" class="nav-toggle"></button>
+          </div>
+        </nav>
+      </div>
+      <div class="nav-collapse">
+        <button id="nav-collapse-toggle"><span></span></button>        
+      </div>
+    </div>
+    <div class="nav-resize"></div>
+  </aside>
+</div>
+<script>
+!function (sidebar) {
+  if (sidebar) {
+    document.body.classList.add('nav-sm')
+  }
+}(localStorage && localStorage.getItem('sidebar') === 'close')
+</script><main class="article">
+<div class="toolbar" role="navigation">
+  <button id="nav-toggle-1" class="nav-toggle"></button>
+<div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+</div>
+  <div class="content">
+<aside class="sidebar">
+  <div class="content">
+    <div
+      class="toc"
+      data-title="Redis Support"
+      data-levels="2"
+    >
+      <div class="toc-menu"></div>
+    </div>
+    <div class="sidebar-links">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/src/reference/antora/modules/ROOT/pages/redis.adoc">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+          ><path
+              d="m16 2.012 3 3L16.713 7.3l-3-3zM4 14v3h3l8.299-8.287-3-3zm0 6h16v2H4z"
+            ></path></svg>
+          Edit this Page
+        </a>
+              <a href="https://github.com/rwinch/spring-integration" title="Github">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="512px"
+            id="Layer_1"
+            version="1.1"
+            viewBox="0 0 512 512"
+            width="512px"
+          ><style type="text/css"><![CDATA[
+              .st0{fill-rule:evenodd;clip-rule:evenodd;} ]]></style><g><path
+                class="st0"
+                d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"
+              ></path></g></svg>
+          Github Project
+        </a>
+        <a href="https://stackoverflow.com/tags/spring-integration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path
+              d="M290.7 311L95 269.7 86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8 153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"
+            ></path></svg>
+          Stack Overflow
+        </a>
+    </div>
+  </div>
+</aside><div class="doc">
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Spring Integration</a></li>
+    <li><a href="redis.html">Redis Support</a></li>
+  </ul>
+</nav>
+<article>
+<h1 id="page-title" class="page">Redis Support</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration 2.1 introduced support for <a href="https://redis.io/">Redis</a>: &#8220;an open source advanced key-value store&#8221;.
+This support comes in the form of a Redis-based <code>MessageStore</code> as well as publish-subscribe messaging adapters that are supported by Redis through its <a href="https://redis.io/topics/pubsub"><code>PUBLISH</code>, <code>SUBSCRIBE</code>, and <code>UNSUBSCRIBE</code></a> commands.</p>
+</div>
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-redis&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-redis:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>You also need to include Redis client dependency, e.g. Lettuce.</p>
+</div>
+<div class="paragraph">
+<p>To download, install, and run Redis, see the <a href="https://redis.io/download">Redis documentation</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-connection"><a class="anchor" href="#redis-connection"></a>Connecting to Redis</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To begin interacting with Redis, you first need to connect to it.
+Spring Integration uses support provided by another Spring project, <a href="https://github.com/SpringSource/spring-data-redis">Spring Data Redis</a>, which provides typical Spring constructs: <code>ConnectionFactory</code> and <code>Template</code>.
+Those abstractions simplify integration with several Redis client Java APIs.
+Currently, Spring Data Redis supports <a href="https://github.com/xetorthio/jedis">Jedis</a> and <a href="https://lettuce.io/">Lettuce</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="using-redisconnectionfactory"><a class="anchor" href="#using-redisconnectionfactory"></a>Using <code>RedisConnectionFactory</code></h3>
+<div class="paragraph">
+<p>To connect to Redis, you can use one of the implementations of the <code>RedisConnectionFactory</code> interface.
+The following listing shows the interface definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface RedisConnectionFactory extends PersistenceExceptionTranslator {
+
+    /**
+     * Provides a suitable connection for interacting with Redis.
+     * @return connection for interacting with Redis.
+     */
+    RedisConnection getConnection();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows how to create a <code>LettuceConnectionFactory</code> in Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">LettuceConnectionFactory cf = new LettuceConnectionFactory();
+cf.afterPropertiesSet();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows how to create a <code>LettuceConnectionFactory</code> in Spring&#8217;s XML configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="redisConnectionFactory"
+    class="o.s.data.redis.connection.lettuce.LettuceConnectionFactory"&gt;
+    &lt;property name="port" value="7379" /&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The implementations of <code>RedisConnectionFactory</code> provide a set of properties, such as port and host, that you can set if needed.
+Once you have an instance of <code>RedisConnectionFactory</code>, you can create an instance of <code>RedisTemplate</code> and inject it with the <code>RedisConnectionFactory</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="using-redistemplate"><a class="anchor" href="#using-redistemplate"></a>Using <code>RedisTemplate</code></h3>
+<div class="paragraph">
+<p>As with other template classes in Spring (such as <code>JdbcTemplate</code> and <code>JmsTemplate</code>) <code>RedisTemplate</code> is a helper class that simplifies Redis data access code.
+For more information about <code>RedisTemplate</code> and its variations (such as <code>StringRedisTemplate</code>) see the <a href="https://docs.spring.io/spring-data/data-redis/docs/current/reference/html/">Spring Data Redis documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows how to create an instance of <code>RedisTemplate</code> in Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">RedisTemplate rt = new RedisTemplate&lt;String, Object&gt;();
+rt.setConnectionFactory(redisConnectionFactory);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows how to create an instance of <code>RedisTemplate</code> in Spring&#8217;s XML configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="redisTemplate"
+         class="org.springframework.data.redis.core.RedisTemplate"&gt;
+    &lt;property name="connectionFactory" ref="redisConnectionFactory"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-messages"><a class="anchor" href="#redis-messages"></a>Messaging with Redis</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As mentioned in <a href="#">the introduction</a>, Redis provides support for publish-subscribe messaging through its <code>PUBLISH</code>, <code>SUBSCRIBE</code>, and <code>UNSUBSCRIBE</code> commands.
+As with JMS and AMQP, Spring Integration provides message channels and adapters for sending and receiving messages through Redis.</p>
+</div>
+<div class="sect2">
+<h3 id="redis-pub-sub-channel"><a class="anchor" href="#redis-pub-sub-channel"></a>Redis Publish/Subscribe channel</h3>
+<div class="paragraph">
+<p>Similarly to JMS, there are cases where both the producer and consumer are intended to be part of the same application, running within the same process.
+You can accomplish this by using a pair of inbound and outbound channel adapters.
+However, as with Spring Integration&#8217;s JMS support, there is a simpler way to address this use case.
+You can create a publish-subscribe channel, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:publish-subscribe-channel id="redisChannel" topic-name="si.test.topic"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <code>publish-subscribe-channel</code> behaves much like a normal <code>&lt;publish-subscribe-channel/&gt;</code> element from the main Spring Integration namespace.
+It can be referenced by both the <code>input-channel</code> and the <code>output-channel</code> attributes of any endpoint.
+The difference is that this channel is backed by a Redis topic name: a <code>String</code> value specified by the <code>topic-name</code> attribute.
+However, unlike JMS, this topic does not have to be created in advance or even auto-created by Redis.
+In Redis, topics are simple <code>String</code> values that play the role of an address.
+The producer and consumer can communicate by using the same <code>String</code> value as their topic name.
+A simple subscription to this channel means that asynchronous publish-subscribe messaging is possible between the producing and consuming endpoints.
+However, unlike the asynchronous message channels created by adding a <code>&lt;queue/&gt;</code> element within a simple Spring Integration <code>&lt;channel/&gt;</code> element, the messages are not stored in an in-memory queue.
+Instead, those messages are passed through Redis, which lets you rely on its support for persistence and clustering as well as its interoperability with other non-Java platforms.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="redis-inbound-channel-adapter"><a class="anchor" href="#redis-inbound-channel-adapter"></a>Redis Inbound Channel Adapter</h3>
+<div class="paragraph">
+<p>The Redis inbound channel adapter (<code>RedisInboundChannelAdapter</code>) adapts incoming Redis messages into Spring messages in the same way as other inbound adapters.
+It receives platform-specific messages (Redis in this case) and converts them to Spring messages by using a <code>MessageConverter</code> strategy.
+The following example shows how to configure a Redis inbound channel adapter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:inbound-channel-adapter id="redisAdapter"
+       topics="thing1, thing2"
+       channel="receiveChannel"
+       error-channel="testErrorChannel"
+       message-converter="testConverter" /&gt;
+
+&lt;bean id="redisConnectionFactory"
+    class="o.s.data.redis.connection.lettuce.LettuceConnectionFactory"&gt;
+    &lt;property name="port" value="7379" /&gt;
+&lt;/bean&gt;
+
+&lt;bean id="testConverter" class="things.something.SampleMessageConverter" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding example shows a simple but complete configuration of a Redis inbound channel adapter.
+Note that the preceding configuration relies on the familiar Spring paradigm of auto-discovering certain beans.
+In this case, the <code>redisConnectionFactory</code> is implicitly injected into the adapter.
+You can specify it explicitly by using the <code>connection-factory</code> attribute instead.</p>
+</div>
+<div class="paragraph">
+<p>Also, note that the preceding configuration injects the adapter with a custom <code>MessageConverter</code>.
+The approach is similar to JMS, where <code>MessageConverter</code> instances are used to convert between Redis messages and the Spring Integration message payloads.
+The default is a <code>SimpleMessageConverter</code>.</p>
+</div>
+<div class="paragraph">
+<p>Inbound adapters can subscribe to multiple topic names, hence the comma-separated set of values in the <code>topics</code> attribute.</p>
+</div>
+<div class="paragraph">
+<p>Since version 3.0, the inbound adapter, in addition to the existing <code>topics</code> attribute, now has the <code>topic-patterns</code> attribute.
+This attribute contains a comma-separated set of Redis topic patterns.
+For more information regarding Redis publish-subscribe, see <a href="https://redis.io/topics/pubsub">Redis Pub/Sub</a>.</p>
+</div>
+<div class="paragraph">
+<p>Inbound adapters can use a <code>RedisSerializer</code> to deserialize the body of Redis messages.
+The <code>serializer</code> attribute of the <code>&lt;int-redis:inbound-channel-adapter&gt;</code> can be set to an empty string, which results in a <code>null</code> value for the <code>RedisSerializer</code> property.
+In this case, the raw <code>byte[]</code> bodies of Redis messages are provided as the message payloads.</p>
+</div>
+<div class="paragraph">
+<p>Since version 5.0, you can provide an <code>Executor</code> instance to the inbound adapter by using the <code>task-executor</code> attribute of the <code>&lt;int-redis:inbound-channel-adapter&gt;</code>.
+Also, the received Spring Integration messages now have the <code>RedisHeaders.MESSAGE_SOURCE</code> header to indicate the source of the published message: topic or pattern.
+You can use this downstream for routing logic.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="redis-outbound-channel-adapter"><a class="anchor" href="#redis-outbound-channel-adapter"></a>Redis Outbound Channel Adapter</h3>
+<div class="paragraph">
+<p>The Redis outbound channel adapter adapts outgoing Spring Integration messages into Redis messages in the same way as other outbound adapters.
+It receives Spring Integration messages and converts them to platform-specific messages (Redis in this case) by using a <code>MessageConverter</code> strategy.
+The following example shows how to configure a Redis outbound channel adapter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:outbound-channel-adapter id="outboundAdapter"
+    channel="sendChannel"
+    topic="thing1"
+    message-converter="testConverter"/&gt;
+
+&lt;bean id="redisConnectionFactory"
+    class="o.s.data.redis.connection.lettuce.LettuceConnectionFactory"&gt;
+    &lt;property name="port" value="7379"/&gt;
+&lt;/bean&gt;
+
+&lt;bean id="testConverter" class="things.something.SampleMessageConverter" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The configuration parallels the Redis inbound channel adapter.
+The adapter is implicitly injected with a <code>RedisConnectionFactory</code>, which is defined with <code>redisConnectionFactory</code> as its bean name.
+This example also includes the optional (and custom) <code>MessageConverter</code> (the <code>testConverter</code> bean).</p>
+</div>
+<div class="paragraph">
+<p>Since Spring Integration 3.0, the <code>&lt;int-redis:outbound-channel-adapter&gt;</code> offers an alternative to the <code>topic</code> attribute: You can use the <code>topic-expression</code> attribute to determine the Redis topic for the message at runtime.
+These attributes are mutually exclusive.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="redis-queue-inbound-channel-adapter"><a class="anchor" href="#redis-queue-inbound-channel-adapter"></a>Redis Queue Inbound Channel Adapter</h3>
+<div class="paragraph">
+<p>Spring Integration 3.0 introduced a queue inbound channel adapter to &#8220;pop&#8221; messages from a Redis list.
+By default, it uses &#8220;right pop&#8221;, but you can configure it to use &#8220;left pop&#8221; instead.
+The adapter is message-driven.
+It uses an internal listener thread and does not use a poller.</p>
+</div>
+<div class="paragraph">
+<p>The following listing shows all the available attributes for <code>queue-inbound-channel-adapter</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:queue-inbound-channel-adapter id=""  <i class="conum" data-value="1"></i><b>(1)</b>
+                    channel=""  <i class="conum" data-value="2"></i><b>(2)</b>
+                    auto-startup=""  <i class="conum" data-value="3"></i><b>(3)</b>
+                    phase=""  <i class="conum" data-value="4"></i><b>(4)</b>
+                    connection-factory=""  <i class="conum" data-value="5"></i><b>(5)</b>
+                    queue=""  <i class="conum" data-value="6"></i><b>(6)</b>
+                    error-channel=""  <i class="conum" data-value="7"></i><b>(7)</b>
+                    serializer=""  <i class="conum" data-value="8"></i><b>(8)</b>
+                    receive-timeout=""  <i class="conum" data-value="9"></i><b>(9)</b>
+                    recovery-interval=""  <i class="conum" data-value="10"></i><b>(10)</b>
+                    expect-message=""  <i class="conum" data-value="11"></i><b>(11)</b>
+                    task-executor=""  <i class="conum" data-value="12"></i><b>(12)</b>
+                    right-pop=""/&gt;  <i class="conum" data-value="13"></i><b>(13)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The component bean name.
+If you do not provide the <code>channel</code> attribute, a <code>DirectChannel</code> is created and registered in the application context with this <code>id</code> attribute as the bean name.
+In this case, the endpoint itself is registered with the bean name <code>id</code> plus <code>.adapter</code>.
+(If the bean name were <code>thing1</code>, the endpoint is registered as <code>thing1.adapter</code>.)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>MessageChannel</code> to which to send <code>Message</code> instances from this Endpoint.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A <code>SmartLifecycle</code> attribute to specify whether this endpoint should start automatically after the application context start or not.
+It defaults to <code>true</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>A <code>SmartLifecycle</code> attribute to specify the phase in which this endpoint is started.
+It defaults to <code>0</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>A reference to a <code>RedisConnectionFactory</code> bean.
+It defaults to <code>redisConnectionFactory</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The name of the Redis list on which the queue-based 'pop' operation is performed to get Redis messages.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The <code>MessageChannel</code> to which to send <code>ErrorMessage</code> instances when exceptions are received from the listening task of the endpoint.
+By default, the underlying <code>MessagePublishingErrorHandler</code> uses the default <code>errorChannel</code> from the application context.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The <code>RedisSerializer</code> bean reference.
+It can be an empty string, which means 'no serializer'.
+In this case, the raw <code>byte[]</code> from the inbound Redis message is sent to the <code>channel</code> as the <code>Message</code> payload.
+By default, it is a <code>JdkSerializationRedisSerializer</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>The timeout in milliseconds for 'pop' operation to wait for a Redis message from the queue.
+The default is 1 second.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>The time in milliseconds for which the listener task should sleep after exceptions on the 'pop' operation, before restarting the listener task.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Specifies whether this endpoint expects data from the Redis queue to contain entire <code>Message</code> instances.
+If this attribute is set to <code>true</code>, the <code>serializer</code> cannot be an empty string, because messages require some form of deserialization (JDK serialization by default).
+Its default is <code>false</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>A reference to a Spring <code>TaskExecutor</code> (or standard JDK 1.5+ <code>Executor</code>) bean.
+It is used for the underlying listening task.
+It defaults to a <code>SimpleAsyncTaskExecutor</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>Specifies whether this endpoint should use &#8220;right pop&#8221; (when <code>true</code>) or &#8220;left pop&#8221; (when <code>false</code>) to read messages from the Redis list.
+If <code>true</code>, the Redis List acts as a <code>FIFO</code> queue when used with a default Redis queue outbound channel adapter.
+Set it to <code>false</code> to use with software that writes to the list with &#8220;right push&#8221; or to achieve a stack-like message order.
+Its default is <code>true</code>.
+Since version 4.3.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The <code>task-executor</code> has to be configured with more than one thread for processing; otherwise there is a possible deadlock when the <code>RedisQueueMessageDrivenEndpoint</code> tries to restart the listener task after an error.
+The <code>errorChannel</code> can be used to process those errors, to avoid restarts, but it is preferable to not expose your application to the possible deadlock situation.
+See Spring Framework <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#scheduling-task-executor-types">Reference Manual</a> for possible <code>TaskExecutor</code> implementations.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="redis-queue-outbound-channel-adapter"><a class="anchor" href="#redis-queue-outbound-channel-adapter"></a>Redis Queue Outbound Channel Adapter</h3>
+<div class="paragraph">
+<p>Spring Integration 3.0 introduced a queue outbound channel adapter to &#8220;push&#8221; to a Redis list from Spring Integration messages.
+By default, it uses &#8220;left push&#8221;, but you can configure it to use &#8220;right push&#8221; instead.
+The following listing shows all the available attributes for a Redis <code>queue-outbound-channel-adapter</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:queue-outbound-channel-adapter id=""  <i class="conum" data-value="1"></i><b>(1)</b>
+                    channel=""  <i class="conum" data-value="2"></i><b>(2)</b>
+                    connection-factory=""  <i class="conum" data-value="3"></i><b>(3)</b>
+                    queue=""  <i class="conum" data-value="4"></i><b>(4)</b>
+                    queue-expression=""  <i class="conum" data-value="5"></i><b>(5)</b>
+                    serializer=""  <i class="conum" data-value="6"></i><b>(6)</b>
+                    extract-payload=""  <i class="conum" data-value="7"></i><b>(7)</b>
+                    left-push=""/&gt;  <i class="conum" data-value="8"></i><b>(8)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The component bean name.
+If you do not provide the <code>channel</code> attribute, a <code>DirectChannel</code> is created and registered in the application context with this <code>id</code> attribute as the bean name.
+In this case, the endpoint is registered with a bean name of <code>id</code> plus <code>.adapter</code>.
+(If the bean name were <code>thing1</code>, the endpoint is registered as <code>thing1.adapter</code>.)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>MessageChannel</code> from which this endpoint receives <code>Message</code> instances.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A reference to a <code>RedisConnectionFactory</code> bean.
+It defaults to <code>redisConnectionFactory</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The name of the Redis list on which the queue-based 'push' operation is performed to send Redis messages.
+This attribute is mutually exclusive with <code>queue-expression</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>A SpEL <code>Expression</code> to determine the name of the Redis list.
+It uses the incoming <code>Message</code> at runtime as the <code>#root</code> variable.
+This attribute is mutually exclusive with <code>queue</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>A <code>RedisSerializer</code> bean reference.
+It defaults to a <code>JdkSerializationRedisSerializer</code>.
+However, for <code>String</code> payloads, a <code>StringRedisSerializer</code> is used, if a <code>serializer</code> reference is not provided.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Specifies whether this endpoint should send only the payload or the entire <code>Message</code> to the Redis queue.
+It defaults to <code>true</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>Specifies whether this endpoint should use &#8220;left push&#8221; (when <code>true</code>) or &#8220;right push&#8221; (when <code>false</code>) to write messages to the Redis list.
+If <code>true</code>, the Redis list acts as a <code>FIFO</code> queue when used with a default Redis queue inbound channel adapter.
+Set it to <code>false</code> to use with software that reads from the list with &#8220;left pop&#8221; or to achieve a stack-like message order.
+It defaults to <code>true</code>.
+Since version 4.3.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="redis-application-events"><a class="anchor" href="#redis-application-events"></a>Redis Application Events</h3>
+<div class="paragraph">
+<p>Since Spring Integration 3.0, the Redis module provides an implementation of <code>IntegrationEvent</code>, which, in turn, is a <code>org.springframework.context.ApplicationEvent</code>.
+The <code>RedisExceptionEvent</code> encapsulates exceptions from Redis operations (with the endpoint being the &#8220;source&#8221; of the event).
+For example, the <code>&lt;int-redis:queue-inbound-channel-adapter/&gt;</code> emits those events after catching exceptions from the <code>BoundListOperations.rightPop</code> operation.
+The exception may be any generic <code>org.springframework.data.redis.RedisSystemException</code> or a <code>org.springframework.data.redis.RedisConnectionFailureException</code>.
+Handling these events with an <code>&lt;int-event:inbound-channel-adapter/&gt;</code> can be useful to determine problems with background Redis tasks and to take administrative actions.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-message-store"><a class="anchor" href="#redis-message-store"></a>Redis Message Store</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As described in the <em>Enterprise Integration Patterns</em> (EIP) book, a <a href="https://www.enterpriseintegrationpatterns.com/MessageStore.html">message store</a> lets you persist messages.
+This can be useful when dealing with components that have a capability to buffer messages (aggregator, resequencer, and others) when reliability is a concern.
+In Spring Integration, the <code>MessageStore</code> strategy also provides the foundation for the <a href="https://www.enterpriseintegrationpatterns.com/StoreInLibrary.html">claim check</a> pattern, which is described in EIP as well.</p>
+</div>
+<div class="paragraph">
+<p>Spring Integration&#8217;s Redis module provides the <code>RedisMessageStore</code>.
+The following example shows how to use it with a aggregator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="redisMessageStore" class="o.s.i.redis.store.RedisMessageStore"&gt;
+    &lt;constructor-arg ref="redisConnectionFactory"/&gt;
+&lt;/bean&gt;
+
+&lt;int:aggregator input-channel="inputChannel" output-channel="outputChannel"
+         message-store="redisMessageStore"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding example is a bean configuration, and it expects a <code>RedisConnectionFactory</code> as a constructor argument.</p>
+</div>
+<div class="paragraph">
+<p>By default, the <code>RedisMessageStore</code> uses Java serialization to serialize the message.
+However, if you want to use a different serialization technique (such as JSON), you can provide your own serializer by setting the <code>valueSerializer</code> property of the <code>RedisMessageStore</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.3.10, the Framework provides Jackson serializer and deserializer implementations for <code>Message</code> instances and <code>MessageHeaders</code> instances&#8201;&#8212;&#8201;<code>MessageJacksonDeserializer</code> and <code>MessageHeadersJacksonSerializer</code>, respectively.
+They have to be configured with the <code>SimpleModule</code> options for the <code>ObjectMapper</code>.
+In addition, you should set <code>enableDefaultTyping</code> on the <code>ObjectMapper</code> to add type information for each serialized complex object (if you trust the source).
+That type information is then used during deserialization.
+The framework provides a utility method called <code>JacksonJsonUtils.messagingAwareMapper()</code>, which is already supplied with all the previously mentioned properties and serializers.
+This utility method comes with the <code>trustedPackages</code> argument to limit Java packages for deserialization to avoid security vulnerabilities.
+The default trusted packages: <code>java.util</code>, <code>java.lang</code>, <code>org.springframework.messaging.support</code>, <code>org.springframework.integration.support</code>, <code>org.springframework.integration.message</code>, <code>org.springframework.integration.store</code>.
+To manage JSON serialization in the <code>RedisMessageStore</code>, you must configure it in a fashion similar to the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">RedisMessageStore store = new RedisMessageStore(redisConnectionFactory);
+ObjectMapper mapper = JacksonJsonUtils.messagingAwareMapper();
+RedisSerializer&lt;Object&gt; serializer = new GenericJackson2JsonRedisSerializer(mapper);
+store.setValueSerializer(serializer);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.3.12, <code>RedisMessageStore</code> supports the <code>prefix</code> option to allow distinguishing between instances of the store on the same Redis server.</p>
+</div>
+<div class="sect2">
+<h3 id="redis-cms"><a class="anchor" href="#redis-cms"></a>Redis Channel Message Stores</h3>
+<div class="paragraph">
+<p>The <code>RedisMessageStore</code> <a href="#redis-message-store">shown earlier</a> maintains each group as a value under a single key (the group ID).
+While you can use this to back a <code>QueueChannel</code> for persistence, a specialized <code>RedisChannelMessageStore</code> is provided for that purpose (since version 4.0).
+This store uses a <code>LIST</code> for each channel, <code>LPUSH</code> when sending messages, and <code>RPOP</code> when receiving messages.
+By default, this store also uses JDK serialization, but you can modify the value serializer, as <a href="#redis-message-store">described earlier</a>.</p>
+</div>
+<div class="paragraph">
+<p>We recommend using this store backing channels, instead of using the general <code>RedisMessageStore</code>.
+The following example defines a Redis message store and uses it in a channel with a queue:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="redisMessageStore" class="o.s.i.redis.store.RedisChannelMessageStore"&gt;
+	&lt;constructor-arg ref="redisConnectionFactory"/&gt;
+&lt;/bean&gt;
+
+&lt;int:channel id="somePersistentQueueChannel"&gt;
+    &lt;int:queue message-store="redisMessageStore"/&gt;
+&lt;int:channel&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The keys used to store the data have the form: <code>&lt;storeBeanName&gt;:&lt;channelId&gt;</code> (in the preceding example, <code>redisMessageStore:somePersistentQueueChannel</code>).</p>
+</div>
+<div class="paragraph">
+<p>In addition, a subclass <code>RedisChannelPriorityMessageStore</code> is also provided.
+When you use this with a <code>QueueChannel</code>, the messages are received in (FIFO) priority order.
+It uses the standard <code>IntegrationMessageHeaderAccessor.PRIORITY</code> header and supports priority values (<code>0 - 9</code>).
+Messages with other priorities (and messages with no priority) are retrieved in FIFO order after any messages with priority.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+These stores implement only <code>BasicMessageGroupStore</code> and do not implement <code>MessageGroupStore</code>.
+They can be used only for situations such as backing a <code>QueueChannel</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-metadata-store"><a class="anchor" href="#redis-metadata-store"></a>Redis Metadata Store</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration 3.0 introduced a new Redis-based <a href="https://docs.spring.io/spring-integration/docs/latest-ga/api/org/springframework/integration/metadata/MetadataStore.html"><code>MetadataStore</code></a> (see <a href="meta-data-store.html" class="xref page">Metadata Store</a>) implementation.
+You can use the <code>RedisMetadataStore</code> to maintain the state of a <code>MetadataStore</code> across application restarts.
+You can use this new <code>MetadataStore</code> implementation with adapters such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="feed.html#feed-inbound-channel-adapter" class="xref page">Feed</a></p>
+</li>
+<li>
+<p><a href="file/reading.html" class="xref page">File</a></p>
+</li>
+<li>
+<p><a href="ftp/inbound.html" class="xref page">FTP</a></p>
+</li>
+<li>
+<p><a href="sftp/inbound.html" class="xref page">SFTP</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To instruct these adapters to use the new <code>RedisMetadataStore</code>, declare a Spring bean named <code>metadataStore</code>.
+The Feed inbound channel adapter and the feed inbound channel adapter both automatically pick up and use the declared <code>RedisMetadataStore</code>.
+The following example shows how to declare such a bean:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean name="metadataStore" class="o.s.i.redis.store.metadata.RedisMetadataStore"&gt;
+    &lt;constructor-arg name="connectionFactory" ref="redisConnectionFactory"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>RedisMetadataStore</code> is backed by <a href="https://docs.spring.io/spring-data/data-redis/docs/current/api/org/springframework/data/redis/support/collections/RedisProperties.html"><code>RedisProperties</code></a>.
+Interaction with it uses <a href="https://docs.spring.io/spring-data/data-redis/docs/current/api/org/springframework/data/redis/core/BoundHashOperations.html"><code>BoundHashOperations</code></a>, which, in turn, requires a <code>key</code> for the entire <code>Properties</code> store.
+In the case of the <code>MetadataStore</code>, this <code>key</code> plays the role of a region, which is useful in a distributed environment, when several applications use the same Redis server.
+By default, this <code>key</code> has a value of <code>MetaData</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.0, this store implements <code>ConcurrentMetadataStore</code>, letting it be reliably shared across multiple application instances where only one instance is allowed to store or modify a key&#8217;s value.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+You cannot use the <code>RedisMetadataStore.replace()</code> (for example, in the <code>AbstractPersistentAcceptOnceFileListFilter</code>) with a Redis cluster, since the <code>WATCH</code> command for atomicity is not currently supported.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-store-inbound-channel-adapter"><a class="anchor" href="#redis-store-inbound-channel-adapter"></a>Redis Store Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Redis store inbound channel adapter is a polling consumer that reads data from a Redis collection and sends it as a <code>Message</code> payload.
+The following example shows how to configure a Redis store inbound channel adapter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:store-inbound-channel-adapter id="listAdapter"
+    connection-factory="redisConnectionFactory"
+    key="myCollection"
+    channel="redisChannel"
+    collection-type="LIST" &gt;
+    &lt;int:poller fixed-rate="2000" max-messages-per-poll="10"/&gt;
+&lt;/int-redis:store-inbound-channel-adapter&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding example shows how to configure a Redis store inbound channel adapter by using the <code>store-inbound-channel-adapter</code> element, providing values for various attributes, such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key</code> or <code>key-expression</code>: The name of the key for the collection being used.</p>
+</li>
+<li>
+<p><code>collection-type</code>: An enumeration of the collection types supported by this adapter.
+The supported Collections are <code>LIST</code>, <code>SET</code>, <code>ZSET</code>, <code>PROPERTIES</code>, and <code>MAP</code>.</p>
+</li>
+<li>
+<p><code>connection-factory</code>: Reference to an instance of <code>o.s.data.redis.connection.RedisConnectionFactory</code>.</p>
+</li>
+<li>
+<p><code>redis-template</code>: Reference to an instance of <code>o.s.data.redis.core.RedisTemplate</code>.</p>
+</li>
+<li>
+<p>Other attributes that are common across all other inbound adapters (such as 'channel').</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You cannot set both <code>redis-template</code> and <code>connection-factory</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>By default, the adapter uses a <code>StringRedisTemplate</code>.
+This uses <code>StringRedisSerializer</code> instances for keys, values, hash keys, and hash values.
+If your Redis store contains objects that are serialized with other techniques, you must supply a <code>RedisTemplate</code> configured with appropriate serializers.
+For example, if the store is written to using a Redis store outbound adapter that has its <code>extract-payload-elements</code> set to <code>false</code>, you must provide a <code>RedisTemplate</code> configured as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"&gt;
+    &lt;property name="connectionFactory" ref="redisConnectionFactory"/&gt;
+    &lt;property name="keySerializer"&gt;
+        &lt;bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/&gt;
+    &lt;/property&gt;
+    &lt;property name="hashKeySerializer"&gt;
+        &lt;bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>RedisTemplate</code> uses <code>String</code> serializers for keys and hash keys and the default JDK Serialization serializers for values and hash values.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Because it has a literal value for the <code>key</code>, the preceding example is relatively simple and static.
+Sometimes, you may need to change the value of the key at runtime based on some condition.
+To do so, use <code>key-expression</code> instead, where the provided expression can be any valid SpEL expression.</p>
+</div>
+<div class="paragraph">
+<p>Also, you may wish to perform some post-processing on the successfully processed data that was read from the Redis collection.
+For example, you may want to move or remove the value after it has been processed.
+You can do so by using the transaction synchronization feature that was added with Spring Integration 2.2.
+The following example uses <code>key-expression</code> and transaction synchronization:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:store-inbound-channel-adapter id="zsetAdapterWithSingleScoreAndSynchronization"
+        connection-factory="redisConnectionFactory"
+        key-expression="'presidents'"
+        channel="otherRedisChannel"
+        auto-startup="false"
+        collection-type="ZSET"&gt;
+            &lt;int:poller fixed-rate="1000" max-messages-per-poll="2"&gt;
+                &lt;int:transactional synchronization-factory="syncFactory"/&gt;
+            &lt;/int:poller&gt;
+&lt;/int-redis:store-inbound-channel-adapter&gt;
+
+&lt;int:transaction-synchronization-factory id="syncFactory"&gt;
+	&lt;int:after-commit expression="payload.removeByScore(18, 18)"/&gt;
+&lt;/int:transaction-synchronization-factory&gt;
+
+&lt;bean id="transactionManager" class="o.s.i.transaction.PseudoTransactionManager"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can declare your poller to be transactional by using a <code>transactional</code> element.
+This element can reference a real transaction manager (for example, if some other part of your flow invokes JDBC).
+If you do not have a &#8220;real&#8221; transaction, you can use an <code>o.s.i.transaction.PseudoTransactionManager</code>, which is an implementation of Spring&#8217;s <code>PlatformTransactionManager</code> and enables the use of the transaction synchronization features of the Redis adapter when there is no actual transaction.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This does not make the Redis activities themselves transactional.
+It lets the synchronization of actions be taken before or after success (commit) or after failure (rollback).
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Once your poller is transactional, you can set an instance of the <code>o.s.i.transaction.TransactionSynchronizationFactory</code> on the <code>transactional</code> element.
+<code>TransactionSynchronizationFactory</code> creates an instance of the <code>TransactionSynchronization</code>.
+For your convenience, we have exposed a default SpEL-based <code>TransactionSynchronizationFactory</code>, which lets you configure SpEL expressions, with their execution being coordinated (synchronized) with a transaction.
+Expressions for before-commit, after-commit, and after-rollback are supported, together with channels (one for each kind of event) where the evaluation result (if any) is sent.
+For each child element, you can specify <code>expression</code> and <code>channel</code> attributes.
+If only the <code>channel</code> attribute is present, the received message is sent there as part of the particular synchronization scenario.
+If only the <code>expression</code> attribute is present and the result of an expression is a non-null value, a message with the result as the payload is generated and sent to a default channel (<code>NullChannel</code>) and appears in the logs (at the <code>DEBUG</code> level).
+If you want the evaluation result to go to a specific channel, add a <code>channel</code> attribute.
+If the result of an expression is null or void, no message is generated.</p>
+</div>
+<div class="paragraph">
+<p>The <code>RedisStoreMessageSource</code> adds a <code>store</code> attribute with a <code>RedisStore</code> instance bound to the transaction <code>IntegrationResourceHolder</code>, which can be accessed from a <code>TransactionSynchronizationProcessor</code> implementation.</p>
+</div>
+<div class="paragraph">
+<p>For more information about transaction synchronization, see <a href="transactions.html#transaction-synchronization" class="xref page">Transaction Synchronization</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-store-outbound-channel-adapter"><a class="anchor" href="#redis-store-outbound-channel-adapter"></a>RedisStore Outbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The RedisStore outbound channel adapter lets you write a message payload to a Redis collection, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:store-outbound-channel-adapter id="redisListAdapter"
+          collection-type="LIST"
+          channel="requestChannel"
+          key="myCollection" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding configuration a Redis store outbound channel adapter by using the <code>store-inbound-channel-adapter</code> element.
+It provides values for various attributes, such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key</code> or <code>key-expression</code>: The name of the key for the collection being used.</p>
+</li>
+<li>
+<p><code>extract-payload-elements</code>: If set to <code>true</code> (the default) and the payload is an instance of a &#8220;multi-value&#8221; object (that is, a <code>Collection</code> or a <code>Map</code>), it is stored by using &#8220;addAll&#8221; and &#8220;putAll&#8221; semantics.
+Otherwise, if set to <code>false</code>, the payload is stored as a single entry regardless of its type.
+If the payload is not an instance of a &#8220;multi-value&#8221; object, the value of this attribute is ignored and the payload is always stored as a single entry.</p>
+</li>
+<li>
+<p><code>collection-type</code>: An enumeration of the <code>Collection</code> types supported by this adapter.
+The supported Collections are <code>LIST</code>, <code>SET</code>, <code>ZSET</code>, <code>PROPERTIES</code>, and <code>MAP</code>.</p>
+</li>
+<li>
+<p><code>map-key-expression</code>: SpEL expression that returns the name of the key for the entry being stored.
+It applies only if the <code>collection-type</code> is <code>MAP</code> or <code>PROPERTIES</code> and 'extract-payload-elements' is false.</p>
+</li>
+<li>
+<p><code>connection-factory</code>: Reference to an instance of <code>o.s.data.redis.connection.RedisConnectionFactory</code>.</p>
+</li>
+<li>
+<p><code>redis-template</code>: Reference to an instance of <code>o.s.data.redis.core.RedisTemplate</code>.</p>
+</li>
+<li>
+<p>Other attributes that are common across all other inbound adapters (such as 'channel').</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You cannot set both <code>redis-template</code> and <code>connection-factory</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+By default, the adapter uses a <code>StringRedisTemplate</code>.
+This uses <code>StringRedisSerializer</code> instances for keys, values, hash keys, and hash values.
+However, if <code>extract-payload-elements</code> is set to <code>false</code>, a <code>RedisTemplate</code> that has <code>StringRedisSerializer</code> instances for keys and hash keys and <code>JdkSerializationRedisSerializer</code> instances s for values and hash values will be used.
+With the JDK serializer, it is important to understand that Java serialization is used for all values, regardless of whether the value is actually a collection or not.
+If you need more control over the serialization of values, consider providing your own <code>RedisTemplate</code> rather than relying upon these defaults.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Because it has literal values for the <code>key</code> and other attributes, the preceding example is relatively simple and static.
+Sometimes, you may need to change the values dynamically at runtime based on some condition.
+To do so, use their <code>-expression</code> equivalents (<code>key-expression</code>, <code>map-key-expression</code>, and so on), where the provided expression can be any valid SpEL expression.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-outbound-gateway"><a class="anchor" href="#redis-outbound-gateway"></a>Redis Outbound Command Gateway</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration 4.0 introduced the Redis command gateway to let you perform any standard Redis command by using the generic <code>RedisConnection#execute</code> method.
+The following listing shows the available attributes for the Redis outbound gateway:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:outbound-gateway
+        request-channel=""  <i class="conum" data-value="1"></i><b>(1)</b>
+        reply-channel=""  <i class="conum" data-value="2"></i><b>(2)</b>
+        requires-reply=""  <i class="conum" data-value="3"></i><b>(3)</b>
+        reply-timeout=""  <i class="conum" data-value="4"></i><b>(4)</b>
+        connection-factory=""  <i class="conum" data-value="5"></i><b>(5)</b>
+        redis-template=""  <i class="conum" data-value="6"></i><b>(6)</b>
+        arguments-serializer=""  <i class="conum" data-value="7"></i><b>(7)</b>
+        command-expression=""  <i class="conum" data-value="8"></i><b>(8)</b>
+        argument-expressions=""  <i class="conum" data-value="9"></i><b>(9)</b>
+        use-command-variable=""  <i class="conum" data-value="10"></i><b>(10)</b>
+        arguments-strategy="" /&gt; <i class="conum" data-value="11"></i><b>(11)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>MessageChannel</code> from which this endpoint receives <code>Message</code> instances.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>MessageChannel</code> where this endpoint sends reply <code>Message</code> instances.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Specifies whether this outbound gateway must return a non-null value.
+It defaults to <code>true</code>.
+A <code>ReplyRequiredException</code> is thrown when Redis returns a <code>null</code> value.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The timeout (in milliseconds) to wait until the reply message is sent.
+It is typically applied for queue-based limited reply-channels.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>A reference to a <code>RedisConnectionFactory</code> bean.
+It defaults to <code>redisConnectionFactory</code>.
+It is mutually exclusive with 'redis-template' attribute.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>A reference to a <code>RedisTemplate</code> bean.
+It is mutually exclusive with 'connection-factory' attribute.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>A reference to an instance of <code>org.springframework.data.redis.serializer.RedisSerializer</code>.
+It is used to serialize each command argument to byte[], if necessary.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The SpEL expression that returns the command key.
+It defaults to the <code>redis_command</code> message header.
+It must not evaluate to <code>null</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Comma-separated SpEL expressions that are evaluated as command arguments.
+Mutually exclusive with the <code>arguments-strategy</code> attribute.
+If you provide neither attribute, the <code>payload</code> is used as the command arguments.
+The argument expressions can evaluate to 'null' to support a variable number of arguments.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>A <code>boolean</code> flag to specify whether the evaluated Redis command string is made available as the <code>#cmd</code> variable in the expression evaluation context in the <code>o.s.i.redis.outbound.ExpressionArgumentsStrategy</code> when <code>argument-expressions</code> is configured.
+Otherwise, this attribute is ignored.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Reference to an instance of <code>o.s.i.redis.outbound.ArgumentsStrategy</code>.
+It is mutually exclusive with <code>argument-expressions</code> attribute.
+If you provide neither attribute, the <code>payload</code> is used as the command arguments.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can use the <code>&lt;int-redis:outbound-gateway&gt;</code> as a common component to perform any desired Redis operation.
+The following example shows how to get incremented values from Redis atomic number:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:outbound-gateway request-channel="requestChannel"
+    reply-channel="replyChannel"
+    command-expression="'INCR'"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Message</code> payload should have a name of <code>redisCounter</code>, which may be provided by <code>org.springframework.data.redis.support.atomic.RedisAtomicInteger</code> bean definition.</p>
+</div>
+<div class="paragraph">
+<p>The <code>RedisConnection#execute</code> method has a generic <code>Object</code> as its return type.
+Real result depends on command type.
+For example, <code>MGET</code> returns a <code>List&lt;byte[]&gt;</code>.
+For more information about commands, their arguments and result type, see <a href="https://redis.io/commands">Redis Specification</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-queue-outbound-gateway"><a class="anchor" href="#redis-queue-outbound-gateway"></a>Redis Queue Outbound Gateway</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration introduced the Redis queue outbound gateway to perform request and reply scenarios.
+It pushes a conversation <code>UUID</code> to the provided <code>queue</code>, pushes the value with that <code>UUID</code> as its key to a Redis list, and waits for the reply from a Redis list with a key of <code>UUID' plus '.reply</code>.
+A different UUID is used for each interaction.
+The following listing shows the available attributes for a Redis outbound gateway:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:queue-outbound-gateway
+        request-channel=""  <i class="conum" data-value="1"></i><b>(1)</b>
+        reply-channel=""  <i class="conum" data-value="2"></i><b>(2)</b>
+        requires-reply=""  <i class="conum" data-value="3"></i><b>(3)</b>
+        reply-timeout=""  <i class="conum" data-value="4"></i><b>(4)</b>
+        connection-factory=""  <i class="conum" data-value="5"></i><b>(5)</b>
+        queue=""  <i class="conum" data-value="6"></i><b>(6)</b>
+        order=""  <i class="conum" data-value="7"></i><b>(7)</b>
+        serializer=""  <i class="conum" data-value="8"></i><b>(8)</b>
+        extract-payload=""/&gt;  <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>MessageChannel</code> from which this endpoint receives <code>Message</code> instances.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>MessageChannel</code> where this endpoint sends reply <code>Message</code> instances.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Specifies whether this outbound gateway must return a non-null value.
+This value is <code>false</code> by default.
+Otherwise, a <code>ReplyRequiredException</code> is thrown when Redis returns a <code>null</code> value.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The timeout (in milliseconds) to wait until the reply message is sent.
+It is typically applied for queue-based limited reply-channels.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>A reference to a <code>RedisConnectionFactory</code> bean.
+It defaults to <code>redisConnectionFactory</code>.
+It is mutually exclusive with the 'redis-template' attribute.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The name of the Redis list to which the outbound gateway sends a conversation <code>UUID</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The order of this outbound gateway when multiple gateways are registered.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The <code>RedisSerializer</code> bean reference.
+It can be an empty string, which means &#8220;no serializer&#8221;.
+In this case, the raw <code>byte[]</code> from the inbound Redis message is sent to the <code>channel</code> as the <code>Message</code> payload.
+By default, it is a <code>JdkSerializationRedisSerializer</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Specifies whether this endpoint expects data from the Redis queue to contain entire <code>Message</code> instances.
+If this attribute is set to <code>true</code>, the <code>serializer</code> cannot be an empty string, because messages require some form of deserialization (JDK serialization by default).</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-queue-inbound-gateway"><a class="anchor" href="#redis-queue-inbound-gateway"></a>Redis Queue Inbound Gateway</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration 4.1 introduced the Redis queue inbound gateway to perform request and reply scenarios.
+It pops a conversation <code>UUID</code> from the provided <code>queue</code>, pops the value with that <code>UUID</code> as its key from the Redis list, and pushes the reply to the Redis list with a key of <code>UUID</code> plus <code>.reply</code>.
+The following listing shows the available attributes for a Redis queue inbound gateway:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-redis:queue-inbound-gateway
+        request-channel=""  <i class="conum" data-value="1"></i><b>(1)</b>
+        reply-channel=""  <i class="conum" data-value="2"></i><b>(2)</b>
+        executor=""  <i class="conum" data-value="3"></i><b>(3)</b>
+        reply-timeout=""  <i class="conum" data-value="4"></i><b>(4)</b>
+        connection-factory=""  <i class="conum" data-value="5"></i><b>(5)</b>
+        queue=""  <i class="conum" data-value="6"></i><b>(6)</b>
+        order=""  <i class="conum" data-value="7"></i><b>(7)</b>
+        serializer=""  <i class="conum" data-value="8"></i><b>(8)</b>
+        receive-timeout=""  <i class="conum" data-value="9"></i><b>(9)</b>
+        expect-message=""  <i class="conum" data-value="10"></i><b>(10)</b>
+        recovery-interval=""/&gt;  <i class="conum" data-value="11"></i><b>(11)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>MessageChannel</code> where this endpoint sends <code>Message</code> instances created from the Redis data.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>MessageChannel</code> from where this endpoint waits for reply <code>Message</code> instances.
+Optional - the <code>replyChannel</code> header is still in use.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A reference to a Spring <code>TaskExecutor</code> (or a standard JDK <code>Executor</code>) bean.
+It is used for the underlying listening task.
+It defaults to a <code>SimpleAsyncTaskExecutor</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The timeout (in milliseconds) to wait until the reply message is sent.
+It is typically applied for queue-based limited reply-channels.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>A reference to a <code>RedisConnectionFactory</code> bean.
+It defaults to <code>redisConnectionFactory</code>.
+It is mutually exclusive with 'redis-template' attribute.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The name of the Redis list for the conversation <code>UUID</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The order of this inbound gateway when multiple gateways are registered.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The <code>RedisSerializer</code> bean reference.
+It can be an empty string, which means &#8220;no serializer&#8221;.
+In this case, the raw <code>byte[]</code> from the inbound Redis message is sent to the <code>channel</code> as the <code>Message</code> payload.
+It defaults to a <code>JdkSerializationRedisSerializer</code>.
+(Note that, in releases before version 4.3, it was a <code>StringRedisSerializer</code> by default.
+To restore that behavior, provide a reference to a <code>StringRedisSerializer</code>).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>The timeout (in milliseconds) to wait until the receive message is fetched.
+It is typically applied for queue-based limited request-channels.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>Specifies whether this endpoint expects data from the Redis queue to contain entire <code>Message</code> instances.
+If this attribute is set to <code>true</code>, the <code>serializer</code> cannot be an empty string, because messages require some form of deserialization (JDK serialization by default).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>The time (in milliseconds) the listener task should sleep after exceptions on the &#8220;right pop&#8221; operation before restarting the listener task.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The <code>task-executor</code> has to be configured with more than one thread for processing; otherwise there is a possible deadlock when the <code>RedisQueueMessageDrivenEndpoint</code> tries to restart the listener task after an error.
+The <code>errorChannel</code> can be used to process those errors, to avoid restarts, but it is preferable to not expose your application to the possible deadlock situation.
+See Spring Framework <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#scheduling-task-executor-types">Reference Manual</a> for possible <code>TaskExecutor</code> implementations.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-stream-outbound"><a class="anchor" href="#redis-stream-outbound"></a>Redis Stream Outbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration 5.4 introduced Reactive Redis Stream outbound channel adapter to write Message payload into Redis stream.
+Outbound Channel adapter uses <code>ReactiveStreamOperations.add(&#8230;&#8203;)</code> to add a  <code>Record</code> to the stream.
+The following example shows how to use Java configuration and Service class for Redis Stream Outbound Channel Adapter.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@ServiceActivator(inputChannel = "messageChannel")
+public ReactiveRedisStreamMessageHandler reactiveValidatorMessageHandler(
+        ReactiveRedisConnectionFactory reactiveRedisConnectionFactory) {
+    ReactiveRedisStreamMessageHandler reactiveStreamMessageHandler =
+        new ReactiveRedisStreamMessageHandler(reactiveRedisConnectionFactory, "myStreamKey"); <i class="conum" data-value="1"></i><b>(1)</b>
+    reactiveStreamMessageHandler.setSerializationContext(serializationContext); <i class="conum" data-value="2"></i><b>(2)</b>
+    reactiveStreamMessageHandler.setHashMapper(hashMapper); <i class="conum" data-value="3"></i><b>(3)</b>
+    reactiveStreamMessageHandler.setExtractPayload(true); <i class="conum" data-value="4"></i><b>(4)</b>
+    return reactiveStreamMessageHandler;
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Construct an instance of <code>ReactiveRedisStreamMessageHandler</code> using <code>ReactiveRedisConnectionFactory</code> and stream name to add records.
+Another constructor variant is based on a SpEL expression to evaluate a stream key against a request message.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Set a <code>RedisSerializationContext</code> used to serialize a record key and value before adding to the stream.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Set <code>HashMapper</code> which provides contract between Java types and Redis hashes/maps.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>If 'true', channel adapter will extract payload from a request message for a stream record to add.
+Or use the whole message as a value.
+It defaults to <code>true</code>.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-stream-inbound"><a class="anchor" href="#redis-stream-inbound"></a>Redis Stream Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration 5.4 introduced the Reactive Stream inbound channel adapter for reading messages from a Redis Stream.
+Inbound channel adapter uses <code>StreamReceiver.receive(&#8230;&#8203;)</code> or <code>StreamReceiver.receiveAutoAck()</code> based on auto acknowledgement flag to read record from Redis stream.
+The following example shows how to use Java configuration for Redis Stream Inbound Channel Adapter.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public ReactiveRedisStreamMessageProducer reactiveRedisStreamProducer(
+       ReactiveRedisConnectionFactory reactiveRedisConnectionFactory) {
+ReactiveRedisStreamMessageProducer messageProducer =
+            new ReactiveRedisStreamMessageProducer(reactiveRedisConnectionFactory, "myStreamKey"); <i class="conum" data-value="1"></i><b>(1)</b>
+    messageProducer.setStreamReceiverOptions( <i class="conum" data-value="2"></i><b>(2)</b>
+                StreamReceiver.StreamReceiverOptions.builder()
+                      .pollTimeout(Duration.ofMillis(100))
+                      .build());
+    messageProducer.setAutoStartup(true); <i class="conum" data-value="3"></i><b>(3)</b>
+    messageProducer.setAutoAck(false); <i class="conum" data-value="4"></i><b>(4)</b>
+    messageProducer.setCreateConsumerGroup(true); <i class="conum" data-value="5"></i><b>(5)</b>
+    messageProducer.setConsumerGroup("my-group"); <i class="conum" data-value="6"></i><b>(6)</b>
+    messageProducer.setConsumerName("my-consumer"); <i class="conum" data-value="7"></i><b>(7)</b>
+    messageProducer.setOutputChannel(fromRedisStreamChannel); <i class="conum" data-value="8"></i><b>(8)</b>
+    messageProducer.setReadOffset(ReadOffset.latest()); <i class="conum" data-value="9"></i><b>(9)</b>
+    messageProducer.extractPayload(true); <i class="conum" data-value="10"></i><b>(10)</b>
+    return messageProducer;
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Construct an instance of <code>ReactiveRedisStreamMessageProducer</code> using <code>ReactiveRedisConnectionFactory</code> and stream key to read records.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A <code>StreamReceiver.StreamReceiverOptions</code> to consume redis stream using reactive infrastructure.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A <code>SmartLifecycle</code> attribute to specify whether this endpoint should start automatically after the application context start or not.
+It defaults to <code>true</code>.
+If <code>false</code>, <code>RedisStreamMessageProducer</code> should be started manually <code>messageProducer.start()</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>If <code>false</code>, received messages are not auto acknowledged.
+The acknowledgement of the message will be deferred to the client consuming message.
+It defaults to <code>true</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>If <code>true</code>, a consumer group will be created.
+During creation of consumer group stream will be created (if not exists yet), too.
+Consumer group track message delivery and distinguish between consumers.
+It defaults to <code>false</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Set Consumer Group name.
+It defaults to the defined bean name.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Set Consumer name.
+Reads message as <code>my-consumer</code> from group <code>my-group</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The message channel to which to send messages from this endpoint.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Define the offset to read message.
+It defaults to <code>ReadOffset.latest()</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>If 'true', channel adapter will extract payload value from the <code>Record</code>.
+Otherwise, the whole <code>Record</code> is used as a payload.
+It defaults to <code>true</code>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If the <code>autoAck</code> is set to <code>false</code>, the <code>Record</code> in Redis Stream is not acknowledge automatically by the Redis driver, instead an <code>IntegrationMessageHeaderAccessor.ACKNOWLEDGMENT_CALLBACK</code> header is added into a message to produce with a <code>SimpleAcknowledgment</code> instance as a value.
+It is a target integration flow responsibility to call its <code>acknowledge()</code> callback whenever the business logic is done for the message based on such a record.
+Similar logic is required even when an exception happens during deserialization and <code>errorChannel</code> is configured.
+So, target error handler must decide to ack or nack such a failed message.
+Alongside with <code>IntegrationMessageHeaderAccessor.ACKNOWLEDGMENT_CALLBACK</code>, the <code>ReactiveRedisStreamMessageProducer</code> also populates these headers into the message to produce: <code>RedisHeaders.STREAM_KEY</code>, <code>RedisHeaders.STREAM_MESSAGE_ID</code>, <code>RedisHeaders.CONSUMER_GROUP</code> and <code>RedisHeaders.CONSUMER</code>.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.5, you can configure <code>StreamReceiver.StreamReceiverOptionsBuilder</code> options explicitly on the <code>ReactiveRedisStreamMessageProducer</code>, including the newly introduced <code>onErrorResume</code> function, which is required if the Redis Stream consumer should continue polling when deserialization errors occur.
+The default function sends a message to the error channel (if provided) with possible acknowledgement for the failed message as it is described above.
+All these <code>StreamReceiver.StreamReceiverOptionsBuilder</code> are mutually exclusive with an externally provided <code>StreamReceiver.StreamReceiverOptions</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="redis-lock-registry"><a class="anchor" href="#redis-lock-registry"></a>Redis Lock Registry</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration 4.0 introduced the <code>RedisLockRegistry</code>.
+Certain components (for example, aggregator and resequencer) use a lock obtained from a <code>LockRegistry</code> instance to ensure that only one thread manipulates a group at a time.
+The <code>DefaultLockRegistry</code> performs this function within a single component.
+You can now configure an external lock registry on these components.
+When you use it with a shared <code>MessageGroupStore</code>, you can use the <code>RedisLockRegistry</code> to provide this functionality across multiple application instances, such that only one instance can manipulate the group at a time.</p>
+</div>
+<div class="paragraph">
+<p>When a lock is released by a local thread, another local thread can generally acquire the lock immediately.
+If a lock is released by a thread using a different registry instance, it can take up to 100ms to acquire the lock.</p>
+</div>
+<div class="paragraph">
+<p>To avoid &#8220;hung&#8221; locks (when a server fails), the locks in this registry are expired after a default 60 seconds, but you can configure this value on the registry.
+Locks are normally held for a much smaller time.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Because the keys can expire, an attempt to unlock an expired lock results in an exception being thrown.
+However, the resources protected by such a lock may have been compromised, so such exceptions should be considered to be severe.
+You should set the expiry at a large enough value to prevent this condition, but set it low enough that the lock can be recovered after a server failure in a reasonable amount of time.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Starting with version 5.0, the <code>RedisLockRegistry</code> implements <code>ExpirableLockRegistry</code>, which removes locks last acquired more than <code>age</code> ago and that are not currently locked.</p>
+</div>
+<div class="paragraph">
+<p>String with version 5.5.6, the <code>RedisLockRegistry</code> is support automatically clean up cache for redisLocks in <code>RedisLockRegistry.locks</code> via <code>RedisLockRegistry.setCacheCapacity()</code>.
+See its JavaDocs for more information.</p>
+</div>
+<div class="paragraph">
+<p>String with version 5.5.13, the <code>RedisLockRegistry</code> exposes a <code>setRedisLockType(RedisLockType)</code> option to determine in which mode a Redis lock acquisition should happen:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>RedisLockType.SPIN_LOCK</code> - the lock is acquired by periodic loop (100ms) checking whether the lock can be acquired.
+Default.</p>
+</li>
+<li>
+<p><code>RedisLockType.PUB_SUB_LOCK</code> - The lock is acquired by redis pub-sub subscription.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The pub-sub is preferred mode - less network chatter between client Redis server, and more performant - the lock is acquired immediately when subscription is notified about unlocking in the other process.
+However, the Redis does not support pub-sub in the Master/Replica connections (for example in AWS ElastiCache environment), therefore a busy-spin mode is chosen as a default to make the registry working in any environment.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="r2dbc.html">R2DBC Support</a></span>
+  <span class="next"><a href="resource.html">Resource Support</a></span>
+</nav>
+</article>
+</div>  </div>
+</main>
+<div class="modal micromodal-slide" id="modal-versions" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true">
+            <main class="modal__content" id="modal-versions-content">
+              <button data-micromodal-close class="modal-versions-close">
+                <svg width="28px" height="28px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><title/><g id="cross"><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>
+              </button>
+              <div class="colset">
+                <div class="col-left">
+                  <ul class="nav-versions">
+                    <li class="component is-current">
+                      <a class="title" href="index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-current is-latest">
+                          <a href="index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="component">
+                      <a class="title" href="spring-integration/index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-latest">
+                          <a href="spring-integration/index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-right">
+                  <ul>
+                    <li>
+                      Related Spring Documentation
+                      <ul>
+                        <li><a href="https://docs.spring.io/spring-framework/reference/">Spring Framework</a></li>
+                        <li><a href="https://docs.spring.io/spring-security/reference/">Spring Security</a></li>
+                        <li><a href="https://docs.spring.io/spring-ldap/reference/">Spring LDAP</a></li>
+                        <li><a href="https://docs.spring.io/spring-session/reference/">Spring Session</a></li>
+                        <li><a href="https://docs.spring.io/spring-authorization-server/reference/">Spring Authorization Server</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+</div>
+<footer class="footer flex">
+    <div id="spring-links flex">
+        <img id="springlogo" src="./_/img/spring-logo.svg" alt="Spring">
+        <p class="smallest antialiased">© <script>var d = new Date();
+        document.write(d.getFullYear());</script> <a href="https://www.vmware.com/">VMware</a>, Inc. or its affiliates. <a href="https://www.vmware.com/help/legal.html">Terms of Use</a> • <a href="https://www.vmware.com/help/privacy.html" rel="noopener noreferrer">Privacy</a> • <a href="https://spring.io/trademarks">Trademark Guidelines</a> <span id="thank-you-mobile">• <a href="https://spring.io/thank-you">Thank you</a></span> • <a href="https://www.vmware.com/help/privacy/california-privacy-rights.html">Your California Privacy Rights</a> • <a class="ot-sdk-show-settings">Cookie Settings</a> <span id="teconsent"></span></p>
+        <p class="smallest antialiased has-gray-text">Apache®, Apache Tomcat®, Apache Kafka®, Apache Cassandra&trade;, and Apache Geode&trade; are trademarks or registered trademarks of the Apache Software Foundation in the United States and/or other countries. Java&trade;, Java&trade; SE, Java&trade; EE, and OpenJDK&trade; are trademarks of Oracle and/or its affiliates. Kubernetes® is a registered trademark of the Linux Foundation in the United States and other countries. Linux® is the registered trademark of Linus Torvalds in the United States and other countries. Windows® and Microsoft® Azure are registered trademarks of Microsoft Corporation. “AWS” and “Amazon Web Services” are trademarks or registered trademarks of Amazon.com Inc. or its affiliates. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes. Other names may be trademarks of their respective owners.</p>
+    </div>
+    <div id="social-icons" class="flex jc-between">
+        <a href="https://www.youtube.com/user/SpringSourceDev" title="Youtube"><svg id="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle class="cls-1" cx="20" cy="20" r="20"/><path class="cls-2" d="M30.91,14.53a2.89,2.89,0,0,0-2-2C27.12,12,20,12,20,12s-7.12,0-8.9.47a2.9,2.9,0,0,0-2,2A30.56,30.56,0,0,0,8.63,20a30.44,30.44,0,0,0,.46,5.47,2.89,2.89,0,0,0,2,2C12.9,28,20,28,20,28s7.12,0,8.9-.47a2.87,2.87,0,0,0,2-2A30.56,30.56,0,0,0,31.37,20,28.88,28.88,0,0,0,30.91,14.53ZM17.73,23.41V16.59L23.65,20Z"/></svg></a>
+        <a href="https://github.com/spring-projects" title="Github"><svg id="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><path class="cls-1" d="M38,0a38,38,0,1,0,38,38A38,38,0,0,0,38,0Z"/></g><path class="cls-2" d="M38,15.59A22.95,22.95,0,0,0,30.71,60.3c1.15.21,1.57-.5,1.57-1.11s0-2,0-3.9c-6.38,1.39-7.73-3.07-7.73-3.07A6.09,6.09,0,0,0,22,48.86c-2.09-1.42.15-1.39.15-1.39a4.81,4.81,0,0,1,3.52,2.36c2,3.5,5.37,2.49,6.67,1.91a4.87,4.87,0,0,1,1.46-3.07c-5.09-.58-10.45-2.55-10.45-11.34a8.84,8.84,0,0,1,2.36-6.15,8.29,8.29,0,0,1,.23-6.07s1.92-.62,6.3,2.35a21.82,21.82,0,0,1,11.49,0c4.38-3,6.3-2.35,6.3-2.35a8.29,8.29,0,0,1,.23,6.07,8.84,8.84,0,0,1,2.36,6.15c0,8.81-5.37,10.75-10.48,11.32a5.46,5.46,0,0,1,1.56,4.25c0,3.07,0,5.54,0,6.29s.42,1.33,1.58,1.1A22.94,22.94,0,0,0,38,15.59Z"/></svg></a>
+        <a href="https://twitter.com/springcentral" title="Twitter"><svg id="twitter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><circle class="cls-1" cx="37.97" cy="37.97" r="37.97"/><path id="Twitter-2" data-name="Twitter" class="cls-2" d="M55.2,22.73a15.43,15.43,0,0,1-4.88,1.91,7.56,7.56,0,0,0-5.61-2.49A7.78,7.78,0,0,0,37,30a7.56,7.56,0,0,0,.2,1.79,21.63,21.63,0,0,1-15.84-8.23,8,8,0,0,0,2.37,10.52,7.66,7.66,0,0,1-3.48-1v.09A7.84,7.84,0,0,0,26.45,41a7.54,7.54,0,0,1-2,.28A7.64,7.64,0,0,1,23,41.09a7.71,7.71,0,0,0,7.18,5.47,15.21,15.21,0,0,1-9.55,3.37,15.78,15.78,0,0,1-1.83-.11,21.41,21.41,0,0,0,11.78,3.54c14.13,0,21.86-12,21.86-22.42,0-.34,0-.68,0-1a15.67,15.67,0,0,0,3.83-4.08,14.9,14.9,0,0,1-4.41,1.24A7.8,7.8,0,0,0,55.2,22.73Z"/></svg></a>
+    </div>
+</footer>
+<script src="./_/js/vendor/import.js"></script>
+<script src="./_/js/site.js"></script>
+<script async src="./_/js/vendor/highlight.js"></script>
+<script async src="./_/js/vendor/asciidoctor-tabs.js" data-sync-storage-key="docs:preferred-tab"></script>
+
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <main class="modal__content" id="modal-1-content">
+                <div id="searchbox"></div>
+                <div id="counter"></div>
+                <div class="search-by">
+                    <a target="_blank" rel="noopener noreferrer" href="https://www.algolia.com/" aria-label="Search by Algolia">
+                        <img class="light" width="140" src="./_/img/algolia-light.svg" />
+                        <img class="dark" width="140" src="./_/img/algolia-dark.svg" />
+                    </a>
+                </div>
+                <div id="hits"></div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.17.0/dist/algoliasearch-lite.umd.js" integrity="sha256-Lf9DrpGmcRip6OQzbcL6lnvNmoZNSKpyQX5pMlwatWE=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.54.1/dist/instantsearch.production.min.js" integrity="sha256-xYsZPDeNjYNTBWLvqD2Lxe98hOxcDgOHyMPfz4tVAbk=" crossorigin="anonymous"></script>
+<script async id="search-script" src="./_/js/vendor/search.js" data-app-id="WB1FQYI187" data-api-key="9d489079e5ec46dbb238909fee5c9c29" data-index-name="springintegration" data-stylesheet="./_/css/vendor/search.css" data-page-version="6.2.0"></script>
+
+  </body>
+</html>

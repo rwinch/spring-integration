@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Content Enricher :: Spring Integration</title>
+    <link rel="prev" href="transformer.html">
+    <link rel="next" href="claim-check.html">
+    <meta name="generator" content="Antora 3.2.0-alpha.2">
+    <script>
+!function (theme, navWidth) {
+  if (theme === 'dark') document.documentElement.classList.add('dark-theme')
+  if (navWidth) document.documentElement.style.setProperty('--nav-width', `${navWidth}px`)
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'),
+  localStorage && localStorage.getItem('nav-width'))
+    </script>
+    <link rel="stylesheet" href="./_/css/site.css">
+    <link rel="stylesheet" href="./_/css/vendor/search.css">
+    <link rel="stylesheet" href="./_/css/vendor/asciidoctor-tabs.css">
+
+    <meta name="version" content="6.2.0">
+    <meta name="component" content="integration">
+    <link rel="icon" href="./_/img/favicon.ico" type="image/vnd.microsoft.icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://spring.io">
+        <img
+          id="springlogo"
+          class="block"
+          src="./_/img/spring-logo.svg"
+          alt="Spring"
+        />
+      </a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Why Spring</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/why-spring"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/microservices"
+            >Microservices</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/reactive"
+            >Reactive</a>
+            <a class="navbar-item" href="https://spring.io/event-driven">Event
+              Driven</a>
+            <a class="navbar-item" href="https://spring.io/cloud">Cloud</a>
+            <a class="navbar-item" href="https://spring.io/web-applications">Web
+              Applications</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/serverless"
+            >Serverless</a>
+            <a class="navbar-item" href="https://spring.io/batch">Batch</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Learn</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/learn">Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/quickstart"
+            >Quickstart</a>
+            <a class="navbar-item" href="https://spring.io/guides">Guides</a>
+            <a class="navbar-item" href="https://spring.io/blog">Blog</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Projects</a>
+          <div class="navbar-dropdown" style="min-width: 280px">
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-boot"
+            >Spring Boot</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-framework"
+            >Spring Framework</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud"
+            >Spring Cloud</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud-dataflow"
+            >Spring Cloud Data Flow</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-data"
+            >Spring Data</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-integration"
+            >Spring Integration</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-batch"
+            >Spring Batch</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-security"
+            >Spring Security</a>
+            <a
+              class="navbar-item navbar-item-special"
+              href="https://spring.io/projects"
+            >View all projects</a>
+            <a class="navbar-item" href="https://spring.io/tools">Spring Tools 4</a>
+            <a
+              class="navbar-item navbar-item-special-2"
+              href="https://start.spring.io"
+            >Spring Initializr
+              <svg
+                class="external-link-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+              ><polyline
+                  points="15 10.94 15 15 1 15 1 1 5.06 1"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><polyline
+                  points="8.93 1 15 1 15 7.07"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><line
+                  x1="15"
+                  y1="1"
+                  x2="8"
+                  y2="8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></line></svg></a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Academy</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.academy/courses"
+            >Courses</a>
+            <a
+              class="navbar-item"
+              href="https://spring.academy/learning-path"
+            >Get Certified</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Support</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/support">Overview</a>
+            <a class="navbar-item" href="https://spring.io/security">Security
+              Advisories</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable is-community">
+          <a class="navbar-link" href="#">Community</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/community"
+            >Overview</a>
+            <a class="navbar-item" href="https://spring.io/events">Events</a>
+            <a class="navbar-item" href="https://spring.io/team">Team</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <label class="theme-toggler">
+      <input
+        type="checkbox"
+        type="checkbox"
+        id="switch-theme-checkbox"
+        name="switch-theme-checkbox"
+      />
+      <span class="icon"><svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="moon"
+          class="svg-inline--fa fa-moon moon"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+        ><path
+            fill="currentColor"
+            d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"
+          ></path>
+        </svg>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="sun"
+          class="svg-inline--fa fa-sun sun"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        ><path
+            fill="currentColor"
+            d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"
+          ></path>
+        </svg></span>
+      <span class="text">light</span>
+    </label>
+  </nav>
+</header>
+<script>
+!function (theme) {
+  if (theme === 'dark') {
+    document.getElementById('switch-theme-checkbox').parentElement.classList.add('active')
+  }
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'))
+</script><div class="body">
+<div class="nav-container" data-component="integration" data-version="6.2.0">
+  <aside class="nav">
+    <div class="panels">
+      <div class="nav-panel-menu is-active" data-panel="menu">
+        <nav class="nav-menu">
+<div class="context">
+  <span class="title">Spring Integration</span>
+  <span class="version">6.2.0-SNAPSHOT</span>
+  <button class="browse-version" id="browse-version">
+    <svg
+      height="24px"
+      id="Layer_1"
+      style="enable-background:new 0 0 512 512;"
+      version="1.1"
+      viewBox="0 0 512 512"
+      width="24px"
+      xml:space="preserve"
+    ><g><path
+          d="M256,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S273.7,224,256,224L256,224z"
+        ></path><path
+          d="M128.4,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S146,224,128.4,224L128.4,224z"
+        ></path><path
+          d="M384,224c-17.7,0-32,14.3-32,32s14.3,32,32,32s32-14.3,32-32S401.7,224,384,224L384,224z"
+        ></path></g></svg>
+  </button>
+</div><div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="preface.html">Preface</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New?</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="core.html">Core Messaging</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="channel.html">Message Channels</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interfaces.html">The MessageChannel Interface</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/implementations.html">Message Channel Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interceptors.html">Channel Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/template.html"><code>MessagingTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/configuration.html">Configuring Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/special-channels.html">Special Channels</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="polling-consumer.html">Poller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="channel-adapter.html">Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="bridge.html">Messaging Bridge</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message.html">Message</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-routing.html">Message Routing</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="router.html">Routers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/common-parameters.html">Common Router Parameters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/implementations.html">Router Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/namespace.html">Configuring a Generic Router</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/spel.html">Routers and the Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/annotation.html">Configuring a Router with Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/dynamic-routers.html">Dynamic Routers</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/routing-slip.html">Routing Slip</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/process-manager.html">Process Manager Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="filter.html">Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="splitter.html">Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="aggregator.html">Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="resequencer.html">Resequencer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="chain.html">Message Handler Chain</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scatter-gather.html">Scatter-Gather</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="barrier.html">Thread Barrier</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-transformation.html">Message Transformation</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="transformer.html">Transformer</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="content-enrichment.html">Content Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="claim-check.html">Claim Check</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="codec.html">Codec</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="messaging-endpoints.html">Messaging Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint.html">Message Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint-roles.html">Endpoint Roles</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="leadership-event-handling.html">Leadership Event Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gateway.html">Messaging Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="service-activator.html">Service Activator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="delayer.html">Delayer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scripting.html">Scripting Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="groovy.html">Groovy Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="handler-advice.html">Adding Behavior to Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/classes.html">Provided Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/reactive.html">Reactive Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/context-holder.html">Context Holder Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/custom.html">Custom Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/other.html">Other Advice Chain Elements</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/handle-message.html">Handling Message Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/tx-handle-message.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-filters.html">Advising Filters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-with-annotations.html">Advising Endpoints Using Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/order.html">Ordering Advices within Advice Chain</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advised-properties.html">Advised Handler Properties</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/idempotent-receiver.html">Idempotent Receiver Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="logging-adapter.html">Logging Channel Adapter</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="functions-support.html"><code>java.util.function</code> Interfaces Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kotlin-functions.html">Kotlin Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="dsl.html">Java DSL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-basics.html">DSL Basics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-channels.html">Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-pollers.html">Pollers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-reactive.html">The <code>reactive()</code> Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-endpoints.html">DSL and Endpoint Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-transformers.html">Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-inbound-adapters.html">Inbound Channel Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-routers.html">Message Routers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-splitters.html">Splitters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-aggregators.html">Aggregators and Resequencers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-handle.html">Service Activators and the <code>.handle()</code> method</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-gateway.html">Operator gateway()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-log.html">Operator log()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-intercept.html">Operator intercept()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-wiretap.html"><code>MessageChannelSpec.wireTap()</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flows.html">Working With Message Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-function-expression.html"><code>FunctionExpression</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-subflows.html">Sub-flows support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-protocol-adapters.html">Using Protocol Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flow-adapter.html"><code>IntegrationFlowAdapter</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-runtime-flows.html">Dynamic and Runtime Integration Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flow-as-gateway.html"><code>IntegrationFlow</code> as a Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-extensions.html">DSL Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flows-composition.html">Integration Flows Composition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="groovy-dsl.html">Groovy DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kotlin-dsl.html">Kotlin DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="system-management.html">System Management</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="metrics.html">Metrics and Management</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-history.html">Message History</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-store.html">Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="meta-data-store.html">Metadata Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="control-bus.html">Control Bus</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="shutdown.html">Orderly Shutdown</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="graph.html">Integration Graph</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="integration-graph-controller.html">Integration Graph Controller</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reactive-streams.html">Reactive Streams Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="native-aot.html">Native Images Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="endpoint-summary.html">Integration Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="amqp.html">AMQP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/polled-inbound-channel-adapter.html">Polled Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-gateway.html">Inbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-ack.html">Inbound Endpoint Acknowledge Mode</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-endpoints.html">Outbound Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/async-outbound-gateway.html">Asynchronous Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/alternative-confirms-returns.html">Alternative Mechanism for Publisher Confirms and Returns</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/conversion-inbound.html">Inbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/content-type-conversion-outbound.html">Outbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/user-id.html">Outbound User ID</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/delay.html">Delayed Message Exchange</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/channels.html">AMQP-backed Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/message-headers.html">AMQP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/strict-ordering.html">Strict Message Ordering</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/samples.html">AMQP Samples</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/rmq-streams.html">RabbitMQ Stream Queue Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="camel.html">Apache Camel Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cassandra.html">Apache Cassandra Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="debezium.html">Debezium Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="event.html">Spring <code>ApplicationEvent</code> Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="feed.html">Feed Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="file.html">File Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/reading.html">Reading Files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/writing.html">Writing files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/transforming.html">File Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/splitter.html">File Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/aggregator.html">File Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/remote-persistent-flf.html">Remote Persistent File List Filters</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ftp.html">FTP/FTPS Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-factory.html">FTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/advanced-configuration.html">Advanced Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/inbound.html">FTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/streaming.html">FTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound.html">FTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound-gateway.html">FTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-caching.html">FTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-callback.html">Using <code>MessageSessionCallback</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/server-events.html">Apache Mina FTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="graphql.html">GraphQL Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="hazelcast.html">Hazelcast Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="http.html">HTTP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/inbound.html">Http Inbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/outbound.html">HTTP Outbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/namespace.html">HTTP Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/java-config.html">Configuring HTTP Endpoints with Java</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/timeout.html">Timeout Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/proxy.html">HTTP Proxy configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/header-mapping.html">HTTP Header Mappings</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/int-graph-controller.html">Integration Graph Controller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/samples.html">HTTP Samples</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jdbc.html">JDBC Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/message-store.html">JDBC Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/stored-procedures.html">Stored Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/lock-registry.html">JDBC Lock Registry</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/metadata-store.html">JDBC Metadata Store</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jpa.html">JPA Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/functionality.html">Functionality</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/supported-persistence-providers.html">Supported Persistence Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/java-implementation.html">Java Implementation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-gateways.html">Outbound Gateways</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jms.html">JMS Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jmx.html">JMX Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kafka.html">Apache Kafka Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mail.html">Mail Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mongodb.html">MongoDb Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mqtt.html">MQTT Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="r2dbc.html">R2DBC Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="redis.html">Redis Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resource.html">Resource Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="rsocket.html">RSocket Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="sftp.html">SFTP Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-factory.html">SFTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-caching.html">SFTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/inbound.html">SFTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/streaming.html">SFTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound.html">SFTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound-gateway.html">SFTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-callback.html">MessageSessionCallback</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/server-events.html">Apache Mina SFTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="smb.html">SMB Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stomp.html">STOMP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stream.html">Stream Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="syslog.html">Syslog Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ip.html">TCP and UDP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/intro.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/udp-adapters.html">UDP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-connection-factories.html">TCP Connection Factories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/testing-connections.html">Testing Connections</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/interceptors.html">TCP Connection Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-events.html">TCP Connection Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-adapters.html">TCP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-gateways.html">TCP Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/correlation.html">TCP Message Correlation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/note-nio.html">About Non-blocking I/O (NIO)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/ssl-tls.html">SSL/TLS Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-advanced-techniques.html">Advanced Techniques</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/endpoint-reference.html">IP Configuration Attributes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/msg-headers.html">IP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/annotation.html">Annotation-Based Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/dsl.html">Using the Java DSL for TCP Components</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="webflux.html">WebFlux Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="web-sockets.html">WebSockets Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="ws.html">Web Services Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="xml.html">XML Support - Dealing with XML Payloads</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/transformation.html">Transforming XML Payloads</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-transformer.html">Transforming XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-splitting.html">Splitting XML Messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-routing.html">Routing XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-header-enricher.html">XPath Header Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-filter.html">Using the XPath Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-spel-function.html">#xpath SpEL Function</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/validating-filter.html">XML Validating Filter</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="xmpp.html">XMPP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zeromq.html">ZeroMQ Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zookeeper.html">Zookeeper Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="error-handling.html">Error Handling</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="spel.html">Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message-publishing.html">Message Publishing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="transactions.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="security.html">Security in Spring Integration</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="configuration.html">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace-taskscheduler.html">Configuring the Task Scheduler</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/global-properties.html">Global Properties</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/annotations.html">Annotation Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/meta-annotations.html">Messaging Meta-Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/message-mapping-rules.html">Message Mapping Rules and Conventions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="testing.html">Testing support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="samples.html">Spring Integration Samples</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resources.html">Additional Resources</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="history.html">Change History</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-6.0-6.1.html">Changes between 6.0 and 6.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.5-6.0.html">Changes between 5.5 and 6.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.4-5.5.html">Changes between 5.4 and 5.5</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.3-5.4.html">Changes between 5.3 and 5.4</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.2-5.3.html">Changes between 5.2 and 5.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.1-5.2.html">Changes between 5.1 and 5.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.2-4.3.html">Changes between 4.2 and 4.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.1-4.2.html">Changes between 4.1 and 4.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.0-4.1.html">Changes between 4.0 and 4.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.1-2.2.html">Changes between 2.1 and 2.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.0-2.1.html">Changes between 2.0 and 2.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-1.0-2.0.html">Changes between Versions 1.0 and 2.0</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zip.html">Zip Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+          <div class="toggle-sm">
+            <button id="nav-toggle-2" class="nav-toggle"></button>
+          </div>
+        </nav>
+      </div>
+      <div class="nav-collapse">
+        <button id="nav-collapse-toggle"><span></span></button>        
+      </div>
+    </div>
+    <div class="nav-resize"></div>
+  </aside>
+</div>
+<script>
+!function (sidebar) {
+  if (sidebar) {
+    document.body.classList.add('nav-sm')
+  }
+}(localStorage && localStorage.getItem('sidebar') === 'close')
+</script><main class="article">
+<div class="toolbar" role="navigation">
+  <button id="nav-toggle-1" class="nav-toggle"></button>
+<div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+</div>
+  <div class="content">
+<aside class="sidebar">
+  <div class="content">
+    <div
+      class="toc"
+      data-title="Content Enricher"
+      data-levels="2"
+    >
+      <div class="toc-menu"></div>
+    </div>
+    <div class="sidebar-links">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/src/reference/antora/modules/ROOT/pages/content-enrichment.adoc">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+          ><path
+              d="m16 2.012 3 3L16.713 7.3l-3-3zM4 14v3h3l8.299-8.287-3-3zm0 6h16v2H4z"
+            ></path></svg>
+          Edit this Page
+        </a>
+              <a href="https://github.com/rwinch/spring-integration" title="Github">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="512px"
+            id="Layer_1"
+            version="1.1"
+            viewBox="0 0 512 512"
+            width="512px"
+          ><style type="text/css"><![CDATA[
+              .st0{fill-rule:evenodd;clip-rule:evenodd;} ]]></style><g><path
+                class="st0"
+                d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"
+              ></path></g></svg>
+          Github Project
+        </a>
+        <a href="https://stackoverflow.com/tags/spring-integration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path
+              d="M290.7 311L95 269.7 86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8 153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"
+            ></path></svg>
+          Stack Overflow
+        </a>
+    </div>
+  </div>
+</aside><div class="doc">
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Spring Integration</a></li>
+    <li><a href="message-transformation.html">Message Transformation</a></li>
+    <li><a href="content-enrichment.html">Content Enricher</a></li>
+  </ul>
+</nav>
+<article>
+<h1 id="page-title" class="page">Content Enricher</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>At times, you may have a requirement to enhance a request with more information than was provided by the target system.
+The <a href="https://www.enterpriseintegrationpatterns.com/DataEnricher.html">data enricher</a> pattern describes various scenarios as well as the component (Enricher) that lets you address such requirements.</p>
+</div>
+<div class="paragraph">
+<p>The Spring Integration <code>Core</code> module includes two enrichers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#header-enricher">Header Enricher</a></p>
+</li>
+<li>
+<p><a href="#payload-enricher">Payload Enricher</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>It also includes three adapter-specific header enrichers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="xml/xpath-header-enricher.html" class="xref page">XPath Header Enricher (XML Module)</a></p>
+</li>
+<li>
+<p><a href="mail.html#mail-namespace" class="xref page">Mail Header Enricher (Mail Module)</a></p>
+</li>
+<li>
+<p><a href="xmpp.html#xmpp-message-outbound-channel-adapter" class="xref page">XMPP Header Enricher (XMPP Module)</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>See the adapter-specific sections of this reference manual to learn more about those adapters.</p>
+</div>
+<div class="paragraph">
+<p>For more information regarding expressions support, see <a href="spel.html" class="xref page">Spring Expression Language (SpEL)</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="header-enricher"><a class="anchor" href="#header-enricher"></a>Header Enricher</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you need do nothing more than add headers to a message and the headers are not dynamically determined by the message content, referencing a custom implementation of a transformer may be overkill.
+For that reason, Spring Integration provides support for the header enricher pattern.
+It is exposed through the <code>&lt;header-enricher&gt;</code> element.
+The following example shows how to use it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:header-enricher input-channel="in" output-channel="out"&gt;
+    &lt;int:header name="foo" value="123"/&gt;
+    &lt;int:header name="bar" ref="someBean"/&gt;
+&lt;/int:header-enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The header enricher also provides helpful sub-elements to set well known header names, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:header-enricher input-channel="in" output-channel="out"&gt;
+    &lt;int:error-channel ref="applicationErrorChannel"/&gt;
+    &lt;int:reply-channel ref="quoteReplyChannel"/&gt;
+    &lt;int:correlation-id value="123"/&gt;
+    &lt;int:priority value="HIGHEST"/&gt;
+    &lt;routing-slip value="channel1; routingSlipRoutingStrategy; request.headers[myRoutingSlipChannel]"/&gt;
+    &lt;int:header name="bar" ref="someBean"/&gt;
+&lt;/int:header-enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding configuration shows that, for well known headers (such as <code>errorChannel</code>, <code>correlationId</code>, <code>priority</code>, <code>replyChannel</code>, <code>routing-slip</code>, and others), instead of using generic <code>&lt;header&gt;</code> sub-elements where you would have to provide both header 'name' and 'value', you can use convenient sub-elements to set those values directly.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.1, the header enricher provides a <code>routing-slip</code> sub-element.
+See <a href="router/routing-slip.html" class="xref page">Routing Slip</a> for more information.</p>
+</div>
+<div class="sect2">
+<h3 id="pojo-support"><a class="anchor" href="#pojo-support"></a>POJO Support</h3>
+<div class="paragraph">
+<p>Often, a header value cannot be defined statically and has to be determined dynamically based on some content in the message.
+That is why the header enricher lets you also specify a bean reference by using the <code>ref</code> and <code>method</code> attributes.
+The specified method calculates the header value.
+Consider the following configuration and a bean with a method that modifies a <code>String</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:header-enricher input-channel="in" output-channel="out"&gt;
+    &lt;int:header name="something" method="computeValue" ref="myBean"/&gt;
+&lt;/int:header-enricher&gt;
+
+&lt;bean id="myBean" class="thing1.thing2.MyBean"/&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyBean {
+
+    public String computeValue(String payload){
+        return payload.toUpperCase() + "_US";
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also configure your POJO as an inner bean, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:header-enricher  input-channel="inputChannel" output-channel="outputChannel"&gt;
+    &lt;int:header name="some_header"&gt;
+        &lt;bean class="org.MyEnricher"/&gt;
+    &lt;/int:header&gt;
+&lt;/int:header-enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can similarly point to a Groovy script, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:header-enricher  input-channel="inputChannel" output-channel="outputChannel"&gt;
+    &lt;int:header name="some_header"&gt;
+        &lt;int-groovy:script location="org/SampleGroovyHeaderEnricher.groovy"/&gt;
+    &lt;/int:header&gt;
+&lt;/int:header-enricher&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="spel-support"><a class="anchor" href="#spel-support"></a>SpEL Support</h3>
+<div class="paragraph">
+<p>In Spring Integration 2.0, we introduced the convenience of the <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions">Spring Expression Language (SpEL)</a> to help configure many different components.
+The header enricher is one of them.
+Look again at the POJO example shown earlier.
+You can see that the computation logic to determine the header value is pretty simple.
+A natural question would be: "Is there an even simpler way to accomplish this?".
+That is where SpEL shows its true power.
+Consider the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:header-enricher input-channel="in" output-channel="out"&gt;
+    &lt;int:header name="foo" expression="payload.toUpperCase() + '_US'"/&gt;
+&lt;/int:header-enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By using SpEL for such simple cases, you no longer have to provide a separate class and configure it in the application context.
+All you need do is configured the <code>expression</code> attribute with a valid SpEL expression.
+The 'payload' and 'headers' variables are bound to the SpEL evaluation context, giving you full access to the incoming message.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuring-a-header-enricher-with-java-configuration"><a class="anchor" href="#configuring-a-header-enricher-with-java-configuration"></a>Configuring a Header Enricher with Java Configuration</h3>
+<div class="paragraph">
+<p>The following two examples show how to use Java Configuration for header enrichers:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@Transformer(inputChannel = "enrichHeadersChannel", outputChannel = "emailChannel")
+public HeaderEnricher enrichHeaders() {
+    Map&lt;String, ? extends HeaderValueMessageProcessor&lt;?&gt;&gt; headersToAdd =
+            Collections.singletonMap("emailUrl",
+                      new StaticHeaderValueMessageProcessor&lt;&gt;(this.imapUrl));
+    HeaderEnricher enricher = new HeaderEnricher(headersToAdd);
+    return enricher;
+}
+
+@Bean
+@Transformer(inputChannel="enrichHeadersChannel", outputChannel="emailChannel")
+public HeaderEnricher enrichHeaders() {
+    Map&lt;String, HeaderValueMessageProcessor&lt;?&gt;&gt; headersToAdd = new HashMap&lt;&gt;();
+    headersToAdd.put("emailUrl", new StaticHeaderValueMessageProcessor&lt;String&gt;(this.imapUrl));
+    Expression expression = new SpelExpressionParser().parseExpression("payload.from[0].toString()");
+    headersToAdd.put("from",
+               new ExpressionEvaluatingHeaderValueMessageProcessor&lt;&gt;(expression, String.class));
+    HeaderEnricher enricher = new HeaderEnricher(headersToAdd);
+    return enricher;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first example adds a single literal header.
+The second example adds two headers, a literal header and one based on a SpEL expression.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuring-a-header-enricher-with-the-java-dsl"><a class="anchor" href="#configuring-a-header-enricher-with-the-java-dsl"></a>Configuring a Header Enricher with the Java DSL</h3>
+<div class="paragraph">
+<p>The following example shows Java DSL Configuration for a header enricher:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow enrichHeadersInFlow() {
+    return f -&gt; f
+                ...
+                .enrichHeaders(h -&gt; h.header("emailUrl", this.emailUrl)
+                                     .headerExpression("from", "payload.from[0].toString()"))
+                .handle(...);
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="header-channel-registry"><a class="anchor" href="#header-channel-registry"></a>Header Channel Registry</h3>
+<div class="paragraph">
+<p>Starting with Spring Integration 3.0, a new sub-element <code>&lt;int:header-channels-to-string/&gt;</code> is available.
+It has no attributes.
+This new sub-element converts existing <code>replyChannel</code> and <code>errorChannel</code> headers (when they are a <code>MessageChannel</code>) to a <code>String</code> and stores the channels in a registry for later resolution, when it is time to send a reply or handle an error.
+This is useful for cases where the headers might be lost&#8201;&#8212;&#8201;for example, when serializing a message into a message store or when transporting the message over JMS.
+If the header does not already exist or it is not a <code>MessageChannel</code>, no changes are made.</p>
+</div>
+<div class="paragraph">
+<p>Using this functionality requires the presence of a <code>HeaderChannelRegistry</code> bean.
+By default, the framework creates a <code>DefaultHeaderChannelRegistry</code> with the default expiry (60 seconds).
+Channels are removed from the registry after this time.
+To change this behavior, define a bean with an <code>id</code> of <code>integrationHeaderChannelRegistry</code> and configure the required default delay by using a constructor argument (in milliseconds).</p>
+</div>
+<div class="paragraph">
+<p>Since version 4.1, you can set a property called <code>removeOnGet</code> to <code>true</code> on the <code>&lt;bean/&gt;</code> definition, and the mapping entry is removed immediately on first use.
+This might be useful in a high-volume environment and when the channel is only used once, rather than waiting for the reaper to remove it.</p>
+</div>
+<div class="paragraph">
+<p>The <code>HeaderChannelRegistry</code> has a <code>size()</code> method to determine the current size of the registry.
+The <code>runReaper()</code> method cancels the current scheduled task and runs the reaper immediately.
+The task is then scheduled to run again based on the current delay.
+These methods can be invoked directly by getting a reference to the registry, or you can send a message with, for example, the following content to a control bus:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">"@integrationHeaderChannelRegistry.runReaper()"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This sub-element is a convenience, and is the equivalent of specifying the following configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:reply-channel
+    expression="@integrationHeaderChannelRegistry.channelToChannelName(headers.replyChannel)"
+    overwrite="true" /&gt;
+&lt;int:error-channel
+    expression="@integrationHeaderChannelRegistry.channelToChannelName(headers.errorChannel)"
+    overwrite="true" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting with version 4.1, you can now override the registry&#8217;s configured reaper delay so that the channel mapping is retained for at least the specified time, regardless of the reaper delay.
+The following example shows how to do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:header-enricher input-channel="inputTtl" output-channel="next"&gt;
+    &lt;int:header-channels-to-string time-to-live-expression="120000" /&gt;
+&lt;/int:header-enricher&gt;
+
+&lt;int:header-enricher input-channel="inputCustomTtl" output-channel="next"&gt;
+    &lt;int:header-channels-to-string
+        time-to-live-expression="headers['channelTTL'] ?: 120000" /&gt;
+&lt;/int:header-enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the first case, the time to live for every header channel mapping will be two minutes.
+In the second case, the time to live is specified in the message header and uses an Elvis operator to use two minutes if there is no header.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="payload-enricher"><a class="anchor" href="#payload-enricher"></a>Payload Enricher</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In certain situations, the header enricher, as discussed earlier, may not be sufficient and payloads themselves may have to be enriched with additional information.
+For example, order messages that enter the Spring Integration messaging system have to look up the order&#8217;s customer based on the provided customer number and then enrich the original payload with that information.</p>
+</div>
+<div class="paragraph">
+<p>Spring Integration 2.1 introduced the payload enricher.
+The payload enricher defines an endpoint that passes a <code>Message</code> to the exposed request channel and then expects a reply message.
+The reply message then becomes the root object for evaluation of expressions to enrich the target payload.</p>
+</div>
+<div class="paragraph">
+<p>The payload enricher provides full XML namespace support through the <code>enricher</code> element.
+In order to send request messages, the payload enricher has a <code>request-channel</code> attribute that lets you dispatch messages to a request channel.</p>
+</div>
+<div class="paragraph">
+<p>Basically, by defining the request channel, the payload enricher acts as a gateway, waiting for the message sent to the request channel to return.
+The enricher then augments the message&#8217;s payload with the data provided by the reply message.</p>
+</div>
+<div class="paragraph">
+<p>When sending messages to the request channel, you also have the option to send only a subset of the original payload by using the <code>request-payload-expression</code> attribute.</p>
+</div>
+<div class="paragraph">
+<p>The enriching of payloads is configured through SpEL expressions, providing a maximum degree of flexibility.
+Therefore, you can not only enrich payloads with direct values from the reply channel&#8217;s <code>Message</code>, but you can use SpEL expressions to extract a subset from that message or to apply additional inline transformations, letting you further manipulate the data.</p>
+</div>
+<div class="paragraph">
+<p>If you need only to enrich payloads with static values, you need not provide the <code>request-channel</code> attribute.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Enrichers are a variant of transformers.
+In many cases, you could use a payload enricher or a generic transformer implementation to add additional data to your message payloads.
+You should familiarize yourself with all transformation-capable components that are provided by Spring Integration and carefully select the implementation that semantically fits your business case best.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="payload-enricher-configuration"><a class="anchor" href="#payload-enricher-configuration"></a>Configuration</h3>
+<div class="paragraph">
+<p>The following example shows all available configuration options for the payload enricher:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:enricher request-channel=""                           <i class="conum" data-value="1"></i><b>(1)</b>
+              auto-startup="true"                          <i class="conum" data-value="2"></i><b>(2)</b>
+              id=""                                        <i class="conum" data-value="3"></i><b>(3)</b>
+              order=""                                     <i class="conum" data-value="4"></i><b>(4)</b>
+              output-channel=""                            <i class="conum" data-value="5"></i><b>(5)</b>
+              request-payload-expression=""                <i class="conum" data-value="6"></i><b>(6)</b>
+              reply-channel=""                             <i class="conum" data-value="7"></i><b>(7)</b>
+              error-channel=""                             <i class="conum" data-value="8"></i><b>(8)</b>
+              send-timeout=""                              <i class="conum" data-value="9"></i><b>(9)</b>
+              should-clone-payload="false"&gt;                <i class="conum" data-value="10"></i><b>(10)</b>
+    &lt;int:poller&gt;&lt;/int:poller&gt;                              <i class="conum" data-value="11"></i><b>(11)</b>
+    &lt;int:property name="" expression="" null-result-expression="'Could not determine the name'"/&gt;   <i class="conum" data-value="12"></i><b>(12)</b>
+    &lt;int:property name="" value="23" type="java.lang.Integer" null-result-expression="'0'"/&gt;
+    &lt;int:header name="" expression="" null-result-expression=""/&gt;   <i class="conum" data-value="13"></i><b>(13)</b>
+    &lt;int:header name="" value="" overwrite="" type="" null-result-expression=""/&gt;
+&lt;/int:enricher&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Channel to which a message is sent to get the data to use for enrichment.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Lifecycle attribute signaling whether this component should be started during the application context startup.
+Defaults to true.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>ID of the underlying bean definition, which is either an <code>EventDrivenConsumer</code> or a <code>PollingConsumer</code>.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Specifies the order for invocation when this endpoint is connected as a subscriber to a channel.
+This is particularly relevant when that channel is using a &#8220;failover&#8221; dispatching strategy.
+It has no effect when this endpoint is itself a polling consumer for a channel with a queue.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Identifies the message channel where a message is sent after it is being processed by this endpoint.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>By default, the original message&#8217;s payload is used as payload that is sent to the <code>request-channel</code>.
+By specifying a SpEL expression as the value for the <code>request-payload-expression</code> attribute, you can use a subset of the original payload, a header value, or any other resolvable SpEL expression as the basis for the payload that is sent to the request-channel.
+For the expression evaluation, the full message is available as the 'root object'.
+For instance, the following SpEL expressions (among others) are possible: <code>payload.something</code>, <code>headers.something</code>, <code>new java.util.Date()</code>, <code>'thing1' + 'thing2'</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Channel where a reply message is expected.
+This is optional.
+Typically, the auto-generated temporary reply channel suffices.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>The channel to which an <code>ErrorMessage</code> is sent if an <code>Exception</code> occurs downstream of the <code>request-channel</code>.
+This enables you to return an alternative object to use for enrichment.
+If it is not set, an <code>Exception</code> is thrown to the caller.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Maximum amount of time in milliseconds to wait when sending a message to the channel, if the channel might block.
+For example, a queue channel can block until space is available, if its maximum capacity has been reached.
+Internally, the <code>send()</code> timeout is set on the <code>MessagingTemplate</code> and ultimately applied when invoking the send operation on the <code>MessageChannel</code>.
+By default, the <code>send()</code> timeout is set to '30'.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>Boolean value indicating whether any payload that implements <code>Cloneable</code> should be cloned prior to sending the message to the request channel for acquiring the enriching data.
+The cloned version would be used as the target payload for the ultimate reply.
+The default is <code>false</code>.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Lets you configure a message poller if this endpoint is a polling consumer.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>Each <code>property</code> sub-element provides the name of a property (through the mandatory <code>name</code> attribute).
+That property should be settable on the target payload instance.
+Exactly one of the <code>value</code> or <code>expression</code> attributes must be provided as well&#8201;&#8212;&#8201;the former for a literal value to set and the latter for a SpEL expression to be evaluated.
+The root object of the evaluation context is the message that was returned from the flow initiated by this enricher&#8201;&#8212;&#8201;the input message if there is no request channel or the application context (using the <code>@&lt;beanName&gt;.&lt;beanProperty&gt;</code> SpEL syntax).
+Starting with version 4.0, when specifying a <code>value</code> attribute, you can also specify an optional <code>type</code> attribute.
+When the destination is a typed setter method, the framework coerces the value appropriately (as long as a <code>PropertyEditor</code>) exists to handle the conversion.
+If, however, the target payload is a <code>Map</code>, the entry is populated with the value without conversion.
+The <code>type</code> attribute lets you, for example, convert a <code>String</code> containing a number to an <code>Integer</code> value in the target payload.
+Starting with version 4.1, you can also specify an optional <code>null-result-expression</code> attribute.
+When the <code>enricher</code> returns null, it is evaluated, and the output of the evaluation is returned instead.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>Each <code>header</code> sub-element provides the name of a message header (through the mandatory <code>name</code> attribute).
+Exactly one of the <code>value</code> or <code>expression</code> attributes must also be provided&#8201;&#8212;&#8201;the former for a literal value to set and the latter for a SpEL expression to be evaluated.
+The root object of the evaluation context is the message that was returned from the flow initiated by this enricher&#8201;&#8212;&#8201;the input message if there is no request channel or the application context (using the '@&lt;beanName&gt;.&lt;beanProperty&gt;' SpEL syntax).
+Note that, similarly to the <code>&lt;header-enricher&gt;</code>, the <code>&lt;enricher&gt;</code> element&#8217;s <code>header</code> element has <code>type</code> and <code>overwrite</code> attributes.
+However, a key difference is that, with the <code>&lt;enricher&gt;</code>, the <code>overwrite</code> attribute is <code>true</code> by default, to be consistent with the <code>&lt;enricher&gt;</code> element&#8217;s <code>&lt;property&gt;</code> sub-element.
+Starting with version 4.1, you can also specify an optional <code>null-result-expression</code> attribute.
+When the <code>enricher</code> returns null, it is evaluated, and the output of the evaluation is returned instead.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="payload-enricher-examples"><a class="anchor" href="#payload-enricher-examples"></a>Examples</h3>
+<div class="paragraph">
+<p>This section contains several examples of using a payload enricher in various situations.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The code samples shown here are part of the Spring Integration Samples project.
+See <a href="samples.html#samples-impl" class="xref page">Spring Integration Samples</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In the following example, a <code>User</code> object is passed as the payload of the <code>Message</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:enricher id="findUserEnricher"
+              input-channel="findUserEnricherChannel"
+              request-channel="findUserServiceChannel"&gt;
+    &lt;int:property name="email"    expression="payload.email"/&gt;
+    &lt;int:property name="password" expression="payload.password"/&gt;
+&lt;/int:enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>User</code> has several properties, but only the <code>username</code> is set initially.
+The enricher&#8217;s <code>request-channel</code> attribute is configured to pass the <code>User</code> to the <code>findUserServiceChannel</code>.</p>
+</div>
+<div class="paragraph">
+<p>Through the implicitly set <code>reply-channel</code>, a <code>User</code> object is returned and, by using the <code>property</code> sub-element, properties from the reply are extracted and used to enrich the original payload.</p>
+</div>
+<div class="paragraph">
+<p>[[how-do-i-pass-only-a-subset-of-data-to-the-request-channel?]]
+=== How Do I Pass Only a Subset of Data to the Request Channel?</p>
+</div>
+<div class="paragraph">
+<p>When using a <code>request-payload-expression</code> attribute, a single property of the payload instead of the full message can be passed on to the request channel.
+In the following example, the username property is passed on to the request channel:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:enricher id="findUserByUsernameEnricher"
+              input-channel="findUserByUsernameEnricherChannel"
+              request-channel="findUserByUsernameServiceChannel"
+              request-payload-expression="payload.username"&gt;
+    &lt;int:property name="email"    expression="payload.email"/&gt;
+    &lt;int:property name="password" expression="payload.password"/&gt;
+&lt;/int:enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Keep in mind that, although only the username is passed, the resulting message to the request channel contains the full set of <code>MessageHeaders</code>.</p>
+</div>
+<div class="paragraph">
+<p>[[how-can-i-enrich-payloads-that-consist-of-collection-data?]]
+==== How Can I Enrich Payloads that Consist of Collection Data?</p>
+</div>
+<div class="paragraph">
+<p>In the following example, instead of a <code>User</code> object, a <code>Map</code> is passed in:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:enricher id="findUserWithMapEnricher"
+              input-channel="findUserWithMapEnricherChannel"
+              request-channel="findUserByUsernameServiceChannel"
+              request-payload-expression="payload.username"&gt;
+    &lt;int:property name="user" expression="payload"/&gt;
+&lt;/int:enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Map</code> contains the username under the <code>username</code> map key.
+Only the <code>username</code> is passed on to the request channel.
+The reply contains a full <code>User</code> object, which is ultimately added to the <code>Map</code> under the <code>user</code> key.</p>
+</div>
+<div class="paragraph">
+<p>[[how-can-i-enrich-payloads-with-static-information-without-using-a-request-channel?]]
+=== How Can I Enrich Payloads with Static Information without Using a Request Channel?</p>
+</div>
+<div class="paragraph">
+<p>The following example does not use a request channel at all but solely enriches the message&#8217;s payload with static values:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:enricher id="userEnricher"
+              input-channel="input"&gt;
+    &lt;int:property name="user.updateDate" expression="new java.util.Date()"/&gt;
+    &lt;int:property name="user.firstName" value="William"/&gt;
+    &lt;int:property name="user.lastName"  value="Shakespeare"/&gt;
+    &lt;int:property name="user.age"       value="42"/&gt;
+&lt;/int:enricher&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the word, 'static', is used loosely here.
+You can still use SpEL expressions for setting those values.</p>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="transformer.html">Transformer</a></span>
+  <span class="next"><a href="claim-check.html">Claim Check</a></span>
+</nav>
+</article>
+</div>  </div>
+</main>
+<div class="modal micromodal-slide" id="modal-versions" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true">
+            <main class="modal__content" id="modal-versions-content">
+              <button data-micromodal-close class="modal-versions-close">
+                <svg width="28px" height="28px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><title/><g id="cross"><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>
+              </button>
+              <div class="colset">
+                <div class="col-left">
+                  <ul class="nav-versions">
+                    <li class="component is-current">
+                      <a class="title" href="index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-current is-latest">
+                          <a href="index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="component">
+                      <a class="title" href="spring-integration/index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-latest">
+                          <a href="spring-integration/index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-right">
+                  <ul>
+                    <li>
+                      Related Spring Documentation
+                      <ul>
+                        <li><a href="https://docs.spring.io/spring-framework/reference/">Spring Framework</a></li>
+                        <li><a href="https://docs.spring.io/spring-security/reference/">Spring Security</a></li>
+                        <li><a href="https://docs.spring.io/spring-ldap/reference/">Spring LDAP</a></li>
+                        <li><a href="https://docs.spring.io/spring-session/reference/">Spring Session</a></li>
+                        <li><a href="https://docs.spring.io/spring-authorization-server/reference/">Spring Authorization Server</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+</div>
+<footer class="footer flex">
+    <div id="spring-links flex">
+        <img id="springlogo" src="./_/img/spring-logo.svg" alt="Spring">
+        <p class="smallest antialiased">© <script>var d = new Date();
+        document.write(d.getFullYear());</script> <a href="https://www.vmware.com/">VMware</a>, Inc. or its affiliates. <a href="https://www.vmware.com/help/legal.html">Terms of Use</a> • <a href="https://www.vmware.com/help/privacy.html" rel="noopener noreferrer">Privacy</a> • <a href="https://spring.io/trademarks">Trademark Guidelines</a> <span id="thank-you-mobile">• <a href="https://spring.io/thank-you">Thank you</a></span> • <a href="https://www.vmware.com/help/privacy/california-privacy-rights.html">Your California Privacy Rights</a> • <a class="ot-sdk-show-settings">Cookie Settings</a> <span id="teconsent"></span></p>
+        <p class="smallest antialiased has-gray-text">Apache®, Apache Tomcat®, Apache Kafka®, Apache Cassandra&trade;, and Apache Geode&trade; are trademarks or registered trademarks of the Apache Software Foundation in the United States and/or other countries. Java&trade;, Java&trade; SE, Java&trade; EE, and OpenJDK&trade; are trademarks of Oracle and/or its affiliates. Kubernetes® is a registered trademark of the Linux Foundation in the United States and other countries. Linux® is the registered trademark of Linus Torvalds in the United States and other countries. Windows® and Microsoft® Azure are registered trademarks of Microsoft Corporation. “AWS” and “Amazon Web Services” are trademarks or registered trademarks of Amazon.com Inc. or its affiliates. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes. Other names may be trademarks of their respective owners.</p>
+    </div>
+    <div id="social-icons" class="flex jc-between">
+        <a href="https://www.youtube.com/user/SpringSourceDev" title="Youtube"><svg id="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle class="cls-1" cx="20" cy="20" r="20"/><path class="cls-2" d="M30.91,14.53a2.89,2.89,0,0,0-2-2C27.12,12,20,12,20,12s-7.12,0-8.9.47a2.9,2.9,0,0,0-2,2A30.56,30.56,0,0,0,8.63,20a30.44,30.44,0,0,0,.46,5.47,2.89,2.89,0,0,0,2,2C12.9,28,20,28,20,28s7.12,0,8.9-.47a2.87,2.87,0,0,0,2-2A30.56,30.56,0,0,0,31.37,20,28.88,28.88,0,0,0,30.91,14.53ZM17.73,23.41V16.59L23.65,20Z"/></svg></a>
+        <a href="https://github.com/spring-projects" title="Github"><svg id="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><path class="cls-1" d="M38,0a38,38,0,1,0,38,38A38,38,0,0,0,38,0Z"/></g><path class="cls-2" d="M38,15.59A22.95,22.95,0,0,0,30.71,60.3c1.15.21,1.57-.5,1.57-1.11s0-2,0-3.9c-6.38,1.39-7.73-3.07-7.73-3.07A6.09,6.09,0,0,0,22,48.86c-2.09-1.42.15-1.39.15-1.39a4.81,4.81,0,0,1,3.52,2.36c2,3.5,5.37,2.49,6.67,1.91a4.87,4.87,0,0,1,1.46-3.07c-5.09-.58-10.45-2.55-10.45-11.34a8.84,8.84,0,0,1,2.36-6.15,8.29,8.29,0,0,1,.23-6.07s1.92-.62,6.3,2.35a21.82,21.82,0,0,1,11.49,0c4.38-3,6.3-2.35,6.3-2.35a8.29,8.29,0,0,1,.23,6.07,8.84,8.84,0,0,1,2.36,6.15c0,8.81-5.37,10.75-10.48,11.32a5.46,5.46,0,0,1,1.56,4.25c0,3.07,0,5.54,0,6.29s.42,1.33,1.58,1.1A22.94,22.94,0,0,0,38,15.59Z"/></svg></a>
+        <a href="https://twitter.com/springcentral" title="Twitter"><svg id="twitter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><circle class="cls-1" cx="37.97" cy="37.97" r="37.97"/><path id="Twitter-2" data-name="Twitter" class="cls-2" d="M55.2,22.73a15.43,15.43,0,0,1-4.88,1.91,7.56,7.56,0,0,0-5.61-2.49A7.78,7.78,0,0,0,37,30a7.56,7.56,0,0,0,.2,1.79,21.63,21.63,0,0,1-15.84-8.23,8,8,0,0,0,2.37,10.52,7.66,7.66,0,0,1-3.48-1v.09A7.84,7.84,0,0,0,26.45,41a7.54,7.54,0,0,1-2,.28A7.64,7.64,0,0,1,23,41.09a7.71,7.71,0,0,0,7.18,5.47,15.21,15.21,0,0,1-9.55,3.37,15.78,15.78,0,0,1-1.83-.11,21.41,21.41,0,0,0,11.78,3.54c14.13,0,21.86-12,21.86-22.42,0-.34,0-.68,0-1a15.67,15.67,0,0,0,3.83-4.08,14.9,14.9,0,0,1-4.41,1.24A7.8,7.8,0,0,0,55.2,22.73Z"/></svg></a>
+    </div>
+</footer>
+<script src="./_/js/vendor/import.js"></script>
+<script src="./_/js/site.js"></script>
+<script async src="./_/js/vendor/highlight.js"></script>
+<script async src="./_/js/vendor/asciidoctor-tabs.js" data-sync-storage-key="docs:preferred-tab"></script>
+
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <main class="modal__content" id="modal-1-content">
+                <div id="searchbox"></div>
+                <div id="counter"></div>
+                <div class="search-by">
+                    <a target="_blank" rel="noopener noreferrer" href="https://www.algolia.com/" aria-label="Search by Algolia">
+                        <img class="light" width="140" src="./_/img/algolia-light.svg" />
+                        <img class="dark" width="140" src="./_/img/algolia-dark.svg" />
+                    </a>
+                </div>
+                <div id="hits"></div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.17.0/dist/algoliasearch-lite.umd.js" integrity="sha256-Lf9DrpGmcRip6OQzbcL6lnvNmoZNSKpyQX5pMlwatWE=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.54.1/dist/instantsearch.production.min.js" integrity="sha256-xYsZPDeNjYNTBWLvqD2Lxe98hOxcDgOHyMPfz4tVAbk=" crossorigin="anonymous"></script>
+<script async id="search-script" src="./_/js/vendor/search.js" data-app-id="WB1FQYI187" data-api-key="9d489079e5ec46dbb238909fee5c9c29" data-index-name="springintegration" data-stylesheet="./_/css/vendor/search.css" data-page-version="6.2.0"></script>
+
+  </body>
+</html>

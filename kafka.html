@@ -1,0 +1,2590 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Apache Kafka Support :: Spring Integration</title>
+    <link rel="prev" href="jmx.html">
+    <link rel="next" href="mail.html">
+    <meta name="generator" content="Antora 3.2.0-alpha.2">
+    <script>
+!function (theme, navWidth) {
+  if (theme === 'dark') document.documentElement.classList.add('dark-theme')
+  if (navWidth) document.documentElement.style.setProperty('--nav-width', `${navWidth}px`)
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'),
+  localStorage && localStorage.getItem('nav-width'))
+    </script>
+    <link rel="stylesheet" href="./_/css/site.css">
+    <link rel="stylesheet" href="./_/css/vendor/search.css">
+    <link rel="stylesheet" href="./_/css/vendor/asciidoctor-tabs.css">
+
+    <meta name="version" content="6.2.0">
+    <meta name="component" content="integration">
+    <link rel="icon" href="./_/img/favicon.ico" type="image/vnd.microsoft.icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://spring.io">
+        <img
+          id="springlogo"
+          class="block"
+          src="./_/img/spring-logo.svg"
+          alt="Spring"
+        />
+      </a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Why Spring</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/why-spring"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/microservices"
+            >Microservices</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/reactive"
+            >Reactive</a>
+            <a class="navbar-item" href="https://spring.io/event-driven">Event
+              Driven</a>
+            <a class="navbar-item" href="https://spring.io/cloud">Cloud</a>
+            <a class="navbar-item" href="https://spring.io/web-applications">Web
+              Applications</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/serverless"
+            >Serverless</a>
+            <a class="navbar-item" href="https://spring.io/batch">Batch</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Learn</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/learn">Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/quickstart"
+            >Quickstart</a>
+            <a class="navbar-item" href="https://spring.io/guides">Guides</a>
+            <a class="navbar-item" href="https://spring.io/blog">Blog</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Projects</a>
+          <div class="navbar-dropdown" style="min-width: 280px">
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-boot"
+            >Spring Boot</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-framework"
+            >Spring Framework</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud"
+            >Spring Cloud</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud-dataflow"
+            >Spring Cloud Data Flow</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-data"
+            >Spring Data</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-integration"
+            >Spring Integration</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-batch"
+            >Spring Batch</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-security"
+            >Spring Security</a>
+            <a
+              class="navbar-item navbar-item-special"
+              href="https://spring.io/projects"
+            >View all projects</a>
+            <a class="navbar-item" href="https://spring.io/tools">Spring Tools 4</a>
+            <a
+              class="navbar-item navbar-item-special-2"
+              href="https://start.spring.io"
+            >Spring Initializr
+              <svg
+                class="external-link-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+              ><polyline
+                  points="15 10.94 15 15 1 15 1 1 5.06 1"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><polyline
+                  points="8.93 1 15 1 15 7.07"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><line
+                  x1="15"
+                  y1="1"
+                  x2="8"
+                  y2="8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></line></svg></a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Academy</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.academy/courses"
+            >Courses</a>
+            <a
+              class="navbar-item"
+              href="https://spring.academy/learning-path"
+            >Get Certified</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Support</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/support">Overview</a>
+            <a class="navbar-item" href="https://spring.io/security">Security
+              Advisories</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable is-community">
+          <a class="navbar-link" href="#">Community</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/community"
+            >Overview</a>
+            <a class="navbar-item" href="https://spring.io/events">Events</a>
+            <a class="navbar-item" href="https://spring.io/team">Team</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <label class="theme-toggler">
+      <input
+        type="checkbox"
+        type="checkbox"
+        id="switch-theme-checkbox"
+        name="switch-theme-checkbox"
+      />
+      <span class="icon"><svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="moon"
+          class="svg-inline--fa fa-moon moon"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+        ><path
+            fill="currentColor"
+            d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"
+          ></path>
+        </svg>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="sun"
+          class="svg-inline--fa fa-sun sun"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        ><path
+            fill="currentColor"
+            d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"
+          ></path>
+        </svg></span>
+      <span class="text">light</span>
+    </label>
+  </nav>
+</header>
+<script>
+!function (theme) {
+  if (theme === 'dark') {
+    document.getElementById('switch-theme-checkbox').parentElement.classList.add('active')
+  }
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'))
+</script><div class="body">
+<div class="nav-container" data-component="integration" data-version="6.2.0">
+  <aside class="nav">
+    <div class="panels">
+      <div class="nav-panel-menu is-active" data-panel="menu">
+        <nav class="nav-menu">
+<div class="context">
+  <span class="title">Spring Integration</span>
+  <span class="version">6.2.0-SNAPSHOT</span>
+  <button class="browse-version" id="browse-version">
+    <svg
+      height="24px"
+      id="Layer_1"
+      style="enable-background:new 0 0 512 512;"
+      version="1.1"
+      viewBox="0 0 512 512"
+      width="24px"
+      xml:space="preserve"
+    ><g><path
+          d="M256,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S273.7,224,256,224L256,224z"
+        ></path><path
+          d="M128.4,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S146,224,128.4,224L128.4,224z"
+        ></path><path
+          d="M384,224c-17.7,0-32,14.3-32,32s14.3,32,32,32s32-14.3,32-32S401.7,224,384,224L384,224z"
+        ></path></g></svg>
+  </button>
+</div><div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="preface.html">Preface</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New?</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="core.html">Core Messaging</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="channel.html">Message Channels</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interfaces.html">The MessageChannel Interface</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/implementations.html">Message Channel Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interceptors.html">Channel Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/template.html"><code>MessagingTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/configuration.html">Configuring Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/special-channels.html">Special Channels</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="polling-consumer.html">Poller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="channel-adapter.html">Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="bridge.html">Messaging Bridge</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message.html">Message</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-routing.html">Message Routing</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="router.html">Routers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/common-parameters.html">Common Router Parameters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/implementations.html">Router Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/namespace.html">Configuring a Generic Router</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/spel.html">Routers and the Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/annotation.html">Configuring a Router with Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/dynamic-routers.html">Dynamic Routers</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/routing-slip.html">Routing Slip</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/process-manager.html">Process Manager Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="filter.html">Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="splitter.html">Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="aggregator.html">Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="resequencer.html">Resequencer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="chain.html">Message Handler Chain</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scatter-gather.html">Scatter-Gather</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="barrier.html">Thread Barrier</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-transformation.html">Message Transformation</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="transformer.html">Transformer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="content-enrichment.html">Content Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="claim-check.html">Claim Check</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="codec.html">Codec</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="messaging-endpoints.html">Messaging Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint.html">Message Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint-roles.html">Endpoint Roles</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="leadership-event-handling.html">Leadership Event Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gateway.html">Messaging Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="service-activator.html">Service Activator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="delayer.html">Delayer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scripting.html">Scripting Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="groovy.html">Groovy Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="handler-advice.html">Adding Behavior to Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/classes.html">Provided Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/reactive.html">Reactive Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/context-holder.html">Context Holder Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/custom.html">Custom Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/other.html">Other Advice Chain Elements</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/handle-message.html">Handling Message Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/tx-handle-message.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-filters.html">Advising Filters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-with-annotations.html">Advising Endpoints Using Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/order.html">Ordering Advices within Advice Chain</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advised-properties.html">Advised Handler Properties</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/idempotent-receiver.html">Idempotent Receiver Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="logging-adapter.html">Logging Channel Adapter</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="functions-support.html"><code>java.util.function</code> Interfaces Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kotlin-functions.html">Kotlin Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="dsl.html">Java DSL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-basics.html">DSL Basics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-channels.html">Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-pollers.html">Pollers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-reactive.html">The <code>reactive()</code> Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-endpoints.html">DSL and Endpoint Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-transformers.html">Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-inbound-adapters.html">Inbound Channel Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-routers.html">Message Routers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-splitters.html">Splitters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-aggregators.html">Aggregators and Resequencers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-handle.html">Service Activators and the <code>.handle()</code> method</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-gateway.html">Operator gateway()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-log.html">Operator log()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-intercept.html">Operator intercept()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-wiretap.html"><code>MessageChannelSpec.wireTap()</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flows.html">Working With Message Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-function-expression.html"><code>FunctionExpression</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-subflows.html">Sub-flows support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-protocol-adapters.html">Using Protocol Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flow-adapter.html"><code>IntegrationFlowAdapter</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-runtime-flows.html">Dynamic and Runtime Integration Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flow-as-gateway.html"><code>IntegrationFlow</code> as a Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-extensions.html">DSL Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flows-composition.html">Integration Flows Composition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="groovy-dsl.html">Groovy DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kotlin-dsl.html">Kotlin DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="system-management.html">System Management</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="metrics.html">Metrics and Management</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-history.html">Message History</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-store.html">Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="meta-data-store.html">Metadata Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="control-bus.html">Control Bus</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="shutdown.html">Orderly Shutdown</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="graph.html">Integration Graph</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="integration-graph-controller.html">Integration Graph Controller</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reactive-streams.html">Reactive Streams Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="native-aot.html">Native Images Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="endpoint-summary.html">Integration Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="amqp.html">AMQP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/polled-inbound-channel-adapter.html">Polled Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-gateway.html">Inbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-ack.html">Inbound Endpoint Acknowledge Mode</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-endpoints.html">Outbound Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/async-outbound-gateway.html">Asynchronous Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/alternative-confirms-returns.html">Alternative Mechanism for Publisher Confirms and Returns</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/conversion-inbound.html">Inbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/content-type-conversion-outbound.html">Outbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/user-id.html">Outbound User ID</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/delay.html">Delayed Message Exchange</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/channels.html">AMQP-backed Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/message-headers.html">AMQP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/strict-ordering.html">Strict Message Ordering</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/samples.html">AMQP Samples</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/rmq-streams.html">RabbitMQ Stream Queue Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="camel.html">Apache Camel Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cassandra.html">Apache Cassandra Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="debezium.html">Debezium Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="event.html">Spring <code>ApplicationEvent</code> Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="feed.html">Feed Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="file.html">File Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/reading.html">Reading Files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/writing.html">Writing files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/transforming.html">File Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/splitter.html">File Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/aggregator.html">File Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/remote-persistent-flf.html">Remote Persistent File List Filters</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ftp.html">FTP/FTPS Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-factory.html">FTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/advanced-configuration.html">Advanced Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/inbound.html">FTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/streaming.html">FTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound.html">FTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound-gateway.html">FTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-caching.html">FTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-callback.html">Using <code>MessageSessionCallback</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/server-events.html">Apache Mina FTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="graphql.html">GraphQL Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="hazelcast.html">Hazelcast Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="http.html">HTTP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/inbound.html">Http Inbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/outbound.html">HTTP Outbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/namespace.html">HTTP Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/java-config.html">Configuring HTTP Endpoints with Java</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/timeout.html">Timeout Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/proxy.html">HTTP Proxy configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/header-mapping.html">HTTP Header Mappings</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/int-graph-controller.html">Integration Graph Controller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/samples.html">HTTP Samples</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jdbc.html">JDBC Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/message-store.html">JDBC Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/stored-procedures.html">Stored Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/lock-registry.html">JDBC Lock Registry</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/metadata-store.html">JDBC Metadata Store</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jpa.html">JPA Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/functionality.html">Functionality</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/supported-persistence-providers.html">Supported Persistence Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/java-implementation.html">Java Implementation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-gateways.html">Outbound Gateways</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jms.html">JMS Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jmx.html">JMX Support</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="kafka.html">Apache Kafka Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mail.html">Mail Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mongodb.html">MongoDb Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mqtt.html">MQTT Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="r2dbc.html">R2DBC Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="redis.html">Redis Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resource.html">Resource Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="rsocket.html">RSocket Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="sftp.html">SFTP Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-factory.html">SFTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-caching.html">SFTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/inbound.html">SFTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/streaming.html">SFTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound.html">SFTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound-gateway.html">SFTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-callback.html">MessageSessionCallback</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/server-events.html">Apache Mina SFTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="smb.html">SMB Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stomp.html">STOMP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stream.html">Stream Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="syslog.html">Syslog Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ip.html">TCP and UDP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/intro.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/udp-adapters.html">UDP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-connection-factories.html">TCP Connection Factories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/testing-connections.html">Testing Connections</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/interceptors.html">TCP Connection Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-events.html">TCP Connection Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-adapters.html">TCP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-gateways.html">TCP Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/correlation.html">TCP Message Correlation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/note-nio.html">About Non-blocking I/O (NIO)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/ssl-tls.html">SSL/TLS Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-advanced-techniques.html">Advanced Techniques</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/endpoint-reference.html">IP Configuration Attributes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/msg-headers.html">IP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/annotation.html">Annotation-Based Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/dsl.html">Using the Java DSL for TCP Components</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="webflux.html">WebFlux Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="web-sockets.html">WebSockets Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="ws.html">Web Services Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="xml.html">XML Support - Dealing with XML Payloads</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/transformation.html">Transforming XML Payloads</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-transformer.html">Transforming XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-splitting.html">Splitting XML Messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-routing.html">Routing XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-header-enricher.html">XPath Header Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-filter.html">Using the XPath Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-spel-function.html">#xpath SpEL Function</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/validating-filter.html">XML Validating Filter</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="xmpp.html">XMPP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zeromq.html">ZeroMQ Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zookeeper.html">Zookeeper Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="error-handling.html">Error Handling</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="spel.html">Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message-publishing.html">Message Publishing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="transactions.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="security.html">Security in Spring Integration</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="configuration.html">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace-taskscheduler.html">Configuring the Task Scheduler</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/global-properties.html">Global Properties</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/annotations.html">Annotation Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/meta-annotations.html">Messaging Meta-Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/message-mapping-rules.html">Message Mapping Rules and Conventions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="testing.html">Testing support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="samples.html">Spring Integration Samples</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resources.html">Additional Resources</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="history.html">Change History</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-6.0-6.1.html">Changes between 6.0 and 6.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.5-6.0.html">Changes between 5.5 and 6.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.4-5.5.html">Changes between 5.4 and 5.5</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.3-5.4.html">Changes between 5.3 and 5.4</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.2-5.3.html">Changes between 5.2 and 5.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.1-5.2.html">Changes between 5.1 and 5.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.2-4.3.html">Changes between 4.2 and 4.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.1-4.2.html">Changes between 4.1 and 4.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.0-4.1.html">Changes between 4.0 and 4.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.1-2.2.html">Changes between 2.1 and 2.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.0-2.1.html">Changes between 2.0 and 2.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-1.0-2.0.html">Changes between Versions 1.0 and 2.0</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zip.html">Zip Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+          <div class="toggle-sm">
+            <button id="nav-toggle-2" class="nav-toggle"></button>
+          </div>
+        </nav>
+      </div>
+      <div class="nav-collapse">
+        <button id="nav-collapse-toggle"><span></span></button>        
+      </div>
+    </div>
+    <div class="nav-resize"></div>
+  </aside>
+</div>
+<script>
+!function (sidebar) {
+  if (sidebar) {
+    document.body.classList.add('nav-sm')
+  }
+}(localStorage && localStorage.getItem('sidebar') === 'close')
+</script><main class="article">
+<div class="toolbar" role="navigation">
+  <button id="nav-toggle-1" class="nav-toggle"></button>
+<div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+</div>
+  <div class="content">
+<aside class="sidebar">
+  <div class="content">
+    <div
+      class="toc"
+      data-title="Apache Kafka Support"
+      data-levels="2"
+    >
+      <div class="toc-menu"></div>
+    </div>
+    <div class="sidebar-links">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/src/reference/antora/modules/ROOT/pages/kafka.adoc">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+          ><path
+              d="m16 2.012 3 3L16.713 7.3l-3-3zM4 14v3h3l8.299-8.287-3-3zm0 6h16v2H4z"
+            ></path></svg>
+          Edit this Page
+        </a>
+              <a href="https://github.com/rwinch/spring-integration" title="Github">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="512px"
+            id="Layer_1"
+            version="1.1"
+            viewBox="0 0 512 512"
+            width="512px"
+          ><style type="text/css"><![CDATA[
+              .st0{fill-rule:evenodd;clip-rule:evenodd;} ]]></style><g><path
+                class="st0"
+                d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"
+              ></path></g></svg>
+          Github Project
+        </a>
+        <a href="https://stackoverflow.com/tags/spring-integration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path
+              d="M290.7 311L95 269.7 86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8 153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"
+            ></path></svg>
+          Stack Overflow
+        </a>
+    </div>
+  </div>
+</aside><div class="doc">
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Spring Integration</a></li>
+    <li><a href="kafka.html">Apache Kafka Support</a></li>
+  </ul>
+</nav>
+<article>
+<h1 id="page-title" class="page">Apache Kafka Support</h1>
+<div class="sect1">
+<h2 id="overview"><a class="anchor" href="#overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration for Apache Kafka is based on the <a href="https://projects.spring.io/spring-kafka/">Spring for Apache Kafka project</a>.</p>
+</div>
+<div class="paragraph">
+<p>You need to include this dependency into your project:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_maven" class="tab">
+<p>Maven</p>
+</li>
+<li id="_tabs_1_gradle" class="tab">
+<p>Gradle</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_maven--panel" class="tabpanel" aria-labelledby="_tabs_1_maven">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.integration&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-integration-kafka&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_gradle--panel" class="tabpanel" aria-labelledby="_tabs_1_gradle">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "org.springframework.integration:spring-integration-kafka:6.2.0-SNAPSHOT"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>It provides the following components:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#kafka-outbound">Outbound Channel Adapter</a></p>
+</li>
+<li>
+<p><a href="#kafka-inbound">Message-driven Channel Adapter</a></p>
+</li>
+<li>
+<p><a href="#kafka-inbound-pollable">Inbound Channel Adapter</a></p>
+</li>
+<li>
+<p><a href="#kafka-outbound-gateway">Outbound Gateway</a></p>
+</li>
+<li>
+<p><a href="#kafka-inbound-gateway">Inbound Gateway</a></p>
+</li>
+<li>
+<p><a href="#kafka-channels">Channels Backed by Apache Kafka Topics</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="kafka-outbound"><a class="anchor" href="#kafka-outbound"></a>Outbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Outbound channel adapter is used to publish messages from a Spring Integration channel to Apache Kafka topics.
+The channel is defined in the application context and then wired into the application that sends messages to Apache Kafka.
+Sender applications can publish to Apache Kafka by using Spring Integration messages, which are internally converted to Kafka records by the outbound channel adapter, as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The payload of the Spring Integration message is used to populate the payload of the Kafka record.</p>
+</li>
+<li>
+<p>By default, the <code>kafka_messageKey</code> header of the Spring Integration message is used to populate the key of the Kafka record.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can customize the target topic and partition for publishing the message through the <code>kafka_topic</code> and <code>kafka_partitionId</code> headers, respectively.</p>
+</div>
+<div class="paragraph">
+<p>In addition, the <code>&lt;int-kafka:outbound-channel-adapter&gt;</code> provides the ability to extract the key, target topic, and target partition by applying SpEL expressions on the outbound message.
+To that end, it supports three mutually exclusive pairs of attributes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>topic</code> and <code>topic-expression</code></p>
+</li>
+<li>
+<p><code>message-key</code> and <code>message-key-expression</code></p>
+</li>
+<li>
+<p><code>partition-id</code> and <code>partition-id-expression</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These let you specify <code>topic</code>, <code>message-key</code>, and <code>partition-id</code>, respectively, as static values on the adapter or to dynamically evaluate their values at runtime against the request message.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The <code>KafkaHeaders</code> interface (provided by <code>spring-kafka</code>) contains constants used for interacting with
+headers.
+The <code>messageKey</code> and <code>topic</code> default headers now require a <code>kafka_</code> prefix.
+When migrating from an earlier version that used the old headers, you need to specify <code>message-key-expression="headers['messageKey']"</code> and <code>topic-expression="headers['topic']"</code> on the <code>&lt;int-kafka:outbound-channel-adapter&gt;</code>.
+Alternatively, you can change the headers upstream to the new headers from <code>KafkaHeaders</code> by using a <code>&lt;header-enricher&gt;</code> or a <code>MessageBuilder</code>.
+If you use constant values, you can also configure them on the adapter by using <code>topic</code> and <code>message-key</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>NOTE : If the adapter is configured with a topic or message key (either with a constant or expression), those are used and the corresponding header is ignored.
+If you wish the header to override the configuration, you need to configure it in an expression, such as the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">topic-expression="headers['topic'] != null ? headers['topic'] : 'myTopic'"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The adapter requires a <code>KafkaTemplate</code>, which, in turn, requires a suitably configured <code>KafkaProducerFactory</code>.</p>
+</div>
+<div class="paragraph">
+<p>If a <code>send-failure-channel</code> (<code>sendFailureChannel</code>) is provided and a <code>send()</code> failure (sync or async) is received, an <code>ErrorMessage</code> is sent to the channel.
+The payload is a <code>KafkaSendFailureException</code> with <code>failedMessage</code>, <code>record</code> (the <code>ProducerRecord</code>) and <code>cause</code> properties.
+You can override the <code>DefaultErrorMessageStrategy</code> by setting the <code>error-message-strategy</code> property.</p>
+</div>
+<div class="paragraph">
+<p>If a <code>send-success-channel</code> (<code>sendSuccessChannel</code>) is provided, a message with a payload of type <code>org.apache.kafka.clients.producer.RecordMetadata</code> is sent after a successful send.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If your application uses transactions and the same channel adapter is used to publish messages where the transaction is started by a listener container, as well as publishing where there is no existing transaction, you must configure a <code>transactionIdPrefix</code> on the <code>KafkaTemplate</code> to override the prefix used by the container or transaction manager.
+The prefix used by container-initiated transactions (the producer factory or transaction manager property) must be the same on all application instances.
+The prefix used for producer-only transactions must be unique on all application instances.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can configure a <code>flushExpression</code> which must resolve to a boolean value.
+Flushing after sending several messages might be useful if you are using the <code>linger.ms</code> and <code>batch.size</code> Kafka producer properties; the expression should evaluate to <code>Boolean.TRUE</code> on the last message and an incomplete batch will be sent immediately.
+By default, the expression looks for a <code>Boolean</code> value in the <code>KafkaIntegrationHeaders.FLUSH</code> header (<code>kafka_flush</code>).
+The flush will occur if the value is <code>true</code> and not if it&#8217;s <code>false</code> or the header is absent.</p>
+</div>
+<div class="paragraph">
+<p>The <code>KafkaProducerMessageHandler.sendTimeoutExpression</code> default has changed from 10 seconds to the <code>delivery.timeout.ms</code> Kafka producer property <code>+ 5000</code> so that the actual Kafka error after a timeout is propagated to the application, instead of a timeout generated by this framework.
+This has been changed for consistency because you may get unexpected behavior (Spring may timeout the send, while it is actually, eventually, successful).
+IMPORTANT: That timeout is 120 seconds by default so you may wish to reduce it to get more timely failures.</p>
+</div>
+<div class="sect2">
+<h3 id="kakfa-outbound-adapter-coniguration"><a class="anchor" href="#kakfa-outbound-adapter-coniguration"></a>Configuration</h3>
+<div class="paragraph">
+<p>The following example shows how to configure the outbound channel adapter for Apache Kafka:</p>
+</div>
+<div id="_tabs_2" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_2_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_2_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_2_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_2_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_2_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public ProducerFactory&lt;Integer, String&gt; producerFactory() {
+    return new DefaultKafkaProducerFactory&lt;&gt;(KafkaTestUtils.producerProps(embeddedKafka));
+}
+
+@Bean
+public IntegrationFlow sendToKafkaFlow() {
+    return f -&gt; f
+            .splitWith(s -&gt; s.&lt;String&gt;function(p -&gt; Stream.generate(() -&gt; p).limit(101).iterator()))
+            .publishSubscribeChannel(c -&gt; c
+                    .subscribe(sf -&gt; sf.handle(
+                            kafkaMessageHandler(producerFactory(), TEST_TOPIC1)
+                                    .timestampExpression("T(Long).valueOf('1487694048633')"),
+                            e -&gt; e.id("kafkaProducer1")))
+                    .subscribe(sf -&gt; sf.handle(
+                            kafkaMessageHandler(producerFactory(), TEST_TOPIC2)
+                                   .timestamp(m -&gt; 1487694048644L),
+                            e -&gt; e.id("kafkaProducer2")))
+            );
+}
+
+@Bean
+public DefaultKafkaHeaderMapper mapper() {
+    return new DefaultKafkaHeaderMapper();
+}
+
+private KafkaProducerMessageHandlerSpec&lt;Integer, String, ?&gt; kafkaMessageHandler(
+        ProducerFactory&lt;Integer, String&gt; producerFactory, String topic) {
+    return Kafka
+            .outboundChannelAdapter(producerFactory)
+            .messageKey(m -&gt; m
+                    .getHeaders()
+                    .get(IntegrationMessageHeaderAccessor.SEQUENCE_NUMBER))
+            .headerMapper(mapper())
+            .partitionId(m -&gt; 10)
+            .topicExpression("headers[kafka_topic] ?: '" + topic + "'")
+            .configureKafkaTemplate(t -&gt; t.id("kafkaTemplate:" + topic));
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@ServiceActivator(inputChannel = "toKafka")
+public MessageHandler handler() throws Exception {
+    KafkaProducerMessageHandler&lt;String, String&gt; handler =
+            new KafkaProducerMessageHandler&lt;&gt;(kafkaTemplate());
+    handler.setTopicExpression(new LiteralExpression("someTopic"));
+    handler.setMessageKeyExpression(new LiteralExpression("someKey"));
+    handler.setSuccessChannel(successes());
+    handler.setFailureChannel(failures());
+    return handler;
+}
+
+@Bean
+public KafkaTemplate&lt;String, String&gt; kafkaTemplate() {
+    return new KafkaTemplate&lt;&gt;(producerFactory());
+}
+
+@Bean
+public ProducerFactory&lt;String, String&gt; producerFactory() {
+    Map&lt;String, Object&gt; props = new HashMap&lt;&gt;();
+    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, this.brokerAddress);
+    // set more properties
+    return new DefaultKafkaProducerFactory&lt;&gt;(props);
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-kafka:outbound-channel-adapter id="kafkaOutboundChannelAdapter"
+                                    kafka-template="template"
+                                    auto-startup="false"
+                                    channel="inputToKafka"
+                                    topic="foo"
+                                    sync="false"
+                                    message-key-expression="'bar'"
+                                    send-failure-channel="failures"
+                                    send-success-channel="successes"
+                                    error-message-strategy="ems"
+                                    partition-id-expression="2"&gt;
+&lt;/int-kafka:outbound-channel-adapter&gt;
+
+&lt;bean id="template" class="org.springframework.kafka.core.KafkaTemplate"&gt;
+    &lt;constructor-arg&gt;
+        &lt;bean class="org.springframework.kafka.core.DefaultKafkaProducerFactory"&gt;
+            &lt;constructor-arg&gt;
+                &lt;map&gt;
+                    &lt;entry key="bootstrap.servers" value="localhost:9092" /&gt;
+                    ... &lt;!-- more producer properties --&gt;
+                &lt;/map&gt;
+            &lt;/constructor-arg&gt;
+        &lt;/bean&gt;
+    &lt;/constructor-arg&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="kafka-inbound"><a class="anchor" href="#kafka-inbound"></a>Message-driven Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>KafkaMessageDrivenChannelAdapter</code> (<code>&lt;int-kafka:message-driven-channel-adapter&gt;</code>) uses a <code>spring-kafka</code> <code>KafkaMessageListenerContainer</code> or <code>ConcurrentListenerContainer</code>.</p>
+</div>
+<div class="paragraph">
+<p>Also, the <code>mode</code> attribute is available.
+It can accept values of <code>record</code> or <code>batch</code> (default: <code>record</code>).
+For <code>record</code> mode, each message payload is converted from a single <code>ConsumerRecord</code>.
+For <code>batch</code> mode, the payload is a list of objects that are converted from all the <code>ConsumerRecord</code> instances returned by the consumer poll.
+As with the batched <code>@KafkaListener</code>, the <code>KafkaHeaders.RECEIVED_KEY</code>, <code>KafkaHeaders.RECEIVED_PARTITION</code>, <code>KafkaHeaders.RECEIVED_TOPIC</code>, and <code>KafkaHeaders.OFFSET</code> headers are also lists, with positions corresponding to the position in the payload.</p>
+</div>
+<div class="paragraph">
+<p>Received messages have certain headers populated.
+See the <a href="https://docs.spring.io/spring-kafka/api/org/springframework/kafka/support/KafkaHeaders.html"><code>KafkaHeaders</code> class</a> for more information.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The <code>Consumer</code> object (in the <code>kafka_consumer</code> header) is not thread-safe.
+You must invoke its methods only on the thread that calls the listener within the adapter.
+If you hand off the message to another thread, you must not call its methods.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When a <code>retry-template</code> is provided, delivery failures are retried according to its retry policy.
+If an <code>error-channel</code> is also supplied, a default <code>ErrorMessageSendingRecoverer</code> will be used as the recovery callback after retries are exhausted.
+You can also use the <code>recovery-callback</code> to specify some other action to take in that case, or set it to <code>null</code> to throw the final exception to the listener container so it is handled there.</p>
+</div>
+<div class="paragraph">
+<p>When building an <code>ErrorMessage</code> (for use in the <code>error-channel</code> or <code>recovery-callback</code>), you can customize the error message by setting the <code>error-message-strategy</code> property.
+By default, a <code>RawRecordHeaderErrorMessageStrategy</code> is used, to provide access to the converted message as well as the raw <code>ConsumerRecord</code>.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This form of retry is blocking and could cause a rebalance if the aggregate retry delays across all polled records might exceed the <code>max.poll.interval.ms</code> consumer property.
+Instead, consider adding a <code>DefaultErrorHandler</code> to the listener container, configured with a <code>KafkaErrorSendingMessageRecoverer</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="kafka-inbound-adapter-configuration"><a class="anchor" href="#kafka-inbound-adapter-configuration"></a>Configuration</h3>
+<div class="paragraph">
+<p>The following example shows how to configure a message-driven channel adapter:</p>
+</div>
+<div id="_tabs_3" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_3_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_3_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_3_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_3_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_3_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow topic1ListenerFromKafkaFlow() {
+    return IntegrationFlow
+            .from(Kafka.messageDrivenChannelAdapter(consumerFactory(),
+                    KafkaMessageDrivenChannelAdapter.ListenerMode.record, TEST_TOPIC1)
+                    .configureListenerContainer(c -&gt;
+                            c.ackMode(AbstractMessageListenerContainer.AckMode.MANUAL)
+                                    .id("topic1ListenerContainer"))
+                    .recoveryCallback(new ErrorMessageSendingRecoverer(errorChannel(),
+                            new RawRecordHeaderErrorMessageStrategy()))
+                    .retryTemplate(new RetryTemplate())
+                    .filterInRetry(true))
+            .filter(Message.class, m -&gt;
+                            m.getHeaders().get(KafkaHeaders.RECEIVED_MESSAGE_KEY, Integer.class) &lt; 101,
+                    f -&gt; f.throwExceptionOnRejection(true))
+            .&lt;String, String&gt;transform(String::toUpperCase)
+            .channel(c -&gt; c.queue("listeningFromKafkaResults1"))
+            .get();
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public KafkaMessageDrivenChannelAdapter&lt;String, String&gt;
+            adapter(KafkaMessageListenerContainer&lt;String, String&gt; container) {
+    KafkaMessageDrivenChannelAdapter&lt;String, String&gt; kafkaMessageDrivenChannelAdapter =
+            new KafkaMessageDrivenChannelAdapter&lt;&gt;(container, ListenerMode.record);
+    kafkaMessageDrivenChannelAdapter.setOutputChannel(received());
+    return kafkaMessageDrivenChannelAdapter;
+}
+
+@Bean
+public KafkaMessageListenerContainer&lt;String, String&gt; container() throws Exception {
+    ContainerProperties properties = new ContainerProperties(this.topic);
+    // set more properties
+    return new KafkaMessageListenerContainer&lt;&gt;(consumerFactory(), properties);
+}
+
+@Bean
+public ConsumerFactory&lt;String, String&gt; consumerFactory() {
+    Map&lt;String, Object&gt; props = new HashMap&lt;&gt;();
+    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this.brokerAddress);
+    // set more properties
+    return new DefaultKafkaConsumerFactory&lt;&gt;(props);
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-kafka:message-driven-channel-adapter
+        id="kafkaListener"
+        listener-container="container1"
+        auto-startup="false"
+        phase="100"
+        send-timeout="5000"
+        mode="record"
+        retry-template="template"
+        recovery-callback="callback"
+        error-message-strategy="ems"
+        channel="someChannel"
+        error-channel="errorChannel" /&gt;
+
+&lt;bean id="container1" class="org.springframework.kafka.listener.KafkaMessageListenerContainer"&gt;
+    &lt;constructor-arg&gt;
+        &lt;bean class="org.springframework.kafka.core.DefaultKafkaConsumerFactory"&gt;
+            &lt;constructor-arg&gt;
+                &lt;map&gt;
+                &lt;entry key="bootstrap.servers" value="localhost:9092" /&gt;
+                ...
+                &lt;/map&gt;
+            &lt;/constructor-arg&gt;
+        &lt;/bean&gt;
+    &lt;/constructor-arg&gt;
+    &lt;constructor-arg&gt;
+        &lt;bean class="org.springframework.kafka.listener.config.ContainerProperties"&gt;
+            &lt;constructor-arg name="topics" value="foo" /&gt;
+        &lt;/bean&gt;
+    &lt;/constructor-arg&gt;
+
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use the container factory that is used for <code>@KafkaListener</code> annotations to create <code>ConcurrentMessageListenerContainer</code> instances for other purposes.
+See <a href="https://docs.spring.io/spring-kafka/docs/current/reference/html/">the Spring for Apache Kafka documentation</a> for an example.</p>
+</div>
+<div class="paragraph">
+<p>With the Java DSL, the container does not have to be configured as a <code>@Bean</code>, because the DSL registers the container as a bean.
+The following example shows how to do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow topic2ListenerFromKafkaFlow() {
+    return IntegrationFlow
+            .from(Kafka.messageDrivenChannelAdapter(kafkaListenerContainerFactory().createContainer(TEST_TOPIC2),
+            KafkaMessageDrivenChannelAdapter.ListenerMode.record)
+                .id("topic2Adapter"))
+            ...
+            get();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice that, in this case, the adapter is given an <code>id</code> (<code>topic2Adapter</code>).
+The container is registered in the application context with a name of <code>topic2Adapter.container</code>.
+If the adapter does not have an <code>id</code> property, the container&#8217;s bean name is the container&#8217;s fully qualified class name plus <code>#n</code>, where <code>n</code> is incremented for each container.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="kafka-inbound-pollable"><a class="anchor" href="#kafka-inbound-pollable"></a>Inbound Channel Adapter</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>KafkaMessageSource</code> provides a pollable channel adapter implementation.</p>
+</div>
+<div class="sect2">
+<h3 id="kafka-message-source-configuration"><a class="anchor" href="#kafka-message-source-configuration"></a>Configuration</h3>
+<div id="_tabs_4" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_4_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_4_kotlin" class="tab">
+<p>Kotlin</p>
+</li>
+<li id="_tabs_4_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_4_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_4_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_4_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow flow(ConsumerFactory&lt;String, String&gt; cf)  {
+    return IntegrationFlow.from(Kafka.inboundChannelAdapter(cf, new ConsumerProperties("myTopic")),
+                          e -&gt; e.poller(Pollers.fixedDelay(5000)))
+            .handle(System.out::println)
+            .get();
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_4_kotlin--panel" class="tabpanel" aria-labelledby="_tabs_4_kotlin">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Bean
+fun sourceFlow(cf: ConsumerFactory&lt;String, String&gt;) =
+    integrationFlow(Kafka.inboundChannelAdapter(cf,
+        ConsumerProperties(TEST_TOPIC3).also {
+            it.groupId = "kotlinMessageSourceGroup"
+        }),
+        { poller(Pollers.fixedDelay(100)) }) {
+        handle { m -&gt;
+
+        }
+    }</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@InboundChannelAdapter(channel = "fromKafka", poller = @Poller(fixedDelay = "5000"))
+@Bean
+public KafkaMessageSource&lt;String, String&gt; source(ConsumerFactory&lt;String, String&gt; cf)  {
+    ConsumerProperties consumerProperties = new ConsumerProperties("myTopic");
+	consumerProperties.setGroupId("myGroupId");
+	consumerProperties.setClientId("myClientId");
+    retunr new KafkaMessageSource&lt;&gt;(cf, consumerProperties);
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-kafka:inbound-channel-adapter
+        id="adapter1"
+        consumer-factory="consumerFactory"
+        consumer-properties="consumerProperties1"
+        ack-factory="ackFactory"
+        channel="inbound"
+        message-converter="converter"
+        payload-type="java.lang.String"
+        raw-header="true"
+        auto-startup="false"&gt;
+    &lt;int:poller fixed-delay="5000"/&gt;
+&lt;/int-kafka:inbound-channel-adapter&gt;
+
+&lt;bean id="consumerFactory" class="org.springframework.kafka.core.DefaultKafkaConsumerFactory"&gt;
+    &lt;constructor-arg&gt;
+        &lt;map&gt;
+            &lt;entry key="max.poll.records" value="1"/&gt;
+        &lt;/map&gt;
+    &lt;/constructor-arg&gt;
+&lt;/bean&gt;
+
+&lt;bean id="consumerProperties1" class="org.springframework.kafka.listener.ConsumerProperties"&gt;
+    &lt;constructor-arg name="topics" value="topic1"/&gt;
+    &lt;property name="groupId" value="group"/&gt;
+    &lt;property name="clientId" value="client"/&gt;
+&lt;/bean&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Refer to the javadocs for available properties.</p>
+</div>
+<div id="max-poll-records" class="paragraph">
+<p>By default, <code>max.poll.records</code> must be either explicitly set in the consumer factory, or it will be forced to 1 if the consumer factory is a <code>DefaultKafkaConsumerFactory</code>.
+You can set the property <code>allowMultiFetch</code> to <code>true</code> to override this behavior.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+You must poll the consumer within <code>max.poll.interval.ms</code> to avoid a rebalance.
+If you set <code>allowMultiFetch</code> to <code>true</code> you must process all the retrieved records, and poll again, within <code>max.poll.interval.ms</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Messages emitted by this adapter contain a header <code>kafka_remainingRecords</code> with a count of records remaining from the previous poll.</p>
+</div>
+<div class="paragraph">
+<p>Starting with version <code>6.2</code>, the <code>KafkaMessageSource</code> supports an <code>ErrorHandlingDeserializer</code> provided in the consumer properties.
+A <code>DeserializationException</code> is extracted from record headers and thrown to the called.
+With a <code>SourcePollingChannelAdapter</code> this exception is wrapped into an <code>ErrorMessage</code> and published to its <code>errorChannel</code>.
+See <a href="https://docs.spring.io/spring-kafka/reference/html/#error-handling-deserializer"><code>ErrorHandlingDeserializer</code></a> documentation for more information.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="kafka-outbound-gateway"><a class="anchor" href="#kafka-outbound-gateway"></a>Outbound Gateway</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The outbound gateway is for request/reply operations.
+It differs from most Spring Integration gateways in that the sending thread does not block in the gateway, and the reply is processed on the reply listener container thread.
+If your code invokes the gateway behind a synchronous <a href="https://docs.spring.io/spring-integration/reference/html/messaging-endpoints-chapter.html#gateway">Messaging Gateway</a>, the user thread blocks there until the reply is received (or a timeout occurs).</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The gateway does not accept requests until the reply container has been assigned its topics and partitions.
+It is suggested that you add a <code>ConsumerRebalanceListener</code> to the template&#8217;s reply container properties and wait for the <code>onPartitionsAssigned</code> call before sending messages to the gateway.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>KafkaProducerMessageHandler</code> <code>sendTimeoutExpression</code> default is <code>delivery.timeout.ms</code> Kafka producer property <code>+ 5000</code> so that the actual Kafka error after a timeout is propagated to the application, instead of a timeout generated by this framework.
+This has been changed for consistency because you may get unexpected behavior (Spring may time out the <code>send()</code>, while it is actually, eventually, successful).
+IMPORTANT: That timeout is 120 seconds by default, so you may wish to reduce it to get more timely failures.</p>
+</div>
+<div class="sect2">
+<h3 id="kafka-outbound-gateway-configuration"><a class="anchor" href="#kafka-outbound-gateway-configuration"></a>Configuration</h3>
+<div class="paragraph">
+<p>The following example shows how to configure a gateway:</p>
+</div>
+<div id="_tabs_5" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_5_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_5_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_5_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_5_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_5_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow outboundGateFlow(
+        ReplyingKafkaTemplate&lt;String, String, String&gt; kafkaTemplate) {
+
+    return IntegrationFlow.from("kafkaRequests")
+            .handle(Kafka.outboundGateway(kafkaTemplate))
+            .channel("kafkaReplies")
+            .get();
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+@ServiceActivator(inputChannel = "kafkaRequests", outputChannel = "kafkaReplies")
+public KafkaProducerMessageHandler&lt;String, String&gt; outGateway(
+        ReplyingKafkaTemplate&lt;String, String, String&gt; kafkaTemplate) {
+    return new KafkaProducerMessageHandler&lt;&gt;(kafkaTemplate);
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-kafka:outbound-gateway
+    id="allProps"
+    error-message-strategy="ems"
+    kafka-template="template"
+    message-key-expression="'key'"
+    order="23"
+    partition-id-expression="2"
+    reply-channel="replies"
+    reply-timeout="43"
+    request-channel="requests"
+    requires-reply="false"
+    send-success-channel="successes"
+    send-failure-channel="failures"
+    send-timeout-expression="44"
+    sync="true"
+    timestamp-expression="T(System).currentTimeMillis()"
+    topic-expression="'topic'"/&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Refer to the javadocs for available properties.</p>
+</div>
+<div class="paragraph">
+<p>Notice that the same class as the <a href="#kafka-outbound">outbound channel adapter</a> is used, the only difference being that the <code>KafkaTemplate</code> passed into the constructor is a <code>ReplyingKafkaTemplate</code>.
+See <a href="https://docs.spring.io/spring-kafka/docs/current/reference/html/">the Spring for Apache Kafka documentation</a>  for more information.</p>
+</div>
+<div class="paragraph">
+<p>The outbound topic, partition, key, and so on are determined in the same way as the outbound adapter.
+The reply topic is determined as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A message header named <code>KafkaHeaders.REPLY_TOPIC</code> (if present, it must have a <code>String</code> or <code>byte[]</code> value) is validated against the template&#8217;s reply container&#8217;s subscribed topics.</p>
+</li>
+<li>
+<p>If the template&#8217;s <code>replyContainer</code> is subscribed to only one topic, it is used.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>You can also specify a <code>KafkaHeaders.REPLY_PARTITION</code> header to determine a specific partition to be used for replies.
+Again, this is validated against the template&#8217;s reply container&#8217;s subscriptions.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, you can also use a configuration similar to the following bean:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow outboundGateFlow() {
+    return IntegrationFlow.from("kafkaRequests")
+            .handle(Kafka.outboundGateway(producerFactory(), replyContainer())
+                .configureKafkaTemplate(t -&gt; t.replyTimeout(30_000)))
+            .channel("kafkaReplies")
+            .get();
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="kafka-inbound-gateway"><a class="anchor" href="#kafka-inbound-gateway"></a>Inbound Gateway</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The inbound gateway is for request/reply operations.</p>
+</div>
+<div class="sect2">
+<h3 id="kafka-inbound-gateway-configurartion"><a class="anchor" href="#kafka-inbound-gateway-configurartion"></a>Configuration</h3>
+<div class="paragraph">
+<p>The following example shows how to configure an inbound gateway:</p>
+</div>
+<div id="_tabs_6" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_6_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_6_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_6_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_6_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_6_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow serverGateway(
+        ConcurrentMessageListenerContainer&lt;Integer, String&gt; container,
+        KafkaTemplate&lt;Integer, String&gt; replyTemplate) {
+    return IntegrationFlow
+            .from(Kafka.inboundGateway(container, replyTemplate)
+                .replyTimeout(30_000))
+            .&lt;String, String&gt;transform(String::toUpperCase)
+            .get();
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public KafkaInboundGateway&lt;Integer, String, String&gt; inboundGateway(
+        AbstractMessageListenerContainer&lt;Integer, String&gt;container,
+        KafkaTemplate&lt;Integer, String&gt; replyTemplate) {
+
+    KafkaInboundGateway&lt;Integer, String, String&gt; gateway =
+        new KafkaInboundGateway&lt;&gt;(container, replyTemplate);
+    gateway.setRequestChannel(requests);
+    gateway.setReplyChannel(replies);
+    gateway.setReplyTimeout(30_000);
+    return gateway;
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-kafka:inbound-gateway
+        id="gateway1"
+        listener-container="container1"
+        kafka-template="template"
+        auto-startup="false"
+        phase="100"
+        request-timeout="5000"
+        request-channel="nullChannel"
+        reply-channel="errorChannel"
+        reply-timeout="43"
+        message-converter="messageConverter"
+        payload-type="java.lang.String"
+        error-message-strategy="ems"
+        retry-template="retryTemplate"
+        recovery-callback="recoveryCallback"/&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Refer to the javadocs for available properties.</p>
+</div>
+<div class="paragraph">
+<p>When a <code>RetryTemplate</code> is provided, delivery failures are retried according to its retry policy.
+If an <code>error-channel</code> is also supplied, a default <code>ErrorMessageSendingRecoverer</code> will be used as the recovery callback after retries are exhausted.
+You can also use the <code>recovery-callback</code> to specify some other action to take in that case, or set it to <code>null</code> to throw the final exception to the listener container so it is handled there.</p>
+</div>
+<div class="paragraph">
+<p>When building an <code>ErrorMessage</code> (for use in the <code>error-channel</code> or <code>recovery-callback</code>), you can customize the error message by setting the <code>error-message-strategy</code> property.
+By default, a <code>RawRecordHeaderErrorMessageStrategy</code> is used, to provide access to the converted message as well as the raw <code>ConsumerRecord</code>.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This form of retry is blocking and could cause a rebalance if the aggregate retry delays across all polled records might exceed the <code>max.poll.interval.ms</code> consumer property.
+Instead, consider adding a <code>DefaultErrorHandler</code> to the listener container, configured with a <code>KafkaErrorSendingMessageRecoverer</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The following example shows how to configure a simple upper case converter with the Java DSL:</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, you could configure an upper-case converter by using code similar to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow serverGateway() {
+    return IntegrationFlow
+            .from(Kafka.inboundGateway(consumerFactory(), containerProperties(),
+                    producerFactory())
+                .replyTimeout(30_000))
+            .&lt;String, String&gt;transform(String::toUpperCase)
+            .get();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also use the container factory that is used for <code>@KafkaListener</code> annotations to create <code>ConcurrentMessageListenerContainer</code> instances for other purposes.
+See <a href="https://docs.spring.io/spring-kafka/docs/current/reference/html/">the Spring for Apache Kafka documentation</a> and <a href="#kafka-inbound">Message-driven Channel Adapter</a> for examples.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="kafka-channels"><a class="anchor" href="#kafka-channels"></a>Channels Backed by Apache Kafka Topics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration has <code>MessageChannel</code> implementations backed by an Apache Kafka topic for persistence.</p>
+</div>
+<div class="paragraph">
+<p>Each channel requires a <code>KafkaTemplate</code> for the sending side and either a listener container factory (for subscribable channels) or a <code>KafkaMessageSource</code> for a pollable channel.</p>
+</div>
+<div class="sect2">
+<h3 id="java-dsl-configuration"><a class="anchor" href="#java-dsl-configuration"></a>Java DSL Configuration</h3>
+<div id="_tabs_7" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_7_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_7_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_7_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_7_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_7_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public IntegrationFlow flowWithSubscribable(KafkaTemplate&lt;Integer, String&gt; template,
+        ConcurrentKafkaListenerContainerFactory&lt;Integer, String&gt; containerFactory) {
+
+    return IntegrationFlow.from(...)
+            ...
+            .channel(Kafka.channel(template, containerFactory, "someTopic1").groupId("group1"))
+            ...
+            .get();
+}
+
+@Bean
+public IntegrationFlow flowWithPubSub(KafkaTemplate&lt;Integer, String&gt; template,
+        ConcurrentKafkaListenerContainerFactory&lt;Integer, String&gt; containerFactory) {
+
+    return IntegrationFlow.from(...)
+            ...
+            .publishSubscribeChannel(pubSub(template, containerFactory),
+                pubsub -&gt; pubsub
+                            .subscribe(subflow -&gt; ...)
+                            .subscribe(subflow -&gt; ...))
+            .get();
+}
+
+@Bean
+public BroadcastCapableChannel pubSub(KafkaTemplate&lt;Integer, String&gt; template,
+        ConcurrentKafkaListenerContainerFactory&lt;Integer, String&gt; containerFactory) {
+
+    return Kafka.publishSubscribeChannel(template, containerFactory, "someTopic2")
+            .groupId("group2")
+            .get();
+}
+
+@Bean
+public IntegrationFlow flowWithPollable(KafkaTemplate&lt;Integer, String&gt; template,
+        KafkaMessageSource&lt;Integer, String&gt; source) {
+
+    return IntegrationFlow.from(...)
+            ...
+            .channel(Kafka.pollableChannel(template, source, "someTopic3").groupId("group3"))
+            .handle(...,  e -&gt; e.poller(...))
+            ...
+            .get();
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">/**
+ * Channel for a single subscriber.
+ **/
+@Bean
+SubscribableKafkaChannel pointToPoint(KafkaTemplate&lt;String, String&gt; template,
+    KafkaListenerContainerFactory&lt;String, String&gt; factory)
+
+    SubscribableKafkaChannel channel =
+        new SubscribableKafkaChannel(template, factory, "topicA");
+    channel.setGroupId("group1");
+    return channel;
+}
+
+/**
+ * Channel for multiple subscribers.
+ **/
+@Bean
+SubscribableKafkaChannel pubsub(KafkaTemplate&lt;String, String&gt; template,
+    KafkaListenerContainerFactory&lt;String, String&gt; factory)
+
+    SubscribableKafkaChannel channel =
+        new SubscribableKafkaChannel(template, factory, "topicB", true);
+    channel.setGroupId("group2");
+    return channel;
+}
+
+/**
+ * Pollable channel (topic is configured on the source)
+ **/
+@Bean
+PollableKafkaChannel pollable(KafkaTemplate&lt;String, String&gt; template,
+    KafkaMessageSource&lt;String, String&gt; source)
+
+    PollableKafkaChannel channel =
+        new PollableKafkaChannel(template, source);
+    channel.setGroupId("group3");
+    return channel;
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-kafka:channel kafka-template="template" id="ptp" topic="ptpTopic" group-id="ptpGroup"
+    container-factory="containerFactory" /&gt;
+
+&lt;int-kafka:pollable-channel kafka-template="template" id="pollable" message-source="source"
+    group-id = "pollableGroup"/&gt;
+
+&lt;int-kafka:publish-subscribe-channel kafka-template="template" id="pubSub" topic="pubSubTopic"
+    group-id="pubSubGroup" container-factory="containerFactory" /&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="message-conversion"><a class="anchor" href="#message-conversion"></a>Message Conversion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A <code>StringJsonMessageConverter</code> is provided.
+See <a href="https://docs.spring.io/spring-kafka/docs/current/reference/html/">the Spring for Apache Kafka documentation</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>When using this converter with a message-driven channel adapter, you can specify the type to which you want the incoming payload to be converted.
+This is achieved by setting the <code>payload-type</code> attribute (<code>payloadType</code> property) on the adapter.
+The following example shows how to do so in XML configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int-kafka:message-driven-channel-adapter
+        id="kafkaListener"
+        listener-container="container1"
+        auto-startup="false"
+        phase="100"
+        send-timeout="5000"
+        channel="nullChannel"
+        message-converter="messageConverter"
+        payload-type="com.example.Thing"
+        error-channel="errorChannel" /&gt;
+
+&lt;bean id="messageConverter"
+    class="org.springframework.kafka.support.converter.MessagingMessageConverter"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The following example shows how to set the <code>payload-type</code> attribute (<code>payloadType</code> property) on the adapter in Java configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public KafkaMessageDrivenChannelAdapter&lt;String, String&gt;
+            adapter(KafkaMessageListenerContainer&lt;String, String&gt; container) {
+    KafkaMessageDrivenChannelAdapter&lt;String, String&gt; kafkaMessageDrivenChannelAdapter =
+            new KafkaMessageDrivenChannelAdapter&lt;&gt;(container, ListenerMode.record);
+    kafkaMessageDrivenChannelAdapter.setOutputChannel(received());
+    kafkaMessageDrivenChannelAdapter.setMessageConverter(converter());
+    kafkaMessageDrivenChannelAdapter.setPayloadType(Thing.class);
+    return kafkaMessageDrivenChannelAdapter;
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="kafka-tombstones"><a class="anchor" href="#kafka-tombstones"></a>Null Payloads and Log Compaction 'Tombstone' Records</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Messaging <code>Message&lt;?&gt;</code> objects cannot have <code>null</code> payloads.
+When you use the endpoints for Apache Kafka, <code>null</code> payloads (also known as tombstone records) are represented by a payload of type <code>KafkaNull</code>.
+See <a href="https://docs.spring.io/spring-kafka/docs/current/reference/html/">the Spring for Apache Kafka documentation</a> for more information.</p>
+</div>
+<div class="paragraph">
+<p>The POJO methods for Spring Integration endpoints can use a true <code>null</code> value instead of <code>KafkaNull</code>.
+To do so, mark the parameter with <code>@Payload(required = false)</code>.
+The following example shows how to do so:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@ServiceActivator(inputChannel = "fromSomeKafkaInboundEndpoint")
+public void in(@Header(KafkaHeaders.RECEIVED_KEY) String key,
+               @Payload(required = false) Customer customer) {
+    // customer is null if a tombstone record
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="streams-integration"><a class="anchor" href="#streams-integration"></a>Calling a Spring Integration flow from a <code>KStream</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can use a <code>MessagingTransformer</code> to invoke an integration flow from a <code>KStream</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+public KStream&lt;byte[], byte[]&gt; kStream(StreamsBuilder kStreamBuilder,
+        MessagingTransformer&lt;byte[], byte[], byte[]&gt; transformer)  transformer) {
+    KStream&lt;byte[], byte[]&gt; stream = kStreamBuilder.stream(STREAMING_TOPIC1);
+    stream.mapValues((ValueMapper&lt;byte[], byte[]&gt;) String::toUpperCase)
+            ...
+            .transform(() -&gt; transformer)
+            .to(streamingTopic2);
+
+    stream.print(Printed.toSysOut());
+
+    return stream;
+}
+
+@Bean
+@DependsOn("flow")
+public MessagingTransformer&lt;byte[], byte[], String&gt; transformer(
+        MessagingFunction function) {
+
+    MessagingMessageConverter converter = new MessagingMessageConverter();
+    converter.setHeaderMapper(new SimpleKafkaHeaderMapper("*"));
+    return new MessagingTransformer&lt;&gt;(function, converter);
+}
+
+@Bean
+public IntegrationFlow flow() {
+    return IntegrationFlow.from(MessagingFunction.class)
+        ...
+        .get();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When an integration flow starts with an interface, the proxy that is created has the name of the flow bean, appended with ".gateway" so this bean name can be used a a <code>@Qualifier</code> if needed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="read-process-write"><a class="anchor" href="#read-process-write"></a>Performance Considerations for read/process/write Scenarios</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Many applications consume from a topic, perform some processing and write to another topic.
+In most, cases, if the <code>write</code> fails, the application would want to throw an exception so the incoming request can be retried and/or sent to a dead letter topic.
+This functionality is supported by the underlying message listener container, together with a suitably configured error handler.
+However, in order to support this, we need to block the listener thread until the success (or failure) of the write operation so that any exceptions can be thrown to the container.
+When consuming single records, this is achieved by setting the <code>sync</code> property on the outbound adapter.
+However, when consuming batches, using <code>sync</code> causes a significant performance degradation because the application would wait for the result of each send before sending the next message.
+You also can perform multiple sends and then wait for the results of those sends afterwards.
+This is achieved by adding a <code>futuresChannel</code> to the message handler.
+To enable the feature add <code>KafkaIntegrationHeaders.FUTURE_TOKEN</code> to the outbound messages; this can then be used to correlate a <code>Future</code> to a particular sent message.
+Here is an example of how you might use this feature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@SpringBootApplication
+public class FuturesChannelApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(FuturesChannelApplication.class, args);
+    }
+
+    @Bean
+    IntegrationFlow inbound(ConsumerFactory&lt;String, String&gt; consumerFactory, Handler handler) {
+        return IntegrationFlow.from(Kafka.messageDrivenChannelAdapter(consumerFactory,
+                    ListenerMode.batch, "inTopic"))
+                .handle(handler)
+                .get();
+    }
+
+    @Bean
+    IntegrationFlow outbound(KafkaTemplate&lt;String, String&gt; kafkaTemplate) {
+        return IntegrationFlow.from(Gate.class)
+                .enrichHeaders(h -&gt; h
+                        .header(KafkaHeaders.TOPIC, "outTopic")
+                        .headerExpression(KafkaIntegrationHeaders.FUTURE_TOKEN, "headers[id]"))
+                .handle(Kafka.outboundChannelAdapter(kafkaTemplate)
+                        .futuresChannel("futures"))
+                .get();
+    }
+
+    @Bean
+    PollableChannel futures() {
+        return new QueueChannel();
+    }
+
+}
+
+@Component
+@DependsOn("outbound")
+class Handler {
+
+    @Autowired
+    Gate gate;
+
+    @Autowired
+    PollableChannel futures;
+
+    public void handle(List&lt;String&gt; input) throws Exception {
+        System.out.println(input);
+        input.forEach(str -&gt; this.gate.send(str.toUpperCase()));
+        for (int i = 0; i &lt; input.size(); i++) {
+            Message&lt;?&gt; future = this.futures.receive(10000);
+            ((Future&lt;?&gt;) future.getPayload()).get(10, TimeUnit.SECONDS);
+        }
+    }
+
+}
+
+interface Gate {
+
+    void send(String out);
+
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="jmx.html">JMX Support</a></span>
+  <span class="next"><a href="mail.html">Mail Support</a></span>
+</nav>
+</article>
+</div>  </div>
+</main>
+<div class="modal micromodal-slide" id="modal-versions" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true">
+            <main class="modal__content" id="modal-versions-content">
+              <button data-micromodal-close class="modal-versions-close">
+                <svg width="28px" height="28px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><title/><g id="cross"><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>
+              </button>
+              <div class="colset">
+                <div class="col-left">
+                  <ul class="nav-versions">
+                    <li class="component is-current">
+                      <a class="title" href="index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-current is-latest">
+                          <a href="index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="component">
+                      <a class="title" href="spring-integration/index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-latest">
+                          <a href="spring-integration/index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-right">
+                  <ul>
+                    <li>
+                      Related Spring Documentation
+                      <ul>
+                        <li><a href="https://docs.spring.io/spring-framework/reference/">Spring Framework</a></li>
+                        <li><a href="https://docs.spring.io/spring-security/reference/">Spring Security</a></li>
+                        <li><a href="https://docs.spring.io/spring-ldap/reference/">Spring LDAP</a></li>
+                        <li><a href="https://docs.spring.io/spring-session/reference/">Spring Session</a></li>
+                        <li><a href="https://docs.spring.io/spring-authorization-server/reference/">Spring Authorization Server</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+</div>
+<footer class="footer flex">
+    <div id="spring-links flex">
+        <img id="springlogo" src="./_/img/spring-logo.svg" alt="Spring">
+        <p class="smallest antialiased">© <script>var d = new Date();
+        document.write(d.getFullYear());</script> <a href="https://www.vmware.com/">VMware</a>, Inc. or its affiliates. <a href="https://www.vmware.com/help/legal.html">Terms of Use</a> • <a href="https://www.vmware.com/help/privacy.html" rel="noopener noreferrer">Privacy</a> • <a href="https://spring.io/trademarks">Trademark Guidelines</a> <span id="thank-you-mobile">• <a href="https://spring.io/thank-you">Thank you</a></span> • <a href="https://www.vmware.com/help/privacy/california-privacy-rights.html">Your California Privacy Rights</a> • <a class="ot-sdk-show-settings">Cookie Settings</a> <span id="teconsent"></span></p>
+        <p class="smallest antialiased has-gray-text">Apache®, Apache Tomcat®, Apache Kafka®, Apache Cassandra&trade;, and Apache Geode&trade; are trademarks or registered trademarks of the Apache Software Foundation in the United States and/or other countries. Java&trade;, Java&trade; SE, Java&trade; EE, and OpenJDK&trade; are trademarks of Oracle and/or its affiliates. Kubernetes® is a registered trademark of the Linux Foundation in the United States and other countries. Linux® is the registered trademark of Linus Torvalds in the United States and other countries. Windows® and Microsoft® Azure are registered trademarks of Microsoft Corporation. “AWS” and “Amazon Web Services” are trademarks or registered trademarks of Amazon.com Inc. or its affiliates. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes. Other names may be trademarks of their respective owners.</p>
+    </div>
+    <div id="social-icons" class="flex jc-between">
+        <a href="https://www.youtube.com/user/SpringSourceDev" title="Youtube"><svg id="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle class="cls-1" cx="20" cy="20" r="20"/><path class="cls-2" d="M30.91,14.53a2.89,2.89,0,0,0-2-2C27.12,12,20,12,20,12s-7.12,0-8.9.47a2.9,2.9,0,0,0-2,2A30.56,30.56,0,0,0,8.63,20a30.44,30.44,0,0,0,.46,5.47,2.89,2.89,0,0,0,2,2C12.9,28,20,28,20,28s7.12,0,8.9-.47a2.87,2.87,0,0,0,2-2A30.56,30.56,0,0,0,31.37,20,28.88,28.88,0,0,0,30.91,14.53ZM17.73,23.41V16.59L23.65,20Z"/></svg></a>
+        <a href="https://github.com/spring-projects" title="Github"><svg id="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><path class="cls-1" d="M38,0a38,38,0,1,0,38,38A38,38,0,0,0,38,0Z"/></g><path class="cls-2" d="M38,15.59A22.95,22.95,0,0,0,30.71,60.3c1.15.21,1.57-.5,1.57-1.11s0-2,0-3.9c-6.38,1.39-7.73-3.07-7.73-3.07A6.09,6.09,0,0,0,22,48.86c-2.09-1.42.15-1.39.15-1.39a4.81,4.81,0,0,1,3.52,2.36c2,3.5,5.37,2.49,6.67,1.91a4.87,4.87,0,0,1,1.46-3.07c-5.09-.58-10.45-2.55-10.45-11.34a8.84,8.84,0,0,1,2.36-6.15,8.29,8.29,0,0,1,.23-6.07s1.92-.62,6.3,2.35a21.82,21.82,0,0,1,11.49,0c4.38-3,6.3-2.35,6.3-2.35a8.29,8.29,0,0,1,.23,6.07,8.84,8.84,0,0,1,2.36,6.15c0,8.81-5.37,10.75-10.48,11.32a5.46,5.46,0,0,1,1.56,4.25c0,3.07,0,5.54,0,6.29s.42,1.33,1.58,1.1A22.94,22.94,0,0,0,38,15.59Z"/></svg></a>
+        <a href="https://twitter.com/springcentral" title="Twitter"><svg id="twitter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><circle class="cls-1" cx="37.97" cy="37.97" r="37.97"/><path id="Twitter-2" data-name="Twitter" class="cls-2" d="M55.2,22.73a15.43,15.43,0,0,1-4.88,1.91,7.56,7.56,0,0,0-5.61-2.49A7.78,7.78,0,0,0,37,30a7.56,7.56,0,0,0,.2,1.79,21.63,21.63,0,0,1-15.84-8.23,8,8,0,0,0,2.37,10.52,7.66,7.66,0,0,1-3.48-1v.09A7.84,7.84,0,0,0,26.45,41a7.54,7.54,0,0,1-2,.28A7.64,7.64,0,0,1,23,41.09a7.71,7.71,0,0,0,7.18,5.47,15.21,15.21,0,0,1-9.55,3.37,15.78,15.78,0,0,1-1.83-.11,21.41,21.41,0,0,0,11.78,3.54c14.13,0,21.86-12,21.86-22.42,0-.34,0-.68,0-1a15.67,15.67,0,0,0,3.83-4.08,14.9,14.9,0,0,1-4.41,1.24A7.8,7.8,0,0,0,55.2,22.73Z"/></svg></a>
+    </div>
+</footer>
+<script src="./_/js/vendor/import.js"></script>
+<script src="./_/js/site.js"></script>
+<script async src="./_/js/vendor/highlight.js"></script>
+<script async src="./_/js/vendor/asciidoctor-tabs.js" data-sync-storage-key="docs:preferred-tab"></script>
+
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <main class="modal__content" id="modal-1-content">
+                <div id="searchbox"></div>
+                <div id="counter"></div>
+                <div class="search-by">
+                    <a target="_blank" rel="noopener noreferrer" href="https://www.algolia.com/" aria-label="Search by Algolia">
+                        <img class="light" width="140" src="./_/img/algolia-light.svg" />
+                        <img class="dark" width="140" src="./_/img/algolia-dark.svg" />
+                    </a>
+                </div>
+                <div id="hits"></div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.17.0/dist/algoliasearch-lite.umd.js" integrity="sha256-Lf9DrpGmcRip6OQzbcL6lnvNmoZNSKpyQX5pMlwatWE=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.54.1/dist/instantsearch.production.min.js" integrity="sha256-xYsZPDeNjYNTBWLvqD2Lxe98hOxcDgOHyMPfz4tVAbk=" crossorigin="anonymous"></script>
+<script async id="search-script" src="./_/js/vendor/search.js" data-app-id="WB1FQYI187" data-api-key="9d489079e5ec46dbb238909fee5c9c29" data-index-name="springintegration" data-stylesheet="./_/css/vendor/search.css" data-page-version="6.2.0"></script>
+
+  </body>
+</html>

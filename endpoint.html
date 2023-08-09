@@ -1,0 +1,2279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Message Endpoints :: Spring Integration</title>
+    <link rel="prev" href="messaging-endpoints.html">
+    <link rel="next" href="endpoint-roles.html">
+    <meta name="generator" content="Antora 3.2.0-alpha.2">
+    <script>
+!function (theme, navWidth) {
+  if (theme === 'dark') document.documentElement.classList.add('dark-theme')
+  if (navWidth) document.documentElement.style.setProperty('--nav-width', `${navWidth}px`)
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'),
+  localStorage && localStorage.getItem('nav-width'))
+    </script>
+    <link rel="stylesheet" href="./_/css/site.css">
+    <link rel="stylesheet" href="./_/css/vendor/search.css">
+    <link rel="stylesheet" href="./_/css/vendor/asciidoctor-tabs.css">
+
+    <meta name="version" content="6.2.0">
+    <meta name="component" content="integration">
+    <link rel="icon" href="./_/img/favicon.ico" type="image/vnd.microsoft.icon">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://spring.io">
+        <img
+          id="springlogo"
+          class="block"
+          src="./_/img/spring-logo.svg"
+          alt="Spring"
+        />
+      </a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Why Spring</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/why-spring"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/microservices"
+            >Microservices</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/reactive"
+            >Reactive</a>
+            <a class="navbar-item" href="https://spring.io/event-driven">Event
+              Driven</a>
+            <a class="navbar-item" href="https://spring.io/cloud">Cloud</a>
+            <a class="navbar-item" href="https://spring.io/web-applications">Web
+              Applications</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/serverless"
+            >Serverless</a>
+            <a class="navbar-item" href="https://spring.io/batch">Batch</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Learn</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/learn">Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/quickstart"
+            >Quickstart</a>
+            <a class="navbar-item" href="https://spring.io/guides">Guides</a>
+            <a class="navbar-item" href="https://spring.io/blog">Blog</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Projects</a>
+          <div class="navbar-dropdown" style="min-width: 280px">
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects"
+            >Overview</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-boot"
+            >Spring Boot</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-framework"
+            >Spring Framework</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud"
+            >Spring Cloud</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-cloud-dataflow"
+            >Spring Cloud Data Flow</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-data"
+            >Spring Data</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-integration"
+            >Spring Integration</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-batch"
+            >Spring Batch</a>
+            <a
+              class="navbar-item"
+              href="https://spring.io/projects/spring-security"
+            >Spring Security</a>
+            <a
+              class="navbar-item navbar-item-special"
+              href="https://spring.io/projects"
+            >View all projects</a>
+            <a class="navbar-item" href="https://spring.io/tools">Spring Tools 4</a>
+            <a
+              class="navbar-item navbar-item-special-2"
+              href="https://start.spring.io"
+            >Spring Initializr
+              <svg
+                class="external-link-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+              ><polyline
+                  points="15 10.94 15 15 1 15 1 1 5.06 1"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><polyline
+                  points="8.93 1 15 1 15 7.07"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></polyline><line
+                  x1="15"
+                  y1="1"
+                  x2="8"
+                  y2="8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="2"
+                ></line></svg></a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Academy</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.academy/courses"
+            >Courses</a>
+            <a
+              class="navbar-item"
+              href="https://spring.academy/learning-path"
+            >Get Certified</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Support</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://spring.io/support">Overview</a>
+            <a class="navbar-item" href="https://spring.io/security">Security
+              Advisories</a>
+          </div>
+        </div>
+
+        <div class="navbar-item has-dropdown is-hoverable is-community">
+          <a class="navbar-link" href="#">Community</a>
+          <div class="navbar-dropdown">
+            <a
+              class="navbar-item"
+              href="https://spring.io/community"
+            >Overview</a>
+            <a class="navbar-item" href="https://spring.io/events">Events</a>
+            <a class="navbar-item" href="https://spring.io/team">Team</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <label class="theme-toggler">
+      <input
+        type="checkbox"
+        type="checkbox"
+        id="switch-theme-checkbox"
+        name="switch-theme-checkbox"
+      />
+      <span class="icon"><svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="moon"
+          class="svg-inline--fa fa-moon moon"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+        ><path
+            fill="currentColor"
+            d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6c-96.9 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"
+          ></path>
+        </svg>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="sun"
+          class="svg-inline--fa fa-sun sun"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        ><path
+            fill="currentColor"
+            d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391 371.1 498.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121 140.9 13.1c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1 346.3 2.8c4.5-3.1 10.2-3.7 15.2-1.6zM160 256a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zm224 0a128 128 0 1 0 -256 0 128 128 0 1 0 256 0z"
+          ></path>
+        </svg></span>
+      <span class="text">light</span>
+    </label>
+  </nav>
+</header>
+<script>
+!function (theme) {
+  if (theme === 'dark') {
+    document.getElementById('switch-theme-checkbox').parentElement.classList.add('active')
+  }
+}(localStorage && localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)') && 'dark'))
+</script><div class="body">
+<div class="nav-container" data-component="integration" data-version="6.2.0">
+  <aside class="nav">
+    <div class="panels">
+      <div class="nav-panel-menu is-active" data-panel="menu">
+        <nav class="nav-menu">
+<div class="context">
+  <span class="title">Spring Integration</span>
+  <span class="version">6.2.0-SNAPSHOT</span>
+  <button class="browse-version" id="browse-version">
+    <svg
+      height="24px"
+      id="Layer_1"
+      style="enable-background:new 0 0 512 512;"
+      version="1.1"
+      viewBox="0 0 512 512"
+      width="24px"
+      xml:space="preserve"
+    ><g><path
+          d="M256,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S273.7,224,256,224L256,224z"
+        ></path><path
+          d="M128.4,224c-17.7,0-32,14.3-32,32s14.3,32,32,32c17.7,0,32-14.3,32-32S146,224,128.4,224L128.4,224z"
+        ></path><path
+          d="M384,224c-17.7,0-32,14.3-32,32s14.3,32,32,32s32-14.3,32-32S401.7,224,384,224L384,224z"
+        ></path></g></svg>
+  </button>
+</div><div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="preface.html">Preface</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="whats-new.html">What&#8217;s New?</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="core.html">Core Messaging</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="channel.html">Message Channels</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interfaces.html">The MessageChannel Interface</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/implementations.html">Message Channel Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/interceptors.html">Channel Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/template.html"><code>MessagingTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/configuration.html">Configuring Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="channel/special-channels.html">Special Channels</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="polling-consumer.html">Poller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="channel-adapter.html">Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="bridge.html">Messaging Bridge</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message.html">Message</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-routing.html">Message Routing</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="router.html">Routers</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/overview.html">Overview</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/common-parameters.html">Common Router Parameters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/implementations.html">Router Implementations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/namespace.html">Configuring a Generic Router</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/spel.html">Routers and the Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/annotation.html">Configuring a Router with Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/dynamic-routers.html">Dynamic Routers</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/routing-slip.html">Routing Slip</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="router/process-manager.html">Process Manager Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="filter.html">Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="splitter.html">Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="aggregator.html">Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="resequencer.html">Resequencer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="chain.html">Message Handler Chain</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scatter-gather.html">Scatter-Gather</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="barrier.html">Thread Barrier</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="message-transformation.html">Message Transformation</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="transformer.html">Transformer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="content-enrichment.html">Content Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="claim-check.html">Claim Check</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="codec.html">Codec</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="messaging-endpoints.html">Messaging Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="endpoint.html">Message Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="endpoint-roles.html">Endpoint Roles</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="leadership-event-handling.html">Leadership Event Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gateway.html">Messaging Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="service-activator.html">Service Activator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="delayer.html">Delayer</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="scripting.html">Scripting Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="groovy.html">Groovy Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="handler-advice.html">Adding Behavior to Endpoints</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/classes.html">Provided Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/reactive.html">Reactive Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/context-holder.html">Context Holder Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/custom.html">Custom Advice Classes</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/other.html">Other Advice Chain Elements</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/handle-message.html">Handling Message Advice</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/tx-handle-message.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-filters.html">Advising Filters</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advising-with-annotations.html">Advising Endpoints Using Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/order.html">Ordering Advices within Advice Chain</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/advised-properties.html">Advised Handler Properties</a>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="handler-advice/idempotent-receiver.html">Idempotent Receiver Enterprise Integration Pattern</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="logging-adapter.html">Logging Channel Adapter</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <a class="nav-link" href="functions-support.html"><code>java.util.function</code> Interfaces Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="kotlin-functions.html">Kotlin Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="dsl.html">Java DSL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-basics.html">DSL Basics</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-channels.html">Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-pollers.html">Pollers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-reactive.html">The <code>reactive()</code> Endpoint</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-endpoints.html">DSL and Endpoint Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-transformers.html">Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-inbound-adapters.html">Inbound Channel Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-routers.html">Message Routers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-splitters.html">Splitters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-aggregators.html">Aggregators and Resequencers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-handle.html">Service Activators and the <code>.handle()</code> method</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-gateway.html">Operator gateway()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-log.html">Operator log()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-intercept.html">Operator intercept()</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-wiretap.html"><code>MessageChannelSpec.wireTap()</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flows.html">Working With Message Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-function-expression.html"><code>FunctionExpression</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-subflows.html">Sub-flows support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-protocol-adapters.html">Using Protocol Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-flow-adapter.html"><code>IntegrationFlowAdapter</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-runtime-flows.html">Dynamic and Runtime Integration Flows</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flow-as-gateway.html"><code>IntegrationFlow</code> as a Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/java-extensions.html">DSL Extensions</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dsl/integration-flows-composition.html">Integration Flows Composition</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="groovy-dsl.html">Groovy DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kotlin-dsl.html">Kotlin DSL</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="system-management.html">System Management</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="metrics.html">Metrics and Management</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-history.html">Message History</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="message-store.html">Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="meta-data-store.html">Metadata Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="control-bus.html">Control Bus</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="shutdown.html">Orderly Shutdown</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="graph.html">Integration Graph</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="integration-graph-controller.html">Integration Graph Controller</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="reactive-streams.html">Reactive Streams Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="native-aot.html">Native Images Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="endpoint-summary.html">Integration Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="amqp.html">AMQP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/polled-inbound-channel-adapter.html">Polled Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-gateway.html">Inbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/inbound-ack.html">Inbound Endpoint Acknowledge Mode</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-endpoints.html">Outbound Endpoints</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/async-outbound-gateway.html">Asynchronous Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/alternative-confirms-returns.html">Alternative Mechanism for Publisher Confirms and Returns</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/conversion-inbound.html">Inbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/content-type-conversion-outbound.html">Outbound Message Conversion</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/user-id.html">Outbound User ID</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/delay.html">Delayed Message Exchange</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/channels.html">AMQP-backed Message Channels</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/message-headers.html">AMQP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/strict-ordering.html">Strict Message Ordering</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/samples.html">AMQP Samples</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="amqp/rmq-streams.html">RabbitMQ Stream Queue Support</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="camel.html">Apache Camel Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cassandra.html">Apache Cassandra Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="debezium.html">Debezium Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="event.html">Spring <code>ApplicationEvent</code> Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="feed.html">Feed Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="file.html">File Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/reading.html">Reading Files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/writing.html">Writing files</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/transforming.html">File Transformers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/splitter.html">File Splitter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/aggregator.html">File Aggregator</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="file/remote-persistent-flf.html">Remote Persistent File List Filters</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ftp.html">FTP/FTPS Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-factory.html">FTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/advanced-configuration.html">Advanced Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/inbound.html">FTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/streaming.html">FTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound.html">FTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/outbound-gateway.html">FTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-caching.html">FTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/session-callback.html">Using <code>MessageSessionCallback</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/server-events.html">Apache Mina FTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="graphql.html">GraphQL Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="hazelcast.html">Hazelcast Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="http.html">HTTP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/inbound.html">Http Inbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/outbound.html">HTTP Outbound Components</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/namespace.html">HTTP Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/java-config.html">Configuring HTTP Endpoints with Java</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/timeout.html">Timeout Handling</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/proxy.html">HTTP Proxy configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/header-mapping.html">HTTP Header Mappings</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/int-graph-controller.html">Integration Graph Controller</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="http/samples.html">HTTP Samples</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jdbc.html">JDBC Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/outbound-gateway.html">Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/message-store.html">JDBC Message Store</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/stored-procedures.html">Stored Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/lock-registry.html">JDBC Lock Registry</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jdbc/metadata-store.html">JDBC Metadata Store</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="jpa.html">JPA Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/functionality.html">Functionality</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/supported-persistence-providers.html">Supported Persistence Providers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/java-implementation.html">Java Implementation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/inbound-channel-adapter.html">Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-channel-adapter.html">Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="jpa/outbound-gateways.html">Outbound Gateways</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jms.html">JMS Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="jmx.html">JMX Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="kafka.html">Apache Kafka Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mail.html">Mail Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mongodb.html">MongoDb Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="mqtt.html">MQTT Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="r2dbc.html">R2DBC Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="redis.html">Redis Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resource.html">Resource Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="rsocket.html">RSocket Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="sftp.html">SFTP Adapters</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-factory.html">SFTP Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/dsf.html">Delegating Session Factory</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-caching.html">SFTP Session Caching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rft.html">Using <code>RemoteFileTemplate</code></a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/inbound.html">SFTP Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/streaming.html">SFTP Streaming Inbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/rotating-server-advice.html">Inbound Channel Adapters: Polling Multiple Servers and Directories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/max-fetch.html">Inbound Channel Adapters: Controlling Remote File Fetching</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound.html">SFTP Outbound Channel Adapter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/outbound-gateway.html">SFTP Outbound Gateway</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/session-callback.html">MessageSessionCallback</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/server-events.html">Apache Mina SFTP Server Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="sftp/remote-file-info.html">Remote File Information</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="smb.html">SMB Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stomp.html">STOMP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="stream.html">Stream Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="syslog.html">Syslog Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="ip.html">TCP and UDP Support</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/intro.html">Introduction</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/udp-adapters.html">UDP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-connection-factories.html">TCP Connection Factories</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/testing-connections.html">Testing Connections</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/interceptors.html">TCP Connection Interceptors</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-events.html">TCP Connection Events</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-adapters.html">TCP Adapters</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-gateways.html">TCP Gateways</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/correlation.html">TCP Message Correlation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/note-nio.html">About Non-blocking I/O (NIO)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/ssl-tls.html">SSL/TLS Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/tcp-advanced-techniques.html">Advanced Techniques</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/endpoint-reference.html">IP Configuration Attributes</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/msg-headers.html">IP Message Headers</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/annotation.html">Annotation-Based Configuration</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ip/dsl.html">Using the Java DSL for TCP Components</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="webflux.html">WebFlux Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="web-sockets.html">WebSockets Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="ws.html">Web Services Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="xml.html">XML Support - Dealing with XML Payloads</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-namespace-support.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/transformation.html">Transforming XML Payloads</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-transformer.html">Transforming XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-splitting.html">Splitting XML Messages</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-routing.html">Routing XML Messages with XPath</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-header-enricher.html">XPath Header Enricher</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-filter.html">Using the XPath Filter</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/xpath-spel-function.html">#xpath SpEL Function</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="xml/validating-filter.html">XML Validating Filter</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="xmpp.html">XMPP Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zeromq.html">ZeroMQ Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zookeeper.html">Zookeeper Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="error-handling.html">Error Handling</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="spel.html">Spring Expression Language (SpEL)</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="message-publishing.html">Message Publishing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="transactions.html">Transaction Support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="security.html">Security in Spring Integration</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="configuration.html">Configuration</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace.html">Namespace Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/namespace-taskscheduler.html">Configuring the Task Scheduler</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/global-properties.html">Global Properties</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/annotations.html">Annotation Support</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/meta-annotations.html">Messaging Meta-Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="configuration/message-mapping-rules.html">Message Mapping Rules and Conventions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="testing.html">Testing support</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="samples.html">Spring Integration Samples</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="resources.html">Additional Resources</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="history.html">Change History</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-6.0-6.1.html">Changes between 6.0 and 6.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.5-6.0.html">Changes between 5.5 and 6.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.4-5.5.html">Changes between 5.4 and 5.5</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.3-5.4.html">Changes between 5.3 and 5.4</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.2-5.3.html">Changes between 5.2 and 5.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.1-5.2.html">Changes between 5.1 and 5.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-5.0-5.1.html">Changes between 5.0 and 5.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.3-5.0.html">Changes between 4.3 and 5.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.2-4.3.html">Changes between 4.2 and 4.3</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.1-4.2.html">Changes between 4.1 and 4.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-4.0-4.1.html">Changes between 4.0 and 4.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-3.0-4.0.html">Changes between 3.0 and 4.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.2-3.0.html">Changes Between 2.2 and 3.0</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.1-2.2.html">Changes between 2.1 and 2.2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-2.0-2.1.html">Changes between 2.0 and 2.1</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="changes-1.0-2.0.html">Changes between Versions 1.0 and 2.0</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="zip.html">Zip Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+          <div class="toggle-sm">
+            <button id="nav-toggle-2" class="nav-toggle"></button>
+          </div>
+        </nav>
+      </div>
+      <div class="nav-collapse">
+        <button id="nav-collapse-toggle"><span></span></button>        
+      </div>
+    </div>
+    <div class="nav-resize"></div>
+  </aside>
+</div>
+<script>
+!function (sidebar) {
+  if (sidebar) {
+    document.body.classList.add('nav-sm')
+  }
+}(localStorage && localStorage.getItem('sidebar') === 'close')
+</script><main class="article">
+<div class="toolbar" role="navigation">
+  <button id="nav-toggle-1" class="nav-toggle"></button>
+<div class="search">
+  <button class="DocSearch-Button search-button">
+    <svg enable-background="new 0 0 32 32" id="Glyph" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <path d="M27.414,24.586l-5.077-5.077C23.386,17.928,24,16.035,24,14c0-5.514-4.486-10-10-10S4,8.486,4,14  s4.486,10,10,10c2.035,0,3.928-0.614,5.509-1.663l5.077,5.077c0.78,0.781,2.048,0.781,2.828,0  C28.195,26.633,28.195,25.367,27.414,24.586z M7,14c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S7,17.86,7,14z" id="XMLID_223_"/>
+    </svg>
+    <span>Search</span>
+    <span class="search-key"></span>
+  </button>
+</div>
+</div>
+  <div class="content">
+<aside class="sidebar">
+  <div class="content">
+    <div
+      class="toc"
+      data-title="Message Endpoints"
+      data-levels="2"
+    >
+      <div class="toc-menu"></div>
+    </div>
+    <div class="sidebar-links">
+        <a href="https://github.com/rwinch/spring-integration/edit/main/src/reference/antora/modules/ROOT/pages/endpoint.adoc">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+          ><path
+              d="m16 2.012 3 3L16.713 7.3l-3-3zM4 14v3h3l8.299-8.287-3-3zm0 6h16v2H4z"
+            ></path></svg>
+          Edit this Page
+        </a>
+              <a href="https://github.com/rwinch/spring-integration" title="Github">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="512px"
+            id="Layer_1"
+            version="1.1"
+            viewBox="0 0 512 512"
+            width="512px"
+          ><style type="text/css"><![CDATA[
+              .st0{fill-rule:evenodd;clip-rule:evenodd;} ]]></style><g><path
+                class="st0"
+                d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"
+              ></path></g></svg>
+          Github Project
+        </a>
+        <a href="https://stackoverflow.com/tags/spring-integration">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path
+              d="M290.7 311L95 269.7 86.8 309l195.7 41zm51-87L188.2 95.7l-25.5 30.8 153.5 128.3zm-31.2 39.7L129.2 179l-16.7 36.5L293.7 300zM262 32l-32 24 119.3 160.3 32-24zm20.5 328h-200v39.7h200zm39.7 80H42.7V320h-40v160h359.5V320h-40z"
+            ></path></svg>
+          Stack Overflow
+        </a>
+    </div>
+  </div>
+</aside><div class="doc">
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Spring Integration</a></li>
+    <li><a href="messaging-endpoints.html">Messaging Endpoints</a></li>
+    <li><a href="endpoint.html">Message Endpoints</a></li>
+  </ul>
+</nav>
+<article>
+<h1 id="page-title" class="page">Message Endpoints</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The first part of this chapter covers some background theory and reveals quite a bit about the underlying API that drives Spring Integration&#8217;s various messaging components.
+This information can be helpful if you want to really understand what goes on behind the scenes.
+However, if you want to get up and running with the simplified namespace-based configuration of the various elements, feel free to skip ahead to <a href="#endpoint-namespace">Endpoint Namespace Support</a> for now.</p>
+</div>
+<div class="paragraph">
+<p>As mentioned in the overview, message endpoints are responsible for connecting the various messaging components to channels.
+Over the next several chapters, we cover a number of different components that consume messages.
+Some of these are also capable of sending reply messages.
+Sending messages is quite straightforward.
+As shown earlier in <a href="channel.html" class="xref page">Message Channels</a>, you can send a message to a message channel.
+However, receiving is a bit more complicated.
+The main reason is that there are two types of consumers: <a href="https://www.enterpriseintegrationpatterns.com/PollingConsumer.html">polling consumers</a> and <a href="https://www.enterpriseintegrationpatterns.com/EventDrivenConsumer.html">event-driven consumers</a>.</p>
+</div>
+<div class="paragraph">
+<p>Of the two, event-driven consumers are much simpler.
+Without any need to manage and schedule a separate poller thread, they are essentially listeners with a callback method.
+When connecting to one of Spring Integration&#8217;s subscribable message channels, this simple option works great.
+However, when connecting to a buffering, pollable message channel, some component has to schedule and manage the polling threads.
+Spring Integration provides two different endpoint implementations to accommodate these two types of consumers.
+Therefore, the consumers themselves need only implement the callback interface.
+When polling is required, the endpoint acts as a container for the consumer instance.
+The benefit is similar to that of using a container for hosting message-driven beans, but, since these consumers are Spring-managed objects running within an <code>ApplicationContext</code>, it more closely resembles Spring&#8217;s own <code>MessageListener</code> containers.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="endpoint-handler"><a class="anchor" href="#endpoint-handler"></a>Message Handler</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration&#8217;s <code>MessageHandler</code> interface is implemented by many of the components within the framework.
+In other words, this is not part of the public API, and you would not typically implement <code>MessageHandler</code> directly.
+Nevertheless, it is used by a message consumer for actually handling the consumed messages, so being aware of this strategy interface does help in terms of understanding the overall role of a consumer.
+The interface is defined as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface MessageHandler {
+
+    void handleMessage(Message&lt;?&gt; message);
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Despite its simplicity, this interface provides the foundation for most of the components (routers, transformers, splitters, aggregators, service activators, and others) covered in the following chapters.
+Those components each perform very different functionality with the messages they handle, but the requirements for actually receiving a message are the same, and the choice between polling and event-driven behavior is also the same.
+Spring Integration provides two endpoint implementations that host these callback-based handlers and let them be connected to message channels.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="endpoint-eventdrivenconsumer"><a class="anchor" href="#endpoint-eventdrivenconsumer"></a>Event-driven Consumer</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Because it is the simpler of the two, we cover the event-driven consumer endpoint first.
+You may recall that the <code>SubscribableChannel</code> interface provides a <code>subscribe()</code> method and that the method accepts a <code>MessageHandler</code> parameter (as shown in <a href="channel/interfaces.html#channel-interfaces-subscribablechannel" class="xref page"><code>SubscribableChannel</code></a>).
+The following listing shows the definition of the <code>subscribe</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">subscribableChannel.subscribe(messageHandler);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Since a handler that is subscribed to a channel does not have to actively poll that channel, this is an event-driven consumer, and the implementation provided by Spring Integration accepts a <code>SubscribableChannel</code> and a <code>MessageHandler</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SubscribableChannel channel = context.getBean("subscribableChannel", SubscribableChannel.class);
+
+EventDrivenConsumer consumer = new EventDrivenConsumer(channel, exampleHandler);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="endpoint-pollingconsumer"><a class="anchor" href="#endpoint-pollingconsumer"></a>Polling Consumer</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Spring Integration also provides a <code>PollingConsumer</code>, and it can be instantiated in the same way except that the channel must implement <code>PollableChannel</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PollableChannel channel = context.getBean("pollableChannel", PollableChannel.class);
+
+PollingConsumer consumer = new PollingConsumer(channel, exampleHandler);</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For more information regarding polling consumers, see <a href="overview.html#overview-endpoints-channeladapter" class="xref page">Channel Adapter</a> and <a href="channel-adapter.html#channel-adapter" class="xref page">Channel Adapter</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>There are many other configuration options for the polling consumer.
+For example, the trigger is a required property.
+The following example shows how to set the trigger:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PollingConsumer consumer = new PollingConsumer(channel, handler);
+
+consumer.setTrigger(new PeriodicTrigger(Duration.ofSeconds(30)));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>PeriodicTrigger</code> is typically defined with a simple interval (<code>Duration</code>) but also supports an <code>initialDelay</code> property and a boolean <code>fixedRate</code> property (the default is <code>false</code>&#8201;&#8212;&#8201;that is, no fixed delay).
+The following example sets both properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PeriodicTrigger trigger = new PeriodicTrigger(Duration.ofSeconds(1));
+trigger.setInitialDelay(Duration.ofSeconds(5));
+trigger.setFixedRate(true);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result of the three settings in the preceding example is a trigger that waits five seconds and then triggers every second.</p>
+</div>
+<div class="paragraph">
+<p>The <code>CronTrigger</code> requires a valid cron expression.
+See the <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/support/CronTrigger.html">Javadoc</a> for details.
+The following example sets a new <code>CronTrigger</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CronTrigger trigger = new CronTrigger("*/10 * * * * MON-FRI");</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The result of the trigger defined in the previous example is a trigger that triggers every ten seconds, Monday through Friday.</p>
+</div>
+<div class="paragraph">
+<p>In addition to the trigger, you can specify two other polling-related configuration properties: <code>maxMessagesPerPoll</code> and <code>receiveTimeout</code>.
+The following example shows how to set these two properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PollingConsumer consumer = new PollingConsumer(channel, handler);
+
+consumer.setMaxMessagesPerPoll(10);
+consumer.setReceiveTimeout(5000);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>maxMessagesPerPoll</code> property specifies the maximum number of messages to receive within a given poll operation.
+This means that the poller continues calling <code>receive()</code> without waiting, until either <code>null</code> is returned or the maximum value is reached.
+For example, if a poller has a ten-second interval trigger and a <code>maxMessagesPerPoll</code> setting of <code>25</code>, and it is polling a channel that has 100 messages in its queue, all 100 messages can be retrieved within 40 seconds.
+It grabs 25, waits ten seconds, grabs the next 25, and so on.
+If <code>maxMessagesPerPoll</code> is configured with a negative value, then <code>MessageSource.receive()</code> is called within a single polling cycle until it returns <code>null</code>.
+Starting with version 5.5, a <code>0</code> value has a special meaning - skip the <code>MessageSource.receive()</code> call altogether, which may be considered as pausing for this polling endpoint until the <code>maxMessagesPerPoll</code> is changed to a n non-zero value at a later time, e.g. via a Control Bus.</p>
+</div>
+<div class="paragraph">
+<p>The <code>receiveTimeout</code> property specifies the amount of time the poller should wait if no messages are available when it invokes the receive operation.
+For example, consider two options that seem similar on the surface but are actually quite different: The first has an interval trigger of 5 seconds and a receive timeout of 50 milliseconds, while the second has an interval trigger of 50 milliseconds and a receive timeout of 5 seconds.
+The first one may receive a message up to 4950 milliseconds later than it accepted on the channel (if that message arrived immediately after one of its poll calls returned).
+On the other hand, the second configuration never misses a message by more than 50 milliseconds.
+The difference is that the second option requires a thread to wait.
+However, as a result, it can respond much more quickly to arriving messages.
+This technique, known as &#8220;long polling&#8221;, can be used to emulate event-driven behavior on a polled source.</p>
+</div>
+<div class="paragraph">
+<p>A polling consumer can also delegate to a Spring <code>TaskExecutor</code>, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PollingConsumer consumer = new PollingConsumer(channel, handler);
+
+TaskExecutor taskExecutor = context.getBean("exampleExecutor", TaskExecutor.class);
+consumer.setTaskExecutor(taskExecutor);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Furthermore, a <code>PollingConsumer</code> has a property called <code>adviceChain</code>.
+This property lets you specify a <code>List</code> of AOP advices for handling additional cross-cutting concerns including transactions.
+These advices are applied around the <code>doPoll()</code> method.
+For more in-depth information, see the sections on AOP advice chains and transaction support under <a href="#endpoint-namespace">Endpoint Namespace Support</a>.
+See also a <code>@Poller</code> annotation Javadocs and respective <a href="configuration/annotations.html" class="xref page">Messaging Annotations Support</a> section.
+The Java DSL also provides a <a href="dsl/java-pollers.html" class="xref page"><code>.poller()</code></a> endpoint configuration option with its respective <code>Pollers</code> factory.</p>
+</div>
+<div class="paragraph">
+<p>The earlier examples show dependency lookups.
+However, keep in mind that these consumers are most often configured as Spring bean definitions.
+In fact, Spring Integration also provides a <code>FactoryBean</code> called <code>ConsumerEndpointFactoryBean</code> that creates the appropriate consumer type based on the type of channel.
+Also, Spring Integration has full XML namespace support to even further hide those details.
+The namespace-based configuration is in this guide featured as each component type is introduced.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Many of the <code>MessageHandler</code> implementations can generate reply messages.
+As mentioned earlier, sending messages is trivial when compared to receiving messages.
+Nevertheless, when and how many reply messages are sent depends on the handler type.
+For example, an aggregator waits for a number of messages to arrive and is often configured as a downstream consumer for a splitter, which can generate multiple replies for each message it handles.
+When using the namespace configuration, you do not strictly need to know all the details.
+However, it still might be worth knowing that several of these components share a common base class, the <code>AbstractReplyProducingMessageHandler</code>, and that it provides a <code>setOutputChannel(..)</code> method.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="endpoint-namespace"><a class="anchor" href="#endpoint-namespace"></a>Endpoint Namespace Support</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Throughout this reference manual, you can find specific configuration examples for endpoint elements, such as router, transformer, service-activator, and so on.
+Most of these support an <code>input-channel</code> attribute and many support an <code>output-channel</code> attribute.
+After being parsed, these endpoint elements produce an instance of either the <code>PollingConsumer</code> or the <code>EventDrivenConsumer</code>, depending on the type of the <code>input-channel</code> that is referenced: <code>PollableChannel</code> or <code>SubscribableChannel</code>, respectively.
+When the channel is pollable, the polling behavior is based on the endpoint element&#8217;s <code>poller</code> sub-element and its attributes.</p>
+</div>
+<div class="paragraph">
+<p>The following lists all available configuration options for a <code>poller</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:poller cron=""                                  <i class="conum" data-value="1"></i><b>(1)</b>
+            default="false"                          <i class="conum" data-value="2"></i><b>(2)</b>
+            error-channel=""                         <i class="conum" data-value="3"></i><b>(3)</b>
+            fixed-delay=""                           <i class="conum" data-value="4"></i><b>(4)</b>
+            fixed-rate=""                            <i class="conum" data-value="5"></i><b>(5)</b>
+            initial-delay=""                         <i class="conum" data-value="6"></i><b>(6)</b>
+            id=""                                    <i class="conum" data-value="7"></i><b>(7)</b>
+            max-messages-per-poll=""                 <i class="conum" data-value="8"></i><b>(8)</b>
+            receive-timeout=""                       <i class="conum" data-value="9"></i><b>(9)</b>
+            ref=""                                   <i class="conum" data-value="10"></i><b>(10)</b>
+            task-executor=""                         <i class="conum" data-value="11"></i><b>(11)</b>
+            time-unit="MILLISECONDS"                 <i class="conum" data-value="12"></i><b>(12)</b>
+            trigger=""&gt;                              <i class="conum" data-value="13"></i><b>(13)</b>
+            &lt;int:advice-chain /&gt;                     <i class="conum" data-value="14"></i><b>(14)</b>
+            &lt;int:transactional /&gt;                    <i class="conum" data-value="15"></i><b>(15)</b>
+&lt;/int:poller&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Provides the ability to configure pollers by using Cron expressions.
+The underlying implementation uses an <code>org.springframework.scheduling.support.CronTrigger</code>.
+If this attribute is set, none of the following attributes must be specified: <code>fixed-delay</code>, <code>trigger</code>, <code>fixed-rate</code>, and <code>ref</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>By setting this attribute to <code>true</code>, you can define exactly one global default poller.
+An exception is raised if more than one default poller is defined in the application context.
+Any endpoints connected to a <code>PollableChannel</code> (<code>PollingConsumer</code>) or any <code>SourcePollingChannelAdapter</code> that does not have an explicitly configured poller then uses the global default poller.
+It defaults to <code>false</code>.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Identifies the channel to which error messages are sent if a failure occurs in this poller&#8217;s invocation.
+To completely suppress exceptions, you can provide a reference to the <code>nullChannel</code>.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The fixed delay trigger uses a <code>PeriodicTrigger</code> under the covers.
+The numeric value is in <code>time-unit</code> or can be as a duration format (starting with version 6.2), e.g. <code>PT10S</code>, <code>P1D</code>.
+If this attribute is set, none of the following attributes must be specified: <code>fixed-rate</code>, <code>trigger</code>, <code>cron</code>, and <code>ref</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The fixed rate trigger uses a <code>PeriodicTrigger</code> under the covers.
+The numeric value is in <code>time-unit</code> or can be as a duration format (starting with version 6.2), e.g. <code>PT10S</code>, <code>P1D</code>.
+If this attribute is set, none of the following attributes must be specified: <code>fixed-delay</code>, <code>trigger</code>, <code>cron</code>, and <code>ref</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>The initial delay for a <code>PeriodicTrigger</code> under the covers(starting with version 6.2).
+The numeric value is in <code>time-unit</code> or can be as a duration format, e.g. <code>PT10S</code>, <code>P1D</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>The ID referring to the poller&#8217;s underlying bean-definition, which is of type <code>org.springframework.integration.scheduling.PollerMetadata</code>.
+The <code>id</code> attribute is required for a top-level poller element, unless it is the default poller (<code>default="true"</code>).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>See <a href="channel-adapter.html#channel-adapter-namespace-inbound" class="xref page">Configuring An Inbound Channel Adapter</a> for more information.
+If not specified, the default value depends on the context.
+If you use a <code>PollingConsumer</code>, this attribute defaults to <code>-1</code>.
+However, if you use a <code>SourcePollingChannelAdapter</code>, the <code>max-messages-per-poll</code> attribute defaults to <code>1</code>.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Value is set on the underlying class <code>PollerMetadata</code>.
+If not specified, it defaults to 1000 (milliseconds).
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>Bean reference to another top-level poller.
+The <code>ref</code> attribute must not be present on the top-level <code>poller</code> element.
+However, if this attribute is set, none of the following attributes must be specified: <code>fixed-rate</code>, <code>trigger</code>, <code>cron</code>, and <code>fixed-delay</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Provides the ability to reference a custom task executor.
+See <a href="#taskexecutor-support">TaskExecutor Support</a> for further information.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>This attribute specifies the <code>java.util.concurrent.TimeUnit</code> enum value on the underlying <code>org.springframework.scheduling.support.PeriodicTrigger</code>.
+Therefore, this attribute can be used only in combination with the <code>fixed-delay</code> or <code>fixed-rate</code> attributes.
+If combined with either <code>cron</code> or a <code>trigger</code> reference attribute, it causes a failure.
+The minimal supported granularity for a <code>PeriodicTrigger</code> is milliseconds.
+Therefore, the only available options are milliseconds and seconds.
+If this value is not provided, any <code>fixed-delay</code> or <code>fixed-rate</code> value is interpreted as milliseconds.
+Basically, this enum provides a convenience for seconds-based interval trigger values.
+For hourly, daily, and monthly settings, we recommend using a <code>cron</code> trigger instead.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>Reference to any Spring-configured bean that implements the <code>org.springframework.scheduling.Trigger</code> interface.
+However, if this attribute is set, none of the following attributes must be specified: <code>fixed-delay</code>, <code>fixed-rate</code>, <code>cron</code>, and <code>ref</code>.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="14"></i><b>14</b></td>
+<td>Allows specifying extra AOP advices to handle additional cross-cutting concerns.
+See <a href="jms.html#jms-ob-transactions" class="xref page">Transactions</a> for further information.
+Optional.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="15"></i><b>15</b></td>
+<td>Pollers can be made transactional.
+See <a href="#aop-advice-chains">AOP Advice chains</a> for further information.
+Optional.</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="examples"><a class="anchor" href="#examples"></a>Examples</h3>
+<div class="paragraph">
+<p>A simple interval-based poller with a 1-second interval can be configured as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:transformer input-channel="pollable"
+    ref="transformer"
+    output-channel="output"&gt;
+    &lt;int:poller fixed-rate="1000"/&gt;
+&lt;/int:transformer&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As an alternative to using the <code>fixed-rate</code> attribute, you can also use the <code>fixed-delay</code> attribute.</p>
+</div>
+<div class="paragraph">
+<p>For a poller based on a Cron expression, use the <code>cron</code> attribute instead, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:transformer input-channel="pollable"
+    ref="transformer"
+    output-channel="output"&gt;
+    &lt;int:poller cron="*/10 * * * * MON-FRI"/&gt;
+&lt;/int:transformer&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If the input channel is a <code>PollableChannel</code>, the poller configuration is required.
+Specifically, as mentioned earlier, the <code>trigger</code> is a required property of the <code>PollingConsumer</code> class.
+Therefore, if you omit the <code>poller</code> sub-element for a polling consumer endpoint&#8217;s configuration, an exception may be thrown.
+The exception may also be thrown if you attempt to configure a poller on the element that is connected to a non-pollable channel.</p>
+</div>
+<div class="paragraph">
+<p>It is also possible to create top-level pollers, in which case only a <code>ref</code> attribute is required, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:poller id="weekdayPoller" cron="*/10 * * * * MON-FRI"/&gt;
+
+&lt;int:transformer input-channel="pollable"
+    ref="transformer"
+    output-channel="output"&gt;
+    &lt;int:poller ref="weekdayPoller"/&gt;
+&lt;/int:transformer&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>ref</code> attribute is allowed only on the inner poller definitions.
+Defining this attribute on a top-level poller results in a configuration exception being thrown during initialization of the application context.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="global-default-poller"><a class="anchor" href="#global-default-poller"></a>Global Default Poller</h4>
+<div class="paragraph">
+<p>To simplify the configuration even further, you can define a global default poller.
+A single top-level poller component in XML DSL may have the <code>default</code> attribute set to <code>true</code>.
+For Java configuration a <code>PollerMetadata</code> bean with the <code>PollerMetadata.DEFAULT_POLLER</code> name must be declared in this case.
+In that case, any endpoint with a <code>PollableChannel</code> for its input channel, that is defined within the same <code>ApplicationContext</code>, and has no explicitly configured <code>poller</code> uses that default.
+The following example shows such a poller and a transformer that uses it:</p>
+</div>
+<div id="_tabs_1" class="openblock tabs is-sync is-loading">
+<div class="content">
+<div class="ulist tablist">
+<ul>
+<li id="_tabs_1_java_dsl" class="tab">
+<p>Java DSL</p>
+</li>
+<li id="_tabs_1_java" class="tab">
+<p>Java</p>
+</li>
+<li id="_tabs_1_kotlin_dsl" class="tab">
+<p>Kotlin DSL</p>
+</li>
+<li id="_tabs_1_xml" class="tab">
+<p>XML</p>
+</li>
+</ul>
+</div>
+<div id="_tabs_1_java_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_java_dsl">
+<div class="listingblock primary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean(name = PollerMetadata.DEFAULT_POLLER)
+public PollerMetadata defaultPoller() {
+    PollerMetadata pollerMetadata = new PollerMetadata();
+    pollerMetadata.setMaxMessagesPerPoll(5);
+    pollerMetadata.setTrigger(new PeriodicTrigger(3000));
+    return pollerMetadata;
+}
+
+// No 'poller' attribute because there is a default global poller
+@Bean
+public IntegrationFlow transformFlow(MyTransformer transformer) {
+    return IntegrationFlow.from(MessageChannels.queue("pollable"))
+                           .transform(transformer) // No 'poller' attribute because there is a default global poller
+                           .channel("output")
+                           .get();
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean(PollerMetadata.DEFAULT_POLLER)
+public PollerMetadata defaultPoller() {
+    PollerMetadata pollerMetadata = new PollerMetadata();
+    pollerMetadata.setMaxMessagesPerPoll(5);
+    pollerMetadata.setTrigger(new PeriodicTrigger(3000));
+    return pollerMetadata;
+}
+
+@Bean
+public QueueChannel pollable() {
+   return new QueueChannel();
+}
+// No 'poller' attribute because there is a default global poller
+@Transformer(inputChannel = "pollable", outputChannel = "output")
+public Object transform(Object payload) {
+    ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_kotlin_dsl--panel" class="tabpanel" aria-labelledby="_tabs_1_kotlin_dsl">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Bean(PollerMetadata.DEFAULT_POLLER)
+fun defaultPoller() =
+    PollerMetadata()
+        .also {
+            it.maxMessagesPerPoll = 5
+            it.trigger = PeriodicTrigger(3000)
+        }
+
+@Bean
+fun convertFlow() =
+    integrationFlow(MessageChannels.queue("pollable")) {
+    	transform(transformer) // No 'poller' attribute because there is a default global poller
+    	channel("output")
+    }</code></pre>
+</div>
+</div>
+</div>
+<div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml">
+<div class="listingblock secondary">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:poller id="defaultPoller" default="true" max-messages-per-poll="5" fixed-delay="3000"/&gt;
+
+&lt;!-- No &lt;poller/&gt; sub-element is necessary, because there is a default --&gt;
+&lt;int:transformer input-channel="pollable"
+                 ref="transformer"
+                 output-channel="output"/&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="transaction-support"><a class="anchor" href="#transaction-support"></a>Transaction Support</h4>
+<div class="paragraph">
+<p>Spring Integration also provides transaction support for the pollers so that each receive-and-forward operation can be performed as an atomic unit of work.
+To configure transactions for a poller, add the <code>&lt;transactional/&gt;</code> sub-element.
+The following example shows the available attributes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:poller fixed-delay="1000"&gt;
+    &lt;int:transactional transaction-manager="txManager"
+                       propagation="REQUIRED"
+                       isolation="REPEATABLE_READ"
+                       timeout="10000"
+                       read-only="false"/&gt;
+&lt;/int:poller&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="transactions.html#transaction-poller" class="xref page">Poller Transaction Support</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="aop-advice-chains"><a class="anchor" href="#aop-advice-chains"></a>AOP Advice chains</h3>
+<div class="paragraph">
+<p>Since Spring transaction support depends on the proxy mechanism with <code>TransactionInterceptor</code> (AOP Advice) handling transactional behavior of the message flow initiated by the poller, you must sometimes provide extra advices to handle other cross cutting behavior associated with the poller.
+For that, the <code>poller</code> defines an <code>advice-chain</code> element that lets you add more advices in a class that implements the <code>MethodInterceptor</code> interface.
+The following example shows how to define an <code>advice-chain</code> for a <code>poller</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:service-activator id="advicedSa" input-channel="goodInputWithAdvice" ref="testBean"
+		method="good" output-channel="output"&gt;
+	&lt;int:poller max-messages-per-poll="1" fixed-rate="10000"&gt;
+		 &lt;int:advice-chain&gt;
+			&lt;ref bean="adviceA" /&gt;
+			&lt;beans:bean class="org.something.SampleAdvice" /&gt;
+			&lt;ref bean="txAdvice" /&gt;
+		&lt;/int:advice-chain&gt;
+	&lt;/int:poller&gt;
+&lt;/int:service-activator&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more information on how to implement the <code>MethodInterceptor</code> interface, see the <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#aop-api">AOP sections of the Spring Framework Reference Guide</a>.
+An advice chain can also be applied on a poller that does not have any transaction configuration, letting you enhance the behavior of the message flow initiated by the poller.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+When using an advice chain, the <code>&lt;transactional/&gt;</code> child element cannot be specified.
+Instead, declare a <code>&lt;tx:advice/&gt;</code> bean and add it to the <code>&lt;advice-chain/&gt;</code>.
+See <a href="transactions.html#transaction-poller" class="xref page">Poller Transaction Support</a> for complete configuration details.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="taskexecutor-support"><a class="anchor" href="#taskexecutor-support"></a>TaskExecutor Support</h4>
+<div class="paragraph">
+<p>The polling threads may be executed by any instance of Spring&#8217;s <code>TaskExecutor</code> abstraction.
+This enables concurrency for an endpoint or group of endpoints.
+As of Spring 3.0, the core Spring Framework has a <code>task</code> namespace, and its <code>&lt;executor/&gt;</code> element supports the creation of a simple thread pool executor.
+That element accepts attributes for common concurrency settings, such as pool-size and queue-capacity.
+Configuring a thread-pooling executor can make a substantial difference in how the endpoint performs under load.
+These settings are available for each endpoint, since the performance of an endpoint is one of the major factors to consider (the other major factor being the expected volume on the channel to which the endpoint subscribes).
+To enable concurrency for a polling endpoint that is configured with the XML namespace support, provide the <code>task-executor</code> reference on its <code>&lt;poller/&gt;</code> element and then provide one or more of the properties shown in the following example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:poller task-executor="pool" fixed-rate="1000"/&gt;
+
+&lt;task:executor id="pool"
+               pool-size="5-25"
+               queue-capacity="20"
+               keep-alive="120"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you do not provide a task-executor, the consumer&#8217;s handler is invoked in the caller&#8217;s thread.
+Note that the caller is usually the default <code>TaskScheduler</code> (see <a href="configuration/namespace-taskscheduler.html" class="xref page">Configuring the Task Scheduler</a>).
+You should also keep in mind that the <code>task-executor</code> attribute can provide a reference to any implementation of Spring&#8217;s <code>TaskExecutor</code> interface by specifying the bean name.
+The <code>executor</code> element shown earlier is provided for convenience.</p>
+</div>
+<div class="paragraph">
+<p>As mentioned earlier in the <a href="#endpoint-pollingconsumer">background section for polling consumers</a>, you can also configure a polling consumer in such a way as to emulate event-driven behavior.
+With a long receive timeout and a short interval in the trigger, you can ensure a very timely reaction to arriving messages even on a polled message source.
+Note that this applies only  to sources that have a blocking wait call with a timeout.
+For example, the file poller does not block.
+Each <code>receive()</code> call returns immediately and either contains new files or not.
+Therefore, even if a poller contains a long <code>receive-timeout</code>, that value would never be used in such a scenario.
+On the other hand, when using Spring Integration&#8217;s own queue-based channels, the timeout value does have a chance to participate.
+The following example shows how a polling consumer can receive messages nearly instantaneously:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:service-activator input-channel="someQueueChannel"
+    output-channel="output"&gt;
+    &lt;int:poller receive-timeout="30000" fixed-rate="10"/&gt;
+
+&lt;/int:service-activator&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using this approach does not carry much overhead, since, internally, it is nothing more then a timed-wait thread, which does not require nearly as much CPU resource usage as (for example) a thrashing, infinite while loop.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="polling-consumer-change-polling-rate"><a class="anchor" href="#polling-consumer-change-polling-rate"></a>Changing Polling Rate at Runtime</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When configuring a poller with a <code>fixed-delay</code> or a <code>fixed-rate</code> attribute, the default implementation uses a <code>PeriodicTrigger</code> instance.
+The <code>PeriodicTrigger</code> is part of the core Spring Framework.
+It accepts the interval only as a constructor argument.
+Therefore, it cannot be changed at runtime.</p>
+</div>
+<div class="paragraph">
+<p>However, you can define your own implementation of the <code>org.springframework.scheduling.Trigger</code> interface.
+You could even use the <code>PeriodicTrigger</code> as a starting point.
+Then you can add a setter for the interval (period), or you can even embed your own throttling logic within the trigger itself.
+The <code>period</code> property is used with each call to <code>nextExecutionTime</code> to schedule the next poll.
+To use this custom trigger within pollers, declare the bean definition of the custom trigger in your application context and inject the dependency into your poller configuration by using the <code>trigger</code> attribute, which references the custom trigger bean instance.
+You can now obtain a reference to the trigger bean and change the polling interval between polls.</p>
+</div>
+<div class="paragraph">
+<p>For an example, see the <a href="https://github.com/SpringSource/spring-integration-samples/tree/main/intermediate">Spring Integration Samples</a> project.
+It contains a sample called <code>dynamic-poller</code>, which uses a custom trigger and demonstrates the ability to change the polling interval at runtime.</p>
+</div>
+<div class="paragraph">
+<p>The sample provides a custom trigger that implements the <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/Trigger.html"><code>org.springframework.scheduling.Trigger</code></a> interface.
+The sample&#8217;s trigger is based on Spring&#8217;s <a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/scheduling/support/PeriodicTrigger.html"><code>PeriodicTrigger</code></a> implementation.
+However, the fields of the custom trigger are not final, and the properties have explicit getters and setters, letting you dynamically change the polling period at runtime.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It is important to note, though, that because the Trigger method is <code>nextExecutionTime()</code>, any changes to a dynamic trigger do not take effect until the next poll, based on the existing configuration.
+It is not possible to force a trigger to fire before its currently configured next execution time.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="payload-type-conversion"><a class="anchor" href="#payload-type-conversion"></a>Payload Type Conversion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Throughout this reference manual, you can also see specific configuration and implementation examples of various endpoints that accept a message or any arbitrary <code>Object</code> as an input parameter.
+In the case of an <code>Object</code>, such a parameter is mapped to a message payload or part of the payload or header (when using the Spring Expression Language).
+However, the type of input parameter of the endpoint method sometimes does not match the type of the payload or its part.
+In this scenario, we need to perform type conversion.
+Spring Integration provides a convenient way for registering type converters (by using the Spring <code>ConversionService</code>) within its own instance of a conversion service bean named <code>integrationConversionService</code>.
+That bean is automatically created as soon as the first converter is defined by using the Spring Integration infrastructure.
+To register a converter, you can implement <code>org.springframework.core.convert.converter.Converter</code>, <code>org.springframework.core.convert.converter.GenericConverter</code>, or <code>org.springframework.core.convert.converter.ConverterFactory</code>.</p>
+</div>
+<div class="paragraph">
+<p>The <code>Converter</code> implementation is the simplest and converts from a single type to another.
+For more sophistication, such as converting to a class hierarchy, you can implement a <code>GenericConverter</code> and possibly a <code>ConditionalConverter</code>.
+These give you complete access to the <code>from</code> and <code>to</code> type descriptors, enabling complex conversions.
+For example, if you have an abstract class called <code>Something</code> that is the target of your conversion (parameter type, channel data type, and so on), you have two concrete implementations called <code>Thing1</code> and <code>Thing</code>, and you wish to convert to one or the other based on the input type, the <code>GenericConverter</code> would be a good fit.
+For more information, see the Javadoc for these interfaces:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/convert/converter/Converter.html">org.springframework.core.convert.converter.Converter</a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/convert/converter/package-summary.html">org.springframework.core.convert.converter.GenericConverter</a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/core/convert/converter/ConverterFactory.html">org.springframework.core.convert.converter.ConverterFactory</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When you have implemented your converter, you can register it with convenient namespace support, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:converter ref="sampleConverter"/&gt;
+
+&lt;bean id="sampleConverter" class="foo.bar.TestConverter"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternately, you can use an inner bean, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:converter&gt;
+    &lt;bean class="o.s.i.config.xml.ConverterParserTests$TestConverter3"/&gt;
+&lt;/int:converter&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Starting with Spring Integration 4.0, you can use annotations to create the preceding configuration, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Component
+@IntegrationConverter
+public class TestConverter implements Converter&lt;Boolean, Number&gt; {
+
+	public Number convert(Boolean source) {
+		return source ? 1 : 0;
+	}
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Alternately, you can use the <code>@Configuration</code> annotation, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Configuration
+@EnableIntegration
+public class ContextConfiguration {
+
+	@Bean
+	@IntegrationConverter
+	public SerializingConverter serializingConverter() {
+		return new SerializingConverter();
+	}
+
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When configuring an application context, the Spring Framework lets you add a <code>conversionService</code> bean (see <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#core-convert-Spring-config">Configuring a ConversionService</a> chapter).
+This service is used, when needed, to perform appropriate conversions during bean creation and configuration.</p>
+</div>
+<div class="paragraph">
+<p>In contrast, the <code>integrationConversionService</code> is used for runtime conversions.
+These uses are quite different.
+Converters that are intended for use when wiring bean constructor arguments and properties may produce unintended results if used at runtime for Spring Integration expression evaluation against messages within data type channels, payload type transformers, and so on.</p>
+</div>
+<div class="paragraph">
+<p>However, if you do want to use the Spring <code>conversionService</code> as the Spring Integration <code>integrationConversionService</code>, you can configure an alias in the application context, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;alias name="conversionService" alias="integrationConversionService"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, the converters provided by the <code>conversionService</code> are available for Spring Integration runtime conversion.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="content-type-conversion"><a class="anchor" href="#content-type-conversion"></a>Content Type Conversion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting with version 5.0, by default, the method invocation mechanism is based on the <code>org.springframework.messaging.handler.invocation.InvocableHandlerMethod</code> infrastructure.
+Its <code>HandlerMethodArgumentResolver</code> implementations (such as <code>PayloadArgumentResolver</code> and <code>MessageMethodArgumentResolver</code>) can use the <code>MessageConverter</code> abstraction to convert an incoming <code>payload</code> to the target method argument type.
+The conversion can be based on the <code>contentType</code> message header.
+For this purpose, Spring Integration provides the <code>ConfigurableCompositeMessageConverter</code>, which delegates to a list of registered converters to be invoked until one of them returns a non-null result.
+By default, this converter provides (in strict order):</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jms/support/converter/MappingJackson2MessageConverter.html"><code>MappingJackson2MessageConverter</code></a> if the Jackson processor is present on the classpath</p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/messaging/converter/ByteArrayMessageConverter.html"><code>ByteArrayMessageConverter</code></a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring-integration/docs/current/api//org/springframework/integration/support/converter/ObjectStringMessageConverter.html"><code>ObjectStringMessageConverter</code></a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/messaging/converter/GenericMessageConverter.html"><code>GenericMessageConverter</code></a></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>See the Javadoc (linked in the preceding list) for more information about their purpose and appropriate <code>contentType</code> values for conversion.
+The <code>ConfigurableCompositeMessageConverter</code> is used because it can be supplied with any other <code>MessageConverter</code> implementations, including or excluding the previously mentioned default converters.
+It can also be registered as an appropriate bean in the application context, overriding the default converter, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean(name = IntegrationContextUtils.ARGUMENT_RESOLVER_MESSAGE_CONVERTER_BEAN_NAME)
+public ConfigurableCompositeMessageConverter compositeMessageConverter() {
+    List&lt;MessageConverter&gt; converters =
+        Arrays.asList(new MarshallingMessageConverter(jaxb2Marshaller()),
+                 new JavaSerializationMessageConverter());
+    return new ConfigurableCompositeMessageConverter(converters);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Those two new converters are registered in the composite before the defaults.
+You can also not use a <code>ConfigurableCompositeMessageConverter</code> but provide your own <code>MessageConverter</code> by registering a bean with the name, <code>integrationArgumentResolverMessageConverter</code> (by setting the <code>IntegrationContextUtils.ARGUMENT_RESOLVER_MESSAGE_CONVERTER_BEAN_NAME</code> property).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>MessageConverter</code>-based (including <code>contentType</code> header) conversion is not available when using SpEL method invocation.
+In this case, only the regular class-to-class conversion mentioned above in the <a href="#payload-type-conversion">Payload Type Conversion</a> is available.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="async-polling"><a class="anchor" href="#async-polling"></a>Asynchronous Polling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you want the polling to be asynchronous, a poller can optionally specify a <code>task-executor</code> attribute that points to an existing instance of any <code>TaskExecutor</code> bean (Spring 3.0 provides a convenient namespace configuration through the <code>task</code> namespace).
+However, there are certain things you must understand when configuring a poller with a <code>TaskExecutor</code>.</p>
+</div>
+<div class="paragraph">
+<p>The problem is that there are two configurations in place, the poller and the <code>TaskExecutor</code>.
+They must be in tune with each other.
+Otherwise, you might end up creating an artificial memory leak.</p>
+</div>
+<div class="paragraph">
+<p>Consider the following configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:channel id="publishChannel"&gt;
+    &lt;int:queue /&gt;
+&lt;/int:channel&gt;
+
+&lt;int:service-activator input-channel="publishChannel" ref="myService"&gt;
+	&lt;int:poller receive-timeout="5000" task-executor="taskExecutor" fixed-rate="50" /&gt;
+&lt;/int:service-activator&gt;
+
+&lt;task:executor id="taskExecutor" pool-size="20" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding configuration demonstrates an out-of-tune configuration.</p>
+</div>
+<div class="paragraph">
+<p>By default, the task executor has an unbounded task queue.
+The poller keeps scheduling new tasks even though all the threads are blocked, waiting for either a new message to arrive or the timeout to expire.
+Given that there are 20 threads executing tasks with a five-second timeout, they are executed at a rate of 4 per second.
+However, new tasks are being scheduled at a rate of 20 per second, so the internal queue in the task executor grows at a rate of 16 per second (while the process is idle), so we have a memory leak.</p>
+</div>
+<div class="paragraph">
+<p>One of the ways to handle this is to set the <code>queue-capacity</code> attribute of the task executor.
+Even 0 is a reasonable value.
+You can also manage it by specifying what to do with messages that can not be queued by setting the <code>rejection-policy</code> attribute of the Task Executor (for example, to <code>DISCARD</code>).
+In other words, there are certain details you must understand when configuring <code>TaskExecutor</code>.
+See <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#scheduling">&#8220;Task Execution and Scheduling&#8221;</a> in the Spring reference manual for more detail on the subject.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="endpoint-inner"><a class="anchor" href="#endpoint-inner"></a>Endpoint Inner Beans</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Many endpoints are composite beans.
+This includes all consumers and all polled inbound channel adapters.
+Consumers (polled or event-driven) delegate to a <code>MessageHandler</code>.
+Polled adapters obtain messages by delegating to a <code>MessageSource</code>.
+Often, it is useful to obtain a reference to the delegate bean, perhaps to change configuration at runtime or for testing.
+These beans can be obtained from the <code>ApplicationContext</code> with well known names.
+<code>MessageHandler</code> instances are registered with the application context with bean IDs similar to <code>someConsumer.handler</code> (where 'consumer' is the value of the endpoint&#8217;s <code>id</code> attribute).
+<code>MessageSource</code> instances are registered with bean IDs similar to <code>somePolledAdapter.source</code>, where 'somePolledAdapter' is the ID of the adapter.</p>
+</div>
+<div class="paragraph">
+<p>The preceding only applies to the framework component itself.
+You can instead use an inner bean definition, as the following example shows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;int:service-activator id="exampleServiceActivator" input-channel="inChannel"
+            output-channel = "outChannel" method="foo"&gt;
+    &lt;beans:bean class="org.foo.ExampleServiceActivator"/&gt;
+&lt;/int:service-activator&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The bean is treated like any inner bean declared and is not registered with the application context.
+If you wish to access this bean in some other manner, declare it at the top level with an <code>id</code> and use the <code>ref</code> attribute instead.
+See the <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-inner-beans">Spring Documentation</a> for more information.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="messaging-endpoints.html">Messaging Endpoints</a></span>
+  <span class="next"><a href="endpoint-roles.html">Endpoint Roles</a></span>
+</nav>
+</article>
+</div>  </div>
+</main>
+<div class="modal micromodal-slide" id="modal-versions" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true">
+            <main class="modal__content" id="modal-versions-content">
+              <button data-micromodal-close class="modal-versions-close">
+                <svg width="28px" height="28px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><title/><g id="cross"><line class="cls-1" x1="7" x2="25" y1="7" y2="25"/><line class="cls-1" x1="7" x2="25" y1="25" y2="7"/></g></svg>
+              </button>
+              <div class="colset">
+                <div class="col-left">
+                  <ul class="nav-versions">
+                    <li class="component is-current">
+                      <a class="title" href="index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-current is-latest">
+                          <a href="index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="component">
+                      <a class="title" href="spring-integration/index.html">Spring Integration</a>
+                      <ul class="versions">
+                        <li class="version is-latest">
+                          <a href="spring-integration/index.html">
+                            6.2.0-SNAPSHOT<span class="current">current</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-right">
+                  <ul>
+                    <li>
+                      Related Spring Documentation
+                      <ul>
+                        <li><a href="https://docs.spring.io/spring-framework/reference/">Spring Framework</a></li>
+                        <li><a href="https://docs.spring.io/spring-security/reference/">Spring Security</a></li>
+                        <li><a href="https://docs.spring.io/spring-ldap/reference/">Spring LDAP</a></li>
+                        <li><a href="https://docs.spring.io/spring-session/reference/">Spring Session</a></li>
+                        <li><a href="https://docs.spring.io/spring-authorization-server/reference/">Spring Authorization Server</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+</div>
+<footer class="footer flex">
+    <div id="spring-links flex">
+        <img id="springlogo" src="./_/img/spring-logo.svg" alt="Spring">
+        <p class="smallest antialiased">© <script>var d = new Date();
+        document.write(d.getFullYear());</script> <a href="https://www.vmware.com/">VMware</a>, Inc. or its affiliates. <a href="https://www.vmware.com/help/legal.html">Terms of Use</a> • <a href="https://www.vmware.com/help/privacy.html" rel="noopener noreferrer">Privacy</a> • <a href="https://spring.io/trademarks">Trademark Guidelines</a> <span id="thank-you-mobile">• <a href="https://spring.io/thank-you">Thank you</a></span> • <a href="https://www.vmware.com/help/privacy/california-privacy-rights.html">Your California Privacy Rights</a> • <a class="ot-sdk-show-settings">Cookie Settings</a> <span id="teconsent"></span></p>
+        <p class="smallest antialiased has-gray-text">Apache®, Apache Tomcat®, Apache Kafka®, Apache Cassandra&trade;, and Apache Geode&trade; are trademarks or registered trademarks of the Apache Software Foundation in the United States and/or other countries. Java&trade;, Java&trade; SE, Java&trade; EE, and OpenJDK&trade; are trademarks of Oracle and/or its affiliates. Kubernetes® is a registered trademark of the Linux Foundation in the United States and other countries. Linux® is the registered trademark of Linus Torvalds in the United States and other countries. Windows® and Microsoft® Azure are registered trademarks of Microsoft Corporation. “AWS” and “Amazon Web Services” are trademarks or registered trademarks of Amazon.com Inc. or its affiliates. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes. Other names may be trademarks of their respective owners.</p>
+    </div>
+    <div id="social-icons" class="flex jc-between">
+        <a href="https://www.youtube.com/user/SpringSourceDev" title="Youtube"><svg id="youtube-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle class="cls-1" cx="20" cy="20" r="20"/><path class="cls-2" d="M30.91,14.53a2.89,2.89,0,0,0-2-2C27.12,12,20,12,20,12s-7.12,0-8.9.47a2.9,2.9,0,0,0-2,2A30.56,30.56,0,0,0,8.63,20a30.44,30.44,0,0,0,.46,5.47,2.89,2.89,0,0,0,2,2C12.9,28,20,28,20,28s7.12,0,8.9-.47a2.87,2.87,0,0,0,2-2A30.56,30.56,0,0,0,31.37,20,28.88,28.88,0,0,0,30.91,14.53ZM17.73,23.41V16.59L23.65,20Z"/></svg></a>
+        <a href="https://github.com/spring-projects" title="Github"><svg id="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><path class="cls-1" d="M38,0a38,38,0,1,0,38,38A38,38,0,0,0,38,0Z"/></g><path class="cls-2" d="M38,15.59A22.95,22.95,0,0,0,30.71,60.3c1.15.21,1.57-.5,1.57-1.11s0-2,0-3.9c-6.38,1.39-7.73-3.07-7.73-3.07A6.09,6.09,0,0,0,22,48.86c-2.09-1.42.15-1.39.15-1.39a4.81,4.81,0,0,1,3.52,2.36c2,3.5,5.37,2.49,6.67,1.91a4.87,4.87,0,0,1,1.46-3.07c-5.09-.58-10.45-2.55-10.45-11.34a8.84,8.84,0,0,1,2.36-6.15,8.29,8.29,0,0,1,.23-6.07s1.92-.62,6.3,2.35a21.82,21.82,0,0,1,11.49,0c4.38-3,6.3-2.35,6.3-2.35a8.29,8.29,0,0,1,.23,6.07,8.84,8.84,0,0,1,2.36,6.15c0,8.81-5.37,10.75-10.48,11.32a5.46,5.46,0,0,1,1.56,4.25c0,3.07,0,5.54,0,6.29s.42,1.33,1.58,1.1A22.94,22.94,0,0,0,38,15.59Z"/></svg></a>
+        <a href="https://twitter.com/springcentral" title="Twitter"><svg id="twitter-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75.93 75.93"><circle class="cls-1" cx="37.97" cy="37.97" r="37.97"/><path id="Twitter-2" data-name="Twitter" class="cls-2" d="M55.2,22.73a15.43,15.43,0,0,1-4.88,1.91,7.56,7.56,0,0,0-5.61-2.49A7.78,7.78,0,0,0,37,30a7.56,7.56,0,0,0,.2,1.79,21.63,21.63,0,0,1-15.84-8.23,8,8,0,0,0,2.37,10.52,7.66,7.66,0,0,1-3.48-1v.09A7.84,7.84,0,0,0,26.45,41a7.54,7.54,0,0,1-2,.28A7.64,7.64,0,0,1,23,41.09a7.71,7.71,0,0,0,7.18,5.47,15.21,15.21,0,0,1-9.55,3.37,15.78,15.78,0,0,1-1.83-.11,21.41,21.41,0,0,0,11.78,3.54c14.13,0,21.86-12,21.86-22.42,0-.34,0-.68,0-1a15.67,15.67,0,0,0,3.83-4.08,14.9,14.9,0,0,1-4.41,1.24A7.8,7.8,0,0,0,55.2,22.73Z"/></svg></a>
+    </div>
+</footer>
+<script src="./_/js/vendor/import.js"></script>
+<script src="./_/js/site.js"></script>
+<script async src="./_/js/vendor/highlight.js"></script>
+<script async src="./_/js/vendor/asciidoctor-tabs.js" data-sync-storage-key="docs:preferred-tab"></script>
+
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <main class="modal__content" id="modal-1-content">
+                <div id="searchbox"></div>
+                <div id="counter"></div>
+                <div class="search-by">
+                    <a target="_blank" rel="noopener noreferrer" href="https://www.algolia.com/" aria-label="Search by Algolia">
+                        <img class="light" width="140" src="./_/img/algolia-light.svg" />
+                        <img class="dark" width="140" src="./_/img/algolia-dark.svg" />
+                    </a>
+                </div>
+                <div id="hits"></div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.17.0/dist/algoliasearch-lite.umd.js" integrity="sha256-Lf9DrpGmcRip6OQzbcL6lnvNmoZNSKpyQX5pMlwatWE=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.54.1/dist/instantsearch.production.min.js" integrity="sha256-xYsZPDeNjYNTBWLvqD2Lxe98hOxcDgOHyMPfz4tVAbk=" crossorigin="anonymous"></script>
+<script async id="search-script" src="./_/js/vendor/search.js" data-app-id="WB1FQYI187" data-api-key="9d489079e5ec46dbb238909fee5c9c29" data-index-name="springintegration" data-stylesheet="./_/css/vendor/search.css" data-page-version="6.2.0"></script>
+
+  </body>
+</html>

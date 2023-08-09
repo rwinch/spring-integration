@@ -1,8 +1,1376 @@
 {
   "$id": "https://schemas.antora.org/site-manifest/1-0-0/draft-01",
-  "generated": "2023-08-09T18:03:33.544Z",
+  "generated": "2023-08-09T18:52:41.995Z",
   "url": "https://rwinch.github.io/spring-integration",
   "components": {
+    "integration": {
+      "title": "Spring Integration",
+      "latest": "6.2.0",
+      "versions": {
+        "6.2.0": {
+          "prerelease": true,
+          "displayVersion": "6.2.0-SNAPSHOT",
+          "url": "/index.html",
+          "pages": [
+            {
+              "path": "index.adoc",
+              "url": "/index.html",
+              "title": "Spring Integration"
+            },
+            {
+              "path": "aggregator.adoc",
+              "url": "/aggregator.html",
+              "title": "Aggregator"
+            },
+            {
+              "path": "amqp.adoc",
+              "url": "/amqp.html",
+              "title": "AMQP (RabbitMQ) Support"
+            },
+            {
+              "path": "amqp/alternative-confirms-returns.adoc",
+              "url": "/amqp/alternative-confirms-returns.html",
+              "title": "Alternative Mechanism for Publisher Confirms and Returns"
+            },
+            {
+              "path": "amqp/async-outbound-gateway.adoc",
+              "url": "/amqp/async-outbound-gateway.html",
+              "title": "Asynchronous Outbound Gateway"
+            },
+            {
+              "path": "amqp/channels.adoc",
+              "url": "/amqp/channels.html",
+              "title": "AMQP-backed Message Channels"
+            },
+            {
+              "path": "amqp/content-type-conversion-outbound.adoc",
+              "url": "/amqp/content-type-conversion-outbound.html",
+              "title": "Outbound Message Conversion"
+            },
+            {
+              "path": "amqp/conversion-inbound.adoc",
+              "url": "/amqp/conversion-inbound.html",
+              "title": "Inbound Message Conversion"
+            },
+            {
+              "path": "amqp/delay.adoc",
+              "url": "/amqp/delay.html",
+              "title": "Delayed Message Exchange"
+            },
+            {
+              "path": "amqp/inbound-ack.adoc",
+              "url": "/amqp/inbound-ack.html",
+              "title": "Inbound Endpoint Acknowledge Mode"
+            },
+            {
+              "path": "amqp/inbound-channel-adapter.adoc",
+              "url": "/amqp/inbound-channel-adapter.html",
+              "title": "Inbound Channel Adapter"
+            },
+            {
+              "path": "amqp/inbound-gateway.adoc",
+              "url": "/amqp/inbound-gateway.html",
+              "title": "Inbound Gateway"
+            },
+            {
+              "path": "amqp/message-headers.adoc",
+              "url": "/amqp/message-headers.html",
+              "title": "AMQP Message Headers"
+            },
+            {
+              "path": "amqp/outbound-channel-adapter.adoc",
+              "url": "/amqp/outbound-channel-adapter.html",
+              "title": "Outbound Channel Adapter"
+            },
+            {
+              "path": "amqp/outbound-endpoints.adoc",
+              "url": "/amqp/outbound-endpoints.html",
+              "title": "Outbound Endpoints"
+            },
+            {
+              "path": "amqp/outbound-gateway.adoc",
+              "url": "/amqp/outbound-gateway.html",
+              "title": "Outbound Gateway"
+            },
+            {
+              "path": "amqp/polled-inbound-channel-adapter.adoc",
+              "url": "/amqp/polled-inbound-channel-adapter.html",
+              "title": "Polled Inbound Channel Adapter"
+            },
+            {
+              "path": "amqp/rmq-streams.adoc",
+              "url": "/amqp/rmq-streams.html",
+              "title": "RabbitMQ Stream Queue Support"
+            },
+            {
+              "path": "amqp/samples.adoc",
+              "url": "/amqp/samples.html",
+              "title": "AMQP Samples"
+            },
+            {
+              "path": "amqp/strict-ordering.adoc",
+              "url": "/amqp/strict-ordering.html",
+              "title": "Strict Message Ordering"
+            },
+            {
+              "path": "amqp/user-id.adoc",
+              "url": "/amqp/user-id.html",
+              "title": "Outbound User ID"
+            },
+            {
+              "path": "barrier.adoc",
+              "url": "/barrier.html",
+              "title": "Thread Barrier"
+            },
+            {
+              "path": "bridge.adoc",
+              "url": "/bridge.html",
+              "title": "Messaging Bridge"
+            },
+            {
+              "path": "camel.adoc",
+              "url": "/camel.html",
+              "title": "Apache Camel Support"
+            },
+            {
+              "path": "cassandra.adoc",
+              "url": "/cassandra.html",
+              "title": "Apache Cassandra Support"
+            },
+            {
+              "path": "chain.adoc",
+              "url": "/chain.html",
+              "title": "Message Handler Chain"
+            },
+            {
+              "path": "changes-1.0-2.0.adoc",
+              "url": "/changes-1.0-2.0.html",
+              "title": "Changes between Versions 1.0 and 2.0"
+            },
+            {
+              "path": "changes-2.0-2.1.adoc",
+              "url": "/changes-2.0-2.1.html",
+              "title": "Changes between 2.0 and 2.1"
+            },
+            {
+              "path": "changes-2.1-2.2.adoc",
+              "url": "/changes-2.1-2.2.html",
+              "title": "Changes between 2.1 and 2.2"
+            },
+            {
+              "path": "changes-2.2-3.0.adoc",
+              "url": "/changes-2.2-3.0.html",
+              "title": "Changes Between 2.2 and 3.0"
+            },
+            {
+              "path": "changes-3.0-4.0.adoc",
+              "url": "/changes-3.0-4.0.html",
+              "title": "Changes between 3.0 and 4.0"
+            },
+            {
+              "path": "changes-4.0-4.1.adoc",
+              "url": "/changes-4.0-4.1.html",
+              "title": "Changes between 4.0 and 4.1"
+            },
+            {
+              "path": "changes-4.1-4.2.adoc",
+              "url": "/changes-4.1-4.2.html",
+              "title": "Changes between 4.1 and 4.2"
+            },
+            {
+              "path": "changes-4.2-4.3.adoc",
+              "url": "/changes-4.2-4.3.html",
+              "title": "Changes between 4.2 and 4.3"
+            },
+            {
+              "path": "changes-4.3-5.0.adoc",
+              "url": "/changes-4.3-5.0.html",
+              "title": "Changes between 4.3 and 5.0"
+            },
+            {
+              "path": "changes-5.0-5.1.adoc",
+              "url": "/changes-5.0-5.1.html",
+              "title": "Changes between 5.0 and 5.1"
+            },
+            {
+              "path": "changes-5.1-5.2.adoc",
+              "url": "/changes-5.1-5.2.html",
+              "title": "Changes between 5.1 and 5.2"
+            },
+            {
+              "path": "changes-5.2-5.3.adoc",
+              "url": "/changes-5.2-5.3.html",
+              "title": "Changes between 5.2 and 5.3"
+            },
+            {
+              "path": "changes-5.3-5.4.adoc",
+              "url": "/changes-5.3-5.4.html",
+              "title": "Changes between 5.3 and 5.4"
+            },
+            {
+              "path": "changes-5.4-5.5.adoc",
+              "url": "/changes-5.4-5.5.html",
+              "title": "Changes between 5.4 and 5.5"
+            },
+            {
+              "path": "changes-5.5-6.0.adoc",
+              "url": "/changes-5.5-6.0.html",
+              "title": "Changes between 5.5 and 6.0"
+            },
+            {
+              "path": "changes-6.0-6.1.adoc",
+              "url": "/changes-6.0-6.1.html",
+              "title": "Changes between 6.0 and 6.1"
+            },
+            {
+              "path": "channel-adapter.adoc",
+              "url": "/channel-adapter.html",
+              "title": "Channel Adapter"
+            },
+            {
+              "path": "channel.adoc",
+              "url": "/channel.html",
+              "title": "Message Channels"
+            },
+            {
+              "path": "channel/configuration.adoc",
+              "url": "/channel/configuration.html",
+              "title": "Configuring Message Channels"
+            },
+            {
+              "path": "channel/implementations.adoc",
+              "url": "/channel/implementations.html",
+              "title": "Message Channel Implementations"
+            },
+            {
+              "path": "channel/interceptors.adoc",
+              "url": "/channel/interceptors.html",
+              "title": "Channel Interceptors"
+            },
+            {
+              "path": "channel/interfaces.adoc",
+              "url": "/channel/interfaces.html",
+              "title": "The MessageChannel Interface"
+            },
+            {
+              "path": "channel/special-channels.adoc",
+              "url": "/channel/special-channels.html",
+              "title": "Special Channels"
+            },
+            {
+              "path": "channel/template.adoc",
+              "url": "/channel/template.html",
+              "title": "<code>MessagingTemplate</code>"
+            },
+            {
+              "path": "claim-check.adoc",
+              "url": "/claim-check.html",
+              "title": "Claim Check"
+            },
+            {
+              "path": "codec.adoc",
+              "url": "/codec.html",
+              "title": "Codec"
+            },
+            {
+              "path": "configuration.adoc",
+              "url": "/configuration.html",
+              "title": "Configuration"
+            },
+            {
+              "path": "configuration/annotations.adoc",
+              "url": "/configuration/annotations.html",
+              "title": "Annotation Support"
+            },
+            {
+              "path": "configuration/global-properties.adoc",
+              "url": "/configuration/global-properties.html",
+              "title": "Global Properties"
+            },
+            {
+              "path": "configuration/message-mapping-rules.adoc",
+              "url": "/configuration/message-mapping-rules.html",
+              "title": "Message Mapping Rules and Conventions"
+            },
+            {
+              "path": "configuration/meta-annotations.adoc",
+              "url": "/configuration/meta-annotations.html",
+              "title": "Messaging Meta-Annotations"
+            },
+            {
+              "path": "configuration/namespace-taskscheduler.adoc",
+              "url": "/configuration/namespace-taskscheduler.html",
+              "title": "Configuring the Task Scheduler"
+            },
+            {
+              "path": "configuration/namespace.adoc",
+              "url": "/configuration/namespace.html",
+              "title": "Namespace Support"
+            },
+            {
+              "path": "content-enrichment.adoc",
+              "url": "/content-enrichment.html",
+              "title": "Content Enricher"
+            },
+            {
+              "path": "control-bus.adoc",
+              "url": "/control-bus.html",
+              "title": "Control Bus"
+            },
+            {
+              "path": "core.adoc",
+              "url": "/core.html",
+              "title": "Core Messaging"
+            },
+            {
+              "path": "debezium.adoc",
+              "url": "/debezium.html",
+              "title": "Debezium Support"
+            },
+            {
+              "path": "delayer.adoc",
+              "url": "/delayer.html",
+              "title": "Delayer"
+            },
+            {
+              "path": "dsl.adoc",
+              "url": "/dsl.html",
+              "title": "Java DSL"
+            },
+            {
+              "path": "dsl/integration-flow-as-gateway.adoc",
+              "url": "/dsl/integration-flow-as-gateway.html",
+              "title": "<code>IntegrationFlow</code> as a Gateway"
+            },
+            {
+              "path": "dsl/integration-flows-composition.adoc",
+              "url": "/dsl/integration-flows-composition.html",
+              "title": "Integration Flows Composition"
+            },
+            {
+              "path": "dsl/java-aggregators.adoc",
+              "url": "/dsl/java-aggregators.html",
+              "title": "Aggregators and Resequencers"
+            },
+            {
+              "path": "dsl/java-basics.adoc",
+              "url": "/dsl/java-basics.html",
+              "title": "DSL Basics"
+            },
+            {
+              "path": "dsl/java-channels.adoc",
+              "url": "/dsl/java-channels.html",
+              "title": "Message Channels"
+            },
+            {
+              "path": "dsl/java-endpoints.adoc",
+              "url": "/dsl/java-endpoints.html",
+              "title": "DSL and Endpoint Configuration"
+            },
+            {
+              "path": "dsl/java-extensions.adoc",
+              "url": "/dsl/java-extensions.html",
+              "title": "DSL Extensions"
+            },
+            {
+              "path": "dsl/java-flow-adapter.adoc",
+              "url": "/dsl/java-flow-adapter.html",
+              "title": "<code>IntegrationFlowAdapter</code>"
+            },
+            {
+              "path": "dsl/java-flows.adoc",
+              "url": "/dsl/java-flows.html",
+              "title": "Working With Message Flows"
+            },
+            {
+              "path": "dsl/java-function-expression.adoc",
+              "url": "/dsl/java-function-expression.html",
+              "title": "<code>FunctionExpression</code>"
+            },
+            {
+              "path": "dsl/java-gateway.adoc",
+              "url": "/dsl/java-gateway.html",
+              "title": "Operator gateway()"
+            },
+            {
+              "path": "dsl/java-handle.adoc",
+              "url": "/dsl/java-handle.html",
+              "title": "Service Activators and the <code>.handle()</code> method"
+            },
+            {
+              "path": "dsl/java-inbound-adapters.adoc",
+              "url": "/dsl/java-inbound-adapters.html",
+              "title": "Inbound Channel Adapters"
+            },
+            {
+              "path": "dsl/java-intercept.adoc",
+              "url": "/dsl/java-intercept.html",
+              "title": "Operator intercept()"
+            },
+            {
+              "path": "dsl/java-log.adoc",
+              "url": "/dsl/java-log.html",
+              "title": "Operator log()"
+            },
+            {
+              "path": "dsl/java-pollers.adoc",
+              "url": "/dsl/java-pollers.html",
+              "title": "Pollers"
+            },
+            {
+              "path": "dsl/java-protocol-adapters.adoc",
+              "url": "/dsl/java-protocol-adapters.html",
+              "title": "Using Protocol Adapters"
+            },
+            {
+              "path": "dsl/java-reactive.adoc",
+              "url": "/dsl/java-reactive.html",
+              "title": "The <code>reactive()</code> Endpoint"
+            },
+            {
+              "path": "dsl/java-routers.adoc",
+              "url": "/dsl/java-routers.html",
+              "title": "Message Routers"
+            },
+            {
+              "path": "dsl/java-runtime-flows.adoc",
+              "url": "/dsl/java-runtime-flows.html",
+              "title": "Dynamic and Runtime Integration Flows"
+            },
+            {
+              "path": "dsl/java-splitters.adoc",
+              "url": "/dsl/java-splitters.html",
+              "title": "Splitters"
+            },
+            {
+              "path": "dsl/java-subflows.adoc",
+              "url": "/dsl/java-subflows.html",
+              "title": "Sub-flows support"
+            },
+            {
+              "path": "dsl/java-transformers.adoc",
+              "url": "/dsl/java-transformers.html",
+              "title": "Transformers"
+            },
+            {
+              "path": "dsl/java-wiretap.adoc",
+              "url": "/dsl/java-wiretap.html",
+              "title": "<code>MessageChannelSpec.wireTap()</code>"
+            },
+            {
+              "path": "endpoint-roles.adoc",
+              "url": "/endpoint-roles.html",
+              "title": "Endpoint Roles"
+            },
+            {
+              "path": "endpoint-summary.adoc",
+              "url": "/endpoint-summary.html",
+              "title": "Integration Endpoints"
+            },
+            {
+              "path": "endpoint.adoc",
+              "url": "/endpoint.html",
+              "title": "Message Endpoints"
+            },
+            {
+              "path": "error-handling.adoc",
+              "url": "/error-handling.html",
+              "title": "Error Handling"
+            },
+            {
+              "path": "event.adoc",
+              "url": "/event.html",
+              "title": "Spring <code>ApplicationEvent</code> Support"
+            },
+            {
+              "path": "feed.adoc",
+              "url": "/feed.html",
+              "title": "Feed Adapter"
+            },
+            {
+              "path": "file.adoc",
+              "url": "/file.html",
+              "title": "File Support"
+            },
+            {
+              "path": "file/aggregator.adoc",
+              "url": "/file/aggregator.html",
+              "title": "File Aggregator"
+            },
+            {
+              "path": "file/reading.adoc",
+              "url": "/file/reading.html",
+              "title": "Reading Files"
+            },
+            {
+              "path": "file/remote-persistent-flf.adoc",
+              "url": "/file/remote-persistent-flf.html",
+              "title": "Remote Persistent File List Filters"
+            },
+            {
+              "path": "file/splitter.adoc",
+              "url": "/file/splitter.html",
+              "title": "File Splitter"
+            },
+            {
+              "path": "file/transforming.adoc",
+              "url": "/file/transforming.html",
+              "title": "File Transformers"
+            },
+            {
+              "path": "file/writing.adoc",
+              "url": "/file/writing.html",
+              "title": "Writing files"
+            },
+            {
+              "path": "filter.adoc",
+              "url": "/filter.html",
+              "title": "Filter"
+            },
+            {
+              "path": "ftp.adoc",
+              "url": "/ftp.html",
+              "title": "FTP/FTPS Adapters"
+            },
+            {
+              "path": "ftp/advanced-configuration.adoc",
+              "url": "/ftp/advanced-configuration.html",
+              "title": "Advanced Configuration"
+            },
+            {
+              "path": "ftp/dsf.adoc",
+              "url": "/ftp/dsf.html",
+              "title": "Delegating Session Factory"
+            },
+            {
+              "path": "ftp/inbound.adoc",
+              "url": "/ftp/inbound.html",
+              "title": "FTP Inbound Channel Adapter"
+            },
+            {
+              "path": "ftp/max-fetch.adoc",
+              "url": "/ftp/max-fetch.html",
+              "title": "Inbound Channel Adapters: Controlling Remote File Fetching"
+            },
+            {
+              "path": "ftp/outbound-gateway.adoc",
+              "url": "/ftp/outbound-gateway.html",
+              "title": "FTP Outbound Gateway"
+            },
+            {
+              "path": "ftp/outbound.adoc",
+              "url": "/ftp/outbound.html",
+              "title": "FTP Outbound Channel Adapter"
+            },
+            {
+              "path": "ftp/remote-file-info.adoc",
+              "url": "/ftp/remote-file-info.html",
+              "title": "Remote File Information"
+            },
+            {
+              "path": "ftp/rft.adoc",
+              "url": "/ftp/rft.html",
+              "title": "Using <code>RemoteFileTemplate</code>"
+            },
+            {
+              "path": "ftp/rotating-server-advice.adoc",
+              "url": "/ftp/rotating-server-advice.html",
+              "title": "Inbound Channel Adapters: Polling Multiple Servers and Directories"
+            },
+            {
+              "path": "ftp/server-events.adoc",
+              "url": "/ftp/server-events.html",
+              "title": "Apache Mina FTP Server Events"
+            },
+            {
+              "path": "ftp/session-caching.adoc",
+              "url": "/ftp/session-caching.html",
+              "title": "FTP Session Caching"
+            },
+            {
+              "path": "ftp/session-callback.adoc",
+              "url": "/ftp/session-callback.html",
+              "title": "Using <code>MessageSessionCallback</code>"
+            },
+            {
+              "path": "ftp/session-factory.adoc",
+              "url": "/ftp/session-factory.html",
+              "title": "FTP Session Factory"
+            },
+            {
+              "path": "ftp/streaming.adoc",
+              "url": "/ftp/streaming.html",
+              "title": "FTP Streaming Inbound Channel Adapter"
+            },
+            {
+              "path": "functions-support.adoc",
+              "url": "/functions-support.html",
+              "title": "<code>java.util.function</code> Interfaces Support"
+            },
+            {
+              "path": "gateway.adoc",
+              "url": "/gateway.html",
+              "title": "Messaging Gateways"
+            },
+            {
+              "path": "graph.adoc",
+              "url": "/graph.html",
+              "title": "Integration Graph"
+            },
+            {
+              "path": "graphql.adoc",
+              "url": "/graphql.html",
+              "title": "GraphQL Support"
+            },
+            {
+              "path": "groovy-dsl.adoc",
+              "url": "/groovy-dsl.html",
+              "title": "Groovy DSL"
+            },
+            {
+              "path": "groovy.adoc",
+              "url": "/groovy.html",
+              "title": "Groovy Support"
+            },
+            {
+              "path": "handler-advice.adoc",
+              "url": "/handler-advice.html",
+              "title": "Adding Behavior to Endpoints"
+            },
+            {
+              "path": "handler-advice/advised-properties.adoc",
+              "url": "/handler-advice/advised-properties.html",
+              "title": "Advised Handler Properties"
+            },
+            {
+              "path": "handler-advice/advising-filters.adoc",
+              "url": "/handler-advice/advising-filters.html",
+              "title": "Advising Filters"
+            },
+            {
+              "path": "handler-advice/advising-with-annotations.adoc",
+              "url": "/handler-advice/advising-with-annotations.html",
+              "title": "Advising Endpoints Using Annotations"
+            },
+            {
+              "path": "handler-advice/classes.adoc",
+              "url": "/handler-advice/classes.html",
+              "title": "Provided Advice Classes"
+            },
+            {
+              "path": "handler-advice/context-holder.adoc",
+              "url": "/handler-advice/context-holder.html",
+              "title": "Context Holder Advice"
+            },
+            {
+              "path": "handler-advice/custom.adoc",
+              "url": "/handler-advice/custom.html",
+              "title": "Custom Advice Classes"
+            },
+            {
+              "path": "handler-advice/handle-message.adoc",
+              "url": "/handler-advice/handle-message.html",
+              "title": "Handling Message Advice"
+            },
+            {
+              "path": "handler-advice/idempotent-receiver.adoc",
+              "url": "/handler-advice/idempotent-receiver.html",
+              "title": "Idempotent Receiver Enterprise Integration Pattern"
+            },
+            {
+              "path": "handler-advice/order.adoc",
+              "url": "/handler-advice/order.html",
+              "title": "Ordering Advices within Advice Chain"
+            },
+            {
+              "path": "handler-advice/other.adoc",
+              "url": "/handler-advice/other.html",
+              "title": "Other Advice Chain Elements"
+            },
+            {
+              "path": "handler-advice/reactive.adoc",
+              "url": "/handler-advice/reactive.html",
+              "title": "Reactive Advice"
+            },
+            {
+              "path": "handler-advice/tx-handle-message.adoc",
+              "url": "/handler-advice/tx-handle-message.html",
+              "title": "Transaction Support"
+            },
+            {
+              "path": "hazelcast.adoc",
+              "url": "/hazelcast.html",
+              "title": "Hazelcast Support"
+            },
+            {
+              "path": "history.adoc",
+              "url": "/history.html",
+              "title": "Change History"
+            },
+            {
+              "path": "http.adoc",
+              "url": "/http.html",
+              "title": "HTTP Support"
+            },
+            {
+              "path": "http/header-mapping.adoc",
+              "url": "/http/header-mapping.html",
+              "title": "HTTP Header Mappings"
+            },
+            {
+              "path": "http/inbound.adoc",
+              "url": "/http/inbound.html",
+              "title": "Http Inbound Components"
+            },
+            {
+              "path": "http/int-graph-controller.adoc",
+              "url": "/http/int-graph-controller.html",
+              "title": "Integration Graph Controller"
+            },
+            {
+              "path": "http/java-config.adoc",
+              "url": "/http/java-config.html",
+              "title": "Configuring HTTP Endpoints with Java"
+            },
+            {
+              "path": "http/namespace.adoc",
+              "url": "/http/namespace.html",
+              "title": "HTTP Namespace Support"
+            },
+            {
+              "path": "http/outbound.adoc",
+              "url": "/http/outbound.html",
+              "title": "HTTP Outbound Components"
+            },
+            {
+              "path": "http/proxy.adoc",
+              "url": "/http/proxy.html",
+              "title": "HTTP Proxy configuration"
+            },
+            {
+              "path": "http/samples.adoc",
+              "url": "/http/samples.html",
+              "title": "HTTP Samples"
+            },
+            {
+              "path": "http/timeout.adoc",
+              "url": "/http/timeout.html",
+              "title": "Timeout Handling"
+            },
+            {
+              "path": "integration-graph-controller.adoc",
+              "url": "/integration-graph-controller.html",
+              "title": "Integration Graph Controller"
+            },
+            {
+              "path": "ip.adoc",
+              "url": "/ip.html",
+              "title": "TCP and UDP Support"
+            },
+            {
+              "path": "ip/annotation.adoc",
+              "url": "/ip/annotation.html",
+              "title": "Annotation-Based Configuration"
+            },
+            {
+              "path": "ip/correlation.adoc",
+              "url": "/ip/correlation.html",
+              "title": "TCP Message Correlation"
+            },
+            {
+              "path": "ip/dsl.adoc",
+              "url": "/ip/dsl.html",
+              "title": "Using the Java DSL for TCP Components"
+            },
+            {
+              "path": "ip/endpoint-reference.adoc",
+              "url": "/ip/endpoint-reference.html",
+              "title": "IP Configuration Attributes"
+            },
+            {
+              "path": "ip/interceptors.adoc",
+              "url": "/ip/interceptors.html",
+              "title": "TCP Connection Interceptors"
+            },
+            {
+              "path": "ip/intro.adoc",
+              "url": "/ip/intro.html",
+              "title": "Introduction"
+            },
+            {
+              "path": "ip/msg-headers.adoc",
+              "url": "/ip/msg-headers.html",
+              "title": "IP Message Headers"
+            },
+            {
+              "path": "ip/note-nio.adoc",
+              "url": "/ip/note-nio.html",
+              "title": "About Non-blocking I/O (NIO)"
+            },
+            {
+              "path": "ip/ssl-tls.adoc",
+              "url": "/ip/ssl-tls.html",
+              "title": "SSL/TLS Support"
+            },
+            {
+              "path": "ip/tcp-adapters.adoc",
+              "url": "/ip/tcp-adapters.html",
+              "title": "TCP Adapters"
+            },
+            {
+              "path": "ip/tcp-advanced-techniques.adoc",
+              "url": "/ip/tcp-advanced-techniques.html",
+              "title": "Advanced Techniques"
+            },
+            {
+              "path": "ip/tcp-connection-factories.adoc",
+              "url": "/ip/tcp-connection-factories.html",
+              "title": "TCP Connection Factories"
+            },
+            {
+              "path": "ip/tcp-events.adoc",
+              "url": "/ip/tcp-events.html",
+              "title": "TCP Connection Events"
+            },
+            {
+              "path": "ip/tcp-gateways.adoc",
+              "url": "/ip/tcp-gateways.html",
+              "title": "TCP Gateways"
+            },
+            {
+              "path": "ip/testing-connections.adoc",
+              "url": "/ip/testing-connections.html",
+              "title": "Testing Connections"
+            },
+            {
+              "path": "ip/udp-adapters.adoc",
+              "url": "/ip/udp-adapters.html",
+              "title": "UDP Adapters"
+            },
+            {
+              "path": "jdbc.adoc",
+              "url": "/jdbc.html",
+              "title": "JDBC Support"
+            },
+            {
+              "path": "jdbc/inbound-channel-adapter.adoc",
+              "url": "/jdbc/inbound-channel-adapter.html",
+              "title": "Inbound Channel Adapter"
+            },
+            {
+              "path": "jdbc/lock-registry.adoc",
+              "url": "/jdbc/lock-registry.html",
+              "title": "JDBC Lock Registry"
+            },
+            {
+              "path": "jdbc/message-store.adoc",
+              "url": "/jdbc/message-store.html",
+              "title": "JDBC Message Store"
+            },
+            {
+              "path": "jdbc/metadata-store.adoc",
+              "url": "/jdbc/metadata-store.html",
+              "title": "JDBC Metadata Store"
+            },
+            {
+              "path": "jdbc/outbound-channel-adapter.adoc",
+              "url": "/jdbc/outbound-channel-adapter.html",
+              "title": "Outbound Channel Adapter"
+            },
+            {
+              "path": "jdbc/outbound-gateway.adoc",
+              "url": "/jdbc/outbound-gateway.html",
+              "title": "Outbound Gateway"
+            },
+            {
+              "path": "jdbc/stored-procedures.adoc",
+              "url": "/jdbc/stored-procedures.html",
+              "title": "Stored Procedures"
+            },
+            {
+              "path": "jms.adoc",
+              "url": "/jms.html",
+              "title": "JMS Support"
+            },
+            {
+              "path": "jmx.adoc",
+              "url": "/jmx.html",
+              "title": "JMX Support"
+            },
+            {
+              "path": "jpa.adoc",
+              "url": "/jpa.html",
+              "title": "JPA Support"
+            },
+            {
+              "path": "jpa/functionality.adoc",
+              "url": "/jpa/functionality.html",
+              "title": "Functionality"
+            },
+            {
+              "path": "jpa/inbound-channel-adapter.adoc",
+              "url": "/jpa/inbound-channel-adapter.html",
+              "title": "Inbound Channel Adapter"
+            },
+            {
+              "path": "jpa/java-implementation.adoc",
+              "url": "/jpa/java-implementation.html",
+              "title": "Java Implementation"
+            },
+            {
+              "path": "jpa/namespace-support.adoc",
+              "url": "/jpa/namespace-support.html",
+              "title": "Namespace Support"
+            },
+            {
+              "path": "jpa/outbound-channel-adapter.adoc",
+              "url": "/jpa/outbound-channel-adapter.html",
+              "title": "Outbound Channel Adapter"
+            },
+            {
+              "path": "jpa/outbound-gateways.adoc",
+              "url": "/jpa/outbound-gateways.html",
+              "title": "Outbound Gateways"
+            },
+            {
+              "path": "jpa/supported-persistence-providers.adoc",
+              "url": "/jpa/supported-persistence-providers.html",
+              "title": "Supported Persistence Providers"
+            },
+            {
+              "path": "kafka.adoc",
+              "url": "/kafka.html",
+              "title": "Apache Kafka Support"
+            },
+            {
+              "path": "kotlin-dsl.adoc",
+              "url": "/kotlin-dsl.html",
+              "title": "Kotlin DSL"
+            },
+            {
+              "path": "kotlin-functions.adoc",
+              "url": "/kotlin-functions.html",
+              "title": "Kotlin Support"
+            },
+            {
+              "path": "leadership-event-handling.adoc",
+              "url": "/leadership-event-handling.html",
+              "title": "Leadership Event Handling"
+            },
+            {
+              "path": "logging-adapter.adoc",
+              "url": "/logging-adapter.html",
+              "title": "Logging Channel Adapter"
+            },
+            {
+              "path": "mail.adoc",
+              "url": "/mail.html",
+              "title": "Mail Support"
+            },
+            {
+              "path": "message-history.adoc",
+              "url": "/message-history.html",
+              "title": "Message History"
+            },
+            {
+              "path": "message-publishing.adoc",
+              "url": "/message-publishing.html",
+              "title": "Message Publishing"
+            },
+            {
+              "path": "message-routing.adoc",
+              "url": "/message-routing.html",
+              "title": "Message Routing"
+            },
+            {
+              "path": "message-store.adoc",
+              "url": "/message-store.html",
+              "title": "Message Store"
+            },
+            {
+              "path": "message-transformation.adoc",
+              "url": "/message-transformation.html",
+              "title": "Message Transformation"
+            },
+            {
+              "path": "message.adoc",
+              "url": "/message.html",
+              "title": "Message"
+            },
+            {
+              "path": "messaging-endpoints.adoc",
+              "url": "/messaging-endpoints.html",
+              "title": "Messaging Endpoints"
+            },
+            {
+              "path": "meta-data-store.adoc",
+              "url": "/meta-data-store.html",
+              "title": "Metadata Store"
+            },
+            {
+              "path": "metrics.adoc",
+              "url": "/metrics.html",
+              "title": "Metrics and Management"
+            },
+            {
+              "path": "mongodb.adoc",
+              "url": "/mongodb.html",
+              "title": "MongoDb Support"
+            },
+            {
+              "path": "mqtt.adoc",
+              "url": "/mqtt.html",
+              "title": "MQTT Support"
+            },
+            {
+              "path": "native-aot.adoc",
+              "url": "/native-aot.html",
+              "title": "Native Images Support"
+            },
+            {
+              "path": "overview.adoc",
+              "url": "/overview.html",
+              "title": "Overview of Spring Integration Framework"
+            },
+            {
+              "path": "polling-consumer.adoc",
+              "url": "/polling-consumer.html",
+              "title": "Poller"
+            },
+            {
+              "path": "preface.adoc",
+              "url": "/preface.html",
+              "title": "Preface"
+            },
+            {
+              "path": "r2dbc.adoc",
+              "url": "/r2dbc.html",
+              "title": "R2DBC Support"
+            },
+            {
+              "path": "reactive-streams.adoc",
+              "url": "/reactive-streams.html",
+              "title": "Reactive Streams Support"
+            },
+            {
+              "path": "redis.adoc",
+              "url": "/redis.html",
+              "title": "Redis Support"
+            },
+            {
+              "path": "resequencer.adoc",
+              "url": "/resequencer.html",
+              "title": "Resequencer"
+            },
+            {
+              "path": "resource.adoc",
+              "url": "/resource.html",
+              "title": "Resource Support"
+            },
+            {
+              "path": "resources.adoc",
+              "url": "/resources.html",
+              "title": "Additional Resources"
+            },
+            {
+              "path": "router.adoc",
+              "url": "/router.html",
+              "title": "Routers"
+            },
+            {
+              "path": "router/annotation.adoc",
+              "url": "/router/annotation.html",
+              "title": "Configuring a Router with Annotations"
+            },
+            {
+              "path": "router/common-parameters.adoc",
+              "url": "/router/common-parameters.html",
+              "title": "Common Router Parameters"
+            },
+            {
+              "path": "router/dynamic-routers.adoc",
+              "url": "/router/dynamic-routers.html",
+              "title": "Dynamic Routers"
+            },
+            {
+              "path": "router/implementations.adoc",
+              "url": "/router/implementations.html",
+              "title": "Router Implementations"
+            },
+            {
+              "path": "router/namespace.adoc",
+              "url": "/router/namespace.html",
+              "title": "Configuring a Generic Router"
+            },
+            {
+              "path": "router/overview.adoc",
+              "url": "/router/overview.html",
+              "title": "Overview"
+            },
+            {
+              "path": "router/process-manager.adoc",
+              "url": "/router/process-manager.html",
+              "title": "Process Manager Enterprise Integration Pattern"
+            },
+            {
+              "path": "router/routing-slip.adoc",
+              "url": "/router/routing-slip.html",
+              "title": "Routing Slip"
+            },
+            {
+              "path": "router/spel.adoc",
+              "url": "/router/spel.html",
+              "title": "Routers and the Spring Expression Language (SpEL)"
+            },
+            {
+              "path": "rsocket.adoc",
+              "url": "/rsocket.html",
+              "title": "RSocket Support"
+            },
+            {
+              "path": "samples.adoc",
+              "url": "/samples.html",
+              "title": "Spring Integration Samples"
+            },
+            {
+              "path": "scatter-gather.adoc",
+              "url": "/scatter-gather.html",
+              "title": "Scatter-Gather"
+            },
+            {
+              "path": "scripting.adoc",
+              "url": "/scripting.html",
+              "title": "Scripting Support"
+            },
+            {
+              "path": "security.adoc",
+              "url": "/security.html",
+              "title": "Security in Spring Integration"
+            },
+            {
+              "path": "service-activator.adoc",
+              "url": "/service-activator.html",
+              "title": "Service Activator"
+            },
+            {
+              "path": "sftp.adoc",
+              "url": "/sftp.html",
+              "title": "SFTP Adapters"
+            },
+            {
+              "path": "sftp/dsf.adoc",
+              "url": "/sftp/dsf.html",
+              "title": "Delegating Session Factory"
+            },
+            {
+              "path": "sftp/inbound.adoc",
+              "url": "/sftp/inbound.html",
+              "title": "SFTP Inbound Channel Adapter"
+            },
+            {
+              "path": "sftp/max-fetch.adoc",
+              "url": "/sftp/max-fetch.html",
+              "title": "Inbound Channel Adapters: Controlling Remote File Fetching"
+            },
+            {
+              "path": "sftp/outbound-gateway.adoc",
+              "url": "/sftp/outbound-gateway.html",
+              "title": "SFTP Outbound Gateway"
+            },
+            {
+              "path": "sftp/outbound.adoc",
+              "url": "/sftp/outbound.html",
+              "title": "SFTP Outbound Channel Adapter"
+            },
+            {
+              "path": "sftp/remote-file-info.adoc",
+              "url": "/sftp/remote-file-info.html",
+              "title": "Remote File Information"
+            },
+            {
+              "path": "sftp/rft.adoc",
+              "url": "/sftp/rft.html",
+              "title": "Using <code>RemoteFileTemplate</code>"
+            },
+            {
+              "path": "sftp/rotating-server-advice.adoc",
+              "url": "/sftp/rotating-server-advice.html",
+              "title": "Inbound Channel Adapters: Polling Multiple Servers and Directories"
+            },
+            {
+              "path": "sftp/server-events.adoc",
+              "url": "/sftp/server-events.html",
+              "title": "Apache Mina SFTP Server Events"
+            },
+            {
+              "path": "sftp/session-caching.adoc",
+              "url": "/sftp/session-caching.html",
+              "title": "SFTP Session Caching"
+            },
+            {
+              "path": "sftp/session-callback.adoc",
+              "url": "/sftp/session-callback.html",
+              "title": "MessageSessionCallback"
+            },
+            {
+              "path": "sftp/session-factory.adoc",
+              "url": "/sftp/session-factory.html",
+              "title": "SFTP Session Factory"
+            },
+            {
+              "path": "sftp/streaming.adoc",
+              "url": "/sftp/streaming.html",
+              "title": "SFTP Streaming Inbound Channel Adapter"
+            },
+            {
+              "path": "shutdown.adoc",
+              "url": "/shutdown.html",
+              "title": "Orderly Shutdown"
+            },
+            {
+              "path": "smb.adoc",
+              "url": "/smb.html",
+              "title": "SMB Support"
+            },
+            {
+              "path": "spel.adoc",
+              "url": "/spel.html",
+              "title": "Spring Expression Language (SpEL)"
+            },
+            {
+              "path": "splitter.adoc",
+              "url": "/splitter.html",
+              "title": "Splitter"
+            },
+            {
+              "path": "stomp.adoc",
+              "url": "/stomp.html",
+              "title": "STOMP Support"
+            },
+            {
+              "path": "stream.adoc",
+              "url": "/stream.html",
+              "title": "Stream Support"
+            },
+            {
+              "path": "syslog.adoc",
+              "url": "/syslog.html",
+              "title": "Syslog Support"
+            },
+            {
+              "path": "system-management.adoc",
+              "url": "/system-management.html",
+              "title": "System Management"
+            },
+            {
+              "path": "testing.adoc",
+              "url": "/testing.html",
+              "title": "Testing support"
+            },
+            {
+              "path": "transactions.adoc",
+              "url": "/transactions.html",
+              "title": "Transaction Support"
+            },
+            {
+              "path": "transformer.adoc",
+              "url": "/transformer.html",
+              "title": "Transformer"
+            },
+            {
+              "path": "web-sockets.adoc",
+              "url": "/web-sockets.html",
+              "title": "WebSockets Support"
+            },
+            {
+              "path": "webflux.adoc",
+              "url": "/webflux.html",
+              "title": "WebFlux Support"
+            },
+            {
+              "path": "whats-new.adoc",
+              "url": "/whats-new.html",
+              "title": "What&#8217;s New?"
+            },
+            {
+              "path": "ws.adoc",
+              "url": "/ws.html",
+              "title": "Web Services Support"
+            },
+            {
+              "path": "xml.adoc",
+              "url": "/xml.html",
+              "title": "XML Support - Dealing with XML Payloads"
+            },
+            {
+              "path": "xml/transformation.adoc",
+              "url": "/xml/transformation.html",
+              "title": "Transforming XML Payloads"
+            },
+            {
+              "path": "xml/validating-filter.adoc",
+              "url": "/xml/validating-filter.html",
+              "title": "XML Validating Filter"
+            },
+            {
+              "path": "xml/xpath-filter.adoc",
+              "url": "/xml/xpath-filter.html",
+              "title": "Using the XPath Filter"
+            },
+            {
+              "path": "xml/xpath-header-enricher.adoc",
+              "url": "/xml/xpath-header-enricher.html",
+              "title": "XPath Header Enricher"
+            },
+            {
+              "path": "xml/xpath-namespace-support.adoc",
+              "url": "/xml/xpath-namespace-support.html",
+              "title": "Namespace Support"
+            },
+            {
+              "path": "xml/xpath-routing.adoc",
+              "url": "/xml/xpath-routing.html",
+              "title": "Routing XML Messages with XPath"
+            },
+            {
+              "path": "xml/xpath-spel-function.adoc",
+              "url": "/xml/xpath-spel-function.html",
+              "title": "#xpath SpEL Function"
+            },
+            {
+              "path": "xml/xpath-splitting.adoc",
+              "url": "/xml/xpath-splitting.html",
+              "title": "Splitting XML Messages"
+            },
+            {
+              "path": "xml/xpath-transformer.adoc",
+              "url": "/xml/xpath-transformer.html",
+              "title": "Transforming XML Messages with XPath"
+            },
+            {
+              "path": "xmpp.adoc",
+              "url": "/xmpp.html",
+              "title": "XMPP Support"
+            },
+            {
+              "path": "zeromq.adoc",
+              "url": "/zeromq.html",
+              "title": "ZeroMQ Support"
+            },
+            {
+              "path": "zip.adoc",
+              "url": "/zip.html",
+              "title": "Zip Support"
+            },
+            {
+              "path": "zookeeper.adoc",
+              "url": "/zookeeper.html",
+              "title": "Zookeeper Support"
+            }
+          ]
+        }
+      }
+    },
     "spring-integration": {
       "title": "Spring Integration",
       "latest": "6.2.0",
